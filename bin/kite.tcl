@@ -69,11 +69,54 @@ namespace import ktools::*
 # It determines the application to invoke, and does so.
 
 proc main {argv} {
-    puts "Project Root: [project root]"
+    global tools
+
+    # FIRST, get the project info.  This will throw a FATAL error
+    # if the project root cannot be identified.
     project loadinfo
-    project dump
+
+    # FIRST, given no input display the help.
+    if {[llength $argv] == 0} {
+        usetool help
+        # TODO: Remove the following debug code, when the help
+        #       and info tools are available.
+        puts "Tools Available:"
+        parray ::tools
+
+        puts "\nProject Root: [project root]"
+        project dump
+
+        exit 0
+    }
+
+    # NEXT, get the subcommand and see if we have a matching tool.
+    set tool [lshift argv]
+
+    if {![info exist ::tools($tool)]} {
+        throw FATAL \
+            "'$tool' is not the name of a Kite tool.  See 'kite.kit help'."
+    }
+
+    # NEXT, use the tool, passing it the remaining arguments.
+    usetool $tool $argv
 }
 
+# usetool tool ?args...?
+#
+# tool - A registered Kite tool
+# argv - Command-line arguments.
+#
+# Calls the tool with the given arguments.
+
+proc usetool {tool {argv ""}} {
+    array set tdata $::tools($tool)
+
+    # FIRST, make sure the tool's package is loaded.
+    package require $tdata(package)
+
+    # NEXT, execute it.
+    $tdata(ensemble) execute $argv
+}
 
 #-----------------------------------------------------------------------
 # Run the program

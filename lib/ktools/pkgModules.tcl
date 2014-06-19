@@ -1,6 +1,6 @@
 #-----------------------------------------------------------------------
 # TITLE:
-#    ktools.tcl
+#    pkgModules.tcl
 #
 # AUTHOR:
 #    Will Duquette
@@ -28,5 +28,6 @@ namespace eval ::ktools:: {
 # Note: modules are listed in order of dependencies; be careful if you
 # change the order!
 
-source [file join $::ktools::library misc.tcl   ]
-source [file join $::ktools::library project.tcl]
+source [file join $::ktools::library misc.tcl    ]
+source [file join $::ktools::library project.tcl ]
+source [file join $::ktools::library helptool.tcl]

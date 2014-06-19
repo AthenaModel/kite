@@ -15,11 +15,26 @@
 
 namespace eval ::ktools:: {
     namespace export \
+        lshift       \
         readfile
 }
 
 #-----------------------------------------------------------------------
 # Commands
+
+# lshift listvar
+#
+# Removes the first element from the list held in listvar, updates
+# listvar, and returns the element.
+
+proc ::ktools::lshift {listvar} {
+    upvar $listvar list
+
+    set value [lindex $list 0]
+    set list [lrange $list 1 end]
+    return $value
+}
+
 
 # readfile filename
 #

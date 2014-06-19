@@ -8,7 +8,7 @@
 # DESCRIPTION:
 #   Kite: ktools package index.
 
-package ifneeded ktools 1.0 [list source [file join $dir ktools.tcl]]
+package ifneeded ktools 1.0 [list source [file join $dir pkgModules.tcl]]
 
 
 
