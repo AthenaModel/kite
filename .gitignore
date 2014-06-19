@@ -1,3 +1,6 @@
+# SublimeText artifacts.
+*.sublime-*
+
 # Object files
 *.o
 
