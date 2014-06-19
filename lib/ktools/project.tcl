@@ -39,7 +39,7 @@ snit::type ::ktools::project {
     #   name        - The project name
     #   version     - The version number, x.y.z-Bn
     #   description - The project title
-    #   app         - Application name (if any)
+    #   appkit      - List of appkits to build.
     #
     # If values are "", the data has not yet been loaded.
 
@@ -47,7 +47,7 @@ snit::type ::ktools::project {
         name        ""
         version     ""
         description ""
-        app         ""
+        appkits     ""
     }
 
     #-------------------------------------------------------------------
@@ -102,6 +102,77 @@ snit::type ::ktools::project {
         throw FATAL \
             "Could not find $projfile in this directory or its parents"
     }
+
+    #-------------------------------------------------------------------
+    # Reading the information from the project file.
+
+    # loadinfo
+    #
+    # Loads the information from the project file.
+
+    typemethod loadinfo {} {
+        # FIRST, set up the safe interpreter
+        # TODO: Use a smartinterp(n), once we can claim Mars as an
+        # external dependency.
+        set safe [interp create -safe]
+        $safe alias project [myproc ProjectCmd]
+        $safe alias appkit  [myproc AppkitCmd]
+
+        # NEXT, try to load the file
+        try {
+            $safe eval [readfile [$type root $projfile]]
+        } trap FATAL {result} {
+            throw FATAL $result
+        } on error {result eopts} {
+            # TODO: Figure out which errors are FATAL and which
+            # are not.
+            puts "Got eopts: $eopts"
+            exit 1
+        } finally {
+            interp delete $safe            
+        }
+
+        # NEXT, if the project name has not been set, throw an
+        # error.
+
+        if {$info(name) eq ""} {
+            throw FATAL "No project defined in $projfile"
+        }
+    }
+
+    # ProjectCmd name version description
+    #
+    # Implementation of the "project" kite file command.
+
+    proc ProjectCmd {name version description} {
+        # TBD: error-checking!
+        set info(name)        $name
+        set info(version)     $version
+        set info(description) $description
+    }
+    
+    # AppkitCmd name
+    #
+    # Implementation of the "appkit" kite file command.
+
+    proc AppkitCmd {name} {
+        # TBD: error-checking!
+        lappend info(appkits) $name
+    }
+
+    #-------------------------------------------------------------------
+    # Other Queries
+
+    # dump
+    #
+    # Dump the project info to stdout.
+    # TODO: Do this right.
+
+    typemethod dump {} {
+        puts "Project Information"
+        parray info
+    }
+    
 }
 
 

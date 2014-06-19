@@ -70,6 +70,8 @@ namespace import ktools::*
 
 proc main {argv} {
     puts "Project Root: [project root]"
+    project loadinfo
+    project dump
 }
 
 
