@@ -1,20 +1,7 @@
+# Build Artifacts
+*.log
+*.kit
+
 # SublimeText artifacts.
 *.sublime-*
 
-# Object files
-*.o
-
-# Libraries
-*.lib
-*.a
-
-# Shared objects (inc. Windows DLLs)
-*.dll
-*.so
-*.so.*
-*.dylib
-
-# Executables
-*.exe
-*.out
-*.app
