@@ -50,10 +50,13 @@ set libdir  [file normalize [file join $appdir .. lib]]
 lappend auto_path $libdir
 
 #-------------------------------------------------------------------
-# Next, require Tcl/Tk
+# Next, require Tcl/Tk and other required packages.
 
 package require Tcl 8.6
+package require snit 2.3
+package require ktools
 
+namespace import ktools::*
 
 #-----------------------------------------------------------------------
 # Main Program 
@@ -66,7 +69,18 @@ package require Tcl 8.6
 # It determines the application to invoke, and does so.
 
 proc main {argv} {
-    puts "Hello, <$argv>!"
+    # FIRST, get the project directory.
+    try {
+        puts "Project Dir: [project path]"
+    } trap FATAL {result} {
+        # A fatal application error; result is a message intended
+        # for the user.
+        puts $result
+    } on error {result eopts} {
+        # A genuine error; report it in detail.
+        puts "Unexpected Error: $result"
+        puts "\nStack Trace:\n[dict get $eopts -errorinfo]"
+    }
 }
 
 

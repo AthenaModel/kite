@@ -1,0 +1,5 @@
+project athena-kite "0.0.1-SNAPSHoT" {
+    description "Athena/Kite Development Tool"
+    appname     kite
+}
+

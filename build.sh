@@ -16,11 +16,12 @@ export ARCHIVE=$TCL_HOME/lib/teapot
 export TOP_DIR=~/github/athena-kite
 export KITE_KIT=$TOP_DIR/bin/kite.kit
 
-tclapp $TOP_DIR/bin/kite.tcl                  \
-    -log $TOP_DIR/tclapp.log                  \
-    -out $KITE_KIT                            \
-    -archive $ARCHIVE                         \
-    -follow                                     \
-    -force                                      \
-    -pkgref "snit      -require 2.3"
+tclapp $TOP_DIR/bin/kite.tcl       \
+    $TOP_DIR/lib/*/*               \
+    -log $TOP_DIR/tclapp.log       \
+    -out $KITE_KIT                 \
+    -archive $ARCHIVE              \
+    -follow                        \
+    -force                         \
+    -pkgref "snit -require 2.3"
 
