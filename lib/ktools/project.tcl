@@ -30,9 +30,9 @@ snit::type ::ktools::project {
     #-------------------------------------------------------------------
     # Type variables
 
-    # The project directory
+    # The project's root directory
 
-    typevariable projdir ""
+    typevariable rootdir ""
 
     # info - the project info array
     #
@@ -51,9 +51,9 @@ snit::type ::ktools::project {
     }
 
     #-------------------------------------------------------------------
-    # Public Type Methods
+    # Locating the root of the project tree.
 
-    # path ?names...?
+    # root ?names...?
     #
     # Find and return the directory containing the project.kite file, which
     # by definition is the top directory for the project.  Cache the
@@ -63,13 +63,13 @@ snit::type ::ktools::project {
     # If we cannot find the project directory, throw an error with
     # code FATAL.
 
-    typemethod path {args} {
-        if {$projdir eq ""} {
+    typemethod root {args} {
+        if {$rootdir eq ""} {
             # Find the project directory, throwing an error if not found.
-            set projdir [FindProjectDirectory]   
+            set rootdir [FindProjectDirectory]   
         }
 
-        return [file join $projdir {*}$args]
+        return [file join $rootdir {*}$args]
     }
 
     # FindProjectDirectory

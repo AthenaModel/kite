@@ -69,25 +69,23 @@ namespace import ktools::*
 # It determines the application to invoke, and does so.
 
 proc main {argv} {
-    # FIRST, get the project directory.
-    try {
-        puts "Project Dir: [project path]"
-    } trap FATAL {result} {
-        # A fatal application error; result is a message intended
-        # for the user.
-        puts $result
-    } on error {result eopts} {
-        # A genuine error; report it in detail.
-        puts "Unexpected Error: $result"
-        puts "\nStack Trace:\n[dict get $eopts -errorinfo]"
-    }
+    puts "Project Root: [project root]"
 }
 
 
 #-----------------------------------------------------------------------
 # Run the program
 
-# FIRST, run the main routine, to set everything up.
-main $argv
+try {
+    main $argv
+} trap FATAL {result} {
+    # A fatal application error; result is a message intended
+    # for the user.
+    puts $result
+} on error {result eopts} {
+    # A genuine error; report it in detail.
+    puts "Unexpected Error: $result"
+    puts "\nStack Trace:\n[dict get $eopts -errorinfo]"
+}
 
 
