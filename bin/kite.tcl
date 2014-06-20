@@ -80,11 +80,15 @@ proc main {argv} {
     # if the project root cannot be identified.
     project loadinfo
 
-    # NEXT, as a general rule if project.kite has been changed we want
-    # to save a new kiteinfo package.
-    if {[project kiteinfo needed]} {
-        project kiteinfo save
-    }
+    # NEXT, save the project info to the kiteinfo package so that the
+    # project's code has access to it at run-time.  Note that the content
+    # will change only if the project's project.kite file has changed
+    # (or if Kite itself changes the data being saved).
+    #
+    # Thus, saving it everytime guarantees that the code is always
+    # up-to-date without generating a stream of changes into the 
+    # VCS repository.
+    project kiteinfo save
 
     # FIRST, given no input display the help.
     if {[llength $argv] == 0} {
