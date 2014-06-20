@@ -34,3 +34,15 @@ Kite currently assumes the following things about the user's development environ
 * The "teacup" app (installed with ActiveTcl) is also on the path.
 * The tclsh's teapot repository is in the default place, e.g., <tcldir>/lib/teapot.
 * TclDevKit is installed on the system, and tclapp is on the path.
+
+## Things to Try Later
+
+We can try doing some of the following in order to simplify development.
+
+* Run with basekits in development as well as run-time.  The base-kit then becomes the
+  equivalent of clojure.jar for a Leiningen project.
+* It seems to be possible to create starkits and starpacks as "zipkits" given AT 8.6 and
+  vfs::zip without using tclapp.  This would be a major step forward, as we could then
+  do without TDK, but would require pulling packages from a teapot into the local vfs.
+* Using a non-default teapot, e.g., ~/.teapot (avoids sudo issues on OSX/Linux).
+* Installing local packages (libkits) into ~/.teapot, perhaps as .tms.
