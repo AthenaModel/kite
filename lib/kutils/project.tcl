@@ -165,6 +165,14 @@ snit::type ::kutils::project {
     #-------------------------------------------------------------------
     # Other Queries
 
+    # appkits
+    #
+    # Returns the list of appkit names
+
+    typemethod appkits {} {
+        return $info(appkits)
+    }
+
     # dumpinfo
     #
     # Dump the project info to stdout.
