@@ -24,3 +24,13 @@ tool for Tcl development.  The initial goals are these:
 The initial priority is managing the choice of Mars and the basekit
 to be used in Athena development, so that we no longer rely on 
 svn:externals.
+
+## Assumptions
+
+Kite currently assumes the following things about the user's development environment:
+
+* A version of ActiveTcl is installed on the system.
+* The tclsh is on the path; it can be executed from the command line as "tclsh".
+* The "teacup" app (installed with ActiveTcl) is also on the path.
+* The tclsh's teapot repository is in the default place, e.g., <tcldir>/lib/teapot.
+* TclDevKit is installed on the system, and tclapp is on the path.
