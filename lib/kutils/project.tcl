@@ -163,6 +163,32 @@ snit::type ::kutils::project {
     }
 
     #-------------------------------------------------------------------
+    # Saving project info for use by the project's own code.
+
+    # savepackage
+    #
+    # Saves the kiteinfo package to lib/kiteinfo/*.
+    #
+    # TODO: We probably don't want to include everything in info().
+
+    typemethod savepackage {} {
+        # FIRST, get the data together
+        dict set mapping %package   kiteinfo
+        dict set mapping %timestamp [clock format [clock seconds]]
+        dict set mapping %kiteinfo  [list [array get info]]
+
+        # FIRST, create the directory (if needed)
+        set dir [project root lib kiteinfo]
+        file mkdir $dir
+
+        # NEXT, generate the files.
+        generate pkgIndex   $mapping [file join $dir pkgIndex.tcl]
+        generate pkgModules $mapping [file join $dir pkgModules.tcl]
+        generate kiteinfo   $mapping [file join $dir kiteinfo.tcl]
+    }
+    
+
+    #-------------------------------------------------------------------
     # Other Queries
 
     # appkits
