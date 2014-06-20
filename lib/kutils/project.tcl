@@ -165,13 +165,34 @@ snit::type ::kutils::project {
     #-------------------------------------------------------------------
     # Saving project info for use by the project's own code.
 
-    # savepackage
+    # kiteinfo needed
+    #
+    # Looks to see if the automatically generated kiteinfo package
+    # is out-of-date (or missing).  Assumes that the project.kite
+    # file is known to exist.
+
+    typemethod {kiteinfo needed} {} {
+        # FIRST, get the times for the project.kite file
+        set pktime [file mtime $projfile]
+
+        # NEXT, get the time of the kiteinfo package
+        set kifile [project root lib kiteinfo kiteinfo.tcl]
+        if {[file exists $kifile]} {
+            set kitime [file mtime $kifile]
+        } else {
+            set kitime 0
+        }
+
+        return [expr {$pktime > $kitime}]
+    }
+
+    # kiteinfo save
     #
     # Saves the kiteinfo package to lib/kiteinfo/*.
     #
     # TODO: We probably don't want to include everything in info().
 
-    typemethod savepackage {} {
+    typemethod {kiteinfo save} {} {
         # FIRST, get the data together
         dict set mapping %package   kiteinfo
         dict set mapping %timestamp [clock format [clock seconds]]

@@ -80,8 +80,11 @@ proc main {argv} {
     # if the project root cannot be identified.
     project loadinfo
 
-    # NEXT, save the kiteinfo package.  (This is a temporary thing)
-    project savepackage
+    # NEXT, as a general rule if project.kite has been changed we want
+    # to save a new kiteinfo package.
+    if {[project kiteinfo needed]} {
+        project kiteinfo save
+    }
 
     # FIRST, given no input display the help.
     if {[llength $argv] == 0} {
