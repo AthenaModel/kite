@@ -98,6 +98,12 @@ snit::type ::ktools::buildtool {
             lappend command [project root lib * *]
         }
 
+        # NEXT, does any library have a subdirectory?
+        if {[llength [glob -nocomplain [project root lib * *]]] > 0} {
+            lappend command [project root lib * * *]
+        }
+
+
         # NEXT, other standard arguments.
 
         # TODO: Snit should be an explicit dependency.
