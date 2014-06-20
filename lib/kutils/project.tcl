@@ -123,13 +123,16 @@ snit::type ::kutils::project {
         # NEXT, try to load the file
         try {
             $safe eval [readfile [$type root $projfile]]
+        } trap SYNTAX {result} {
+            throw FATAL "Error in project.kite: $result"
+        } trap {TCL WRONGARGS} {result} {
+            # Assume this is in the project.kite file
+            throw FATAL "Error in project.kite: $result"
         } trap FATAL {result} {
             throw FATAL $result
         } on error {result eopts} {
-            # TODO: Figure out which errors are FATAL and which
-            # are not.
-            puts "Got eopts: $eopts"
-            exit 1
+            # TODO: If verbose, include stacktrace.
+            throw FATAL $result
         } finally {
             interp delete $safe            
         }
@@ -147,10 +150,21 @@ snit::type ::kutils::project {
     # Implementation of the "project" kite file command.
 
     proc ProjectCmd {name version description} {
-        # TODO: error-checking!
-        set info(name)        $name
-        set info(version)     $version
-        set info(description) $description
+        set info(name)        [string trim [string tolower $name]]
+        set info(version)     [string trim $version]
+        set info(description) [string trim $description]
+
+        if {![BaseName? $info(name)]} {
+            throw SYNTAX "Invalid project name: \"$info(name)\""
+        }
+
+        if {![Version? $info(version)]} {
+            throw SYNTAX "Invalid version number: \"$info(version)\""
+        }
+
+        if {$info(description) eq ""} {
+            throw SYNTAX "Missing project description"
+        }
     }
     
     # AppkitCmd name
@@ -158,8 +172,37 @@ snit::type ::kutils::project {
     # Implementation of the "appkit" kite file command.
 
     proc AppkitCmd {name} {
-        # TODO: error-checking!
+        set name [string trim [string tolower $name]]
+
+        if {![regexp {^[a-z]\w*$} $name]} {
+            throw SYNTAX "Invalid appkit name \"$name\""
+        }
+
+        if {$name in $info(appkits)} {
+            throw SYNTAX "Duplicate appkit name \"$name\""
+        }
         lappend info(appkits) $name
+    }
+
+    # BaseName? name
+    #
+    # name   - A base file name, e.g., <base>.kit.
+    #
+    # Validates the name; it may contain letters, numbers, underscores,
+    # and hyphens, and should begin with a latter.
+
+    proc BaseName? {name} {
+        return [regexp {^[a-z][[:alnum:]_-]*$} $name]
+    }
+
+    # Version? ver
+    #
+    # ver   - A version number, e.g, 1.2.3-B12 or 1.2.3-SNAPSHOT.
+    #
+    # Validates the version.
+
+    proc Version? {ver} {
+        return [regexp {^\d+\.\d+\.\d+(-\w+)?$} $ver]
     }
 
     #-------------------------------------------------------------------
