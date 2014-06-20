@@ -15,12 +15,32 @@
 
 namespace eval ::kutils:: {
     namespace export \
+        checkargs    \
         lshift       \
         readfile
 }
 
 #-----------------------------------------------------------------------
 # Commands
+
+# checkargs tool min max argspec argv
+#
+# tool     - The name of the tool
+# min      - The minimum number of arguments.
+# max      - The maximum number of arguments, or "-" for no max
+# argspec  - An argument spec for display.
+# argv     - The actual arguments to the tool
+#
+# Throws an error if there are the wrong number of arguments.
+
+proc ::kutils::checkargs {tool min max argspec argv} {
+    set argc [llength $argv]
+    if {($argc < $min) ||
+        ($max ne "-" && $argc > $max)
+    } {
+        throw FATAL "Usage: kite.kit $tool $argspec"
+    }
+}
 
 # lshift listvar
 #

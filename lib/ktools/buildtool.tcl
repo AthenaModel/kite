@@ -35,6 +35,8 @@ snit::type ::ktools::buildtool {
     # Executes the tool given the command line arguments.
 
     typemethod execute {argv} {
+        checkargs build 0 0 {} $argv
+        
         puts "Building: <$argv>!"
     }
     

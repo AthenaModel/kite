@@ -42,6 +42,22 @@ snit::type ::ktools::helptool {
     # TODO: provide help for individual tools.
 
     typemethod execute {argv} {
+        checkargs help 0 1 {?topic?} $argv
+
+        set topic [lindex $argv 0]
+
+        if {$topic eq ""} {
+            ShowTopicList
+        } else {
+            ShowTopic $topic
+        }
+    }
+
+    # ShowTopicList 
+    #
+    # List all of the help topics (i.e., the tools and their descriptions).
+
+    proc ShowTopicList {} {
         puts "Kite is a tool for working with Tcl projects.\n"
 
         puts "Several tools are available:\n"
@@ -51,8 +67,30 @@ snit::type ::ktools::helptool {
 
             puts [format "%-10s - %s" $tool $tdata(description)]
         }
+
         puts ""
-    }    
+
+        puts "\nEnter 'kite.kit help <topic>' for help on a given topic."
+
+        puts ""
+    }
+
+    # ShowTopic topic
+    #
+    # topic  - A help topic (possibly)
+
+    proc ShowTopic {topic} {
+        # TODO: Provide help for at least the standard tools.
+
+        # For "help", all we can do is display the basic help again.
+        if {$topic eq "help"} {
+            ShowTopicList
+            return
+        }
+
+        puts "No help is currently available for that topic."
+        puts ""
+    }
 }
 
 

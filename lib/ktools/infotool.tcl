@@ -35,13 +35,16 @@ snit::type ::ktools::infotool {
     #-------------------------------------------------------------------
     # Execution
 
-    # execute ?args?
+    # execute argv
     #
-    # Displays information about Kite and the current project.
+    # Displays information about Kite and the current project
+    # given the command line.
     #
     # TODO: Need a mechanism for accessing kite's own project info.
 
     typemethod execute {argv} {
+        checkargs info 0 0 {} $argv
+
         puts "Kite vTBD\n"
 
         project dumpinfo

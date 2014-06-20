@@ -125,6 +125,7 @@ try {
     # A fatal application error; result is a message intended
     # for the user.
     puts $result
+    puts ""
 } on error {result eopts} {
     # A genuine error; report it in detail.
     puts "Unexpected Error: $result"
