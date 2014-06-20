@@ -72,3 +72,23 @@ proc ::kutils::readfile {filename} {
         close $f
     }
 }
+
+# generate template mapping filename
+#
+# template   - The name of a kutils/*.template file, e.g., "pkgIndex"
+# mapping    - A dict mapping from template parameters to generated code.
+# filename   - Full path of a file to be generated.
+#
+# Generates an output file given a template and a [string map]-style
+# mapping dict.
+
+proc ::kutils::generate {template mapping filename} {
+    variable library
+    set text [readfile [file join $library templates $template.template]]
+
+    set text [string map $mapping $text]
+
+    set f [open $filename w]
+    puts $f $text
+    close $f
+}
