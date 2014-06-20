@@ -57,6 +57,10 @@ package require snit 2.3
 package require kutils
 package require ktools
 
+if {[file exists [file join $libdir kiteinfo]]} {
+    package require kiteinfo
+}
+
 namespace import kutils::*
 
 #-----------------------------------------------------------------------
@@ -75,6 +79,9 @@ proc main {argv} {
     # FIRST, get the project info.  This will throw a FATAL error
     # if the project root cannot be identified.
     project loadinfo
+
+    # NEXT, save the kiteinfo package.  (This is a temporary thing)
+    project savepackage
 
     # FIRST, given no input display the help.
     if {[llength $argv] == 0} {

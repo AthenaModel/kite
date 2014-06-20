@@ -45,7 +45,7 @@ snit::type ::ktools::infotool {
     typemethod execute {argv} {
         checkargs info 0 0 {} $argv
 
-        puts "Kite vTBD\n"
+        puts "Kite [kiteinfo get version]\n"
 
         project dumpinfo
 
