@@ -54,9 +54,10 @@ lappend auto_path $libdir
 
 package require Tcl 8.6
 package require snit 2.3
+package require kutils
 package require ktools
 
-namespace import ktools::*
+namespace import kutils::*
 
 #-----------------------------------------------------------------------
 # Main Program 
@@ -69,7 +70,7 @@ namespace import ktools::*
 # It determines the application to invoke, and does so.
 
 proc main {argv} {
-    global tools
+    global ktools
 
     # FIRST, get the project info.  This will throw a FATAL error
     # if the project root cannot be identified.
@@ -78,13 +79,6 @@ proc main {argv} {
     # FIRST, given no input display the help.
     if {[llength $argv] == 0} {
         usetool help
-        # TODO: Remove the following debug code, when the help
-        #       and info tools are available.
-        puts "Tools Available:"
-        parray ::tools
-
-        puts "\nProject Root: [project root]"
-        project dump
 
         exit 0
     }
@@ -92,7 +86,7 @@ proc main {argv} {
     # NEXT, get the subcommand and see if we have a matching tool.
     set tool [lshift argv]
 
-    if {![info exist ::tools($tool)]} {
+    if {![info exist ::ktools($tool)]} {
         throw FATAL \
             "'$tool' is not the name of a Kite tool.  See 'kite.kit help'."
     }
@@ -109,9 +103,13 @@ proc main {argv} {
 # Calls the tool with the given arguments.
 
 proc usetool {tool {argv ""}} {
-    array set tdata $::tools($tool)
+    array set tdata $::ktools($tool)
 
     # FIRST, make sure the tool's package is loaded.
+    # NOTE: At present, this isn't strictly required; all tools
+    # are defined in ktools(n), which is loaded automatically.
+    # In the long run, we will have tools (and external plugins)
+    # that are loaded only when called for.
     package require $tdata(package)
 
     # NEXT, execute it.

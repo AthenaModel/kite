@@ -6,18 +6,18 @@
 #   Will Duquette
 #
 # DESCRIPTION:
-#   Kite: ktools(n) project file reader/writing
+#   Kite: kutils(n) project file reader/writing
 #
 #-----------------------------------------------------------------------
 
-namespace eval ::ktools:: {
+namespace eval ::kutils:: {
     namespace export project
 }
 
 #-----------------------------------------------------------------------
 # project ensemble
 
-snit::type ::ktools::project {
+snit::type ::kutils::project {
     # Make it a singleton
     pragma -hasinstances no -hastypedestroy no
 
@@ -47,7 +47,9 @@ snit::type ::ktools::project {
         name        ""
         version     ""
         description ""
+        apps        ""
         appkits     ""
+        libkits     ""
     }
 
     #-------------------------------------------------------------------
@@ -145,7 +147,7 @@ snit::type ::ktools::project {
     # Implementation of the "project" kite file command.
 
     proc ProjectCmd {name version description} {
-        # TBD: error-checking!
+        # TODO: error-checking!
         set info(name)        $name
         set info(version)     $version
         set info(description) $description
@@ -156,21 +158,47 @@ snit::type ::ktools::project {
     # Implementation of the "appkit" kite file command.
 
     proc AppkitCmd {name} {
-        # TBD: error-checking!
+        # TODO: error-checking!
         lappend info(appkits) $name
     }
 
     #-------------------------------------------------------------------
     # Other Queries
 
-    # dump
+    # dumpinfo
     #
     # Dump the project info to stdout.
-    # TODO: Do this right.
 
-    typemethod dump {} {
-        puts "Project Information"
-        parray info
+    typemethod dumpinfo {} {
+        puts "Project Information:\n"
+
+        DumpValue "Name:"        $info(name)
+        DumpValue "Version:"     $info(version)
+        DumpValue "Description:" $info(description)
+
+        puts ""
+
+        DumpValue "Apps:"     [join $info(apps)    ", "]
+        DumpValue "AppKits:"  [join $info(appkits) ", "]
+        DumpValue "LibKits:"  [join $info(libkits) ", "]
+    }
+
+    # DumpValue name value
+    #
+    # name   - The label, include colon
+    # value  - The value to dump
+    #
+    # Writes a row with the name and value in two columns.  If
+    # the value is "", then "n/a" is output.
+
+    proc DumpValue {name value} {
+        set fmt "%-12s %s"
+
+        if {$value eq ""} {
+            set value "n/a"
+        }
+
+        puts [format $fmt $name $value]
     }
     
 }

@@ -13,12 +13,12 @@
 #-----------------------------------------------------------------------
 # Package Definition
 
-package provide ktools 1.0
+package provide kutils 1.0
 
 #-----------------------------------------------------------------------
 # Namespace definition
 
-namespace eval ::ktools:: {
+namespace eval ::kutils:: {
     variable library [file dirname [info script]]
 }
 
@@ -28,6 +28,5 @@ namespace eval ::ktools:: {
 # Note: modules are listed in order of dependencies; be careful if you
 # change the order!
 
-source [file join $::ktools::library buildtool.tcl]
-source [file join $::ktools::library helptool.tcl ]
-source [file join $::ktools::library infotool.tcl ]
+source [file join $::kutils::library misc.tcl    ]
+source [file join $::kutils::library project.tcl ]

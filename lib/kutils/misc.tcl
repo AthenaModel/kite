@@ -6,14 +6,14 @@
 #   Will Duquette
 #
 # DESCRIPTION:
-#   Kite: ktools(n) Miscellaneous Commands
+#   Kite: kutils(n) Miscellaneous Commands
 #
 # TODO: Some of these should be deleted once we can make Mars an
 #       external dependency.
 #
 #-----------------------------------------------------------------------
 
-namespace eval ::ktools:: {
+namespace eval ::kutils:: {
     namespace export \
         lshift       \
         readfile
@@ -27,7 +27,7 @@ namespace eval ::ktools:: {
 # Removes the first element from the list held in listvar, updates
 # listvar, and returns the element.
 
-proc ::ktools::lshift {listvar} {
+proc ::kutils::lshift {listvar} {
     upvar $listvar list
 
     set value [lindex $list 0]
@@ -43,7 +43,7 @@ proc ::ktools::lshift {listvar} {
 # Reads the file and returns the text.  Throws the normal
 # open/read errors.
 
-proc ::ktools::readfile {filename} {
+proc ::kutils::readfile {filename} {
     set f [open $filename r]
 
     try {

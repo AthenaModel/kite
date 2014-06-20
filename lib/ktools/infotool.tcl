@@ -1,6 +1,6 @@
 #-----------------------------------------------------------------------
 # TITLE:
-#   helptool.tcl
+#   infotool.tcl
 #
 # AUTHOR:
 #   Will Duquette
@@ -13,17 +13,17 @@
 #-----------------------------------------------------------------------
 # Registration
 
-set ::ktools(help) {
+set ::ktools(info) {
     arglist     {}
     package     ktools
-    ensemble    ::ktools::helptool
-    description "Display this help, or help for a given tool."
+    ensemble    ::ktools::infotool
+    description "Display information about Kite and this project."
 }
 
 #-----------------------------------------------------------------------
 # tool::help ensemble
 
-snit::type ::ktools::helptool {
+snit::type ::ktools::infotool {
     # Make it a singleton
     pragma -hasinstances no -hastypedestroy no
 
@@ -37,20 +37,15 @@ snit::type ::ktools::helptool {
 
     # execute ?args?
     #
-    # Displays the Kite help.
+    # Displays information about Kite and the current project.
     #
-    # TODO: provide help for individual tools.
+    # TODO: Need a mechanism for accessing kite's own project info.
 
     typemethod execute {argv} {
-        puts "Kite is a tool for working with Tcl projects.\n"
+        puts "Kite vTBD\n"
 
-        puts "Several tools are available:\n"
+        project dumpinfo
 
-        foreach tool [lsort [array names ::ktools]] {
-            array set tdata $::ktools($tool)
-
-            puts [format "%-10s - %s" $tool $tdata(description)]
-        }
         puts ""
     }    
 }
