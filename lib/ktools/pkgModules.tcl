@@ -28,6 +28,7 @@ namespace eval ::ktools:: {
 # Note: modules are listed in order of dependencies; be careful if you
 # change the order!
 
-source [file join $::ktools::library buildtool.tcl]
-source [file join $::ktools::library helptool.tcl ]
-source [file join $::ktools::library infotool.tcl ]
+source [file join $::ktools::library buildtool.tcl  ]
+source [file join $::ktools::library helptool.tcl   ]
+source [file join $::ktools::library infotool.tcl   ]
+source [file join $::ktools::library installtool.tcl]

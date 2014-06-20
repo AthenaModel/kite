@@ -36,6 +36,8 @@ snit::type ::ktools::buildtool {
     # execute argv
     #
     # Executes the tool given the command line arguments.
+    #
+    # TODO: Allow building just one target.
 
     typemethod execute {argv} {
         checkargs build 0 0 {} $argv

@@ -6,7 +6,7 @@
 #   Will Duquette
 #
 # DESCRIPTION:
-#   Kite: "help" tool
+#   Kite: "info" tool
 #
 #-----------------------------------------------------------------------
 
@@ -21,7 +21,7 @@ set ::ktools(info) {
 }
 
 #-----------------------------------------------------------------------
-# tool::help ensemble
+# tool::info ensemble
 
 snit::type ::ktools::infotool {
     # Make it a singleton
@@ -39,8 +39,6 @@ snit::type ::ktools::infotool {
     #
     # Displays information about Kite and the current project
     # given the command line.
-    #
-    # TODO: Need a mechanism for accessing kite's own project info.
 
     typemethod execute {argv} {
         checkargs info 0 0 {} $argv
