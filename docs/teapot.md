@@ -151,3 +151,14 @@ If I have a package file created by teapot-pkg, I can install it into
     teacup install --at ~/.teapot <package-file>
 
 It can then be seen by any `tclsh` linked to the repository.
+
+## Running a teapot server
+
+The problem with installing local builds into the local `~/.teapot` is
+that every developer needs to do that.  I can build marsutil(n) 
+and install it locally, but Dave would have to do the same on a regular
+basis.
+
+Another possiblity is to run a teapot server on oak.  We have the
+code to do it.  But we might get into trouble with JPL IT, and we'd
+probably need another TDK license.
