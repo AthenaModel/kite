@@ -8,19 +8,19 @@ In particular, Kite will:
 * Use teacup to pull dependencies (both packages and basekits) from 
   teapot.activestate.com.
 
-* Use teacup to create a local repository in `~/.teapot`.
+* Use teacup to create a local repository in `~/.kite/teapot`.
 
-* Pull dependencies into `~/.teapot` rather than the default 
+* Pull dependencies into `~/.kite/teapot` rather than the default 
   `$TCL_HOME/lib/teapot`, since modifying that repository generally
   requires "sudo" on Linux and OSX.
 
 * Package local libraries (e.g., Mars) for inclusion in a teapot
   repository using TDK's `teapot-pkg` application.
 
-* Install local libraries into `~/.teapot`.
+* Install local libraries into `~/.kite/teapot`.
 
 * Use tclapp to build starkits and starpacks, using the dependencies
-  from `~/.teapot`.
+  from `~/.kite/teapot`.
 
 Some of these steps are already well-understood; Athena's been building
 starpacks for years and Kite can already build applications as starkits.
@@ -44,30 +44,41 @@ be [package require]'ing them.
 The `teacup` tool is installed with ActiveTcl and resides in the same
 `bin/` directory as `tclsh` does.  This is important.
 
-## Creating `~/.teapot`
+## Creating `~/.kite/teapot`
 
 This is trivially easy:
 
-    teacup create ~/.teapot
+    teacup create ~/.kite/teapot
 
-However, we probably want to link this teapot to our development tclsh;
-among other things, this allows teacup to infer the desired architecture,
-which is a good thing.  To do that:
+However, we will need to link this teapot to our development tclsh.
+To do that:
 
-    teacup link make ~/.teapot /path/to/your/tclsh
+    teacup link make ~/.kite/teapot `which tclsh`
 
-## Installing a remote dependency into `~/.teapot`
+If Tcl was installed as root on Linux or OSX, this is more complicated:
+
+    sudo `which teacup` link make ~/.kite/teapot `which tclsh`
+
+Finally, we will want to make ~/.kite/teapot the default teapot; on Linux
+(and OSX) when Tcl is installed as root, this allows us to install things
+into the repository without needing sudo:
+
+    sudo `which teacup` default ~/.kite/teapot
+
+If we leave the original teapot in place and linked, we should be fine.
+
+## Installing a remote dependency into `~/.kite/teapot`
 
 To install a package from `teapot.activestate.com`, use a command like
 this:
 
-    teacup install --at ~/.teapot sqlite3 3.8.5
+    teacup install --at ~/.kite/teapot sqlite3 3.8.5
 
 We may wish to use the `--with-recommends` option, which also installs all
 of the package's required dependencies.
 
 __Note on architectures:__ if you've not linked your development 
-`tclsh` to `~/.teapot` and
+`tclsh` to `~/.kite/teapot` and
 the package is a binary package, `teacup` will not be able to infer the
 machine architecture, and you'll get an error.  You can force the
 architecture using the `--arch` options.  The architectures we're likely
@@ -80,17 +91,17 @@ to need are:
 
 Note that pure-Tcl packages have an architecture of "tcl".
 
-## Listing the packages in `~/.teapot`
+## Listing the packages in `~/.kite/teapot`
 
-    teacup list ~/.teapot
+    teacup list ~/.kite/teapot
 
-## Building starkits and starpacks against `~/.teapot`
+## Building starkits and starpacks against `~/.kite/teapot`
 
 This is straightforward; at least, I think it is.
 
-    tclapp ... -archive ~/.teapot ...
+    tclapp ... -archive ~/.kite/teapot ...
 
-## Preparing a local package for inclusion in ~/.teapot
+## Preparing a local package for inclusion in ~/.kite/teapot
 
 First, we can create Tcl modules (.tm's) or .zip archives.
 
@@ -143,22 +154,22 @@ it has problems for my purposes:
 These can be fixed, but they require adding obscure "pragmas" into the
 package files, so I don't plan to use that.
 
-## Installing a local package into ~/.teapot
+## Installing a local package into ~/.kite/teapot
 
 If I have a package file created by teapot-pkg, I can install it into
-`~/.teapot` using `teacup`:
+`~/.kite/teapot` using `teacup`:
 
-    teacup install --at ~/.teapot <package-file>
+    teacup install --at ~/.kite/teapot <package-file>
 
 It can then be seen by any `tclsh` linked to the repository.
 
 ## Running a teapot server
 
-The problem with installing local builds into the local `~/.teapot` is
+The problem with installing local builds into the local `~/.kite/teapot` is
 that every developer needs to do that.  I can build marsutil(n) 
 and install it locally, but Dave would have to do the same on a regular
 basis.
 
 Another possiblity is to run a teapot server on oak.  We have the
-code to do it.  But we might get into trouble with JPL IT, and we'd
-probably need another TDK license.
+code to do it; and I've tried it and it appears to work (modulo some odd
+messages).  But we might get into trouble with JPL IT.

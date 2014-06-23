@@ -82,4 +82,4 @@ We'd do that by specifying a git dependency in project.clj:
 
 And then the gitlibs tree (or some subset of it) would get 
 included in the starpack.  But this requires Kite knowing something
-about git.
+about git, and how to pull down specific tags.
