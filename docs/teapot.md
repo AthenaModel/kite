@@ -15,7 +15,7 @@ In particular, Kite will:
   requires "sudo" on Linux and OSX.
 
 * Package local libraries (e.g., Mars) for inclusion in a teapot
-  repository using TDK's tclpe.
+  repository using TDK's `teapot-pkg` application.
 
 * Install local libraries into `~/.teapot`.
 
@@ -28,9 +28,126 @@ But some of the other steps require some research into how teapots work
 and how the available tools work; and the fruits of that research will
 be recorded here.
 
+## A note on version numbers
+
+The "1.2.3-SNAPSHOT" version numbering scheme used by Leiningen and Maven
+won't work with Tcl packages; Tcl (and hence teacup/teapot) doesn't allow
+the "-SNAPSHOT" suffix.  The closest we can get is "1.2a3" or "1.2b3"
+indicating alpha or beta quality.  I would suggest using "1.2a3" format
+for internal snapshots.  
+
+For applications, we can use any version numbering scheme we like; we won't
+be [package require]'ing them.
+
+## Finding `teacup`
+
+The `teacup` tool is installed with ActiveTcl and resides in the same
+`bin/` directory as `tclsh` does.  This is important.
+
 ## Creating `~/.teapot`
 
 This is trivially easy:
 
     teacup create ~/.teapot
 
+However, we probably want to link this teapot to our development tclsh;
+among other things, this allows teacup to infer the desired architecture,
+which is a good thing.  To do that:
+
+    teacup link make ~/.teapot /path/to/your/tclsh
+
+## Installing a remote dependency into `~/.teapot`
+
+To install a package from `teapot.activestate.com`, use a command like
+this:
+
+    teacup install --at ~/.teapot sqlite3 3.8.5
+
+We may wish to use the `--with-recommends` option, which also installs all
+of the package's required dependencies.
+
+__Note on architectures:__ if you've not linked your development 
+`tclsh` to `~/.teapot` and
+the package is a binary package, `teacup` will not be able to infer the
+machine architecture, and you'll get an error.  You can force the
+architecture using the `--arch` options.  The architectures we're likely
+to need are:
+
+* win32-ix86
+* linux-*-ix86
+* linux-*-x86_64
+* macosx-*-x86-64
+
+Note that pure-Tcl packages have an architecture of "tcl".
+
+## Listing the packages in `~/.teapot`
+
+    teacup list ~/.teapot
+
+## Building starkits and starpacks against `~/.teapot`
+
+This is straightforward; at least, I think it is.
+
+    tclapp ... -archive ~/.teapot ...
+
+## Preparing a local package for inclusion in ~/.teapot
+
+First, we can create Tcl modules (.tm's) or .zip archives.
+
+Next, we need a `teapot.txt` file with
+the required metadata.  It seems that the simplest we can use is
+
+    Package fred 1.0
+    Meta entrykeep 
+    Meta included    *
+    Meta platform    tcl
+
+This tells teapot-pkg the package name and version, that we want to use
+our own pkgIndex.tcl, and all files in the directory should be included
+in the package, and that the package architecture is "tcl".
+
+If we use "Meta entrysource pkgModules.tcl" instead of 
+"Meta entrykeep" then `teapot-pkg` will generate its own pkgIndex.tcl.
+We can also add a number of other descriptive metadata items, as shown
+here:
+
+    Meta category     GUI convenience library and widget set
+    Meta description  The Mars GUI library
+    Meta platform     tcl
+    Meta require      {snit 2.3}
+    Meta require      {Tcl 8.6}
+    Meta require      {Tk 8.6}
+    Meta summary      The Mars GUI library
+
+Next, we can build the package as follows:
+
+    teacup-pkg generate -t zip -o <output-dir> <package-dir>
+
+This command will actually walk the _package-dir_ tree; a single
+project could reasonable export multiple packages.  The created
+package files go in the _output-dir_.
+
+We can also use `-t tm` to create .tm modules; but .zip modules are 
+more practical, as they can contain files other than .tcl code.
+
+## Scanning automatically for packages
+
+The command `teacup-pkg scan` can scan a directory tree and
+build teapot.txt files, extracting dependencies automatically.  However,
+it has problems for my purposes:
+
+1. It misses the non-Tcl files (e.g., .sql files).
+2. It extracts the dependencies; but I want to get those from the 
+   project.kite file anyway.
+
+These can be fixed, but they require adding obscure "pragmas" into the
+package files, so I don't plan to use that.
+
+## Installing a local package into ~/.teapot
+
+If I have a package file created by teapot-pkg, I can install it into
+`~/.teapot` using `teacup`:
+
+    teacup install --at ~/.teapot <package-file>
+
+It can then be seen by any `tclsh` linked to the repository.
