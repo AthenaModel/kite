@@ -1,0 +1,9 @@
+# Local includes
+/includes
+
+# Build Artifacts
+*.log
+*.kit
+
+# SublimeText artifacts
+*.sublime-*

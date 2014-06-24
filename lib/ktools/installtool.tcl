@@ -18,6 +18,7 @@ set ::ktools(install) {
     package     ktools
     ensemble    ::ktools::installtool
     description "Build and install applications to ~/bin."
+    intree      yes
 }
 
 #-----------------------------------------------------------------------

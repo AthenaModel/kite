@@ -21,6 +21,7 @@ set ::ktools(build) {
     package     ktools
     ensemble    ::ktools::buildtool
     description "Build the entire project."
+    intree      yes
 }
 
 #-----------------------------------------------------------------------
@@ -83,28 +84,28 @@ snit::type ::ktools::buildtool {
                 "Cannot build appkit '$name'; the 'bin/$name.kit script is missing."
         }
 
-        lappend command $main
+        lappend command $main \
+            [project root lib * *]
 
-        # NEXT, erase the existing kit, if any
-        set kit [project root bin $name.kit]
-
-        # TODO: erase existing kit; because if we have an error and the
-        # old kit is still around, it's a source of confusion.
-        if {[file exists $kit]} {
-            puts "Deleting old $name.kit"
-            catch {file delete -force $kit}
-        }
 
         # NEXT, do we have any libraries?
         if {[llength [glob -nocomplain [project root lib *]]] > 0} {
             lappend command [project root lib * *]
         }
 
-        # NEXT, does any library have a subdirectory?
-        if {[llength [glob -nocomplain [project root lib * *]]] > 0} {
+        # NEXT, include library subdirectories, if any.
+        if {[llength [glob -nocomplain [project root lib * * *]]] > 0} {
             lappend command [project root lib * * *]
         }
 
+
+        # NEXT, erase the existing kit, if any
+        set kit [project root bin $name.kit]
+
+        if {[file exists $kit]} {
+            puts "Deleting old $name.kit"
+            catch {file delete -force $kit}
+        }
 
         # NEXT, other standard arguments.
 

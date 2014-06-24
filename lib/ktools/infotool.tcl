@@ -18,6 +18,7 @@ set ::ktools(info) {
     package     ktools
     ensemble    ::ktools::infotool
     description "Display information about Kite and this project."
+    intree      yes
 }
 
 #-----------------------------------------------------------------------

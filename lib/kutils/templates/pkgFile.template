@@ -1,0 +1,32 @@
+#-----------------------------------------------------------------------
+# TITLE:
+#   %package.tcl
+#
+# AUTHOR:
+#   Will Duquette
+#
+# DESCRIPTION:
+#   %project: %package(n) Package
+#
+#   FIXME: Description of this package.
+#
+#-----------------------------------------------------------------------
+
+namespace eval ::%package:: {
+    namespace export \
+        hello
+
+    namespace ensemble create
+}
+
+#-----------------------------------------------------------------------
+# Commands
+
+# hello
+#
+# Dummy example proc.
+
+proc ::%package::hello {args} {
+    puts "%package(n): Hello, world!"
+    return
+}

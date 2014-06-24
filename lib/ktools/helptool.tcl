@@ -18,6 +18,7 @@ set ::ktools(help) {
     package     ktools
     ensemble    ::ktools::helptool
     description "Display this help, or help for a given tool."
+    intree      no
 }
 
 #-----------------------------------------------------------------------

@@ -73,21 +73,33 @@ proc ::kutils::readfile {filename} {
     }
 }
 
-# generate template mapping filename
+# generate template mapping filename...
 #
 # template   - The name of a kutils/*.template file, e.g., "pkgIndex"
 # mapping    - A dict mapping from template parameters to generated code.
-# filename   - Full path of a file to be generated.
+# filename...   - Full path of a file to be generated, possibly as a
+#                 series of tokens.
 #
 # Generates an output file given a template and a [string map]-style
-# mapping dict.
+# mapping dict.  If the filename is given as a sequence of tokens,
+# they are joined appropriately for the platform.
 
-proc ::kutils::generate {template mapping filename} {
+proc ::kutils::generate {template mapping args} {
     variable library
+
+    # FIRST, get the file name.
+    set filename [file join {*}$args]
+
+    # NEXT, get the template text
     set text [readfile [file join $library templates $template.template]]
 
+    # NEXT, apply the mapping.
     set text [string map $mapping $text]
 
+    # NEXT, make sure that the relevant directory exists.
+    file mkdir [file dirname $filename]
+
+    # NEXT, save the file.
     set f [open $filename w]
     puts $f $text
     close $f

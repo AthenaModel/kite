@@ -71,6 +71,10 @@ snit::type ::kutils::project {
             set rootdir [FindProjectDirectory]   
         }
 
+        if {$rootdir eq ""} {
+            return ""
+        }
+
         return [file join $rootdir {*}$args]
     }
 
@@ -78,8 +82,7 @@ snit::type ::kutils::project {
     #
     # Starting from the current working directory, works its way up
     # the tree looking for project.kite; if found it returns the 
-    # directory containing project.kite.  Otherwise, it throws an
-    # error of type FATAL.
+    # directory containing project.kite, and "" otherwise.
 
     proc FindProjectDirectory {} {
         set lastdir ""
@@ -101,8 +104,7 @@ snit::type ::kutils::project {
             }
         }
 
-        throw FATAL \
-            "Could not find $projfile in this directory or its parents"
+        return ""
     }
 
     #-------------------------------------------------------------------
@@ -110,7 +112,8 @@ snit::type ::kutils::project {
 
     # loadinfo
     #
-    # Loads the information from the project file.
+    # Loads the information from the project file.  We must be
+    # in a project tree.
 
     typemethod loadinfo {} {
         # FIRST, set up the safe interpreter
@@ -202,7 +205,9 @@ snit::type ::kutils::project {
     # Validates the version.
 
     proc Version? {ver} {
-        return [regexp {^\d+\.\d+\.\d+(-\w+)?$} $ver]
+        # TODO: use the correct regexp for Tcl packages, plus
+        # allow -suffix.
+        return [regexp {^\d+[.ab]\d+[.ab]\d+(-\w+)?$} $ver]
     }
 
     #-------------------------------------------------------------------
@@ -216,6 +221,7 @@ snit::type ::kutils::project {
 
     typemethod {kiteinfo save} {} {
         # FIRST, get the data together
+        dict set mapping %project   $info(name)
         dict set mapping %package   kiteinfo
         dict set mapping %kiteinfo  [list [array get info]]
 
@@ -232,6 +238,14 @@ snit::type ::kutils::project {
 
     #-------------------------------------------------------------------
     # Other Queries
+
+    # intree
+    #
+    # Returns 1 if we're in a project tree, and 0 otherwise.
+
+    typemethod intree {} {
+        return [expr {$rootdir ne ""}]
+    }
 
     # appkits
     #
