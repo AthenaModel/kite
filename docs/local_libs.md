@@ -25,6 +25,29 @@ need them? They aren't in the ActiveState teapot (and won't be) so
 whatever solution I implement for normal external dependencies doesn't
 apply.
 
+## Local Includes
+
+To begin with, we'll implement the notion of "local includes".  We'll be
+relying on teapot.activestate.com for truly external dependencies, but
+local stuff will be in one CM repository or another.  So what we'll do
+is this.
+
+First, we'll add an `include` command to project.kite.  It can have a 
+number of forms:
+
+* `include svn mars https://oak.jpl.nasa.gov/svn/mars/tags/mars_2.34`
+* `include git mars https://github.jpl.nasa.gov/athena/athena-mars v3.0.0`
+* `include dir mars ~/mars`  
+
+The latter would be for use as a temporary stop-gap, typically.
+
+On `kite deps`, Kite will try to pull down all dependencies, including
+these includes.  Include "<project>" will go in the 
+"<root>/includes/<project>/" directory.  The "includes" subdirectory will
+be included in the default ".gitignore" file.
+
+# Discussion
+
 ## Development Tools
 
 The three development tools needed to build Athena are 
