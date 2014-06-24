@@ -16,7 +16,9 @@
 namespace eval ::kutils:: {
     namespace export \
         checkargs    \
+        ladd         \
         lshift       \
+        prepare      \
         readfile
 }
 
@@ -42,6 +44,29 @@ proc ::kutils::checkargs {tool min max argspec argv} {
     }
 }
 
+# ladd listvar value
+#
+# listvar    A list variable
+# value      A value
+#
+# If the value does not exist in listvar, it is appended.
+# The new list is returned.
+
+proc ::kutils::ladd {listvar value} {
+    upvar $listvar list1
+
+    if {[info exists list1]} {
+        set ndx [lsearch -exact $list1 $value]
+        if {$ndx == -1} {
+            lappend list1 $value
+        }
+    } else {
+        set list1 [list $value]
+    }
+
+    return $list1
+}
+
 # lshift listvar
 #
 # Removes the first element from the list held in listvar, updates
@@ -53,6 +78,50 @@ proc ::kutils::lshift {listvar} {
     set value [lindex $list 0]
     set list [lrange $list 1 end]
     return $value
+}
+
+
+# prepare varname ?options?
+#
+# varname - The name of the parameter variable
+#
+# Options:
+#
+#   -required         - Value must not be ""
+#   -toupper          - Convert to upper case
+#   -tolower          - Convert to lower case
+#
+# Does a string trim on the named var's value, applies
+# any options, and puts the result back in the var.
+
+proc kutils::prepare {varname args} {
+    upvar 1 $varname var
+
+    set var [string trim $var]
+
+    while {[llength $args] > 0} {
+        set opt [lshift args] 
+
+        switch -exact -- $opt {
+            -tolower { 
+                set var [string tolower $var] 
+            }
+            
+            -toupper { 
+                set var [string toupper $var] 
+            }
+
+            -required {
+                if {$var eq ""} {
+                    throw SYNTAX "Missing $varname value"
+                }
+            }
+
+            default  { error "Unknown option: \"$opt\""}
+        }
+    }
+
+    return
 }
 
 
