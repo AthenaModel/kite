@@ -42,8 +42,8 @@ number of forms:
 The latter would be for use as a temporary stop-gap, typically.
 
 On `kite deps`, Kite will try to pull down all dependencies, including
-these includes.  Included project "_project_" will go in the 
-"_root_/includes/_project_/" directory.  The "includes" subdirectory will
+these includes.  Included project "<i>project</i>" will go in the 
+"<i>root</i>/includes/<i>project</i>/" directory.  The "includes" subdirectory will
 be included in the default ".gitignore" file.
 
 # Discussion
