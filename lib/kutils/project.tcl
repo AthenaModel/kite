@@ -36,20 +36,26 @@ snit::type ::kutils::project {
 
     # info - the project info array
     #
-    #   name        - The project name
-    #   version     - The version number, x.y.z-Bn
-    #   description - The project title
-    #   appkit      - List of appkits to build.
+    #   name           - The project name
+    #   version        - The version number, x.y.z-Bn
+    #   description    - The project title
+    #   appkit         - List of appkits to build.
+    #
+    #   includes       - List of include names
+    #   include-$name  - inclusion dictionary for the $name
+    #
+    #       vcs - git|svn
+    #       url - The repository URL
+    #       tag - The version/branch tag
     #
     # If values are "", the data has not yet been loaded.
 
     typevariable info -array {
-        name        ""
-        version     ""
-        description ""
-        apps        ""
-        appkits     ""
-        libkits     ""
+        name           ""
+        version        ""
+        description    ""
+        appkits        ""
+        includes       {}
     }
 
     #-------------------------------------------------------------------
@@ -122,6 +128,8 @@ snit::type ::kutils::project {
         set safe [interp create -safe]
         $safe alias project [myproc ProjectCmd]
         $safe alias appkit  [myproc AppkitCmd]
+        $safe alias include [myproc IncludeCmd]
+
 
         # NEXT, try to load the file
         try {
@@ -184,15 +192,57 @@ snit::type ::kutils::project {
         if {$name in $info(appkits)} {
             throw SYNTAX "Duplicate appkit name \"$name\""
         }
-        lappend info(appkits) $name
+
+        ladd info(appkits) $name
     }
+
+    # IncludeCmd name vcs url tag
+    #
+    # name  - Name of included software; used as directory name 
+    #         under <root>/includes/
+    # vcs   - svn | git
+    # url   - URL of the project for cloning/checkout
+    # tag   - The specific version of the software to checkout.
+    #
+    # Pulls the software from the repository at the URL using the
+    # "svn" or "git" command line tool.  The URL is to the project
+    # root.  The tag is the tag or branch to checkout, in a form
+    # appropriate for the VCS.
+    #
+    # For git, the tag can be any branch or tag name.
+    # For svn, the tag is added to the URL, e.g., "trunk", 
+    # "branches/athena_6.3.1", "tags/athena_6.3.1-R12".
+
+    proc IncludeCmd {name vcs url tag} {
+        prepare vcs  -required -tolower
+        prepare name -required
+        prepare url  -required
+        prepare tag  -required
+
+        if {$vcs ni {git svn}} {
+            throw SYNTAX "Unknown VCS on include: \"$vcs\""
+        }
+
+        if {![BaseName? $name]} {
+            throw SYNTAX "Invalid include name: \"$name\""
+        }
+
+        if {$name in $info(includes)} {
+            throw SYNTAX "Duplicate include name: \"$name\""
+        }
+
+        ladd info(includes) $name
+        set info(includes-$name) \
+            [dict create vcs $vcs url $url tag $tag]
+    }
+
 
     # BaseName? name
     #
     # name   - A base file name, e.g., <base>.kit.
     #
     # Validates the name; it may contain letters, numbers, underscores,
-    # and hyphens, and should begin with a latter.
+    # and hyphens, and should begin with a letter.
 
     proc BaseName? {name} {
         return [regexp {^[a-z][[:alnum:]_-]*$} $name]
@@ -265,12 +315,14 @@ snit::type ::kutils::project {
         DumpValue "Name:"        $info(name)
         DumpValue "Version:"     $info(version)
         DumpValue "Description:" $info(description)
+        DumpValue "AppKits:"     [join $info(appkits) ", "]
 
         puts ""
 
-        DumpValue "Apps:"     [join $info(apps)    ", "]
-        DumpValue "AppKits:"  [join $info(appkits) ", "]
-        DumpValue "LibKits:"  [join $info(libkits) ", "]
+        foreach name $info(includes) {
+            array set d $info(includes-$name)
+            DumpValue "Include:"  "$name as $d(vcs) $d(url) $d(tag)"
+        }
     }
 
     # DumpValue name value
