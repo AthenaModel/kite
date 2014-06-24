@@ -42,8 +42,8 @@ number of forms:
 The latter would be for use as a temporary stop-gap, typically.
 
 On `kite deps`, Kite will try to pull down all dependencies, including
-these includes.  Include "<project>" will go in the 
-"<root>/includes/<project>/" directory.  The "includes" subdirectory will
+these includes.  Included project "_project_" will go in the 
+"_root_/includes/_project_/" directory.  The "includes" subdirectory will
 be included in the default ".gitignore" file.
 
 # Discussion
@@ -97,7 +97,7 @@ true teapot server, which has its own headaches.)
 Another possibility is to pull the package directories into the project
 tree somewhere that's ignored by git, e.g.,
 
-  gitlibs/mars/lib/<package>/ 
+  gitlibs/mars/lib/mypackage/ 
 
 We'd do that by specifying a git dependency in project.clj:
 
@@ -106,3 +106,5 @@ We'd do that by specifying a git dependency in project.clj:
 And then the gitlibs tree (or some subset of it) would get 
 included in the starpack.  But this requires Kite knowing something
 about git, and how to pull down specific tags.
+
+(See above for how we decided to handle this.)
