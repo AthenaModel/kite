@@ -1,7 +1,6 @@
 # Project TODO List
 
 * Document the project.kite file syntax and semantics.
-* Add content for "kite help _command_"
 * Add library project tree template.
 
 At this point Kite becomes useful.
