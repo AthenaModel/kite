@@ -28,7 +28,37 @@ snit::type ::kutils::includer {
     # The name for the kite signature file in an include directory.
     typevariable kiteSigFile ".kite_signature"
     
+    #-------------------------------------------------------------------
+    # Public Commands
 
+    # status
+    #
+    # Outputs the status of the project's includes.
+
+    typemethod status {} {
+        if {[llength [project include names]] == 0} {
+            puts "The project has no includes.\n"
+            return
+        }
+
+        puts "Include Status:\n"
+
+        foreach name [project include names] {
+            set tag [project include get $name tag]
+            
+            if {[SignatureMatches $name]} {
+                puts "  include \"$name $tag\" appears to be up-to-date."
+            } else {
+                puts "  include \"$name $tag\" needs to be retrieved."
+            }
+        }
+
+        puts ""
+        puts "To retrieve out-of-date or missing includes, use \"kite.kit deps update\"."
+        puts "To update all includes, use \"kite.kit deps force\"."
+        puts ""
+    }
+    
 
     #-------------------------------------------------------------------
     # Helpers
@@ -63,26 +93,25 @@ snit::type ::kutils::includer {
         set idict [project include get $name]
         dict with idict {}
 
-        return "$name|$includer|$url|$tag"
+        return "$name|$vcs|$url|$tag"
     }
 
-    # SignatureMatches name signature
+    # SignatureMatches name
     #
     # name       - The include name
-    # signature  - The include signature
     #
     # Returns 1 if the signature file on the disk matches the given
     # signature, and 0 otherwise.  Otherwise includes absence of the
     # signature file and absence of the directory as a whole.
 
-    proc SignatureMatches {name signature} {
+    proc SignatureMatches {name} {
         # FIRST, on POSIX errors (i.e., directory doesn't exist or isn't
         # readable, return false).
 
         try {
             set oldsig [readfile [SigFile $name]]
 
-            if {[string trim $oldsig] eq $signature} {
+            if {[string trim $oldsig] eq [Signature $name]} {
                 return 1
             }
 
@@ -163,12 +192,12 @@ snit::type ::kutils::includer {
         DeleteInclude $name
 
         # FIRST, do the retrieval
-        set includer [project include get $name includer]
+        set vcs [project include get $name vcs]
 
-        switch -exact -- $includer {
+        switch -exact -- $vcs {
             git     { GetIncludeGit $name }
             svn     { GetIncludeSvn $name }
-            default { error "Unknown includer: \"$includer\"" }
+            default { error "Unknown VCS: \"$vcs\"" }
         }
 
         # NEXT, we succeeded; save the signature.
