@@ -45,7 +45,7 @@ snit::type ::kutils::includer {
 
         foreach name [project include names] {
             set tag [project include get $name tag]
-            
+
             if {[SignatureMatches $name]} {
                 puts "  include \"$name $tag\" appears to be up-to-date."
             } else {
@@ -59,6 +59,39 @@ snit::type ::kutils::includer {
         puts ""
     }
     
+    # clean
+    #
+    # Removes all includes from the "includes" directory.
+
+    typemethod clean {} {
+        puts "Removing all included libraries from [project root includes]..."
+        # FIRST, delete the ones that are no longer in project.kite.
+        DeleteUnknownIncludes
+
+        # NEXT, delete that ones that remain.
+        foreach name [project include names] {
+            DeleteInclude $name
+        }
+    }
+
+    # update
+    #
+    # Updating any includes that are missing or out-of-date.
+
+    typemethod update {} {
+        set count 0
+
+        foreach name [project include names] {
+            set tag [project include get $name tag]
+
+            if {![SignatureMatches $name]} {
+                incr count
+                GetInclude $name
+            }
+        }
+
+        puts "\nUpdated $count include(s)."
+    }
 
     #-------------------------------------------------------------------
     # Helpers

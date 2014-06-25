@@ -9,6 +9,8 @@
 #   Kite "deps" tool.  This tool reports on the state of the project
 #   dependencies, and can update them.
 #
+# TODO: Support for teapot dependencies.
+#
 #-----------------------------------------------------------------------
 
 #-----------------------------------------------------------------------
@@ -44,15 +46,25 @@ snit::type ::ktools::depstool {
         set subc [lindex $argv 0]
 
         switch -exact -- [lindex $argv 0] {
-            ""       -
-            info     {
+            ""   -
+            info {
                 DisplayStatus
+            }
+
+            update {
+                UpdateDependencies
+            }
+
+            force {
+                UpdateDependencies -force
             }
 
             default {
                 throw FATAL "Unknown subcommand: \"$subc\""
             }
         }
+
+        puts ""
     }
     
     # DisplayStatus
@@ -62,6 +74,19 @@ snit::type ::ktools::depstool {
     proc DisplayStatus {} {
         # FIRST, show the status of local includes.
         includer status
+    }
+
+    # UpdateDependencies ?-force?
+    #
+    # Updates the project dependencies.  If -force is given,
+    # downloads them fresh.
+
+    proc UpdateDependencies {{opt ""}} {
+        if {$opt eq "-force"} {
+            includer clean
+        }
+
+        includer update
     }
 
 }
