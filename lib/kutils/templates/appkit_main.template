@@ -19,6 +19,8 @@ exec tclsh "$0" "$@"
 #
 #        $ %kitfile ?args....?
 #
+# TODO: Much of this boilerplate could be moved into kiteinfo(n).
+#
 #-----------------------------------------------------------------------
 
 #-----------------------------------------------------------------------
@@ -54,6 +56,18 @@ lappend auto_path $libdir
 
 package require Tcl 8.6
 package require kiteinfo
+
+#-----------------------------------------------------------------------
+# Next, add any includes libraries to the auto_path.
+#
+# This presumes that the include follows the usual project tree, with
+# all Tcl packages in $root/lib/<package>.
+
+foreach iname [kiteinfo::get includes] {
+    set idir [file join $appdir .. includes $iname lib]
+    lappend auto_path [file normalize $idir]
+}
+
 
 #=======================================================================
 # FIXME
@@ -96,7 +110,10 @@ proc main {argv} {
 # Run the program
 
 try {
-    main $argv
+    # Allow for interactive testing
+    if {!$tcl_interactive} {
+        main $argv
+    }
 } trap FATAL {result} {
     # A fatal application error; result is a message intended
     # for the user.
