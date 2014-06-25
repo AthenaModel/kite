@@ -31,3 +31,4 @@ namespace eval ::kutils:: {
 source [file join $::kutils::library misc.tcl    ]
 source [file join $::kutils::library project.tcl ]
 source [file join $::kutils::library trees.tcl   ]
+source [file join $::kutils::library includer.tcl]
