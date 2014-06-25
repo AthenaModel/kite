@@ -17,7 +17,7 @@ build targets.
 The project file is a Tcl script, and so follows Tcl quoting 
 rules.
 
-## Statments
+## Statements
 
 <dl>
 <dt> <b><code>project <i>name version description</i></code></b>
