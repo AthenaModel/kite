@@ -117,7 +117,7 @@ proc main {argv} {
     # up-to-date without generating a stream of changes into the 
     # VCS repository.
 
-    if {[project intree]} {
+    if {[project hasinfo]} {
         project kiteinfo save
     }
 
