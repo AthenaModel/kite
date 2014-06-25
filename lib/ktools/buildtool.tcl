@@ -24,6 +24,13 @@ set ::ktools(build) {
     intree      yes
 }
 
+set ::khelp(build) {
+    The "build" tool builds all build targets specified in the
+    project's project.kite file.  In particular:
+
+    * Appkits will be built as bin/<name>.kit
+}
+
 #-----------------------------------------------------------------------
 # buildtool ensemble
 

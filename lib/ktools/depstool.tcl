@@ -24,6 +24,28 @@ set ::ktools(deps) {
     intree      yes
 }
 
+set ::khelp(deps) {
+    The "deps" tool manages the project's external dependencies.
+
+    To get the status of all external dependencies:
+
+        $ kite deps
+
+    To retrieve dependencies that are missing or clearly out-of-date:
+
+        $ kite deps update
+
+    To force the retrieval of all dependencies:
+
+        $ kite deps force
+
+    There are two kinds of dependencies.  "require" dependencies are
+    retrieved from teapot.activestate.com; "include" dependencies are
+    pulled into <root>/includes from local CM repositories and made 
+    available for use by the project.
+}
+
+
 #-----------------------------------------------------------------------
 # depstool ensemble
 

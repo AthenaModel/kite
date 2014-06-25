@@ -297,6 +297,15 @@ snit::type ::kutils::project {
         return [expr {$rootdir ne ""}]
     }
 
+    # hasinfo
+    #
+    # Returns 1 if we've successfully loaded project info, and
+    # 0 otherwise.
+
+    typemethod hasinfo {} {
+        return [expr {$info(name) ne ""}]
+    }
+
     # appkits
     #
     # Returns the list of appkit names

@@ -21,6 +21,11 @@ set ::ktools(info) {
     intree      yes
 }
 
+set ::khelp(info) {
+    The "info" tool displays information about the current project.
+}
+
+
 #-----------------------------------------------------------------------
 # tool::info ensemble
 

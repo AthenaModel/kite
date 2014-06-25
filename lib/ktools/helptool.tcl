@@ -21,6 +21,11 @@ set ::ktools(help) {
     intree      no
 }
 
+set ::khelp(help) {
+    n/a - The "help" tool is a special case.
+}
+
+
 #-----------------------------------------------------------------------
 # tool::help ensemble
 
@@ -71,7 +76,7 @@ snit::type ::ktools::helptool {
 
         puts ""
 
-        puts "\nEnter 'kite.kit help <topic>' for help on a given topic."
+        puts "\nEnter 'kite help <topic>' for help on a given topic."
 
         puts ""
     }
@@ -81,16 +86,20 @@ snit::type ::ktools::helptool {
     # topic  - A help topic (possibly)
 
     proc ShowTopic {topic} {
-        # TODO: Provide help for at least the standard tools.
-
+        global khelp
         # For "help", all we can do is display the basic help again.
         if {$topic eq "help"} {
             ShowTopicList
             return
         }
 
-        puts "No help is currently available for that topic."
-        puts ""
+        if {[info exists khelp($topic)]} {
+            puts [outdent $khelp($topic)]
+            puts ""
+        } else {
+            puts "No help is currently available for that topic."
+            puts ""
+        }
     }
 }
 

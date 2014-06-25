@@ -21,17 +21,23 @@ set ::ktools(install) {
     intree      yes
 }
 
+set ::khelp(install) {
+    The "install" tool installs build products into the local file
+    system for general use.
+
+    Appkits
+
+    Appkits are installed into ~/bin.  For example, appkit myapp.kit
+    is installed as ~/bin/myapp.  Appkits run against the installed
+    development tclsh.  
+}
+
 #-----------------------------------------------------------------------
 # tool::help ensemble
 
 snit::type ::ktools::installtool {
     # Make it a singleton
     pragma -hasinstances no -hastypedestroy no
-
-    #-------------------------------------------------------------------
-    # Type variables
-
-    # TBD
 
     #-------------------------------------------------------------------
     # Execution
@@ -58,7 +64,7 @@ snit::type ::ktools::installtool {
                     continue
                 }
 
-                set target [file join ~ bin $name.kit]
+                set target [file join ~ bin $name]
                 puts "Installing $name.kit to '$target'"
                 file copy -force -- $source $target
             }

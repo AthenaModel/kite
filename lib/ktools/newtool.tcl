@@ -21,6 +21,55 @@ set ::ktools(new) {
     intree      no
 }
 
+set ::khelp(new) {
+    The "new" tool is use to initialize new projects on the disk.  It
+    takes the following arguments:
+
+    template   - The project template, one of: appkit
+    project    - The project name, e.g., "my-project"
+    arg...     - Optional arguments, by template type.
+
+    For example,
+
+        $ cd ~/github
+        $ kite new appkit my-project
+
+    creates a complete project skeleton in 
+
+        ~/github/my-project
+
+    Use "kite help" to find out more about the available templates.
+}
+
+set ::khelp(appkit) {
+    The "appkit" project template is for pure-tcl applications that
+    will be deployed as "starkit" files.  Appkits run against the 
+    installed version of Tcl, and so are primarily useful for 
+    developer tools.
+
+    The template takes one optional argument, the root name of the 
+    ".kit" file; this name defaults to the project name.  For example,
+
+        $ kite new appkit my-project
+
+    produces the appkit "<root>/bin/my-project.kit".  However,
+
+        $ kite new appkit my-project mytool
+
+    products the appkit "<root>/bin/mytool.kit".
+
+    A project can define any number of appkits via the "appkit" statement
+    in the project.kite file.  Each one of them requires a "main" script
+    in <root>/bin/<kitname>.tcl.  For example, "mytool.kit" executes 
+    the file "<root>/bin/mytool.tcl".
+
+    This template also creates a Tcl package, core(n), in 
+    "<root>/lib/core".  The usual practice is to put most of the
+    appkit's code in core(n) (or other Tcl packages) and have 
+    "<root>/bin/<kitname>.tcl" simply invoke it.
+}
+
+
 #-----------------------------------------------------------------------
 # newtool ensemble
 
