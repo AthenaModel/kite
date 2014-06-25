@@ -150,7 +150,10 @@ proc usetool {tool {argv ""}} {
 # Run the program
 
 try {
-    main $argv
+    # Allow for interactive testing
+    if {!$tcl_interactive} {
+        main $argv
+    }
 } trap FATAL {result} {
     # A fatal application error; result is a message intended
     # for the user.
