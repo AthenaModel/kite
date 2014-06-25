@@ -232,7 +232,7 @@ snit::type ::kutils::project {
         }
 
         ladd info(includes) $name
-        set info(includes-$name) \
+        set info(include-$name) \
             [dict create vcs $vcs url $url tag $tag]
     }
 
@@ -303,6 +303,29 @@ snit::type ::kutils::project {
 
     typemethod appkits {} {
         return $info(appkits)
+    }
+
+    # include names
+    #
+    # Returns the list of include names.
+
+    typemethod {include names} {} {
+        return $info(includes)
+    }
+
+    # include get name ?attr?
+    #
+    # name  - the include name
+    # attr  - Optionally, an include attribute.
+    #
+    # Returns the include dictionary, or one attribute of it.
+
+    typemethod {include get} {name {attr ""}} {
+        if {$attr eq ""} {
+            return $info(include-$name)
+        } else {
+            return [dict get $info(include-$name) $attr]
+        }
     }
 
     # dumpinfo
