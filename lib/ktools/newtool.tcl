@@ -85,17 +85,34 @@ snit::type ::ktools::newtool {
     # Executes the tool given the command line arguments.
 
     typemethod execute {argv} {
-        checkargs new 2 3 {template project ?arg?} $argv
+        checkargs new 0 3 {template project ?arg?} $argv
 
         lassign $argv template project targ
 
-        # TODO: Validate project
-        
+        if {$template eq ""} {
+            puts "The following project templates may be used:"
+            puts ""
+
+            foreach name [trees types] {
+                puts [format "%-10s - %s" $name [trees description $name]]
+            }
+
+            puts ""
+            puts "Enter \"kite help <template>\" for more information."
+            puts ""
+            return
+        }
+
         if {$template ni [trees types]} {
             set samples "should be one of: [join [trees types] {, }]"
             throw FATAL "No such project template: \"$template\"; $samples"
         }
 
+        # TODO: Validate project completely
+        if {$project eq ""} {
+            throw FATAL "No project name was given."
+        }
+        
         set dirname [pwd]
         set projdir [file join $dirname $project]
 
@@ -104,13 +121,9 @@ snit::type ::ktools::newtool {
                 "A file called \"$project\" already exists in this directory."
         }
 
-        switch -exact -- $template {
-            appkit {
-                set kitname [expr {$targ ne "" ? $targ : $project}]
-
-                trees appkit $dirname $project $kitname
-            }
-        }
+        # The existing templates all take the first three arguments
+        # with an optional fourth argument.
+        trees $template $dirname $project $targ
     }
     
 

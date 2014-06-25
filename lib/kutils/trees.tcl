@@ -36,6 +36,7 @@ snit::type ::kutils::trees {
 
     typevariable treetypes {
         appkit ".kit application template"
+        lib    "Tcl library package template"
     }
 
 
@@ -104,6 +105,49 @@ snit::type ::kutils::trees {
 
 
         # TODO: Add test tree!
+
+        puts ""
+    }
+
+    # lib dirname projname libname
+    #
+    # dirname  - The directory in which to create the new tree.
+    # projname - The project name, e.g., "athena-mylib"
+    # libname  - The barename of the library package, e.g., "mylib"
+    #
+    # Builds a default library template rooted at the given directory,
+    # assuming that there is nothing there.
+
+    typemethod lib {dirname projname libname} {
+        puts "Making an appkit project tree for project \"$projname.\""
+        puts "The library package will be called ${libname}(n)."
+
+        # FIRST, create the project directory structure
+        set root   [file join $dirname $projname]
+        file mkdir $root
+
+        set lib    [file join $root lib]
+        set docs   [file join $root docs]
+
+        # NEXT, create the mapping
+        dict set mapping %project $projname
+        dict set mapping %package $libname
+
+        # NEXT, create the files.
+        generate lib_project    $mapping $root project.kite
+        generate project_readme $mapping $root README.md
+        generate gitignore      {}       $root .gitignore
+        generate docs_index     $mapping $docs index.ehtml
+        generate pkgIndex       $mapping $lib $libname pkgIndex.tcl
+        generate pkgModules     $mapping $lib $libname pkgModules.tcl
+        generate pkgFile        $mapping $lib $libname $libname.tcl
+
+
+        # TODO: Add test tree!
+        # TODO: man page
+        # TODO: kiteinfo should be handled differently: we will
+        # need to update the pkgIndex/pkgModules files with the 
+        # correct version when it changes.
 
         puts ""
     }
