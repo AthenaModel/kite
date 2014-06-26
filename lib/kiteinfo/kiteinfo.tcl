@@ -17,7 +17,7 @@
 
 namespace eval ::kiteinfo:: {
     variable kiteInfo
-    array set kiteInfo {appkits kite description {Athena/Kite Development Tool} name athena-kite version 0.0.2-SNAPSHOT includes {}}
+    array set kiteInfo {appkits kite description {Athena/Kite Development Tool} name athena-kite version 0.0a2 includes {}}
 
     namespace export get
     namespace ensemble create

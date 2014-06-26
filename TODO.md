@@ -1,5 +1,6 @@
 # Project TODO List
 
+* Build fails on OSX; it doesn't find the right teapot.
 * Flesh out requirements for the appkit and lib templates, based on usage.
 * A project's kiteinfo should be populated by "kite new"
 * Flesh out library project tree template.

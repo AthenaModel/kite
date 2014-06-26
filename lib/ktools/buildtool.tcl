@@ -118,9 +118,9 @@ snit::type ::ktools::buildtool {
 
         # TODO: Snit should be an explicit dependency.
         lappend command \
-            -out $kit   \
-            -log [project root build_$name.log] \
-            -archive [GetTeapotDir]             \
+            -out     $kit                           \
+            -log     [project root build_$name.log] \
+            -archive [GetTeapotDir]                 \
             -pkgref "snit -require 2.3"
 
         # NEXT, Build the appkit
@@ -142,13 +142,17 @@ snit::type ::ktools::buildtool {
     # For ActiveTcl, the default teapot is in $TCL_HOME/lib/teapot.
     #
     # TODO: Kite should have its own local teapot on the machine.
+    # TODO: This routine assumes the default teapot location for
+    # Windows only.
 
     proc GetTeapotDir {} {
         set shell [info nameofexecutable]
         set tclhome [file dirname [file dirname $shell]]
-        set teapot [file join $tclhome lib teapot]
+        set teacup [file join $tclhome bin teacup]
 
-        return $teapot
+        # Assume the default teacup repository
+        set result [exec $teacup default]
+        return [string trim $result]
     }
     
 }
