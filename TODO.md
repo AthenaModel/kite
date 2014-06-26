@@ -1,5 +1,9 @@
 # Project TODO List
 
+* Make generate check to see whether the file exists, and not 
+  write anything if there are no changes.
+* Should kiteinfo be a package, or just a variable filled into the
+  mykit.tcl loader, as we update versions in the pkg* files?
 * Make "lib" related changes, as listed at the bottom of lib.md.
 * Make "appkit" related changes, as listed at the bottom of appkit.md.
 * Build fails on OSX; it doesn't find the right teapot.

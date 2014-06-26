@@ -13,7 +13,9 @@
 #-----------------------------------------------------------------------
 # Package Definition
 
+# -kite-start-provide  DO NOT EDIT THIS BLOCK BY HAND
 package provide kiteinfo 1.0
+# -kite-end-provide
 
 #-----------------------------------------------------------------------
 # Namespace definition

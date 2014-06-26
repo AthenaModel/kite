@@ -295,7 +295,7 @@ snit::type ::kutils::project {
         # FIRST, if there's an appkit save the kiteinfo package for
         # its use.
         if {$info(appkit) ne ""} {
-            SaveKiteinfo
+            SaveKiteInfo
         }
 
         # NEXT, for each declared library, update its version number
@@ -306,13 +306,13 @@ snit::type ::kutils::project {
     }
 
 
-    # SaveKiteinfo
+    # SaveKiteInfo
     #
     # Saves the kiteinfo package to lib/kiteinfo/*.
     #
     # TODO: We probably don't want to include everything in info().
 
-    typemethod SaveKiteinfo {} {
+    proc SaveKiteInfo {} {
         # FIRST, get the data together
         dict set mapping %project   $info(name)
         dict set mapping %package   kiteinfo

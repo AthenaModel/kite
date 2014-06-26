@@ -125,11 +125,11 @@ For now,
 
 * Focus on making "lib" packages available as include's.
 * Add a "lib" command to package.kite.  For now, it's just "lib name".
-  There can be several.
+  There can be several. DONE
 * Revise the lib template to include the markers in the "pkg*" files.
-* Only create kiteinfo if there's an appkit.
-* Update the "lib" pkg* files at the same time as kiteinfo.  (Actually,
-  update all lib/*/pkg* files that have the markers.)
+  DONE
+* Only create kiteinfo if there's an appkit. DONE
+* Update the "lib" pkg* files at the same time as kiteinfo. DONE
 * Move build logs to ".kite", which is gitignored.
 * Support "kite shell" using a ".kite/shell.tcl" script.
 * Add a "shell" command to package.kite that defines a script to be 
