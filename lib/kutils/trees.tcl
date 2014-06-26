@@ -76,6 +76,10 @@ snit::type ::kutils::trees {
     # assuming that there is nothing there.
 
     typemethod appkit {dirname projname kitname} {
+        if {$kitname eq ""} {
+            set kitname $projname
+        }
+        
         puts "Making an appkit project tree for project \"$projname.\""
         puts "The application will be called \"$kitname.kit\"."
 
@@ -119,6 +123,10 @@ snit::type ::kutils::trees {
     # assuming that there is nothing there.
 
     typemethod lib {dirname projname libname} {
+        if {$libname eq ""} {
+            set libname $projname
+        }
+
         puts "Making an appkit project tree for project \"$projname.\""
         puts "The library package will be called ${libname}(n)."
 
