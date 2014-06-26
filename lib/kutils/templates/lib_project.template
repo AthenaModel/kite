@@ -1,6 +1,4 @@
 # Kite Project file for project %project.
 
 project %project "0.0a1" "Your Description"
-
-# TBD: Something should go here to drive the update of the version
-# info for pkgIndex/pkgModules.
+lib %package
