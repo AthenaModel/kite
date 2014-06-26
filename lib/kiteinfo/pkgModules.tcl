@@ -28,4 +28,3 @@ namespace eval ::kiteinfo:: {
 # Modules
 
 source [file join $::kiteinfo::library kiteinfo.tcl]
-

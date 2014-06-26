@@ -20,7 +20,8 @@ namespace eval ::kutils:: {
         lshift       \
         prepare      \
         readfile     \
-        outdent
+        outdent      \
+        writeFile
 }
 
 #-----------------------------------------------------------------------
@@ -186,6 +187,37 @@ proc ::kutils::readfile {filename} {
     }
 }
 
+# writefile filename content ?-ifchanged?
+#
+# filename - The file name
+# content  - The content to write
+#
+# Writes the content to the file.  Throws the normal
+# open/write errors.  If -ifchanged is given, reads the file first,
+# and only writes the content if it's different than what was there.
+
+proc ::kutils::writeFile {filename content {opt ""}} {
+    # FIRST, If we care, has the file's content changed?
+    if {$opt eq "-ifchanged" && [file exists $filename]} {
+        set oldContent [readfile $filename]
+
+        if {$oldContent eq $content} {
+            return
+        }
+    }
+
+    # NEXT, write the file, first making sure the directory exists.
+    file mkdir [file dirname $filename]
+
+    set f [open $filename w]
+
+    try {
+        return [puts -nonewline $f $content]
+    } finally {
+        close $f
+    }
+}
+
 # generate template mapping filename...
 #
 # template   - The name of a kutils/*.template file, e.g., "pkgIndex"
@@ -209,11 +241,6 @@ proc ::kutils::generate {template mapping args} {
     # NEXT, apply the mapping.
     set text [string map $mapping $text]
 
-    # NEXT, make sure that the relevant directory exists.
-    file mkdir [file dirname $filename]
-
     # NEXT, save the file.
-    set f [open $filename w]
-    puts $f $text
-    close $f
+    writeFile $filename $text -ifchanged
 }

@@ -341,41 +341,26 @@ snit::type ::kutils::project {
             set fname [project root lib $lib pkgIndex.tcl]
 
             if {[file exists $fname]} {
-                set oldtext [readfile $fname]
-
+                set oldText [readfile $fname]
                 set content "package ifneeded $lib $info(version) "
                 append content \
                     {[list source [file join $dir pkgModules.tcl]]}
 
-                set newtext [ReplaceBlock $oldtext ifneeded $content]
+                set newText [ReplaceBlock $oldText ifneeded $content]
 
-                # NEXT, save the file.
-                if {$newtext ne $oldtext} {
-                    puts "Writing $fname"
-                    set f [open $fname w]
-                    puts $f $newtext
-                    close $f
-                }
+                writeFile $fname $newText -ifchanged
             }
 
             # NEXT, pkgModules.tcl
             set fname [project root lib $lib pkgModules.tcl]
 
             if {[file exists $fname]} {
-                set oldtext [readfile $fname]
-
+                set oldText [readfile $fname]
                 set content "package provide $lib $info(version)"
-                set newtext [ReplaceBlock $oldtext provide $content]
+                set newText [ReplaceBlock $oldText provide $content]
 
-                # NEXT, save the file.
-                if {$newtext ne $oldtext} {
-                    puts "Writing $fname"
-                    set f [open $fname w]
-                    puts $f $newtext
-                    close $f
-                }
+                writeFile $fname $newText -ifchanged
             }
-
         } trap POSIX {result} {
             throw FATAL "Error updating \"$lib\" version: $result"
         }

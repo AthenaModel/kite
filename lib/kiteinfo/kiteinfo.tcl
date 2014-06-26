@@ -17,7 +17,7 @@
 
 namespace eval ::kiteinfo:: {
     variable kiteInfo
-    array set kiteInfo {description {Athena/Kite Development Tool} appkit kite name athena-kite libs {} version 0.0a2 includes {}}
+    array set kiteInfo {description {Athena/Kite Development Tool} appkit kite name athena-kite libs {} version 0.0a3 includes {}}
 
     namespace export get
     namespace ensemble create
@@ -47,5 +47,4 @@ proc ::kiteinfo::get {{parm ""}} {
     
     return $kiteInfo($parm)
 }
-
 
