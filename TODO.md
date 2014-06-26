@@ -1,11 +1,9 @@
 # Project TODO List
 
+* Make "lib" related changes, as listed at the bottom of lib.md.
+* Make "appkit" related changes, as listed at the bottom of appkit.md.
 * Build fails on OSX; it doesn't find the right teapot.
-* Flesh out requirements for the appkit and lib templates, based on usage.
-* A project's kiteinfo should be populated by "kite new"
-* Flesh out library project tree template.
-  * Version number issue
-  * Docs
+* An appkit project's kiteinfo should be populated by "kite new"
 * Document the project.kite file syntax and semantics.
 
 At this point Kite becomes useful.
