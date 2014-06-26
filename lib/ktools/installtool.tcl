@@ -55,19 +55,18 @@ snit::type ::ktools::installtool {
             # FIRST, make sure that ~/bin exists.
             file mkdir [file join ~ bin]
 
-            # Copy appkits
-            foreach name [project appkits] {
-                set source [project root bin $name.kit]
+            # Copy appkit
+            set kitname [project appkit].kit
+            set source [project root bin $kitname]
 
-                if {![file exists $source]} {
-                    puts "Warning: $name.kit does not exist; not installed."
-                    continue
-                }
-
-                set target [file join ~ bin $name]
-                puts "Installing $name.kit to '$target'"
-                file copy -force -- $source $target
+            if {![file exists $source]} {
+                puts "Warning: $kitname does not exist; not installed."
+                continue
             }
+
+            set target [file join ~ bin [project appkit]]
+            puts "Installing $kitname to '$target'"
+            file copy -force -- $source $target
         } on error {result} {
             throw FATAL $result
         }
