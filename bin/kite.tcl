@@ -118,7 +118,7 @@ proc main {argv} {
     # VCS repository.
 
     if {[project hasinfo]} {
-        project kiteinfo save
+        project metadata save
     }
 
     # NEXT, use the tool, passing it the remaining arguments.

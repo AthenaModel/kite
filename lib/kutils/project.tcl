@@ -283,15 +283,36 @@ snit::type ::kutils::project {
     }
 
     #-------------------------------------------------------------------
-    # Saving project info for use by the project's own code.
+    # Saving project metadata for use by the project's own code.
 
-    # kiteinfo save
+
+
+    # metadata save
+    #
+    # Saves the project metadata to disk as appropriate.
+
+    typemethod {metadata save} {} {
+        # FIRST, if there's an appkit save the kiteinfo package for
+        # its use.
+        if {$info(appkit) ne ""} {
+            SaveKiteinfo
+        }
+
+        # NEXT, for each declared library, update its version number
+        # in the pkgIndex and pkgModules files.
+        foreach lib $info(libs) {
+            UpdateLibVersion $lib
+        }
+    }
+
+
+    # SaveKiteinfo
     #
     # Saves the kiteinfo package to lib/kiteinfo/*.
     #
     # TODO: We probably don't want to include everything in info().
 
-    typemethod {kiteinfo save} {} {
+    typemethod SaveKiteinfo {} {
         # FIRST, get the data together
         dict set mapping %project   $info(name)
         dict set mapping %package   kiteinfo
@@ -305,6 +326,97 @@ snit::type ::kutils::project {
         generate pkgIndex   $mapping [file join $dir pkgIndex.tcl]
         generate pkgModules $mapping [file join $dir pkgModules.tcl]
         generate kiteinfo   $mapping [file join $dir kiteinfo.tcl]
+    }
+
+    # UpdateLibVersion lib
+    #
+    # lib   - Name of a library package
+    #
+    # Updates the version number in the pkgIndex.tcl and pkgModules.tcl
+    # files for the given library.
+
+    proc UpdateLibVersion {lib} {
+        try {
+            # FIRST, pkgIndex.tcl
+            set fname [project root lib $lib pkgIndex.tcl]
+
+            if {[file exists $fname]} {
+                set oldtext [readfile $fname]
+
+                set content "package ifneeded $lib $info(version) "
+                append content \
+                    {[list source [file join $dir pkgModules.tcl]]}
+
+                set newtext [ReplaceBlock $oldtext ifneeded $content]
+
+                # NEXT, save the file.
+                if {$newtext ne $oldtext} {
+                    puts "Writing $fname"
+                    set f [open $fname w]
+                    puts $f $newtext
+                    close $f
+                }
+            }
+
+            # NEXT, pkgModules.tcl
+            set fname [project root lib $lib pkgModules.tcl]
+
+            if {[file exists $fname]} {
+                set oldtext [readfile $fname]
+
+                set content "package provide $lib $info(version)"
+                set newtext [ReplaceBlock $oldtext provide $content]
+
+                # NEXT, save the file.
+                if {$newtext ne $oldtext} {
+                    puts "Writing $fname"
+                    set f [open $fname w]
+                    puts $f $newtext
+                    close $f
+                }
+            }
+
+        } trap POSIX {result} {
+            throw FATAL "Error updating \"$lib\" version: $result"
+        }
+    }
+
+    # ReplaceBlock text tag content
+    #
+    # text    - The contents of a text file
+    # tag     - A replacement tag, e.g., "ifneeded"
+    # content - A text string
+    #
+    # Looks for the 'kite-start' and 'kite-end' lines for the given
+    # tag, and replaces the text between them with the given content.
+
+    proc ReplaceBlock {text tag content} {
+        # FIRST, prepare
+        set inlines [split $text "\n"]
+        set outlines [list]
+        set inBlock 0
+
+        # NEXT, find and replace the block
+        foreach line $inlines {
+            if {!$inBlock} {
+                if {[string match "# -kite-start-$tag *" $line]} {
+                    lappend outlines $line $content
+                    set inBlock 1
+                } else {
+                    lappend outlines $line
+                }
+            } else {
+                # In Block.  Skip everything but end.
+                if {[string match "# -kite-end-*" $line]} {
+                    lappend outlines $line
+                    set inBlock 0
+                }
+            }
+        }
+
+        # NEXT, return the new text.
+        return [join $outlines "\n"]
+
     }
     
 
