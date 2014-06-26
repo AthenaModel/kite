@@ -39,7 +39,7 @@ snit::type ::kutils::project {
     #   name           - The project name
     #   version        - The version number, x.y.z-Bn
     #   description    - The project title
-    #   appkit         - List of appkits to build.
+    #   appkit         - Name of project appkit, or "" if none.
     #
     #   includes       - List of include names
     #   include-$name  - inclusion dictionary for the $name
@@ -54,7 +54,7 @@ snit::type ::kutils::project {
         name           ""
         version        ""
         description    ""
-        appkits        ""
+        appkit         ""
         includes       {}
     }
 
@@ -183,17 +183,17 @@ snit::type ::kutils::project {
     # Implementation of the "appkit" kite file command.
 
     proc AppkitCmd {name} {
+        if {$info(appkit) ne ""} {
+            throw SYNTAX "Multiple appkit statements; only one is allowed."
+        }
+
         set name [string trim [string tolower $name]]
 
         if {![regexp {^[a-z]\w*$} $name]} {
             throw SYNTAX "Invalid appkit name \"$name\""
         }
 
-        if {$name in $info(appkits)} {
-            throw SYNTAX "Duplicate appkit name \"$name\""
-        }
-
-        ladd info(appkits) $name
+        set info(appkit) $name
     }
 
     # IncludeCmd name vcs url tag
@@ -306,12 +306,12 @@ snit::type ::kutils::project {
         return [expr {$info(name) ne ""}]
     }
 
-    # appkits
+    # appkit
     #
-    # Returns the list of appkit names
+    # Returns the appkit name, if any.
 
-    typemethod appkits {} {
-        return $info(appkits)
+    typemethod appkit {} {
+        return $info(appkit)
     }
 
     # include names
@@ -347,7 +347,7 @@ snit::type ::kutils::project {
         DumpValue "Name:"        $info(name)
         DumpValue "Version:"     $info(version)
         DumpValue "Description:" $info(description)
-        DumpValue "AppKits:"     [join $info(appkits) ", "]
+        DumpValue "AppKit:"      [expr {$info(appkit) ne "" ? $info(appkit) : "n/a"}]
 
         puts ""
 

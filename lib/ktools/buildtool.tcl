@@ -53,14 +53,14 @@ snit::type ::ktools::buildtool {
         # TODO: retrieve all dependencies
         # TODO: Build documentation
 
-        # TODO: build all apps
+        # TODO: build any app
 
-        # NEXT, build all appkits
-        foreach name [project appkits] {
-            $type BuildAppKit $name
+        # NEXT, build any appkit
+        if {[project appkit] ne ""} {
+            $type BuildAppKit [project appkit]
         }
 
-        # TODO: build libkits
+        # NEXT, build lib packages.
     }
     
 
