@@ -41,6 +41,9 @@ snit::type ::kutils::project {
     #   description    - The project title
     #   appkit         - Name of project appkit, or "" if none.
     #
+    #   libs           - List of library package names
+    #   lib-$name      - Info dict for the lib (not yet needed)
+    #
     #   includes       - List of include names
     #   include-$name  - inclusion dictionary for the $name
     #
@@ -55,6 +58,7 @@ snit::type ::kutils::project {
         version        ""
         description    ""
         appkit         ""
+        libs           ""
         includes       {}
     }
 
@@ -128,6 +132,7 @@ snit::type ::kutils::project {
         set safe [interp create -safe]
         $safe alias project [myproc ProjectCmd]
         $safe alias appkit  [myproc AppkitCmd]
+        $safe alias lib     [myproc LibCmd]
         $safe alias include [myproc IncludeCmd]
 
 
@@ -143,7 +148,7 @@ snit::type ::kutils::project {
             throw FATAL $result
         } on error {result eopts} {
             # TODO: If verbose, include stacktrace.
-            throw FATAL $result
+            error $result
         } finally {
             interp delete $safe            
         }
@@ -194,6 +199,23 @@ snit::type ::kutils::project {
         }
 
         set info(appkit) $name
+    }
+
+    # LibCmd name
+    #
+    # Implementation of the "lib" kite file command.
+
+    proc LibCmd {name} {
+        set name [string trim [string tolower $name]]
+
+        if {![regexp {^[a-z]\w*$} $name]} {
+            throw SYNTAX "Invalid lib name \"$name\""
+        }
+
+        if {$name in $info(libs)} {
+            throw SYNTAX "Duplicate lib name \"$name\""
+        }
+        ladd info(libs) $name
     }
 
     # IncludeCmd name vcs url tag
@@ -314,6 +336,14 @@ snit::type ::kutils::project {
         return $info(appkit)
     }
 
+    # lib names
+    #
+    # Returns the list of lib names.
+
+    typemethod {lib names} {} {
+        return $info(libs)
+    }
+
     # include names
     #
     # Returns the list of include names.
@@ -348,6 +378,10 @@ snit::type ::kutils::project {
         DumpValue "Version:"     $info(version)
         DumpValue "Description:" $info(description)
         DumpValue "AppKit:"      [expr {$info(appkit) ne "" ? $info(appkit) : "n/a"}]
+
+        foreach name $info(libs) {
+            DumpValue "Lib:" "$name"
+        }
 
         puts ""
 
