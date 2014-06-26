@@ -1,9 +1,11 @@
 # Project TODO List
 
-* Document the project.kite file syntax and semantics.
+* Flesh out requirements for the appkit and lib templates, based on usage.
+* A project's kiteinfo should be populated by "kite new"
 * Flesh out library project tree template.
   * Version number issue
   * Docs
+* Document the project.kite file syntax and semantics.
 
 At this point Kite becomes useful.
 
