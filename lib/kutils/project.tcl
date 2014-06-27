@@ -332,10 +332,6 @@ snit::type ::kutils::project {
         dict set mapping %pkgfile   kiteinfo
         dict set mapping %kiteinfo  [list [array get info]]
 
-        # FIRST, create the directory (if needed)
-        set dir [project root lib kiteinfo]
-        file mkdir $dir
-
         # NEXT, generate the files.
         generate pkgIndex   $mapping [file join $dir pkgIndex.tcl]
         generate pkgModules $mapping [file join $dir pkgModules.tcl]

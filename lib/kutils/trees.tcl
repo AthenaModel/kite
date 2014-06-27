@@ -25,6 +25,64 @@ namespace eval ::kutils:: {
 }
 
 #-----------------------------------------------------------------------
+# Help for the project trees.
+
+set ::khelp(appkit) {
+    The "appkit" project template is for pure-tcl applications that
+    will be deployed as "starkit" files.  Appkits run against the 
+    installed version of Tcl, and so are primarily useful for 
+    developer tools.
+
+    The template takes one optional argument, the root name of the 
+    ".kit" file; this name defaults to the project name.  For example,
+
+        $ kite new appkit my-project
+
+    produces the appkit "<root>/bin/my-project.kit".  However,
+
+        $ kite new appkit my-project mytool
+
+    products the appkit "<root>/bin/mytool.kit".
+
+    A project can contain at most one application, defined as an 
+    "app" or an "appkit" in the project.kite file.  The application 
+    requires a "main" script in <root>/bin/<kitname>.tcl.  For example, 
+    "mytool.kit" executes the file "<root>/bin/mytool.tcl".
+
+    This template also creates a Tcl package, app_<kitname>(n), in 
+    "<root>/lib/app_<kitname>".  The usual practice is to put most of the
+    appkit's code in this package (or in other Tcl packages) and have 
+    "<root>/bin/<kitname>.tcl" simply invoke it.
+}
+
+set ::khelp(lib) {
+    The "lib" project template is for projects that define one or more
+    Tcl library packages for use by other projects.  The template 
+    creates a project tree for a project with one library package;
+    others can be added subsequently.
+
+    The template takes one optional argument, the name of the 
+    library package file; this name defaults to the project name.  
+    For example,
+
+        $ kite new lib my-project
+
+    produces the package "<root>/lib/my-project", while
+
+        $ kite new lib my-project mylib
+
+    products the package "<root>/lib/mylib".
+
+    A project can define any number of library packages via the 
+    "lib" statement in the project.kite file.  These should be
+    initialized using "kite new lib" or "kite add lib"; this ensures
+    that the package files contain the correct markers so that Kite
+    can update their version numbers as the version number changes
+    in project.kite.
+}
+
+
+#-----------------------------------------------------------------------
 # trees ensemble
 
 snit::type ::kutils::trees {

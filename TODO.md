@@ -5,10 +5,16 @@
 
 Then,
 
+* Support the "require" statement in project.kite
+  * require name version
+    * Simple for now; don't worry about fancy version specs.
+  * Code to pull packages into ~/.kite/teapot
+  * Code to create ~/.kite/teapot and prepare local tclsh to use it.
+  * Code to include Tcl dependencies into appkit?
 * Support the "app" build target.
-  * Can't work on this on OS X.
-  * Add "require" project.kite command, to indicate the app's teapot dependencies.
-* Later add "teacup" interactions related to teapot dependencies.
+  * Can't build apps on OS X.
+  * Then add code to include the teapot dependencies when building the app.
+  * And code to find the basekit, by platform.
 
 # Remaining Gaps #
 
