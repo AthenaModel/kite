@@ -258,5 +258,6 @@ proc ::kutils::generate {template mapping args} {
     set text [string map $mapping $text]
 
     # NEXT, save the file.
+    vputs "Generate file: $filename from $template"
     writeFile $filename $text -ifchanged
 }

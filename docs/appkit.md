@@ -132,11 +132,11 @@ appkits.
 
 For now:
 
-* Allow only one appkit.  Analysis shows we don't really need more than
-  that for anything we're doing. DONE
+* DONE: Allow only one appkit.  Analysis shows we don't really need more than
+  that for anything we're doing.
 
-* Name the core package after the appkit, e.g., appkit_mykit, to allow
-  for future growth.
+* DONE: Name the core package "app_$kitname", with one module, app.tcl; this will 
+  be the same for "app" projects as well.
 
 * If it can be easily done, set the versions in the packages in the
   lib directory to the project version.

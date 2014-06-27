@@ -327,6 +327,7 @@ snit::type ::kutils::project {
         # FIRST, get the data together
         dict set mapping %project   $info(name)
         dict set mapping %package   kiteinfo
+        dict set mapping %pkgfile   kiteinfo
         dict set mapping %kiteinfo  [list [array get info]]
 
         # FIRST, create the directory (if needed)

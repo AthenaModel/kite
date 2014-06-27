@@ -72,7 +72,7 @@ foreach iname [kiteinfo::get includes] {
 #=======================================================================
 # FIXME
 
-package require core
+package require %package
 
 # TODO: Add other needed packages.  (Ideally, this should come from
 # project.kite in some way; perhaps kiteinfo can help?)
@@ -99,7 +99,7 @@ proc main {argv} {
     array set pdata [kiteinfo get]
     puts "$pdata(name) $pdata(version): $pdata(description)"
     puts ""
-    core hello
+    %package hello
     puts ""
 
     # FIXME

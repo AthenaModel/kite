@@ -1,7 +1,10 @@
 # Project TODO List
 
-* Make "appkit" related changes, as listed at the bottom of appkit.md.
 * An appkit project's kiteinfo should be populated by "kite new"
+* Handle project versions properly.  A Kite version number should
+  be a valid Tcl package version number, possibly with "-suffix" appended.
+  * When putting the version number in pkg*.tcl files, any "-suffix"
+    must be stripped.  Have a [project pkgversion] call that does this.
 * Document the project.kite file syntax and semantics.
 
 At this point Kite becomes useful.

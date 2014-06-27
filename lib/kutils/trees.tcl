@@ -16,7 +16,7 @@
 #   it is the job of the "kite new" tool to check for problems.
 #
 #   TODO: Ultimately, we'd want a plugin mechanism for adding new
-#   project trees.
+#   kinds of project trees.
 #
 #-----------------------------------------------------------------------
 
@@ -74,6 +74,10 @@ snit::type ::kutils::trees {
     #
     # Builds a default appkit template rooted at the given directory,
     # assuming that there is nothing there.
+    #
+    # TODO: appkits and apps will share the same structure; the only
+    # difference is the entry in the project file.  So we should
+    # share the code.
 
     typemethod appkit {dirname projname kitname} {
         if {$kitname eq ""} {
@@ -90,12 +94,14 @@ snit::type ::kutils::trees {
         set bin    [file join $root bin]
         set lib    [file join $root lib]
         set docs   [file join $root docs]
+        set pkg    app_$kitname
 
         # NEXT, create the mapping
         dict set mapping %project $projname
         dict set mapping %kitname $kitname
         dict set mapping %kitfile $kitname.kit
-        dict set mapping %package core
+        dict set mapping %package $pkg
+        dict set mapping %pkgfile app
 
         # NEXT, create the files.
         generate appkit_project $mapping $root project.kite
@@ -103,9 +109,9 @@ snit::type ::kutils::trees {
         generate gitignore      {}       $root .gitignore
         generate appkit_main    $mapping $bin $kitname.tcl
         generate docs_index     $mapping $docs index.ehtml
-        generate pkgIndex       $mapping $lib core pkgIndex.tcl
-        generate pkgModules     $mapping $lib core pkgModules.tcl
-        generate pkgFile        $mapping $lib core core.tcl
+        generate pkgIndex       $mapping $lib $pkg pkgIndex.tcl
+        generate pkgModules     $mapping $lib $pkg pkgModules.tcl
+        generate pkgFile        $mapping $lib $pkg app.tcl
 
 
         # TODO: Add test tree!

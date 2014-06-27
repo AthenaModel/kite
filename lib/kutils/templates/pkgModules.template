@@ -27,4 +27,4 @@ namespace eval ::%package:: {
 #-----------------------------------------------------------------------
 # Modules
 
-source [file join $::%package::library %package.tcl]
+source [file join $::%package::library %pkgfile.tcl]
