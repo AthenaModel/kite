@@ -102,8 +102,6 @@ snit::type ::ktools::shelltool {
     # WriteShellInitializer
     #
     # Creates .kite/shell.tcl to set up auto_path.
-    #
-    # TODO: Support project.kite "shell" statement.
 
     proc WriteShellInitializer {} {
         # FIRST, add the project's own libraries to the auto_path.

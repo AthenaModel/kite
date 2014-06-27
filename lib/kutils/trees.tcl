@@ -153,9 +153,6 @@ snit::type ::kutils::trees {
 
         # TODO: Add test tree!
         # TODO: man page
-        # TODO: kiteinfo should be handled differently: we will
-        # need to update the pkgIndex/pkgModules files with the 
-        # correct version when it changes.
 
         puts ""
     }

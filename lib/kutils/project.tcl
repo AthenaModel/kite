@@ -150,7 +150,8 @@ snit::type ::kutils::project {
         } trap FATAL {result} {
             throw FATAL $result
         } on error {result eopts} {
-            # TODO: If verbose, include stacktrace.
+            # This will result in a stack trace; add cases above
+            # for things we find that aren't really project.kite errors.
             error $result
         } finally {
             interp delete $safe            

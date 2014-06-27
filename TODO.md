@@ -31,5 +31,14 @@ The remaining major gaps in Kite's tool set:
   * Handling of external dependencies.
 * kite build
   * Building of apps, with external dependencies
+  * Building of docs
+  * Building of teapot packages for libs.
 
-Also, handling of .ehtml documentation.
+The remaining major gaps in Kites feature set:
+
+* Handling of .ehtml documentation.
+* Plugins for building other build targets (e.g., HTML help)
+* Handling of other build targets.
+  * E.g., C libraries.
+  * At least need to be able to specify them in project.kite 
+    with shell commands to "make build" and "make clean".

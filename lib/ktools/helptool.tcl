@@ -32,20 +32,12 @@ set ::khelp(help) {
 snit::type ::ktools::helptool {
     # Make it a singleton
     pragma -hasinstances no -hastypedestroy no
-
-    #-------------------------------------------------------------------
-    # Type variables
-
-    # TBD
-
     #-------------------------------------------------------------------
     # Execution
 
     # execute ?args?
     #
     # Displays the Kite help.
-    #
-    # TODO: provide help for individual tools.
 
     typemethod execute {argv} {
         checkargs help 0 1 {?topic?} $argv

@@ -7,9 +7,11 @@
 #
 # DESCRIPTION:
 #   Kite "build" tool.  By default, this builds all of the build 
-#   targets: apps, appkits, and libkits.
+#   targets: The app or appkit (if any), teapot packages, docs, and
+#   other build targets specified in project.kite.
 #
-#   TODO: Allow building just one.
+#   TODO: When we actually have more than one kind of build product,
+#   add arguments so that the user can selectively build just one thing.
 #
 #-----------------------------------------------------------------------
 
@@ -44,23 +46,21 @@ snit::type ::ktools::buildtool {
     # execute argv
     #
     # Executes the tool given the command line arguments.
-    #
-    # TODO: Allow building just one target.
 
     typemethod execute {argv} {
         checkargs build 0 0 {} $argv
 
-        # TODO: retrieve all dependencies
         # TODO: Build documentation
-
-        # TODO: build any app
+        # TODO: Build C libraries
 
         # NEXT, build any appkit
+        # TODO: build app
+
         if {[project appkit] ne ""} {
             $type BuildAppKit [project appkit]
         }
 
-        # NEXT, build lib packages.
+        # TODO: build teapot packages.
     }
     
 

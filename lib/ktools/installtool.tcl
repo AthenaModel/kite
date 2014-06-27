@@ -46,7 +46,8 @@ snit::type ::ktools::installtool {
     #
     # Builds the build targets, and installs the apps to ~/bin for use.
     #
-    # TODO: Allow installing just one target.
+    # TODO: When we really have multiple kinds of build target, support
+    # installing just one kind or one target.
 
     typemethod execute {argv} {
         checkargs install 0 0 {} $argv

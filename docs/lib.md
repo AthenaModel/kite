@@ -123,24 +123,25 @@ not as a general practice, but as a convenience to the developer.
 
 For now,
 
-* Focus on making "lib" packages available as include's.
-* Add a "lib" command to package.kite.  For now, it's just "lib name".
-  There can be several. DONE
-* Revise the lib template to include the markers in the "pkg*" files.
-  DONE
-* Only create kiteinfo if there's an appkit. DONE
-* Update the "lib" pkg* files at the same time as kiteinfo. DONE
-* Move build logs to ".kite", which is gitignored. DONE
-* Support "kite shell" using a ".kite/shell.tcl" script. DONE
-* Add a "shell" command to package.kite that defines a script to be 
+* DONE. Focus on making "lib" packages available as include's.
+* DONE. Add a "lib" command to package.kite.  For now, it's just "lib name".
+  There can be several.
+* DONE. Revise the lib template to include the markers in the "pkg*" files.
+* DONE. Only create kiteinfo if there's an appkit.
+* DONE. Update the "lib" pkg* files at the same time as kiteinfo. 
+* DONE. Move build logs to ".kite", which is gitignored. 
+* DONE. Support "kite shell" using a ".kite/shell.tcl" script. 
+* DONE. Add a "shell" command to package.kite that defines a script to be 
   appended to the .kite/shell.tcl script.  It can require packages, 
-  import names, etc. DONE.
+  import names, etc.
 
 Later,
 
 * Add the ability to package libs for inclusion in a teapot repository.
 * Add the ability to install them in ~/.kite/teapot.
 * Consider using https://oak/kite as a kind of "kite server".
-* Consider how to include teapot packages into a Kite project.
-  Put them in lib/tm and add that to the tm::path?  That'd work....
+* Consider how to include teapot packages into a Kite project, if they
+  aren't pulled in from a teapot by tclapp.
+  * Put them in lib/tm and add that to the tm::path?  That'd work if they
+    were .tm's; would it work if they were zips?  Good grief, it might.
 * Consider how to associate documentation with a lib.
