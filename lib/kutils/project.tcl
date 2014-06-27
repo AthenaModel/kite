@@ -333,6 +333,8 @@ snit::type ::kutils::project {
         dict set mapping %kiteinfo  [list [array get info]]
 
         # NEXT, generate the files.
+        set dir [project root lib kiteinfo]
+        
         generate pkgIndex   $mapping [file join $dir pkgIndex.tcl]
         generate pkgModules $mapping [file join $dir pkgModules.tcl]
         generate kiteinfo   $mapping [file join $dir kiteinfo.tcl]

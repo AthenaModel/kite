@@ -1,6 +1,5 @@
 # Project TODO List
 
-* An appkit project's kiteinfo should be populated by "kite new"
 * Document the project.kite file syntax and semantics.
 
 Then,

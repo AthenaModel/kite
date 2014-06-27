@@ -174,6 +174,11 @@ snit::type ::kutils::trees {
 
         # TODO: Add test tree!
 
+        # NEXT, load the new project.kite file and save the metadata.
+        cd $root
+        project loadinfo
+        project metadata save
+
         puts ""
     }
 
