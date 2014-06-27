@@ -40,6 +40,7 @@ snit::type ::kutils::project {
     #   version        - The version number, x.y.z-Bn
     #   description    - The project title
     #   appkit         - Name of project appkit, or "" if none.
+    #   shell          - Shell initialization script for "kite shell -plain"
     #
     #   libs           - List of library package names
     #   lib-$name      - Info dict for the lib (not yet needed)
@@ -58,8 +59,9 @@ snit::type ::kutils::project {
         version        ""
         description    ""
         appkit         ""
-        libs           ""
+        libs           {}
         includes       {}
+        shell          {}
     }
 
     #-------------------------------------------------------------------
@@ -134,6 +136,7 @@ snit::type ::kutils::project {
         $safe alias appkit  [myproc AppkitCmd]
         $safe alias lib     [myproc LibCmd]
         $safe alias include [myproc IncludeCmd]
+        $safe alias shell   [myproc ShellCmd]
 
 
         # NEXT, try to load the file
@@ -258,6 +261,13 @@ snit::type ::kutils::project {
             [dict create vcs $vcs url $url tag $tag]
     }
 
+    # ShellCmd script
+    #
+    # Implementation of the "shell" kite file command.
+
+    proc ShellCmd {script} {
+        set info(shell) $script
+    }
 
     # BaseName? name
     #
@@ -462,6 +472,14 @@ snit::type ::kutils::project {
         } else {
             return [dict get $info(include-$name) $attr]
         }
+    }
+
+    # shell
+    #
+    # Returns the shell initialization script.
+
+    typemethod shell {} {
+        return $info(shell)
     }
 
     # dumpinfo

@@ -16,6 +16,16 @@
 package provide kutils 1.0
 
 #-----------------------------------------------------------------------
+# Dependencies
+
+# TODO: Figure out whether this belongs here or not.  We'd like to handle
+# all dependencies at the toplevel; but not all libraries need the same
+# ones.
+
+package require snit
+
+
+#-----------------------------------------------------------------------
 # Namespace definition
 
 namespace eval ::kutils:: {

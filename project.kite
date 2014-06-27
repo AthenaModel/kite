@@ -1,3 +1,9 @@
 project athena-kite "0.0a3" "Athena/Kite Development Tool"
 appkit kite
 
+shell {
+    package require kutils
+    package require ktools
+    namespace import kutils::* ktools::*
+}
+

@@ -23,6 +23,12 @@ namespace eval ::ktools:: {
 }
 
 #-----------------------------------------------------------------------
+# Dependencies
+
+package require kutils
+
+
+#-----------------------------------------------------------------------
 # Submodules
 #
 # Note: modules are listed in order of dependencies; be careful if you
@@ -34,3 +40,4 @@ source [file join $::ktools::library infotool.tcl   ]
 source [file join $::ktools::library installtool.tcl]
 source [file join $::ktools::library newtool.tcl    ]
 source [file join $::ktools::library depstool.tcl   ]
+source [file join $::ktools::library shelltool.tcl  ]

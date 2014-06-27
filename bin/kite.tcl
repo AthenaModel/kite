@@ -80,8 +80,7 @@ proc main {argv} {
     # we're in a project tree or not.
     if {[llength $argv] == 0} {
         usetool help
-
-        exit 0
+        return
     }
 
     # NEXT, get the subcommand and see if we have a matching tool.

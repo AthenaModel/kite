@@ -1,6 +1,7 @@
-# Build Artifacts
+# Kite Artifacts
 *.log
 *.kit
+/.kite
 
 # SublimeText artifacts.
 *.sublime-*
