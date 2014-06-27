@@ -14,6 +14,8 @@
 #-----------------------------------------------------------------------
 
 namespace eval ::kutils:: {
+    variable verbose 0
+
     namespace export \
         checkargs    \
         ladd         \
@@ -36,9 +38,9 @@ namespace eval ::kutils:: {
 # -verbose is on.
 
 proc ::kutils::vputs {args} {
-    global kopts
+    variable verbose
 
-    if {$kopts(-verbose)} {
+    if {$verbose} {
         puts [join $args]
     }
 }
@@ -58,7 +60,7 @@ proc ::kutils::checkargs {tool min max argspec argv} {
     if {($argc < $min) ||
         ($max ne "-" && $argc > $max)
     } {
-        throw FATAL "Usage: kite.kit $tool $argspec"
+        throw FATAL "Usage: kite $tool $argspec"
     }
 }
 

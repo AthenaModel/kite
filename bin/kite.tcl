@@ -64,14 +64,6 @@ if {[file exists [file join $libdir kiteinfo]]} {
 namespace import kutils::*
 
 #-----------------------------------------------------------------------
-# Next, set up global Kite options
-
-array set kopts {
-    -verbose 0
-}
-
-
-#-----------------------------------------------------------------------
 # Main Program 
 
 # main argv
@@ -97,7 +89,7 @@ proc main {argv} {
         set opt [lshift argv]
 
         switch -exact -- $opt {
-            -verbose  { set kopts(-verbose) 1                  }
+            -verbose  { set ::kutils::verbose 1                }
             default   { throw FATAL "Unknown option: \"$opt\"" }
         }
     }

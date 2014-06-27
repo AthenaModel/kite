@@ -43,41 +43,26 @@ namespace eval ::kutils::test {
     #-------------------------------------------------------------------
     # Setup
 
-    # setup
-    #
-    # Sets up for tests
-
-    proc setup {} {
-        global kopts
-        # FIXME: Having kutils depend on kopts defined by the
-        # main.tcl file is bad.
-        set kopts(-verbose) 0
-    }
-
     # cleanup
     #
     # Cleans up after all tests.
 
     proc cleanup {} {
-        global kopts
-        set kopts(-verbose) 0
+        set ::kutils::verbose 0
     }
 
 
     #-------------------------------------------------------------------
     # vputs
 
-    test vputs-1.1 {Creates no output by default} -setup {
-        setup
-    } -body {
+    test vputs-1.1 {Creates no output by default} -body {
         vputs "some text"
     } -cleanup {
         cleanup
     } -output {}
 
     test vputs-1.2 {Creates output when verbose is enabled} -setup {
-        setup
-        set ::kopts(-verbose) 1
+        set ::kutils::verbose 1
     } -body {
         vputs "some text"
     } -cleanup {
@@ -85,13 +70,117 @@ namespace eval ::kutils::test {
     } -output "some text\n"
 
     test vputs-1.3 {Joins multiple strings} -setup {
-        setup
-        set ::kopts(-verbose) 1
+        set ::kutils::verbose 1
     } -body {
         vputs "some text" "some more text" "even more text"
     } -cleanup {
         cleanup
     } -output "some text some more text even more text\n"
+
+    #-------------------------------------------------------------------
+    # checkargs
+
+    test checkargs-1.1 {(0,-): Zero args is OK} -body {
+        checkargs test 0 - {args...} {}
+    } -result {}
+
+    test checkargs-1.2 {(0,-): Many args are OK} -body {
+        checkargs test 0 - {args...} {1 2 3 4 5 6 7 8 9}
+    } -result {}
+
+    test checkargs-1.3 {(1,2): 1 arg is OK} -body {
+        checkargs test 1 2 {x y} {1}
+    } -result {}
+    
+    test checkargs-1.4 {(1,2): 2 args are OK} -body {
+        checkargs test 1 2 {x ?y?} {1 2}
+    } -result {}
+
+    test checkargs-2.1 {(1,2): zero args are not OK} -body {
+        checkargs test 1 2 {x ?y?} {}
+    } -returnCodes {
+        error
+    } -result {Usage: kite test x ?y?}
+
+    test checkargs-2.2 {(1,2): 3 args are not OK} -body {
+        checkargs test 1 2 {x ?y?} {1 2 3}
+    } -returnCodes {
+        error
+    } -result {Usage: kite test x ?y?}
+
+    test checkargs-2.3 {throws FATAL on error} -body {
+        catch {checkargs test 0 0 {} {1 2 3}} result eopts
+        dict get $eopts -errorcode
+    } -result {FATAL}
+
+    #-------------------------------------------------------------------
+    # ladd
+
+    test ladd-1.1 {value is not yet in list} -body {
+        set a {foo bar}
+        set b [ladd a baz]
+        list $a $b
+    } -result {{foo bar baz} {foo bar baz}}
+
+    test ladd-1.2 {value is already in list} -body {
+        set a {foo bar}
+        set b [ladd a bar]
+        list $a $b
+    } -result {{foo bar} {foo bar}}
+
+    test ladd-1.3 {List doesn't yet exist} -body {
+        set b [ladd nonesuch bar]
+        list $nonesuch $b
+    } -cleanup {
+        unset nonesuch
+    } -result {bar bar}
+
+    #-----------------------------------------------------------------------
+    # lshift
+
+    test lshift-1.1 {lshift: normal list} -body {
+        set list {a b c}
+        set value [lshift list]
+        list $value $list
+    } -result {a {b c}}
+
+    test lshift-1.2 {lshift: list with one element} -body {
+        set list {a}
+        set value [lshift list]
+        list $value $list
+    } -result {a {}}
+
+    test lshift-1.3 {lshift: list with no elements} -body {
+        set list {}
+        set value [lshift list]
+        list $value $list
+    } -result {{} {}}
+
+    #-------------------------------------------------------------------
+    # outdent
+
+    test outdent-1.1 {outdent: empty block} -body {
+        outdent {}
+    } -result {}
+    
+    test outdent-1.2 {outdent: leading blank line} -body {
+        outdent {
+                  Now that we have this,
+                  we can make things
+                  look a lot nicer.}
+    } -result {Now that we have this,
+we can make things
+look a lot nicer.}
+
+    test outdent-1.3 {outdent: trailing blank line} -body {
+        outdent {Now that we have this,
+                  we can make things
+                  look a lot nicer.
+                }
+    } -result {Now that we have this,
+                  we can make things
+                  look a lot nicer.}
+           
 
     #-------------------------------------------------------------------
     # Cleanup
