@@ -133,7 +133,7 @@ appkits.
 For now:
 
 * Allow only one appkit.  Analysis shows we don't really need more than
-  that for anything we're doing.
+  that for anything we're doing. DONE
 
 * Name the core package after the appkit, e.g., appkit_mykit, to allow
   for future growth.

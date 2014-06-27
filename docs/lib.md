@@ -130,8 +130,17 @@ For now,
   DONE
 * Only create kiteinfo if there's an appkit. DONE
 * Update the "lib" pkg* files at the same time as kiteinfo. DONE
-* Move build logs to ".kite", which is gitignored.
-* Support "kite shell" using a ".kite/shell.tcl" script.
+* Move build logs to ".kite", which is gitignored. DONE
+* Support "kite shell" using a ".kite/shell.tcl" script. DONE
 * Add a "shell" command to package.kite that defines a script to be 
   appended to the .kite/shell.tcl script.  It can require packages, 
-  import names, etc.
+  import names, etc. DONE.
+
+Later,
+
+* Add the ability to package libs for inclusion in a teapot repository.
+* Add the ability to install them in ~/.kite/teapot.
+* Consider using https://oak/kite as a kind of "kite server".
+* Consider how to include teapot packages into a Kite project.
+  Put them in lib/tm and add that to the tm::path?  That'd work....
+* Consider how to associate documentation with a lib.

@@ -1,4 +1,4 @@
-project athena-kite "0.0a3" "Athena/Kite Development Tool"
+project athena-kite "0.0a4" "Athena/Kite Development Tool"
 appkit kite
 
 shell {
