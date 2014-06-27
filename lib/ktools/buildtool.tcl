@@ -80,10 +80,7 @@ snit::type ::ktools::buildtool {
     # development.
 
     typemethod BuildAppKit {name} {
-        # FIRST, begin to build up the command.
-        set command [list tclapp]
-
-        # NEXT, do we have the main script
+        # FIRST, do we have the main script
         set main [project root bin $name.tcl]
 
         if {![file exists $main]} {
@@ -91,7 +88,11 @@ snit::type ::ktools::buildtool {
                 "Cannot build appkit '$name'; the 'bin/$name.kit script is missing."
         }
 
-        lappend command $main \
+        # FIRST, begin to build up the command.
+        set command [list ]
+        lappend command \
+            -ignorestderr --       \
+            tclapp $main           \
             [project root lib * *]
 
 
@@ -114,23 +115,29 @@ snit::type ::ktools::buildtool {
             catch {file delete -force $kit}
         }
 
+        # NEXT, prepare to write logfile.
+        set logfile [project root .kite build_$name.log]
+        file mkdir [file dirname $logfile]
+
         # NEXT, other standard arguments.
 
         # TODO: Snit should be an explicit dependency.
         lappend command \
-            -out     $kit                           \
-            -log     [project root build_$name.log] \
-            -archive [GetTeapotDir]                 \
-            -pkgref "snit -require 2.3"
+            -out     $kit                            \
+            -archive [GetTeapotDir]                  \
+            -pkgref  "snit -require 2.3"             \
+            >&       $logfile
+
 
         # NEXT, Build the appkit
 
-        puts "Building $name.kit as '$kit'\n"
+        puts "Building $name.kit as '$kit'"
+        puts "See $logfile for details.\n"
 
         try {
             eval exec $command
         } on error {result} {
-            throw FATAL "Error building $name.kit; see build_$name.log:\n$result"
+            throw FATAL "Error building $name.kit; see $logfile:\n$result"
         }
     }
 
