@@ -18,13 +18,14 @@ namespace eval ::kutils:: {
 
     namespace export \
         checkargs    \
+        generate     \
         ladd         \
         lshift       \
         prepare      \
         readfile     \
         outdent      \
         vputs        \
-        writeFile
+        writefile
 }
 
 #-----------------------------------------------------------------------
@@ -214,7 +215,7 @@ proc ::kutils::readfile {filename} {
 # open/write errors.  If -ifchanged is given, reads the file first,
 # and only writes the content if it's different than what was there.
 
-proc ::kutils::writeFile {filename content {opt ""}} {
+proc ::kutils::writefile {filename content {opt ""}} {
     # FIRST, If we care, has the file's content changed?
     if {$opt eq "-ifchanged" && [file exists $filename]} {
         set oldContent [readfile $filename]
@@ -230,6 +231,7 @@ proc ::kutils::writeFile {filename content {opt ""}} {
     set f [open $filename w]
 
     try {
+        vputs "writefile <$filename>"
         return [puts -nonewline $f $content]
     } finally {
         close $f
@@ -261,5 +263,5 @@ proc ::kutils::generate {template mapping args} {
 
     # NEXT, save the file.
     vputs "Generate file: $filename from $template"
-    writeFile $filename $text -ifchanged
+    writefile $filename $text -ifchanged
 }

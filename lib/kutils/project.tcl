@@ -360,7 +360,7 @@ snit::type ::kutils::project {
 
                 set newText [ReplaceBlock $oldText ifneeded $content]
 
-                writeFile $fname $newText -ifchanged
+                writefile $fname $newText -ifchanged
             }
 
             # NEXT, pkgModules.tcl
@@ -371,7 +371,7 @@ snit::type ::kutils::project {
                 set content "package provide $lib $info(pkgversion)"
                 set newText [ReplaceBlock $oldText provide $content]
 
-                writeFile $fname $newText -ifchanged
+                writefile $fname $newText -ifchanged
             }
         } trap POSIX {result} {
             throw FATAL "Error updating \"$lib\" version: $result"

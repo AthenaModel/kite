@@ -1,5 +1,9 @@
 # Project TODO List
 
+* kite test
+  * Complete kite test suite.
+  * Creation of test suite skeletons as part of [kite new]
+* kite add appkit|lib
 * Support the "require" statement in project.kite
   * require name version
     * Simple for now; don't worry about fancy version specs.
@@ -15,9 +19,6 @@
 
 The remaining major gaps in Kite's tool set:
 
-* kite test
-  * Creation of test suite skeletons as part of [kite new]
-  * Execution of library and application test suites on [kite test]
 * kite retest
   * Execute only tests that failed last time.
 * kite add

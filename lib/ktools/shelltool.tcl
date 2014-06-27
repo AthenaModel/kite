@@ -120,7 +120,7 @@ snit::type ::ktools::shelltool {
         append out "\n" [project shell] "\n"
 
         set script [project root .kite shell.tcl]
-        writeFile $script $out
+        writefile $script $out
 
         return $script
     }
