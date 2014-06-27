@@ -37,7 +37,8 @@ snit::type ::kutils::project {
     # info - the project info array
     #
     #   name           - The project name
-    #   version        - The version number, x.y.z-Bn
+    #   version        - The version number, x.y.z-suffix
+    #   pkgversion     - The version number, less suffix
     #   description    - The project title
     #   appkit         - Name of project appkit, or "" if none.
     #   shell          - Shell initialization script for "kite shell -plain"
@@ -57,6 +58,7 @@ snit::type ::kutils::project {
     typevariable info -array {
         name           ""
         version        ""
+        pkgversion     ""
         description    ""
         appkit         ""
         libs           {}
@@ -170,21 +172,22 @@ snit::type ::kutils::project {
     # Implementation of the "project" kite file command.
 
     proc ProjectCmd {name version description} {
-        set info(name)        [string trim [string tolower $name]]
-        set info(version)     [string trim $version]
-        set info(description) [string trim $description]
+        prepare name        -required -tolower
+        prepare version     -required
+        prepare description -required
 
-        if {![BaseName? $info(name)]} {
-            throw SYNTAX "Invalid project name: \"$info(name)\""
+        if {![BaseName? $name]} {
+            throw SYNTAX "Invalid project name: \"$name\""
         }
 
-        if {![Version? $info(version)]} {
-            throw SYNTAX "Invalid version number: \"$info(version)\""
+        if {![Version? $version]} {
+            throw SYNTAX "Invalid version number: \"$version\""
         }
 
-        if {$info(description) eq ""} {
-            throw SYNTAX "Missing project description"
-        }
+        set info(name)        $name
+        set info(version)     $version
+        set info(pkgversion)  [lindex [split $version -] 0]
+        set info(description) $description
     }
     
     # AppkitCmd name
@@ -285,12 +288,11 @@ snit::type ::kutils::project {
     #
     # ver   - A version number, e.g, 1.2.3-B12 or 1.2.3-SNAPSHOT.
     #
-    # Validates the version.
+    # Validates the version, which must be a valid Tcl package 
+    # version number with an optional "-suffix".
 
     proc Version? {ver} {
-        # TODO: use the correct regexp for Tcl packages, plus
-        # allow -suffix.
-        return [regexp {^\d+[.ab]\d+[.ab]\d+(-\w+)?$} $ver]
+        return [regexp {^(\d[.])*\d[.ab]\d(-\w+)?$} $ver]
     }
 
     #-------------------------------------------------------------------
@@ -354,7 +356,7 @@ snit::type ::kutils::project {
 
             if {[file exists $fname]} {
                 set oldText [readfile $fname]
-                set content "package ifneeded $lib $info(version) "
+                set content "package ifneeded $lib $info(pkgversion) "
                 append content \
                     {[list source [file join $dir pkgModules.tcl]]}
 
@@ -368,7 +370,7 @@ snit::type ::kutils::project {
 
             if {[file exists $fname]} {
                 set oldText [readfile $fname]
-                set content "package provide $lib $info(version)"
+                set content "package provide $lib $info(pkgversion)"
                 set newText [ReplaceBlock $oldText provide $content]
 
                 writeFile $fname $newText -ifchanged
@@ -419,6 +421,22 @@ snit::type ::kutils::project {
 
     #-------------------------------------------------------------------
     # Other Queries
+
+    # version
+    #
+    # Returns the full version string.
+
+    typemethod version {} {
+        return $info(version)
+    }
+
+    # pkgversion
+    #
+    # Returns the [package require] form of the version string.
+
+    typemethod pkgversion {} {
+        return $info(pkgversion)
+    }
 
     # intree
     #

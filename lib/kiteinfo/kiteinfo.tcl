@@ -21,7 +21,7 @@ namespace eval ::kiteinfo:: {
     package require kutils
     package require ktools
     namespace import kutils::* ktools::*
-} description {Athena/Kite Development Tool} appkit kite name athena-kite libs {} version 0.0a4 includes {}}
+} description {Athena/Kite Development Tool} appkit kite name athena-kite libs {} version 0.0a1 includes {}}
 
     namespace export get
     namespace ensemble create
