@@ -1,13 +1,9 @@
 # Project TODO List
 
 * An appkit project's kiteinfo should be populated by "kite new"
-* Handle project versions properly.  A Kite version number should
-  be a valid Tcl package version number, possibly with "-suffix" appended.
-  * When putting the version number in pkg*.tcl files, any "-suffix"
-    must be stripped.  Have a [project pkgversion] call that does this.
 * Document the project.kite file syntax and semantics.
 
-At this point Kite becomes useful.
+Then,
 
 * Support the "app" build target.
   * Can't work on this on OS X.
@@ -18,8 +14,6 @@ At this point Kite becomes useful.
 
 The remaining major gaps in Kite's tool set:
 
-* kite version
-  * Display the Kite version information.
 * kite test
   * Creation of test suite skeletons as part of [kite new]
   * Execution of library and application test suites on [kite test]

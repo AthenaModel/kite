@@ -1,57 +1,49 @@
 #-----------------------------------------------------------------------
 # TITLE:
-#   infotool.tcl
+#   versiontool.tcl
 #
 # AUTHOR:
 #   Will Duquette
 #
 # DESCRIPTION:
-#   Kite: "info" tool
+#   Kite: "version" tool
 #
 #-----------------------------------------------------------------------
 
 #-----------------------------------------------------------------------
 # Registration
 
-set ::ktools(info) {
+set ::ktools(version) {
     arglist     {}
     package     ktools
-    ensemble    ::ktools::infotool
-    description "Display information about Kite and this project."
+    ensemble    ::ktools::versiontool
+    description "Display Kite's version information."
     intree      yes
 }
 
-set ::khelp(info) {
-    The "info" tool displays information about the current project.
+set ::khelp(version) {
+    The "version" tool displays Kite's own version information.
 }
 
 
 #-----------------------------------------------------------------------
-# tool::info ensemble
+# tool::version ensemble
 
-snit::type ::ktools::infotool {
+snit::type ::ktools::versiontool {
     # Make it a singleton
     pragma -hasinstances no -hastypedestroy no
-
-    #-------------------------------------------------------------------
-    # Type variables
-
-    # TBD
 
     #-------------------------------------------------------------------
     # Execution
 
     # execute argv
     #
-    # Displays information about Kite and the current project
-    # given the command line.
+    # Displays version information about Kite itself.
 
     typemethod execute {argv} {
-        checkargs info 0 0 {} $argv
+        checkargs version 0 0 {} $argv
 
-        project dumpinfo
-
-        puts ""
+        puts "Kite [kiteinfo get version]\n"
     }    
 }
 
