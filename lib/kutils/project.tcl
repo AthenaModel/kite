@@ -334,7 +334,7 @@ snit::type ::kutils::project {
 
         # NEXT, generate the files.
         set dir [project root lib kiteinfo]
-        
+
         generate pkgIndex   $mapping [file join $dir pkgIndex.tcl]
         generate pkgModules $mapping [file join $dir pkgModules.tcl]
         generate kiteinfo   $mapping [file join $dir kiteinfo.tcl]
@@ -512,6 +512,23 @@ snit::type ::kutils::project {
 
     typemethod shell {} {
         return $info(shell)
+    }
+
+    # libpath
+    #
+    # Returns a Tcl list of library directories associated with this 
+    # project.
+
+    typemethod libpath {} {
+        set path [list]
+
+        foreach iname $info(includes) {
+            lappend path [project root includes $iname lib]
+        }
+
+        lappend path [project root lib]
+
+        return $path
     }
 
     # dumpinfo

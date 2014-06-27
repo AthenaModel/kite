@@ -1,0 +1,109 @@
+# -*-Tcl-*-
+#-----------------------------------------------------------------------
+# TITLE:
+#    misc.test
+#
+# AUTHOR:
+#    Will Duquette
+#
+# DESCRIPTION:
+#    Tcltest test suite for kutils(n) misc.tcl
+#
+#-----------------------------------------------------------------------
+
+#-----------------------------------------------------------------------
+# Initialize tcltest(n)
+
+if {[lsearch [namespace children] ::tcltest] == -1} {
+    package require tcltest 2.2 
+    eval ::tcltest::configure $argv
+}
+ 
+#-----------------------------------------------------------------------
+# Load the package to be tested
+
+package require kutils
+
+#-----------------------------------------------------------------------
+# Test Suite
+#
+# The tests run in a namespace so as not to interfere with other
+# test suites.
+
+namespace eval ::kutils::test {
+    #-------------------------------------------------------------------
+    # Set up the test environment
+
+    # Import tcltest(n)
+    namespace import ::tcltest::*
+
+    # Import the code to be tested
+    namespace import ::kutils::*
+
+    #-------------------------------------------------------------------
+    # Setup
+
+    # setup
+    #
+    # Sets up for tests
+
+    proc setup {} {
+        global kopts
+        # FIXME: Having kutils depend on kopts defined by the
+        # main.tcl file is bad.
+        set kopts(-verbose) 0
+    }
+
+    # cleanup
+    #
+    # Cleans up after all tests.
+
+    proc cleanup {} {
+        global kopts
+        set kopts(-verbose) 0
+    }
+
+
+    #-------------------------------------------------------------------
+    # vputs
+
+    test vputs-1.1 {Creates no output by default} -setup {
+        setup
+    } -body {
+        vputs "some text"
+    } -cleanup {
+        cleanup
+    } -output {}
+
+    test vputs-1.2 {Creates output when verbose is enabled} -setup {
+        setup
+        set ::kopts(-verbose) 1
+    } -body {
+        vputs "some text"
+    } -cleanup {
+        cleanup
+    } -output "some text\n"
+
+    test vputs-1.3 {Joins multiple strings} -setup {
+        setup
+        set ::kopts(-verbose) 1
+    } -body {
+        vputs "some text" "some more text" "even more text"
+    } -cleanup {
+        cleanup
+    } -output "some text some more text even more text\n"
+
+    #-------------------------------------------------------------------
+    # Cleanup
+
+    cleanupTests
+}
+
+namespace delete ::kutils::test
+
+
+
+
+
+
+

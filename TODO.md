@@ -1,9 +1,5 @@
 # Project TODO List
 
-* Document the project.kite file syntax and semantics.
-
-Then,
-
 * Support the "require" statement in project.kite
   * require name version
     * Simple for now; don't worry about fancy version specs.
