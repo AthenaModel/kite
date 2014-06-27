@@ -111,7 +111,7 @@ snit::type ::ktools::buildtool {
         set kit [project root bin $name.kit]
 
         if {[file exists $kit]} {
-            puts "Deleting old $name.kit"
+            vputs "Deleting old $name.kit"
             catch {file delete -force $kit}
         }
 

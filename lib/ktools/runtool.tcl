@@ -58,7 +58,8 @@ snit::type ::ktools::runtool {
 
         # NEXT, execute it in the project root, in the background,
         # and exit.
-        puts "Executing <$command>"
+        vputs "Executing <$command>"
+        
         cd [project root]
         eval exec $command
     }    

@@ -21,11 +21,27 @@ namespace eval ::kutils:: {
         prepare      \
         readfile     \
         outdent      \
+        vputs        \
         writeFile
 }
 
 #-----------------------------------------------------------------------
 # Commands
+
+# vputs text...
+#
+# text...  - One or more text strings
+#
+# Joins its arguments together and prints them to stdout, only if
+# -verbose is on.
+
+proc ::kutils::vputs {args} {
+    global kopts
+
+    if {$kopts(-verbose)} {
+        puts [join $args]
+    }
+}
 
 # checkargs tool min max argspec argv
 #

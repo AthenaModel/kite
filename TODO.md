@@ -6,11 +6,10 @@
 
 At this point Kite becomes useful.
 
-* Add a -verbose mode, and debugging puts that it triggers.
 * Support the "app" build target.
+  * Can't work on this on OS X.
   * Add "require" project.kite command, to indicate the app's teapot dependencies.
 * Later add "teacup" interactions related to teapot dependencies.
-* [kite run] -- runs the app/appkit, possibly with arguments.
 
 # Remaining Gaps #
 
@@ -18,8 +17,6 @@ The remaining major gaps in Kite's tool set:
 
 * kite version
   * Display the Kite version information.
-* kite run
-  * Run app/appkit on [kite run]
 * kite test
   * Creation of test suite skeletons as part of [kite new]
   * Execution of library and application test suites on [kite test]

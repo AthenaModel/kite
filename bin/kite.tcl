@@ -64,6 +64,14 @@ if {[file exists [file join $libdir kiteinfo]]} {
 namespace import kutils::*
 
 #-----------------------------------------------------------------------
+# Next, set up global Kite options
+
+array set kopts {
+    -verbose 0
+}
+
+
+#-----------------------------------------------------------------------
 # Main Program 
 
 # main argv
@@ -75,12 +83,23 @@ namespace import kutils::*
 
 proc main {argv} {
     global ktools
+    global kopts
 
     # FIRST, given no input display the help; help doesn't care whether
     # we're in a project tree or not.
     if {[llength $argv] == 0} {
         usetool help
         return
+    }
+
+    # NEXT, get any options
+    while {[string match "-*" [lindex $argv 0]]} {
+        set opt [lshift argv]
+
+        switch -exact -- $opt {
+            -verbose  { set kopts(-verbose) 1                  }
+            default   { throw FATAL "Unknown option: \"$opt\"" }
+        }
     }
 
     # NEXT, get the subcommand and see if we have a matching tool.

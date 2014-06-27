@@ -70,7 +70,7 @@ snit::type ::ktools::shelltool {
 
         # NEXT, execute it in the project root, in the background,
         # and exit.
-        puts "Loading <$command>"
+        vputs "Loading <$command>"
         cd [project root]
         eval exec $command
     }
@@ -96,7 +96,7 @@ snit::type ::ktools::shelltool {
             return $app
         }
 
-        throw FATAL "Cannot locate tkcon shell application."
+        throw FATAL "Please install the \"tkcon\" shell application."
     }
     
     # WriteShellInitializer
