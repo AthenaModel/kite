@@ -47,8 +47,6 @@ snit::type ::ktools::shelltool {
     # execute argv
     #
     # Executes the tool given the command line arguments.
-    #
-    # TODO: Allow shelling just one target.
 
     typemethod execute {argv} {
         checkargs shell 0 1 {?-plain?} $argv
@@ -60,9 +58,8 @@ snit::type ::ktools::shelltool {
         # NEXT, set up the rest of command.
         set command $shellapp
 
-        if {[project appkit] ne "" && $opt ne "-plain"} {
-            # TODO: Provide a command to return the app loader file
-            lappend command [project root bin [project appkit].tcl]
+        if {[project apploader] ne "" && $opt ne "-plain"} {
+            lappend command [project apploader]
         } else {
             set script [WriteShellInitializer]
             lappend command $script

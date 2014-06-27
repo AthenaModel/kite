@@ -35,9 +35,10 @@ package require kutils
 # change the order!
 
 source [file join $::ktools::library buildtool.tcl  ]
+source [file join $::ktools::library depstool.tcl   ]
 source [file join $::ktools::library helptool.tcl   ]
 source [file join $::ktools::library infotool.tcl   ]
 source [file join $::ktools::library installtool.tcl]
 source [file join $::ktools::library newtool.tcl    ]
-source [file join $::ktools::library depstool.tcl   ]
+source [file join $::ktools::library runtool.tcl    ]
 source [file join $::ktools::library shelltool.tcl  ]

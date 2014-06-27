@@ -443,6 +443,20 @@ snit::type ::kutils::project {
         return $info(appkit)
     }
 
+    # apploader
+    #
+    # Returns the project's application loader script.
+    #
+    # TODO: Support apps as well as appkits
+
+    typemethod apploader {} {
+        if {$info(appkit) eq ""} {
+            return ""
+        }
+
+        return [project root bin $info(appkit).tcl]
+    }
+
     # lib names
     #
     # Returns the list of lib names.
