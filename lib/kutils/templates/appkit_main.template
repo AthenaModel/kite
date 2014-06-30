@@ -100,7 +100,7 @@ proc main {argv} {
     array set pdata [kiteinfo get]
     puts "$pdata(name) $pdata(version): $pdata(description)"
     puts ""
-    app_harry hello
+    %package hello
     puts ""
 
     # FIXME

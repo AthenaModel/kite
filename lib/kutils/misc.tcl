@@ -18,7 +18,8 @@ namespace eval ::kutils:: {
 
     namespace export \
         checkargs    \
-        generate     \
+        genfile      \
+        gentree      \
         ladd         \
         lshift       \
         prepare      \
@@ -238,22 +239,24 @@ proc ::kutils::writefile {filename content {opt ""}} {
     }
 }
 
-# generate template mapping filename...
+# genfile root template path mapping
 #
+# root       - The directory in which the file path is rooted.
 # template   - The name of a kutils/*.template file, e.g., "pkgIndex"
+# path       - Path of the file to be generated, relative to root.
 # mapping    - A dict mapping from template parameters to generated code.
-# filename...   - Full path of a file to be generated, possibly as a
-#                 series of tokens.
 #
 # Generates an output file given a template and a [string map]-style
-# mapping dict.  If the filename is given as a sequence of tokens,
-# they are joined appropriately for the platform.
+# mapping dict.  The $root should be the complete pathname for the
+# root directory.  The $path is the new file's path, relative to the
+# root.  In $path directories should be joined with "/", and the
+# $path can contain template parameters.
 
-proc ::kutils::generate {template mapping args} {
+proc ::kutils::genfile {root template path mapping} {
     variable library
 
     # FIRST, get the file name.
-    set filename [file join {*}$args]
+    set filename [file join $root {*}[split [string map $mapping $path] /]]
 
     # NEXT, get the template text
     set text [readfile [file join $library templates $template.template]]
@@ -265,4 +268,29 @@ proc ::kutils::generate {template mapping args} {
     # NEXT, save the file.
     vputs "Generate file: $filename from $template"
     writefile $filename $text -ifchanged
+}
+
+# gentree root tdict mapping...
+#
+# root    - Root directory of the tree to generate.
+# tlist   - List of template names and paths.  The paths
+#           should be relative to $root, use "/" as the separator,
+#           and may contain mapping parameters.
+# mapping - The mapping dict, expressed as a single argument or as
+#           parameters and values on the command line.
+#
+# Generates an entire tree, rooted at $root.
+
+proc ::kutils::gentree {root tlist args} {
+    # FIRST, get the mapping
+    if {[llength $args] == 1} {
+        set mapping [lindex $args 1]
+    } else {
+        set mapping $args
+    }
+
+    # NEXT, generate each file in the tlist
+    foreach {template path} $tlist {
+        genfile $root $template $path $mapping
+    }
 }

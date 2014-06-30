@@ -149,39 +149,34 @@ snit::type ::kutils::trees {
     # share the code.
 
     typemethod appkit {parent project app} {
+        # FIRST, determine the app name.
         if {$app eq ""} {
             set app $project
         }
         
+        # NEXT, log what we're doing.
         puts "Making an appkit project tree for project \"$project.\""
         puts "The application will be called \"$app.kit\"."
 
-        # FIRST, set up the mapping.
-        set package app_$app
-        set module  app
-
-        dict set M %project $project
-        dict set M %app     $app
-        dict set M %package $package
-        dict set M %module  $module
-
-        # NEXT, create the project directory structure
-        set root [file join $parent $project]
-
-        # NEXT, create the files.
-        generate appkit_project $M   $root project.kite
-        generate project_readme $M   $root README.md
-        generate gitignore      {}   $root .gitignore
-        generate appkit_main    $M   $root bin $app.tcl
-        generate docs_index     $M   $root docs index.ehtml
-        generate pkgIndex       $M   $root lib $package pkgIndex.tcl
-        generate pkgModules     $M   $root lib $package pkgModules.tcl
-        generate pkgFile        $M   $root lib $package $module.tcl
-        generate all_tests      $M   $root test $package all_tests.test
-        generate pkgTest        $M   $root test $package $module.test
+        # NEXT, generate the tree.
+        gentree [file join $parent $project] {
+            appkit_project project.kite
+            project_readme README.md
+            gitignore      .gitignore
+            appkit_main    bin/%app.tcl
+            docs_index     docs/index.ehtml
+            pkgIndex       lib/%package/pkgIndex.tcl
+            pkgModules     lib/%package/pkgModules.tcl
+            pkgFile        lib/%package/%module.tcl
+            all_tests      test/%package/all_tests.test
+            pkgTest        test/%package/%module.test
+        } %project $project \
+          %app     $app     \
+          %package app_$app \
+          %module  app
 
         # NEXT, load the new project.kite file and save the metadata.
-        cd $root
+        cd [file join $parent $project]
         project loadinfo
         project metadata save
 
@@ -198,34 +193,29 @@ snit::type ::kutils::trees {
     # assuming that there is nothing there.
 
     typemethod lib {parent project libname} {
+        # FIRST, determine the lib name.
         if {$libname eq ""} {
             set libname $project
         }
 
+        # NEXT, log what we're doing.
         puts "Making a library project tree for project \"$project.\""
         puts "The library package will be called ${libname}(n)."
 
-        # FIRST, create the project directory structure
-        set root   [file join $parent $project]
-
-        # NEXT, create the mapping
-        set package $libname
-        set module  $libname
-
-        dict set M %project $project
-        dict set M %package $package
-        dict set M %module  $module
-
-        # NEXT, create the files.
-        generate lib_project    $M   $root project.kite
-        generate project_readme $M   $root README.md
-        generate gitignore      {}   $root .gitignore
-        generate docs_index     $M   $root docs index.ehtml
-        generate pkgIndex       $M   $root lib $package pkgIndex.tcl
-        generate pkgModules     $M   $root lib $package pkgModules.tcl
-        generate pkgFile        $M   $root lib $package $module.tcl
-        generate all_tests      $M   $root test $package all_tests.test
-        generate pkgTest        $M   $root test $package $module.test
+        # NEXT, generate the tree.
+        gentree [file join $parent $project] {
+            lib_project    project.kite
+            project_readme README.md
+            gitignore      .gitignore
+            docs_index     docs/index.ehtml
+            pkgIndex       lib/%package/pkgIndex.tcl
+            pkgModules     lib/%package/pkgModules.tcl
+            pkgFile        lib/%package/%module.tcl
+            all_tests      test/%package/all_tests.test
+            pkgTest        test/%package/%module.test
+        } %project $project \
+          %package $libname \
+          %module  $libname
 
         puts ""
     }    

@@ -326,18 +326,14 @@ snit::type ::kutils::project {
     # TODO: We probably don't want to include everything in info().
 
     proc SaveKiteInfo {} {
-        # FIRST, get the data together
-        dict set mapping %project   $info(name)
-        dict set mapping %package   kiteinfo
-        dict set mapping %module    kiteinfo
-        dict set mapping %kiteinfo  [list [array get info]]
-
-        # NEXT, generate the files.
-        set dir [project root lib kiteinfo]
-
-        generate pkgIndex   $mapping [file join $dir pkgIndex.tcl]
-        generate pkgModules $mapping [file join $dir pkgModules.tcl]
-        generate kiteinfo   $mapping [file join $dir kiteinfo.tcl]
+        gentree [project root lib kiteinfo] {
+            pkgIndex   pkgIndex.tcl
+            pkgModules pkgModules.tcl
+            kiteinfo   kiteinfo.tcl
+        } %project  $info(name) \
+          %package  kiteinfo    \
+          %module   kiteinfo    \
+          %kiteinfo [list [array get info]]
     }
 
     # UpdateLibVersion lib

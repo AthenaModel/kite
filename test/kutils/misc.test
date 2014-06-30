@@ -285,19 +285,55 @@ look a lot nicer.}
     } -match glob -output {}
 
     #-------------------------------------------------------------------
-    # generate
+    # genfile
     
-    test generate-1.1 {generates from template} -body {
-        set fname "generate-1.1.txt"
-        set mapping {
+    test genfile-1.1 {generates file from template} -body {
+        set fname "genfile-1.1.txt"
+
+        genfile . genfile_test $fname {
             %project my-test
-            %kitname text
+            %app     test
         }
-        generate generate_test $mapping . $fname
         readfile $fname
     } -cleanup {
         removeFile $fname
-    } -result {project=<my-test> kitname=<text>}
+    } -result {project=<my-test> app=<test>}
+
+    test genfile-1.2 {substitutes in path} -body {
+        set fname "genfile-1.2.txt"
+
+        genfile . genfile_test %package/$fname {
+            %project my-test
+            %package dummy
+            %app     test
+        }
+        readfile [file join . dummy $fname]
+    } -cleanup {
+        removeDirectory [file join . dummy]
+    } -result {project=<my-test> app=<test>}
+
+    #-------------------------------------------------------------------
+    # gentree
+    
+    test gentree-1.1 {generates tree from template dict} -setup {
+        set root [file join . gentree]
+        makeDirectory $root
+    } -body {
+        gentree $root {
+            genfile_test %project.txt
+            genfile_test %app/app.txt
+        } %project my-test \
+          %app     test
+
+        set ftext "project=<my-test> app=<test>"
+
+        set a [readfile [file join $root my-test.txt]]
+        set b [readfile [file join $root test app.txt]]
+
+        expr {$a eq $ftext && $b eq $ftext}
+    } -cleanup {
+        removeDirectory $root
+    } -result {1}
 
 
     #-------------------------------------------------------------------
