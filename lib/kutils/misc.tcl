@@ -258,7 +258,8 @@ proc ::kutils::generate {template mapping args} {
     # NEXT, get the template text
     set text [readfile [file join $library templates $template.template]]
 
-    # NEXT, apply the mapping.
+    # NEXT, apply the mapping, first adding the template
+    dict set mapping %template $template.template
     set text [string map $mapping $text]
 
     # NEXT, save the file.

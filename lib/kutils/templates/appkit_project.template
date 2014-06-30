@@ -1,4 +1,4 @@
 # Kite Project file for project %project.
 
 project %project "0.0a1" "Your Description"
-appkit %kitname
+appkit %app

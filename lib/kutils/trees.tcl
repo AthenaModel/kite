@@ -18,6 +18,17 @@
 #   TODO: Ultimately, we'd want a plugin mechanism for adding new
 #   kinds of project trees.
 #
+# STANDARD MAPPINGS:
+#   The template files should make use of these standard mappings.
+#
+#   %project   - The project name
+#   %app       - When defining an [app] or [appkit], the application name,
+#                e.g., "kite".
+#   %package   - When defining a package, the package name.
+#   %module    - When defining a module within a package, the bare module
+#                name, e.g., "mymodule" not "mymodule.tcl".
+#   %template  - The template file used.
+#
 #-----------------------------------------------------------------------
 
 namespace eval ::kutils:: {
@@ -124,11 +135,11 @@ snit::type ::kutils::trees {
     # Project trees
     
 
-    # appkit dirname projname kitname
+    # appkit parent project app
     #
-    # dirname  - The directory in which to create the new tree.
-    # projname - The project name, e.g., "athena-mytool"
-    # kitname  - The barename of the appkit to make, e.g., "mytool"
+    # parent  - The directory in which to create the new tree.
+    # project - The project name, e.g., "athena-mytool"
+    # app     - The application name, e.g., "mytool"
     #
     # Builds a default appkit template rooted at the given directory,
     # assuming that there is nothing there.
@@ -137,42 +148,37 @@ snit::type ::kutils::trees {
     # difference is the entry in the project file.  So we should
     # share the code.
 
-    typemethod appkit {dirname projname kitname} {
-        if {$kitname eq ""} {
-            set kitname $projname
+    typemethod appkit {parent project app} {
+        if {$app eq ""} {
+            set app $project
         }
         
-        puts "Making an appkit project tree for project \"$projname.\""
-        puts "The application will be called \"$kitname.kit\"."
+        puts "Making an appkit project tree for project \"$project.\""
+        puts "The application will be called \"$app.kit\"."
 
-        # FIRST, create the project directory structure
-        set root   [file join $dirname $projname]
-        file mkdir $root
+        # FIRST, set up the mapping.
+        set package app_$app
+        set module  app
 
-        set bin    [file join $root bin]
-        set lib    [file join $root lib]
-        set docs   [file join $root docs]
-        set pkg    app_$kitname
+        dict set M %project $project
+        dict set M %app     $app
+        dict set M %package $package
+        dict set M %module  $module
 
-        # NEXT, create the mapping
-        dict set mapping %project $projname
-        dict set mapping %kitname $kitname
-        dict set mapping %kitfile $kitname.kit
-        dict set mapping %package $pkg
-        dict set mapping %pkgfile app
+        # NEXT, create the project directory structure
+        set root [file join $parent $project]
 
         # NEXT, create the files.
-        generate appkit_project $mapping $root project.kite
-        generate project_readme $mapping $root README.md
-        generate gitignore      {}       $root .gitignore
-        generate appkit_main    $mapping $bin $kitname.tcl
-        generate docs_index     $mapping $docs index.ehtml
-        generate pkgIndex       $mapping $lib $pkg pkgIndex.tcl
-        generate pkgModules     $mapping $lib $pkg pkgModules.tcl
-        generate pkgFile        $mapping $lib $pkg app.tcl
-
-
-        # TODO: Add test tree!
+        generate appkit_project $M   $root project.kite
+        generate project_readme $M   $root README.md
+        generate gitignore      {}   $root .gitignore
+        generate appkit_main    $M   $root bin $app.tcl
+        generate docs_index     $M   $root docs index.ehtml
+        generate pkgIndex       $M   $root lib $package pkgIndex.tcl
+        generate pkgModules     $M   $root lib $package pkgModules.tcl
+        generate pkgFile        $M   $root lib $package $module.tcl
+        generate all_tests      $M   $root test $package all_tests.test
+        generate pkgTest        $M   $root test $package $module.test
 
         # NEXT, load the new project.kite file and save the metadata.
         cd $root
@@ -182,49 +188,47 @@ snit::type ::kutils::trees {
         puts ""
     }
 
-    # lib dirname projname libname
+    # lib parent project libname
     #
-    # dirname  - The directory in which to create the new tree.
-    # projname - The project name, e.g., "athena-mylib"
+    # parent  - The directory in which to create the new tree.
+    # project - The project name, e.g., "athena-mylib"
     # libname  - The barename of the library package, e.g., "mylib"
     #
     # Builds a default library template rooted at the given directory,
     # assuming that there is nothing there.
 
-    typemethod lib {dirname projname libname} {
+    typemethod lib {parent project libname} {
         if {$libname eq ""} {
-            set libname $projname
+            set libname $project
         }
 
-        puts "Making an appkit project tree for project \"$projname.\""
+        puts "Making a library project tree for project \"$project.\""
         puts "The library package will be called ${libname}(n)."
 
         # FIRST, create the project directory structure
-        set root   [file join $dirname $projname]
-        file mkdir $root
-
-        set lib    [file join $root lib]
-        set docs   [file join $root docs]
+        set root   [file join $parent $project]
 
         # NEXT, create the mapping
-        dict set mapping %project $projname
-        dict set mapping %package $libname
+        set package $libname
+        set module  $libname
+
+        dict set M %project $project
+        dict set M %package $package
+        dict set M %module  $module
 
         # NEXT, create the files.
-        generate lib_project    $mapping $root project.kite
-        generate project_readme $mapping $root README.md
-        generate gitignore      {}       $root .gitignore
-        generate docs_index     $mapping $docs index.ehtml
-        generate pkgIndex       $mapping $lib $libname pkgIndex.tcl
-        generate pkgModules     $mapping $lib $libname pkgModules.tcl
-        generate pkgFile        $mapping $lib $libname $libname.tcl
-
-
-        # TODO: Add test tree!
-        # TODO: man page
+        generate lib_project    $M   $root project.kite
+        generate project_readme $M   $root README.md
+        generate gitignore      {}   $root .gitignore
+        generate docs_index     $M   $root docs index.ehtml
+        generate pkgIndex       $M   $root lib $package pkgIndex.tcl
+        generate pkgModules     $M   $root lib $package pkgModules.tcl
+        generate pkgFile        $M   $root lib $package $module.tcl
+        generate all_tests      $M   $root test $package all_tests.test
+        generate pkgTest        $M   $root test $package $module.test
 
         puts ""
-    }
+    }    
 }
 
 

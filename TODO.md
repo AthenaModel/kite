@@ -1,8 +1,9 @@
 # Project TODO List
 
 * kite test
-  * Complete kite test suite.
   * Creation of test suite skeletons as part of [kite new]
+  * Complete kite test suite.
+* Fix "kite shell" on Windows
 * kite add appkit|lib
 * Support the "require" statement in project.kite
   * require name version

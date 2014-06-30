@@ -1,12 +1,15 @@
 #-----------------------------------------------------------------------
 # TITLE:
-#   %pkgfile.tcl
+#   %module.tcl
+#
+# PROJECT:
+#   %project
 #
 # AUTHOR:
-#   Will Duquette
+#   TBD
 #
 # DESCRIPTION:
-#   %project: %package(n) Package, %pkgfile module.
+#   %package(n) Package, %module module.
 #
 #   FIXME: Description of this module
 #
