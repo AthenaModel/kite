@@ -17,11 +17,11 @@
 
 namespace eval ::kiteinfo:: {
     variable kiteInfo
-    array set kiteInfo {shell {
+    array set kiteInfo {require-snit 2.3 shell {
     package require kutils
     package require ktools
     namespace import kutils::* ktools::*
-} description {Athena/Kite Development Tool} pkgversion 0.0a1 appkit kite name athena-kite libs {} version 0.0a1 includes {}}
+} requires snit description {Athena/Kite Development Tool} pkgversion 0.0a1 appkit kite name athena-kite libs {} version 0.0a1 includes {}}
 
     namespace export get
     namespace ensemble create

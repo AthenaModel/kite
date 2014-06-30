@@ -120,14 +120,20 @@ snit::type ::ktools::buildtool {
         file mkdir [file dirname $logfile]
 
         # NEXT, other standard arguments.
-
-        # TODO: Snit should be an explicit dependency.
         lappend command \
             -out     $kit                            \
-            -archive [GetTeapotDir]                  \
-            -pkgref  "snit -require 2.3"             \
-            >&       $logfile
+            -archive [GetTeapotDir]
 
+        # NEXT, add "require" dependencies
+        foreach name [project require names] {
+            set pkgref "$name [project require version $name]"
+            lappend command \
+                -pkgref $pkgref
+        }
+
+        # NEXT, log the results
+        lappend command \
+            >&  $logfile
 
         # NEXT, Build the appkit
 

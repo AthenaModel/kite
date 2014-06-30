@@ -1,6 +1,8 @@
 project athena-kite 0.0a1 "Athena/Kite Development Tool"
 appkit kite
 
+require snit 2.3
+
 shell {
     package require kutils
     package require ktools

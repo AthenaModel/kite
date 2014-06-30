@@ -53,6 +53,9 @@ snit::type ::kutils::project {
     #       url - The repository URL
     #       tag - The version/branch tag
     #
+    #   requires       - Names of required teapot packages
+    #   require-$name  - Version of required package $name
+    #
     # If values are "", the data has not yet been loaded.
 
     typevariable info -array {
@@ -63,6 +66,7 @@ snit::type ::kutils::project {
         appkit         ""
         libs           {}
         includes       {}
+        requires       {}
         shell          {}
     }
 
@@ -138,6 +142,7 @@ snit::type ::kutils::project {
         $safe alias appkit  [myproc AppkitCmd]
         $safe alias lib     [myproc LibCmd]
         $safe alias include [myproc IncludeCmd]
+        $safe alias require [myproc RequireCmd]
         $safe alias shell   [myproc ShellCmd]
 
 
@@ -263,6 +268,19 @@ snit::type ::kutils::project {
         ladd info(includes) $name
         set info(include-$name) \
             [dict create vcs $vcs url $url tag $tag]
+    }
+
+    # RequireCmd name version
+    #
+    # name      - The name of the teapot package
+    # version   - The version number of the teapot package
+    #
+    # States that the project depends on the given package from 
+    # a teapot repository.
+
+    proc RequireCmd {name version} {
+        ladd info(requires) $name
+        set info(require-$name) $version
     }
 
     # ShellCmd script
@@ -502,6 +520,24 @@ snit::type ::kutils::project {
         }
     }
 
+    # require names
+    #
+    # Returns the list of required package names.
+
+    typemethod {require names} {} {
+        return $info(requires)
+    }
+
+    # require version name
+    #
+    # name  - the require name
+    #
+    # Returns the required package's version.
+
+    typemethod {require version} {name} {
+        return $info(require-$name)
+    }
+
     # shell
     #
     # Returns the shell initialization script.
@@ -545,9 +581,21 @@ snit::type ::kutils::project {
 
         puts ""
 
-        foreach name $info(includes) {
-            array set d $info(includes-$name)
-            DumpValue "Include:"  "$name as $d(vcs) $d(url) $d(tag)"
+        if {[llength $info(includes)] > 0} {
+            foreach name $info(includes) {
+                array set d $info(include-$name)
+                DumpValue "Include:"  "$name as $d(vcs) $d(url) $d(tag)"
+            }
+
+            puts ""
+        }
+
+        if {[llength $info(requires)] > 0} {
+            foreach name $info(requires) {
+                DumpValue "Require:"  "$name $info(require-$name)"
+            }
+
+            puts ""
         }
     }
 

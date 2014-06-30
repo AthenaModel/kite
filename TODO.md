@@ -1,8 +1,6 @@
 # Project TODO List
 
-* Fix "kite shell" on Windows
 * kite test
-  * Creation of test suite skeletons as part of [kite new]
   * Complete kite test suite.
 * kite add appkit|lib
 * Support the "require" statement in project.kite
@@ -42,3 +40,34 @@ The remaining major gaps in Kites feature set:
   * E.g., C libraries.
   * At least need to be able to specify them in project.kite 
     with shell commands to "make build" and "make clean".
+
+What does Mars need that Kite doesn't yet offer?
+
+* "require" dependencies
+  * Pulled into local teapot
+  * Pulled into appkit
+* Building of documentation
+* Building of "make" targets
+  * E.g., C libs
+* Teapot packaging of libs.
+  * Pulling "require" dependencies into teapot.txt.
+  * Install to local teapot
+  * Install to kite server
+* "kite clean"
+* Version tagging
+* Install to home page/kite server
+
+
+What does Athena need that Kite doesn't yet offer?
+
+* "require" dependencies
+  * Pulled into local teapot
+  * Pulled into app
+* Building of documentation
+* "athena_test", which has needs beyond what [kite test] currently gives.
+* "kite clean"
+* Version tagging
+* Make tarballs
+* Make installer
+* Install to home page
+

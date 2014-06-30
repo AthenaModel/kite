@@ -91,6 +91,14 @@ When an app or appkit is built, the included projects will be built into it.
 For lib-only projects, the included projects are available for testing, but
 will not be built into the exported packages.
 
+### require _name version_
+
+This statement tells Kite that the project wants to run against the 
+teapot package with the given _name_ and _version_, where _version_
+takes any of the normal forms for `[package require]`.  The package
+will be installed into the local teapot by "kite deps" and will be
+built into the project's **app** or **appkit**.
+
 ### shell _script_
 
 The _script_ will be automatically loaded in the Tcl shell produced
