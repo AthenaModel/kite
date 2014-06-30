@@ -125,8 +125,8 @@ snit::type ::ktools::buildtool {
             -archive [GetTeapotDir]
 
         # NEXT, add "require" dependencies
-        foreach name [project require names] {
-            set pkgref "$name [project require version $name]"
+        foreach rqmt [project require names] {
+            set pkgref "$rqmt [project require version $rqmt]"
             lappend command \
                 -pkgref $pkgref
         }

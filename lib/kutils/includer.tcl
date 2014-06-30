@@ -36,8 +36,19 @@ snit::type ::kutils::includer {
     # Outputs the status of the project's includes.
 
     typemethod status {} {
+        set unknown [UnknownIncludes]
+        if {[llength $unknown] > 0} {
+            puts "The includes/ directory contains these unknown includes:"
+
+            foreach iname $unknown {
+                puts "  $iname"
+            }
+
+            puts ""
+        }
+
         if {[llength [project include names]] == 0} {
-            puts "The project has no includes.\n"
+            puts "The project has no known includes.\n"
             return
         }
 
@@ -54,24 +65,18 @@ snit::type ::kutils::includer {
         }
 
         puts ""
-        puts "To retrieve out-of-date or missing includes, use \"kite.kit deps update\"."
-        puts "To update all includes, use \"kite.kit deps force\"."
-        puts ""
     }
     
     # clean
     #
-    # Removes all includes from the "includes" directory.
+    # Removes all unknown includes from the "includes" directory.
 
     typemethod clean {} {
-        puts "Removing all included libraries from [project root includes]..."
+        puts "Removing all unknown included libraries from"
+        puts "[project root includes]..."
+        
         # FIRST, delete the ones that are no longer in project.kite.
         DeleteUnknownIncludes
-
-        # NEXT, delete that ones that remain.
-        foreach name [project include names] {
-            DeleteInclude $name
-        }
     }
 
     # update
@@ -91,6 +96,17 @@ snit::type ::kutils::includer {
         }
 
         puts "\nUpdated $count include(s)."
+    }
+
+    # retrieve name
+    #
+    # name  - An include name.
+    #
+    # Retrieves the specific include from its repository, whether
+    # it is up-to-date or not.
+
+    typemethod retrieve {name} {
+        GetInclude $name
     }
 
     #-------------------------------------------------------------------
@@ -188,13 +204,39 @@ snit::type ::kutils::includer {
         # FIRST, on POSIX errors throw FATAL.
 
         try {
+            vputs "Deleting: [IncludeDir $name]"
             # Note: no error is thrown if the directory doesn't exist.
             file delete -force -- [IncludeDir $name]
-        } trap POSIX {result} {
-            throw FATAL "Failed to purge include \"$name\": $result"
+        } trap POSIX {result eopts} {
+            vputs "eopts <$eopts>"
+            if {[string match "*file already exists" $result]} {
+                throw FATAL \
+"Purge of include \"$name\" failed; is some app watching that directory?"
+            } else {
+                throw FATAL "Failed to purge include \"$name\": $result"
+            }
         }
 
         return
+    }
+
+    # UnknownIncludes
+    #
+    # Returns the directory names of all unrecognized includes.
+
+    proc UnknownIncludes {} {
+        set result [list]
+
+        set dir [project root includes]
+
+        foreach fname [glob -nocomplain [file join $dir *]] {
+            set iname [file tail $fname]
+            if {$iname ni [project include names]} {
+                lappend result $iname
+            }
+        }
+
+        return $result
     }
 
     # DeleteUnknownIncludes
@@ -203,12 +245,8 @@ snit::type ::kutils::includer {
     # in project.kite.
 
     proc DeleteUnknownIncludes {} {
-        set dir [project root includes]
-
-        foreach fname [glob -nocomplain [file join $dir *]] {
-            if {[file tail $fname] ni [project include names]} {
-                DeleteInclude [file tail $fname]
-            }
+        foreach iname [UnknownIncludes] {
+            DeleteInclude $iname
         }
     }
 
@@ -219,12 +257,12 @@ snit::type ::kutils::includer {
     # Retrieves the include into <root>/includes/<name>.
 
     proc GetInclude {name} {
-        puts "Retrieving include \"$name\""
-
         # FIRST, delete the old include.
         DeleteInclude $name
 
-        # FIRST, do the retrieval
+        # NEXT, do the retrieval
+        puts "Retrieving include \"$name\"..."
+
         set vcs [project include get $name vcs]
 
         switch -exact -- $vcs {

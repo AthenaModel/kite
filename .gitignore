@@ -2,6 +2,7 @@
 *.log
 *.kit
 /.kite
+/includes
 
 # SublimeText artifacts.
 *.sublime-*

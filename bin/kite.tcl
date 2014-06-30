@@ -99,7 +99,7 @@ proc main {argv} {
 
     if {![info exist ktools($tool)]} {
         throw FATAL \
-            "'$tool' is not the name of a Kite tool.  See 'kite.kit help'."
+            "'$tool' is not the name of a Kite tool.  See 'kite help'."
     }
 
     # NEXT, find the root of the project tree, if any.

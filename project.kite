@@ -3,6 +3,9 @@ appkit kite
 
 require snit 2.3
 
+# Temporary
+# include mars svn https://oak.jpl.nasa.gov/svn/mars trunk
+
 shell {
     package require kutils
     package require ktools

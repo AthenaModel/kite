@@ -261,8 +261,8 @@ snit::type ::kutils::project {
             throw SYNTAX "Invalid include name: \"$name\""
         }
 
-        if {$name in $info(includes)} {
-            throw SYNTAX "Duplicate include name: \"$name\""
+        if {$name in [concat $info(includes) $info(requires)]} {
+            throw SYNTAX "Duplicate include/require name: \"$name\""
         }
 
         ladd info(includes) $name
@@ -279,6 +279,10 @@ snit::type ::kutils::project {
     # a teapot repository.
 
     proc RequireCmd {name version} {
+        if {$name in [concat $info(includes) $info(requires)]} {
+            throw SYNTAX "Duplicate include/require name: \"$name\""
+        }
+
         ladd info(requires) $name
         set info(require-$name) $version
     }

@@ -1,14 +1,16 @@
 # Project TODO List
 
+* Support the "require" statement in project.kite
+  * DONE require name version
+    * Simple for now; don't worry about fancy version specs.
+  * DONE to include Tcl dependencies into appkit
+  * DONE code to determine whether "require" is present in teapot.
+  * Code to pull packages into local teapot
+  * Code to create ~/.kite/teapot and prepare local tclsh to use it.
+  * Update code to use ~/kite.teapot instead 
 * kite test
   * Complete kite test suite.
 * kite add appkit|lib
-* Support the "require" statement in project.kite
-  * require name version
-    * Simple for now; don't worry about fancy version specs.
-  * Code to pull packages into ~/.kite/teapot
-  * Code to create ~/.kite/teapot and prepare local tclsh to use it.
-  * Code to include Tcl dependencies into appkit?
 * Support the "app" build target.
   * Can't build apps on OS X.
   * Then add code to include the teapot dependencies when building the app.

@@ -44,6 +44,19 @@ be [package require]'ing them.
 The `teacup` tool is installed with ActiveTcl and resides in the same
 `bin/` directory as `tclsh` does.  This is important.
 
+## Is a required package installed locally?
+
+There's no easy way to find out whether a requirement is met locally or 
+not.  Here's what you can do.
+
+First, the following command will retrieve the list of versions of the
+package that are installed locally, as a CSV table.
+
+    teacup list --at-default --as csv <package>
+
+Next, step through the rows in the CVS, finding whether there's an 
+entry that [package vsatisfies] the required version.
+
 ## Creating `~/.kite/teapot`
 
 This is trivially easy:
