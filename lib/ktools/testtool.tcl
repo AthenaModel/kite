@@ -114,9 +114,8 @@ snit::type ::ktools::testtool {
 
         # FIRST, get the script to execute.
         if {$module eq ""} {
-            set module $target
+            set module "all_tests"
         }
-
         set testfile [file join $testdir $module.test]
 
         if {![file isfile $testfile]} {
@@ -132,7 +131,11 @@ snit::type ::ktools::testtool {
                 >@ stdout 2>@ stderr
 
         cd $testdir
-        eval exec $command
+        try {
+            eval exec $command
+        } on error {result} {
+            throw FATAL "Error running tests: $result"
+        }
     }
 }
 
