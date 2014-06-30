@@ -85,12 +85,23 @@ snit::type ::ktools::shelltool {
     # be part of Kite.
 
     proc FindTkCon {} {
-        set app [exec which tkcon]
-        if {[file exists $app]} {
-            return $app
-        }
+        # FIRST, if this is Windows assume Tkcon is installed as
+        # tkcon.tcl next to the the same.
+        if {$::tcl_platform(platform) eq "windows"} {
+            set bindir [file dirname [info nameofexecutable]]
+            set app [file join $bindir tkcon.tcl]
+    
+            if {[file exists $app]} {
+                # It's not clear why "tclsh" is required....
+                return [list tclsh $app]
+            } else {
+                throw FATAL \
+                    "Could not find the \"tkcon.tcl\" shell application."
+            }
+        } 
 
-        set app [exec which tkcon.tcl]
+        # NEXT, look for it installed on the path, Unix-style
+        set app [exec which tkcon]
 
         if {[file exists $app]} {
             return $app
