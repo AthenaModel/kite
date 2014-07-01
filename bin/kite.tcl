@@ -53,13 +53,13 @@ lappend auto_path $libdir
 # Next, require Tcl/Tk and other required packages.
 
 package require Tcl 8.6
-package require snit 2.3
+package require kiteinfo
+
+kiteinfo require snit
+
 package require kutils
 package require ktools
 
-if {[file exists [file join $libdir kiteinfo]]} {
-    package require kiteinfo
-}
 
 namespace import kutils::*
 

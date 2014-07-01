@@ -19,7 +19,9 @@ namespace eval ::kiteinfo:: {
     variable kiteInfo
     array set kiteInfo %kiteinfo
 
-    namespace export get
+    namespace export \
+        get          \
+        require
     namespace ensemble create
 }
 
@@ -46,5 +48,22 @@ proc ::kiteinfo::get {{parm ""}} {
     }
     
     return $kiteInfo($parm)
+}
+
+# require name
+#
+# name  - Name of a "require"'d teapot package.
+#
+# Does a Tcl [package require] on the given package, using the
+# version specified by the "require" statement in project.kite.
+
+proc ::kiteinfo::require {name} {
+    variable kiteInfo
+    
+    if {$name ni $kiteInfo(requires)} {
+        error "unknown package name: \"$name\""
+    }
+
+    package require $name $kiteInfo(require-$name)
 }
 

@@ -23,7 +23,9 @@ namespace eval ::kiteinfo:: {
     namespace import kutils::* ktools::*
 } requires snit description {Athena/Kite Development Tool} pkgversion 0.0a1 appkit kite name athena-kite libs {} version 0.0a1 includes {}}
 
-    namespace export get
+    namespace export \
+        get          \
+        require
     namespace ensemble create
 }
 
@@ -50,5 +52,22 @@ proc ::kiteinfo::get {{parm ""}} {
     }
     
     return $kiteInfo($parm)
+}
+
+# require name
+#
+# name  - Name of a "require"'d teapot package.
+#
+# Does a Tcl [package require] on the given package, using the
+# version specified by the "require" statement in project.kite.
+
+proc ::kiteinfo::require {name} {
+    variable kiteInfo
+    
+    if {$name ni $kiteInfo(requires)} {
+        error "unknown package name: \"$name\""
+    }
+
+    package require $name $kiteInfo(require-$name)
 }
 
