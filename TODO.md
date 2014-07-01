@@ -1,15 +1,21 @@
 # Project TODO List
 
-* Support the "app" build target.
-  * Can't build apps on OS X.
-  * Then add code to include the teapot dependencies when building the app.
-  * And code to find the basekit, by platform.
-* Support the "require" statement in project.kite
-  * Test teapot code on OSX
-  * Test teapot code on Linux
+* Test Kite on Linux
+* "kite deps" problem on OS X
+  * Even with a local teapot in the user's home directory as the default
+    teapot, you need to do "sudo" on "teacup install".
+  * On the other hand, "sudo kite deps update" works fine.
+  * And I can build console-mode exes on OSX, which I hadn't expected.
+  * Try this on Linux.
+* Consider getting rid of the .kite/teapot.  The only purpose to it is to
+  avoid sudo (a good thing), and if teacup won't work nicely on Linux
+  without sudo then there's no point in the extra trouble.
+  * The only command it matters for is [kite deps update], and that's not
+    such a big deal.
 * kite test
   * Complete kite test suite.
 * kite add appkit|lib
+* Consider using basekits from teapot.
 
 # Remaining Gaps #
 
@@ -23,7 +29,6 @@ The remaining major gaps in Kite's tool set:
 * kite clean
   * Remove bin/*.kit, .kite/*, other kite artifacts.
 * kite build
-  * Building of apps, with external dependencies
   * Building of docs
   * Building of teapot packages for libs.
 
@@ -38,9 +43,6 @@ The remaining major gaps in Kites feature set:
 
 What does Mars need that Kite doesn't yet offer?
 
-* "require" dependencies
-  * Pulled into local teapot
-  * Pulled into appkit
 * Building of documentation
 * Building of "make" targets
   * E.g., C libs
@@ -55,9 +57,6 @@ What does Mars need that Kite doesn't yet offer?
 
 What does Athena need that Kite doesn't yet offer?
 
-* "require" dependencies
-  * Pulled into local teapot
-  * Pulled into app
 * Building of documentation
 * "athena_test", which has needs beyond what [kite test] currently gives.
 * "kite clean"
