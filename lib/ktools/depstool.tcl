@@ -25,7 +25,11 @@ set ::ktools(deps) {
 }
 
 set ::khelp(deps) {
-    The "deps" tool manages the project's external dependencies.
+    The "deps" tool manages the project's external dependencies.  There 
+    are two kinds of dependencies.  "require" dependencies are retrieved 
+    from teapot.activestate.com; "include" dependencies are pulled into
+    <project>/includes from local CM repositories and made available for 
+    use by the project.
 
     To get the status of all external dependencies:
 
@@ -39,10 +43,21 @@ set ::khelp(deps) {
 
         $ kite deps update <name>
 
-    There are two kinds of dependencies.  "require" dependencies are
-    retrieved from teapot.activestate.com; "include" dependencies are
-    pulled into <root>/includes from local CM repositories and made 
-    available for use by the project.
+    This will remove the dependency from the local teapot repository or
+    from <project>/includes, and then retrieve a fresh copy.  This is
+    generally only use for dependencies on unstable versions of 
+    software (i.e., an include of a project head, or a require of
+    beta software).
+
+    Removing "include" statements from project.kite can leave you
+    with obsolete includes in <project>/includes.  Use
+
+        $ kite deps clean
+
+    to remove them (or just delete them by hand).
+
+    When Kite fails to install a required teapot package,
+    see <project>/.kite/install_<package>.log for details.
 }
 
 
@@ -107,11 +122,11 @@ snit::type ::ktools::depstool {
     proc UpdateDependencies {name} {
         if {$name eq ""} {
             includer update
-            # teacup update
+            teacup update
         } elseif {$name in [project include names]} {
             includer retrieve $name
         } elseif {$name in [project require names]} {
-            # teacup update $name
+            teacup update $name
         } else {
             throw FATAL "Unknown dependency: \"$name\""
         }

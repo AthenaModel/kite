@@ -52,6 +52,102 @@ snit::type ::kutils::teacup {
         }
     }
 
+    # update ?name?
+    #
+    # name   - The package to update, or "".
+    #
+    # Called with no arguments, this routine looks through the list of
+    # "requires" and attempts to install all packages that are required
+    # but not present in the local teapot repository.  It reports 
+    # success or failure for each.
+    # 
+    # Called with a name, this routine attempts to update that particular
+    # package.
+
+    typemethod update {{name ""}} {
+        # FIRST, handle individual packages.
+        if {$name ne ""} {
+            set ver [project require version $name]
+
+            if {[$type has $name $ver]} {
+                try {
+                    RemovePackage $name
+                } on error {result} {
+                    throw FATAL \
+                        "Could not remove package $name from the local teapot: $result"
+                }
+            }
+
+            try {
+                InstallPackage $name
+            } on error {result} {
+                throw FATAL \
+                    "Could not install $name $ver into the local teapot: $result"
+            }
+            return
+        }
+
+        # NEXT, update all that need it.
+        set errCount 0
+        set updateCount 0
+
+        foreach rname [project require names] {
+            set ver [project require version $rname]
+
+            if {[$type has $rname $ver]} {
+                continue
+            }
+
+            try {
+                InstallPackage $rname
+                incr updateCount
+            } on error {result} {
+                incr errCount
+                puts "Could not install $rname $ver: $result"
+            }
+        }
+
+        puts "Updated $updateCount required package(s)."
+
+        if {$errCount} {
+            throw FATAL "Some required packages could not be installed."
+        }
+    }
+
+    # InstallPackage name
+    #
+    # name  - A required package name
+    #
+    # Attempts to install the given package into the repository.
+    # Throws any error.
+
+    proc InstallPackage {name} {
+        set ver [project require version $name]
+        puts "Installing required package: $name $ver..."
+
+        lappend command \
+            teacup install --with-recommends $name $ver
+
+        eval exec $command
+    }
+
+    # RemovePackage name
+    #
+    # name  - A required package name
+    #
+    # Attempts to remove the given package from the repository.
+    # Throws any error.
+
+    proc RemovePackage {name} {
+        set ver [project require version $name]
+        puts "Removing required package: $name $ver..."
+
+        lappend command \
+            teacup remove $name $ver
+
+        eval exec $command
+    }
+
     # has package version
     #
     # package - A package name
@@ -102,6 +198,10 @@ snit::type ::kutils::teacup {
 
         return $dicts
     }
+
+    #-------------------------------------------------------------------
+    # Helpers 
+    
 
     # interdict keys values
     #
