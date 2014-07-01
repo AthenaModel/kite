@@ -438,6 +438,14 @@ snit::type ::kutils::project {
     #-------------------------------------------------------------------
     # Other Queries
 
+    # teapot
+    #
+    # Returns the path to Kite's local teapot repository
+
+    typemethod teapot {} {
+        return [file normalize [file join ~ .kite teapot]]
+    }
+
     # version
     #
     # Returns the full version string.

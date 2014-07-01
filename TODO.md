@@ -7,8 +7,10 @@
   * DONE code to determine whether "require" is present in teapot.
   * DONE Update "kite deps update" to pull missing packages into local teapot.
   * DONE Update "kite deps update name" to update existing require. 
-  * Code to create ~/.kite/teapot and prepare local tclsh to use it.
-  * Update code to use ~/kite.teapot instead 
+  * DONE Code to create ~/.kite/teapot and prepare local tclsh to use it.
+  * DONE Update code to use ~/.kite/teapot instead 
+  * Test teapot code on OSX
+  * Test teapot code on Linux
 * Support the "app" build target.
   * Can't build apps on OS X.
   * Then add code to include the teapot dependencies when building the app.
@@ -28,8 +30,6 @@ The remaining major gaps in Kite's tool set:
   * Requires writing the project file, not just reading it.
 * kite clean
   * Remove bin/*.kit, .kite/*, other kite artifacts.
-* kite deps
-  * Handling of external dependencies.
 * kite build
   * Building of apps, with external dependencies
   * Building of docs

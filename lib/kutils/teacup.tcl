@@ -200,8 +200,132 @@ snit::type ::kutils::teacup {
     }
 
     #-------------------------------------------------------------------
-    # Helpers 
+    # Commands for managing the local teapot.
     
+
+    # teapot state
+    #
+    # Verifies whether we have a Kite teapot or not.  Returns one 
+    # of the following:
+    #
+    # ok          - Project teapot exists and is linked to tclsh
+    # non-default - Project teapot isn't the default teapot.
+    # unlinked    - Project teapot exists but is not linked to tclsh
+    # missing     - Project teapot does not exist
+
+    typemethod {teapot state} {} {
+        if {![file exists [project teapot]]} {
+            return "missing"
+        }
+
+        if {[project teapot] ni [LinkedTeapots]} {
+            return "unlinked"
+        }
+
+        if {[project teapot] ne [DefaultTeapot]} {
+            return "non-default"
+        }
+
+        return "ok"
+    }
+
+    # LinkedTeapots
+    #
+    # Retrieves the teapots linked to the current tclsh.
+
+    proc LinkedTeapots {} {
+        set links [eval exec teacup link info [info nameofexecutable]]
+        set links [string map {\\ /} $links] 
+
+        foreach {dummy path} $links {
+            set newpath [file normalize $path]
+            lappend result $newpath
+        }
+
+        return $result
+    }
+
+    # DefaultTeapot
+    #
+    # Retrieves the default teapot.
+
+    proc DefaultTeapot {} {
+        set def [eval exec teacup default]
+        set def [string map {\\ /} $def] 
+
+        return [file normalize $def]
+    }
+
+
+
+    # teapot create
+    #
+    # Creates the Kite teapot, if need be, and links it to the
+    # current tclsh.
+
+    typemethod {teapot create} {} {
+        # FIRST, create the teapot
+        if {[$type teapot state] eq "missing"} {
+            puts "Creating teapot at [project teapot]..."
+            file mkdir [file dirname [project teapot]]
+            lappend command \
+                teacup create [project teapot]
+
+            eval exec $command
+        }
+
+        # NEXT, link it to the tclsh
+        puts "Linking Kite teapot to [info nameofexecutable]..."
+        exec teacup link make [project teapot] [info nameofexecutable]
+
+        # NEXT, make it the default teapot.
+        puts "Making Kite teapot the default installation teapot"
+        exec teacup default [project teapot] 
+
+    }
+
+    # teapot status
+    #
+    # Displays information about the local teapot.
+
+    typemethod {teapot status} {} {
+        set state [$type teapot state]
+
+        puts "Local teapot: [project teapot]\n"
+
+        switch -exact -- $state {
+            missing {
+                puts "Kite hasn't yet created its local teapot. Please use"
+                puts "'kite teapot create' to do so.  See 'kite help teapot'"
+                puts "for details."
+            }
+
+            unlinked {
+                puts "Kite's local teapot isn't linked to the development"
+                puts "tclsh.  Please use 'kite teapot create' to do so."
+                puts "See 'kite help teapot' for details."
+            }
+
+            non-default {
+                puts "Kite's local teapot isn't the default installation"
+                puts "teapot.  Please use 'kite teapot create' to make it"
+                puts "so.  See 'kite help teapot' for details."
+            }
+
+            ok {
+                puts "Kite's local teapot is ready for use."
+            }
+
+            default {
+                error "Unknown teapot state: \"$state\""
+            }
+        }
+    }
+
+    #-------------------------------------------------------------------
+    # Helpers 
+
+
 
     # interdict keys values
     #

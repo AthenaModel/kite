@@ -50,6 +50,8 @@ snit::type ::ktools::buildtool {
     typemethod execute {argv} {
         checkargs build 0 0 {} $argv
 
+        # FIRST, check preconditions
+
         # TODO: Build documentation
         # TODO: Build C libraries
 
@@ -122,7 +124,7 @@ snit::type ::ktools::buildtool {
         # NEXT, other standard arguments.
         lappend command \
             -out     $kit                            \
-            -archive [GetTeapotDir]
+            -archive [project teapot]
 
         # NEXT, add "require" dependencies
         foreach rqmt [project require names] {
@@ -147,27 +149,6 @@ snit::type ::ktools::buildtool {
         }
     }
 
-    #-------------------------------------------------------------------
-    # Helpers
-
-    # GetTeapotDir
-    #
-    # For ActiveTcl, the default teapot is in $TCL_HOME/lib/teapot.
-    #
-    # TODO: Kite should have its own local teapot on the machine.
-    # TODO: This routine assumes the default teapot location for
-    # Windows only.
-
-    proc GetTeapotDir {} {
-        set shell [info nameofexecutable]
-        set tclhome [file dirname [file dirname $shell]]
-        set teacup [file join $tclhome bin teacup]
-
-        # Assume the default teacup repository
-        set result [exec $teacup default]
-        return [string trim $result]
-    }
-    
 }
 
 

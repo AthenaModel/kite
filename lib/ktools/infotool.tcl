@@ -34,11 +34,6 @@ snit::type ::ktools::infotool {
     pragma -hasinstances no -hastypedestroy no
 
     #-------------------------------------------------------------------
-    # Type variables
-
-    # TBD
-
-    #-------------------------------------------------------------------
     # Execution
 
     # execute argv
