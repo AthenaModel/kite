@@ -58,8 +58,8 @@ snit::type ::ktools::shelltool {
         # NEXT, set up the rest of command.
         set command $shellapp
 
-        if {[project apploader] ne "" && $opt ne "-plain"} {
-            lappend command [project apploader]
+        if {[project app loader] ne "" && $opt ne "-plain"} {
+            lappend command [project app loader]
         } else {
             set script [WriteShellInitializer]
             lappend command $script

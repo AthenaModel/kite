@@ -21,10 +21,11 @@ namespace eval ::kiteinfo:: {
     package require kutils
     package require ktools
     namespace import kutils::* ktools::*
-} requires snit description {Athena/Kite Development Tool} pkgversion 0.0a1 appkit kite name athena-kite libs {} version 0.0a1 includes {}}
+} requires snit description {Athena/Kite Development Tool} pkgversion 0.0a1 app kite name athena-kite libs {} version 0.0a1 app-kite {exe kit gui 0} includes {}}
 
     namespace export \
         get          \
+        gui          \
         require
     namespace ensemble create
 }
@@ -52,6 +53,19 @@ proc ::kiteinfo::get {{parm ""}} {
     }
     
     return $kiteInfo($parm)
+}
+
+# gui
+#
+# Returns 1 if the app is supposed to have a GUI, and 0 otherwise.
+
+proc ::kiteinfo::gui {} {
+    variable kiteInfo
+
+    set app $kiteInfo(app)
+    set adict $kiteInfo(app-$app)
+
+    return [dict get $adict gui]
 }
 
 # require name

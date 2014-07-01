@@ -38,6 +38,38 @@ namespace eval ::kutils:: {
 #-----------------------------------------------------------------------
 # Help for the project trees.
 
+set ::khelp(app) {
+    The "app" project template is for applications that
+    will be deployed as executable "starpack" files.  Apps are platform-
+    dependent, but can generally be run without any ancillary files.
+    Apps are therefore useful for delivered software.
+
+    The template takes one optional argument, the root name of the 
+    executable file; this name defaults to the project name.  For example,
+
+        $ kite new app my-project
+
+    produces the app "<root>/bin/my-project.exe" (on Windows).  However,
+
+        $ kite new app my-project mytool
+
+    products the app "<root>/bin/mytool.exe".
+
+    A project can contain at most one application, defined as an 
+    "app" or an "appkit" in the project.kite file.  The application 
+    requires a "main" script in <root>/bin/<appname>.tcl.  For example, 
+    "mytool.exe" executes the file "<root>/bin/mytool.tcl".
+
+    This template also creates a Tcl package, app_<kitname>(n), in 
+    "<root>/lib/app_<appname>".  The usual practice is to put most of the
+    app's code in this package (or in other Tcl packages) and have 
+    "<root>/bin/<appname>.tcl" simply invoke it.
+
+    An application can be a console app or a GUI app.  This project tree
+    assumes the application should be a GUI app; this can be changed
+    by editing the "app" statement in the generated project.kite.
+}
+
 set ::khelp(appkit) {
     The "appkit" project template is for pure-tcl applications that
     will be deployed as "starkit" files.  Appkits run against the 
@@ -104,6 +136,7 @@ snit::type ::kutils::trees {
     # Type Variables
 
     typevariable treetypes {
+        app    ".exe application template"
         appkit ".kit application template"
         lib    "Tcl library package template"
     }
@@ -135,6 +168,33 @@ snit::type ::kutils::trees {
     # Project trees
     
 
+    # app parent project app
+    #
+    # parent  - The directory in which to create the new tree.
+    # project - The project name, e.g., "athena-mytool"
+    # app     - The application name, e.g., "mytool"
+    #
+    # Builds a default app template rooted at the given directory,
+    # assuming that there is nothing there.
+
+    typemethod app {parent project app} {
+        # FIRST, determine the app name.
+        if {$app eq ""} {
+            set app $project
+        }
+        
+        # NEXT, log what we're doing.
+        puts "Making an app project tree for project \"$project.\""
+        puts "The application will be called \"$app\"."
+
+        # NEXT, generate the tree.
+        genfile [file join $parent $project] app_project project.kite \
+            [dict create %project $project %app $app]
+
+
+        MakeAppTree $parent $project $app
+    }
+
     # appkit parent project app
     #
     # parent  - The directory in which to create the new tree.
@@ -143,10 +203,6 @@ snit::type ::kutils::trees {
     #
     # Builds a default appkit template rooted at the given directory,
     # assuming that there is nothing there.
-    #
-    # TODO: appkits and apps will share the same structure; the only
-    # difference is the entry in the project file.  So we should
-    # share the code.
 
     typemethod appkit {parent project app} {
         # FIRST, determine the app name.
@@ -159,11 +215,27 @@ snit::type ::kutils::trees {
         puts "The application will be called \"$app.kit\"."
 
         # NEXT, generate the tree.
+        genfile [file join $parent $project] appkit_project project.kite \
+            [dict create %project $project %app $app]
+
+        MakeAppTree $parent $project $app
+    }
+
+
+    # MakeAppTree parent project app
+    #
+    # parent  - The directory in which to create the new tree.
+    # project - The project name, e.g., "athena-mytool"
+    # app     - The application name, e.g., "mytool"
+    #
+    # Builds a default app/appkit template rooted at the given directory.
+    
+    proc MakeAppTree {parent project app} {
+        # FIRST, generate the rest of the tree.
         gentree [file join $parent $project] {
-            appkit_project project.kite
             project_readme README.md
             gitignore      .gitignore
-            appkit_main    bin/%app.tcl
+            app_main       bin/%app.tcl
             docs_index     docs/index.ehtml
             pkgIndex       lib/%package/pkgIndex.tcl
             pkgModules     lib/%package/pkgModules.tcl
@@ -182,6 +254,7 @@ snit::type ::kutils::trees {
 
         puts ""
     }
+
 
     # lib parent project libname
     #

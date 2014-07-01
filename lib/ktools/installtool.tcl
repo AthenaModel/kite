@@ -25,11 +25,11 @@ set ::khelp(install) {
     The "install" tool installs build products into the local file
     system for general use.
 
-    Appkits
+    Apps:
 
-    Appkits are installed into ~/bin.  For example, appkit myapp.kit
-    is installed as ~/bin/myapp.  Appkits run against the installed
-    development tclsh.  
+    Apps and appkits are installed into ~/bin.  For example, 
+    appkit myapp.kit is installed as ~/bin/myapp.  Appkits run against 
+    the installed development tclsh.  
 }
 
 #-----------------------------------------------------------------------
@@ -56,17 +56,32 @@ snit::type ::ktools::installtool {
             # FIRST, make sure that ~/bin exists.
             file mkdir [file join ~ bin]
 
-            # Copy appkit
-            set kitname [project appkit].kit
-            set source [project root bin $kitname]
+            # Copy app
+            set app [project app name]
+            if {$app ne ""} {
+                if {[project app get exe] eq "kit"} {
+                    set kitname $app.kit
+                    set source [project root bin $kitname]
+                    set target [file join ~ bin $app]
+                } elseif {[project app get exe] eq "pack"} {
+                    if {$::tcl_platform(platform) eq "windows"} {
+                        set exename "$app.exe"
+                    } else {
+                        set exename $app
+                    }
+
+                    set source [project root bin $exename]
+                    set target [file join ~ bin $exename]
+                }
+            }
 
             if {![file exists $source]} {
-                puts "Warning: $kitname does not exist; not installed."
+                puts "Warning: app $app has not been built;"
+                puts "not installed."
                 continue
             }
 
-            set target [file join ~ bin [project appkit]]
-            puts "Installing $kitname to '$target'"
+            puts "Installing $app to '$target'"
             file copy -force -- $source $target
         } on error {result} {
             throw FATAL $result

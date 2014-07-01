@@ -51,13 +51,18 @@ snit::type ::ktools::buildtool {
         checkargs build 0 0 {} $argv
 
         # TODO: Build documentation
-        # TODO: Build C libraries
+        # TODO: Build make targets
 
-        # NEXT, build any appkit
-        # TODO: build app
+        # NEXT, build the app
 
-        if {[project appkit] ne ""} {
-            $type BuildAppKit [project appkit]
+        if {[project app name] ne ""} {
+            set exe [project app get exe]
+
+            switch -exact $exe {
+                pack    { $type BuildAppPack [project app name] }
+                kit     { $type BuildAppKit  [project app name] }
+                default { error "Unknown application type: \"$exe\"" }
+            }
         }
 
         # TODO: build teapot packages.
@@ -65,7 +70,7 @@ snit::type ::ktools::buildtool {
     
 
     #-------------------------------------------------------------------
-    # Building AppKits
+    # Building Apps
 
     # BuildAppKit name
     #
@@ -81,11 +86,11 @@ snit::type ::ktools::buildtool {
 
     typemethod BuildAppKit {name} {
         # FIRST, do we have the main script
-        set main [project root bin $name.tcl]
+        set main [project app loader]
 
         if {![file exists $main]} {
             throw fatal \
-                "Cannot build appkit '$name'; the 'bin/$name.kit script is missing."
+                "Cannot build appkit '$name'; the 'bin/$name.tcl script is missing."
         }
 
         # FIRST, begin to build up the command.
@@ -147,6 +152,97 @@ snit::type ::ktools::buildtool {
         }
     }
 
+    # BuildAppPack name
+    #
+    # name   - The name of an app
+    #
+    # Builds the app if possible.  An app is a starpack that
+    # includes $root/bin/$name.tcl (the main script) and the entire
+    # lib/ tree (if any), plus includes and requires.
+    #
+    # It is assumed that TclDevKit is installed and accessible, and
+    # that kite.kit is using the same tclsh as is being used in 
+    # development.
+
+    typemethod BuildAppPack {name} {
+        # FIRST, do we have the main script
+        set main [project app loader]
+
+        if {![file exists $main]} {
+            throw fatal \
+                "Cannot build app '$name'; the 'bin/$name.tcl script is missing."
+        }
+
+        # NEXT, get the executable name.
+        set exefile [project app name]
+
+        if {$::tcl_platform(platform) eq "windows"} {
+            append exefile .exe
+        } 
+        set exe [project root bin $exefile]
+
+        # NEXT, get the basekit name.
+        set basekit [FindBaseKit [project app get gui]]
+
+        # NEXT, begin to build up the command.
+        set command [list ]
+        lappend command \
+            -ignorestderr --       \
+            tclapp $main           \
+            [project root lib * *]
+
+
+        # NEXT, do we have any libraries?
+        if {[llength [glob -nocomplain [project root lib *]]] > 0} {
+            lappend command [project root lib * *]
+        }
+
+        # NEXT, include library subdirectories, if any.
+        if {[llength [glob -nocomplain [project root lib * * *]]] > 0} {
+            lappend command [project root lib * * *]
+        }
+
+
+        # NEXT, prepare to write logfile.
+        set logfile [project root .kite build_$name.log]
+        file mkdir [file dirname $logfile]
+
+        # NEXT, other standard arguments.
+        lappend command \
+            -out     $exe                            \
+            -prefix  $basekit                        \
+            -archive [project teapot]
+
+        # NEXT, add "require" dependencies
+        foreach rqmt [project require names] {
+            set pkgref "$rqmt [project require version $rqmt]"
+            lappend command \
+                -pkgref $pkgref
+        }
+
+        # NEXT, log the results
+        lappend command \
+            >&  $logfile
+
+        # NEXT, erase the existing exe file, if any
+
+        if {[file exists $exe]} {
+            vputs "Deleting old $exefile"
+            catch {file delete -force $exe}
+        }
+
+        # NEXT, Build the app
+
+        puts "Building $exefile as '$exe'"
+        puts "See $logfile for details.\n"
+
+        try {
+            eval exec $command
+        } on error {result} {
+            throw FATAL "Error building $exefile; see $logfile:\n$result"
+        }
+    }
+
     #-------------------------------------------------------------------
     # Helpers
 
@@ -166,6 +262,49 @@ snit::type ::ktools::buildtool {
         # Assume the default teacup repository
         set result [exec $teacup default]
         return [string trim $result]
+    }
+
+    # FindBaseKit gflag
+    #
+    # gflag  - If 1, we need a Tk base-kit.
+    #
+    # Finds the basekit executable, based on the platform.
+
+    proc FindBaseKit {gflag} {
+        # FIRST, determine the base-kit pattern.
+        set tv [info tclversion]
+
+        if {$gflag} {
+            set prefix "base-tk${tv}-thread*"
+        } else {
+            set prefix "base-tcl${tv}-thread*"
+        }
+
+        if {$::tcl_platform(platform) eq "windows"} {
+            set basedir [file dirname [info nameofexecutable]]
+            set pattern [file join $basedir $prefix].exe
+        } elseif {$::tcl_platform(os) eq "Darwin"} {
+            # OS X
+            set basedir "/Library/Tcl/basekits"
+            set pattern [file join $basedir $prefix]
+        } else {
+            # Linux -- Tentative!
+            set basedir [file dirname [info nameofexecutable]]
+            set pattern [file join $basedir $prefix]
+        }
+
+        set allfiles [glob -nocomplain $pattern]
+
+        # NEXT, strip out library files
+        foreach file $allfiles {
+            if {[file extension $file] in {.dll .dylib .so}} {
+                continue
+            }
+
+            return $file
+        }
+
+        throw FATAL "Could not find basekit."
     }
     
 }

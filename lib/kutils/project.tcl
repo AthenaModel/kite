@@ -40,8 +40,13 @@ snit::type ::kutils::project {
     #   version        - The version number, x.y.z-suffix
     #   pkgversion     - The version number, less suffix
     #   description    - The project title
-    #   appkit         - Name of project appkit, or "" if none.
     #   shell          - Shell initialization script for "kite shell -plain"
+    #
+    #   app            - Name of project app, or "" if none.
+    #   app-$name      - Info dict for the app.
+    #   
+    #       exe - kit|pack
+    #       gui - 0|1
     #
     #   libs           - List of library package names
     #   lib-$name      - Info dict for the lib (not yet needed)
@@ -63,7 +68,7 @@ snit::type ::kutils::project {
         version        ""
         pkgversion     ""
         description    ""
-        appkit         ""
+        app            ""
         libs           {}
         includes       {}
         requires       {}
@@ -139,6 +144,7 @@ snit::type ::kutils::project {
         # external dependency.
         set safe [interp create -safe]
         $safe alias project [myproc ProjectCmd]
+        $safe alias app     [myproc AppCmd]
         $safe alias appkit  [myproc AppkitCmd]
         $safe alias lib     [myproc LibCmd]
         $safe alias include [myproc IncludeCmd]
@@ -195,13 +201,43 @@ snit::type ::kutils::project {
         set info(description) $description
     }
     
-    # AppkitCmd name
+    # AppCmd name ?console|gui?
+    #
+    # Implementation of the "app" kite file command.
+
+    proc AppCmd {name {mode console}} {
+        if {$info(app) ne ""} {
+            throw SYNTAX "Multiple app/appkit statements; only one is allowed."
+        }
+
+        if {$mode ni {console gui}} {
+            throw SYNTAX "Invalid application mode: \"$mode\"."
+        }
+
+        set name [string trim [string tolower $name]]
+
+        if {![regexp {^[a-z]\w*$} $name]} {
+            throw SYNTAX "Invalid app name \"$name\""
+        }
+
+        set info(app) $name
+        set info(app-$name) [dict create]
+
+        dict set info(app-$name) exe pack
+        dict set info(app-$name) gui [expr {$mode eq "gui"}] 
+    }
+
+    # AppkitCmd name ?console|gui?
     #
     # Implementation of the "appkit" kite file command.
 
-    proc AppkitCmd {name} {
-        if {$info(appkit) ne ""} {
-            throw SYNTAX "Multiple appkit statements; only one is allowed."
+    proc AppkitCmd {name {mode console}} {
+        if {$info(app) ne ""} {
+            throw SYNTAX "Multiple app/appkit statements; only one is allowed."
+        }
+
+        if {$mode ni {console gui}} {
+            throw SYNTAX "Invalid application mode: \"$mode\"."
         }
 
         set name [string trim [string tolower $name]]
@@ -210,7 +246,11 @@ snit::type ::kutils::project {
             throw SYNTAX "Invalid appkit name \"$name\""
         }
 
-        set info(appkit) $name
+        set info(app) $name
+        set info(app-$name) [dict create]
+
+        dict set info(app-$name) exe kit
+        dict set info(app-$name) gui [expr {$mode eq "gui"}] 
     }
 
     # LibCmd name
@@ -327,9 +367,9 @@ snit::type ::kutils::project {
     # Saves the project metadata to disk as appropriate.
 
     typemethod {metadata save} {} {
-        # FIRST, if there's an appkit save the kiteinfo package for
+        # FIRST, if there's an app save the kiteinfo package for
         # its use.
-        if {$info(appkit) ne ""} {
+        if {$info(app) ne ""} {
             SaveKiteInfo
         }
 
@@ -479,26 +519,42 @@ snit::type ::kutils::project {
         return [expr {$info(name) ne ""}]
     }
 
-    # appkit
+    # app name
     #
-    # Returns the appkit name, if any.
+    # Returns the app name, if any.
 
-    typemethod appkit {} {
-        return $info(appkit)
+    typemethod {app name} {} {
+        return $info(app)
     }
 
-    # apploader
+    # app get ?parm?
+    #
+    # parm  - An app parameter (exe, gui)
+    #
+    # Returns the application's parameter dictionary, or the
+    # value of one item.
+
+    typemethod {app get} {{parm ""}} {
+        set dict $info(app-$info(app))
+
+        if {$parm eq ""} {
+            return $dict
+        } else {
+            return [dict get $dict $parm]
+        }
+    }
+
+
+    # app loader
     #
     # Returns the project's application loader script.
-    #
-    # TODO: Support apps as well as appkits
 
-    typemethod apploader {} {
-        if {$info(appkit) eq ""} {
+    typemethod {app loader} {} {
+        if {$info(app) eq ""} {
             return ""
         }
 
-        return [project root bin $info(appkit).tcl]
+        return [project root bin $info(app).tcl]
     }
 
     # lib names
@@ -585,29 +641,46 @@ snit::type ::kutils::project {
         DumpValue "Name:"        $info(name)
         DumpValue "Version:"     $info(version)
         DumpValue "Description:" $info(description)
-        DumpValue "AppKit:"      [expr {$info(appkit) ne "" ? $info(appkit) : "n/a"}]
+
+        if {$info(app) eq ""} {
+            DumpValue "App:" "n/a"
+        } else {
+            array set adata [project app get]
+
+            set apptext $info(app)
+
+            if {$adata(exe) eq "kit"} {
+                append apptext ".kit"
+            }
+
+            if {$adata(gui)} {
+                append apptext ", GUI application"
+            } else {
+                append apptext ", console application"
+            }
+
+            DumpValue "App:" $apptext
+        }
 
         foreach name $info(libs) {
             DumpValue "Lib:" "$name"
         }
 
-        puts ""
-
         if {[llength $info(includes)] > 0} {
+            puts ""
+
             foreach name $info(includes) {
                 array set d $info(include-$name)
                 DumpValue "Include:"  "$name as $d(vcs) $d(url) $d(tag)"
             }
-
-            puts ""
         }
 
         if {[llength $info(requires)] > 0} {
+            puts ""
+
             foreach name $info(requires) {
                 DumpValue "Require:"  "$name $info(require-$name)"
             }
-
-            puts ""
         }
     }
 

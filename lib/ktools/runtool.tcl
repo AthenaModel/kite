@@ -24,7 +24,7 @@ set ::ktools(run) {
 
 set ::khelp(run) {
     The "run" tool executes the user's app or appkit, i.e., it invokes
-    the ./bin/<myproject>.tcl file, passing it any command line
+    the ./bin/<app>.tcl file, passing it any command line
     arguments.
 }
 
@@ -45,7 +45,7 @@ snit::type ::ktools::runtool {
 
     typemethod execute {argv} {
         # FIRST, is there an app/appkit?
-        set script [project apploader]
+        set script [project app loader]
 
         if {$script eq ""} {
             throw FATAL "The project.kite file doesn't define an application."
@@ -53,7 +53,7 @@ snit::type ::ktools::runtool {
 
         # FIRST, set up the rest of command.
         lappend command \
-            tclsh [project apploader] {*}$argv \
+            tclsh [project app loader] {*}$argv \
             >@ stdout 2>@ stderr
 
         # NEXT, execute it in the project root, in the background,

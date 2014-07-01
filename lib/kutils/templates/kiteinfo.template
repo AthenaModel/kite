@@ -21,6 +21,7 @@ namespace eval ::kiteinfo:: {
 
     namespace export \
         get          \
+        gui          \
         require
     namespace ensemble create
 }
@@ -48,6 +49,19 @@ proc ::kiteinfo::get {{parm ""}} {
     }
     
     return $kiteInfo($parm)
+}
+
+# gui
+#
+# Returns 1 if the app is supposed to have a GUI, and 0 otherwise.
+
+proc ::kiteinfo::gui {} {
+    variable kiteInfo
+
+    set app $kiteInfo(app)
+    set adict $kiteInfo(app-$app)
+
+    return [dict get $adict gui]
 }
 
 # require name
