@@ -44,11 +44,27 @@ project version numbers:
 * "1.2.3"
 * "1.2.3-SUFFIX"
 
-### appkit _name_
+### app _name_ _?mode?_
+
+This statement tells Kite that the project builds an application as a
+standalone executable for the current platform.  The _mode_ tells Kite 
+whether this is a **gui** or a **console** application; the default 
+is **gui**.
+
+A project file may contain at most one `app` or `appkit` statement.
+
+The appkit's main routine must be found in "<i>root</i>/bin/<i>name</i>.tcl";
+it will be built as "<i>root</i>/bin/<i>name</i>.kit".
+
+The easiest way to create a new app is via the `kite new app` or 
+`kite add app` commands.
+
+### appkit _name_ _?mode?_
 
 This statement tells Kite that the project builds an application as a ".kit"
 file.  A .kit contains an application that needs to run against a local 
-installation of Tcl.
+installation of Tcl.  The _mode_ tells Kite whether this is a **gui**
+or a **console** application; the default is **console**.
 
 A project file may contain at most one `app` or `appkit` statement.
 
