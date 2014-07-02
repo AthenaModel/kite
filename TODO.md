@@ -1,8 +1,6 @@
 # Project TODO List
 
 * Write test for kutils::interdict
-* If "kite teapot link" fails because teapot-link is not writable,
-  that shouldn't be an unexpected error.
 * Test on Linux:
   * Install TDK
   * Build appkit
@@ -35,6 +33,8 @@ The remaining major gaps in Kites feature set:
   * E.g., C libraries.
   * At least need to be able to specify them in project.kite 
     with shell commands to "make build" and "make clean".
+  * In project.kite:
+    * make src/libFoo
 
 What does Mars need that Kite doesn't yet offer?
 
@@ -59,4 +59,5 @@ What does Athena need that Kite doesn't yet offer?
 * Make tarballs
 * Make installer
 * Install to home page
+* Ability to create .zip archives.
 

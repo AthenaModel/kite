@@ -157,6 +157,21 @@ namespace eval ::kutils::test {
     } -result {{} {}}
 
     #-------------------------------------------------------------------
+    # interdict
+
+    test interdict-1.1 {interdict: empty lists} -body {
+        interdict {} {}
+    } -result {}
+
+    test interdict-1.2 {interdict: individual elements} -body {
+        interdict [list a] [list 1]
+    } -result {a 1}
+
+    test interdict-1.3 {interdict: full lists} -body {
+        interdict [list a b c] [list 1 2 3]
+    } -result {a 1 b 2 c 3}
+
+    #-------------------------------------------------------------------
     # outdent
 
     test outdent-1.1 {outdent: empty block} -body {

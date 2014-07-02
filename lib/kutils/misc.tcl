@@ -103,6 +103,24 @@ proc ::kutils::lshift {listvar} {
     return $value
 }
 
+# interdict keys values
+#
+# keys   - A list of keys
+# values - A list of values
+#
+# Returns a dictionary of the keys and values
+
+proc ::kutils::interdict {keys values} {
+    set d [dict create]
+
+    foreach k $keys v $values {
+        dict set d $k $v
+    }
+
+    return $d
+}
+
+
 # outdent block
 #
 # block  - A block of text in curly braces, indented like the
@@ -239,24 +257,6 @@ proc ::kutils::writefile {filename content {opt ""}} {
         close $f
     }
 }
-
-# interdict keys values
-#
-# keys   - A list of keys
-# values - A list of values
-#
-# Returns a dictionary of the keys and values
-
-proc ::kutils::interdict {keys values} {
-    set d [dict create]
-
-    foreach k $keys v $values {
-        dict set d $k $v
-    }
-
-    return $d
-}
-
 
 # genfile root template path mapping
 #
