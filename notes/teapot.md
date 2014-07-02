@@ -186,3 +186,11 @@ basis.
 Another possiblity is to run a teapot server on oak.  We have the
 code to do it; and I've tried it and it appears to work (modulo some odd
 messages).  But we might get into trouble with JPL IT.
+
+## Fixing Problems ##
+
+Teacup keeps a cache of the index of teapot.activestate.com in the home
+directory (in ~/.teapot on OSX and Linux, and in ~/Teapot on Windows).
+If "sudo teacup install" has been used, then the cache will be owned by
+"root", and attempts to install into ~/.kite/teapot will fail.  The 
+solution is to "chown" all files the cache directory to $USER.

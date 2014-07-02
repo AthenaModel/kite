@@ -45,7 +45,7 @@ set ::khelp(teapot) {
     On Linux and OS X, it may be necessary to use sudo to link your
     tclsh to the local teapot.
 
-        $ sudo kite teapot link
+        $ sudo -E kite teapot link
 
     Removing the local teapot may cause your Kite projects to be unable
     to find their external dependencies.  However, should you need to
@@ -54,7 +54,7 @@ set ::khelp(teapot) {
         $ kite teapot remove
 
     Because this command unlinks the tclsh from the teapot, you may need
-    to use sudo on Linux or OS X.
+    to use sudo on Linux or OS X, just as for "teapot link".
 }
 
 

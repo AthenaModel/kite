@@ -1,18 +1,12 @@
 # Project TODO List
 
-* Test kutils::interdict
-* Test Kite on Linux
-* "kite deps" problem on OS X
-  * Even with a local teapot in the user's home directory as the default
-    teapot, you need to do "sudo" on "teacup install".
-  * On the other hand, "sudo kite deps update" works fine.
-  * And I can build console-mode exes on OSX, which I hadn't expected.
-  * Try this on Linux.
-* Consider getting rid of the .kite/teapot.  The only purpose to it is to
-  avoid sudo (a good thing), and if teacup won't work nicely on Linux
-  without sudo then there's no point in the extra trouble.
-  * The only command it matters for is [kite deps update], and that's not
-    such a big deal.
+* Write test for kutils::interdict
+* If "kite teapot link" fails because teapot-link is not writable,
+  that shouldn't be an unexpected error.
+* Test on Linux:
+  * Install TDK
+  * Build appkit
+  * Build app
 * kite test
   * Complete kite test suite.
 * kite add appkit|lib
