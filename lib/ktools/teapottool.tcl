@@ -34,16 +34,27 @@ set ::khelp(teapot) {
 
         $ kite teapot
 
-    To create the teapot if it's missing, or to link an existing 
-    teapot to the current tclsh,
+    To create the teapot and make it the default teapot,
 
         $ kite teapot create
 
-    On Linux and OS X, it may be necessary to use sudo:
+    To link the teapot to your tclsh,
 
-        $ sudo kite teapot create
+        $ kite teapot link
 
-    To remove the local teapot, delete ~/.kite/teapot by hand.
+    On Linux and OS X, it may be necessary to use sudo to link your
+    tclsh to the local teapot.
+
+        $ sudo kite teapot link
+
+    Removing the local teapot may cause your Kite projects to be unable
+    to find their external dependencies.  However, should you need to
+    do so, you can do this:
+
+        $ kite teapot remove
+
+    Because this command unlinks the tclsh from the teapot, you may need
+    to use sudo on Linux or OS X.
 }
 
 
@@ -65,12 +76,14 @@ snit::type ::ktools::teapottool {
     typemethod execute {argv} {
         checkargs teapot 0 1 {?create?} $argv
 
-        set sub [lshift argv]
+        set sub [lindex $argv 0]
 
-        if {$sub eq "create"} {
-            teacup teapot create
-        } else {
-            teacup teapot status
+        switch -exact -- $sub {
+            ""      { teapot status }
+            create  { teapot create }
+            link    { teapot link   }
+            remove  { teapot remove }
+            default { throw FATAL "Unknown subcommand: \"$sub\""}
         }
 
         puts ""

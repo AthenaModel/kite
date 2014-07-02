@@ -1,5 +1,6 @@
 # Project TODO List
 
+* Test kutils::interdict
 * Test Kite on Linux
 * "kite deps" problem on OS X
   * Even with a local teapot in the user's home directory as the default

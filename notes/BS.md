@@ -5,19 +5,20 @@ be overtaken by events.
 
 ## Questions ###
 
-**Q: Do we want to have a Kite command for initializing new packages in
-the project?**
+**Q: How do we make a lib's HTML documentation available?**
 
-Yes, I think we do.  There's a basic template, and in lib projects, at
-least, we want to keep the package version numbers consistent with the
-project's version number.
+**Q: How do we handle binary docs in our Kite projects?**
 
-**Q: Should kiteinfo be a package?**
+**Q: How do we make "kite test" do what "athena_test" does?**
 
-The kiteinfo package could simply be a global variable, ::kiteinfo,
-inserted into the app's loader script just like the version number is
-inserted into each package's pkg*.tcl files.  Would this be better?
+**Q: How to pull .ehtml handling into Kite?**
 
-Probably not; we have the possibility of moving code from the load script
-template into kiteinfo, and so simplifying the loader script.  Also,
-it leaves the actual content of the loader script upto the user.
+**Q: How to do "kiteinfo require" in lib packages?**
+
+
+
+## Answered Questions ##
+
+**Q: Should kiteinfo(n) just be a variable?**
+
+No; making it a package offers too much.
