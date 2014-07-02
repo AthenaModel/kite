@@ -105,7 +105,20 @@ snit::type ::kutils::teapot {
 
     typemethod link {} {
         puts "Linking Kite teapot to [info nameofexecutable]..."
-        exec teacup link make [project teapot] [info nameofexecutable]
+        try {
+            exec teacup link make [project teapot] [info nameofexecutable]
+        } trap CHILDSTATUS {result eopts} {
+            if {[string match "*cannot be written.*" $result]} {
+                puts "Error: $result"
+                puts ""
+                puts "Consider using 'sudo -E'.  See 'kite help teapot' for details.\n"
+                throw FATAL \
+                    "Failed to link [project teapot] to the tclsh."
+            } else {
+                # Rethrow
+                return {*}$eopts $result
+            }
+        }
     }
 
     # remove
