@@ -1,6 +1,11 @@
 # Project TODO List
 
-* Write test for kutils::interdict
+* Write man pages
+* Add docstool
+  * Just builds/cleans docs
+* Add log in buildtool when building docs
+* Add ability to build particular things in buildtool.
+* Add ability to handle marsdoc(5) documents in docs/.
 * Test on Linux:
   * Install TDK
   * Build appkit
