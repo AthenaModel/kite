@@ -17,11 +17,11 @@
 
 namespace eval ::kiteinfo:: {
     variable kiteInfo
-    array set kiteInfo {require-snit 2.3 shell {
+    array set kiteInfo {require-snit 2.3 app kite description {Athena/Kite Development Tool} includes mars pkgversion 0.0a1 requires snit shell {
     package require kutils
     package require ktools
     namespace import kutils::* ktools::*
-} requires snit description {Athena/Kite Development Tool} pkgversion 0.0a1 app kite name athena-kite libs {} version 0.0a1 app-kite {exe kit gui 0} includes {}}
+} name athena-kite libs {} app-kite {exe kit gui 0} include-mars {vcs git url https://github.jpl.nasa.gov/will/athena-mars.git tag master} version 0.0a1}
 
     namespace export \
         get          \

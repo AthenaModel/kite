@@ -3,8 +3,7 @@ appkit kite
 
 require snit 2.3
 
-# Temporary
-# include mars svn https://oak.jpl.nasa.gov/svn/mars trunk
+include mars git https://github.jpl.nasa.gov/will/athena-mars.git master
 
 shell {
     package require kutils

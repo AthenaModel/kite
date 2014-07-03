@@ -3,6 +3,7 @@
 /includes
 
 # Build Artifacts
+/docs/man*/*.html
 *.log
 *.kit
 
