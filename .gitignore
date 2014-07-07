@@ -3,6 +3,8 @@
 *.kit
 /.kite
 /includes
+/docs/*.html
+/docs/*/*.html
 
 # SublimeText artifacts.
 *.sublime-*
