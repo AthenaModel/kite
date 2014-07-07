@@ -163,6 +163,7 @@ proc main {argv} {
 
     # NEXT, use the tool, passing it the remaining arguments.
     usetool $tool $argv
+    puts ""
 }
 
 # usetool tool ?args...?
