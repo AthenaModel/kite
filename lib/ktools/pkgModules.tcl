@@ -36,6 +36,7 @@ package require kutils
 
 source [file join $::ktools::library buildtool.tcl  ]
 source [file join $::ktools::library depstool.tcl   ]
+source [file join $::ktools::library docstool.tcl   ]
 source [file join $::ktools::library helptool.tcl   ]
 source [file join $::ktools::library infotool.tcl   ]
 source [file join $::ktools::library installtool.tcl]
