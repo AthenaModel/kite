@@ -30,7 +30,10 @@ set ::khelp(build) {
     The "build" tool builds all build targets specified in the
     project's project.kite file.  In particular:
 
+    * Apps will be built as bin/<name>[.exe]
     * Appkits will be built as bin/<name>.kit
+
+    Build also builds the man pages and documentation.
 }
 
 #-----------------------------------------------------------------------
@@ -39,6 +42,20 @@ set ::khelp(build) {
 snit::type ::ktools::buildtool {
     # Make it a singleton
     pragma -hasinstances no -hastypedestroy no
+
+    #-------------------------------------------------------------------
+    # Lookup Tables
+
+    # manpage section titles
+    #
+    # TODO: For non-standard sections, we'll need a way to handle this.
+
+    typevariable manpageSections -array {
+        1 "Executables"
+        5 "File Formats"
+        i "Tcl Interfaces"
+        n "Tcl Commands"
+    }
 
     #-------------------------------------------------------------------
     # Execution 
@@ -50,7 +67,6 @@ snit::type ::ktools::buildtool {
     typemethod execute {argv} {
         checkargs build 0 0 {} $argv
 
-        # TODO: Build documentation
         # TODO: Build make targets
 
         # NEXT, build the app
@@ -59,13 +75,16 @@ snit::type ::ktools::buildtool {
             set exe [project app get exe]
 
             switch -exact $exe {
-                pack    { $type BuildAppPack [project app name] }
-                kit     { $type BuildAppKit  [project app name] }
+                pack    { BuildAppPack [project app name] }
+                kit     { BuildAppKit  [project app name] }
                 default { error "Unknown application type: \"$exe\"" }
             }
         }
 
         # TODO: build teapot packages.
+
+        # NEXT, build documentation
+        BuildManPages
     }
     
 
@@ -84,7 +103,7 @@ snit::type ::ktools::buildtool {
     # that kite.kit is using the same tclsh as is being used in 
     # development.
 
-    typemethod BuildAppKit {name} {
+    proc BuildAppKit {name} {
         # FIRST, do we have the main script
         set main [project app loader]
 
@@ -92,25 +111,6 @@ snit::type ::ktools::buildtool {
             throw fatal \
                 "Cannot build appkit '$name'; the 'bin/$name.tcl script is missing."
         }
-
-        # FIRST, begin to build up the command.
-        set command [list ]
-        lappend command \
-            -ignorestderr --       \
-            tclapp $main           \
-            [project root lib * *]
-
-
-        # NEXT, do we have any libraries?
-        if {[llength [glob -nocomplain [project root lib *]]] > 0} {
-            lappend command [project root lib * *]
-        }
-
-        # NEXT, include library subdirectories, if any.
-        if {[llength [glob -nocomplain [project root lib * * *]]] > 0} {
-            lappend command [project root lib * * *]
-        }
-
 
         # NEXT, erase the existing kit, if any
         set kit [project root bin $name.kit]
@@ -120,23 +120,13 @@ snit::type ::ktools::buildtool {
             catch {file delete -force $kit}
         }
 
+        # NEXT, begin to build up the command.
+        set command [TclAppCommand $kit]
+
         # NEXT, prepare to write logfile.
         set logfile [project root .kite build_$name.log]
         file mkdir [file dirname $logfile]
 
-        # NEXT, other standard arguments.
-        lappend command \
-            -out     $kit                            \
-            -archive [project teapot]
-
-        # NEXT, add "require" dependencies
-        foreach rqmt [project require names] {
-            set pkgref "$rqmt [project require version $rqmt]"
-            lappend command \
-                -pkgref $pkgref
-        }
-
-        # NEXT, log the results
         lappend command \
             >&  $logfile
 
@@ -164,7 +154,7 @@ snit::type ::ktools::buildtool {
     # that kite.kit is using the same tclsh as is being used in 
     # development.
 
-    typemethod BuildAppPack {name} {
+    proc BuildAppPack {name} {
         # FIRST, do we have the main script
         set main [project app loader]
 
@@ -185,42 +175,12 @@ snit::type ::ktools::buildtool {
         set basekit [FindBaseKit [project app get gui]]
 
         # NEXT, begin to build up the command.
-        set command [list ]
-        lappend command \
-            -ignorestderr --       \
-            tclapp $main           \
-            [project root lib * *]
-
-
-        # NEXT, do we have any libraries?
-        if {[llength [glob -nocomplain [project root lib *]]] > 0} {
-            lappend command [project root lib * *]
-        }
-
-        # NEXT, include library subdirectories, if any.
-        if {[llength [glob -nocomplain [project root lib * * *]]] > 0} {
-            lappend command [project root lib * * *]
-        }
-
+        set command [TclAppCommand $exe $basekit]
 
         # NEXT, prepare to write logfile.
         set logfile [project root .kite build_$name.log]
         file mkdir [file dirname $logfile]
 
-        # NEXT, other standard arguments.
-        lappend command \
-            -out     $exe                            \
-            -prefix  $basekit                        \
-            -archive [project teapot]
-
-        # NEXT, add "require" dependencies
-        foreach rqmt [project require names] {
-            set pkgref "$rqmt [project require version $rqmt]"
-            lappend command \
-                -pkgref $pkgref
-        }
-
-        # NEXT, log the results
         lappend command \
             >&  $logfile
 
@@ -242,6 +202,108 @@ snit::type ::ktools::buildtool {
             throw FATAL "Error building $exefile; see $logfile:\n$result"
         }
     }
+
+    # TclAppCommand target ?basekit?
+    #
+    # target   - The name of the output file.
+    # basekit  - The name of the basekit, or ""
+    #
+    # Returns the base tclapp command for building apps and app kits.
+
+    proc TclAppCommand {target {basekit ""}} {
+        lappend command                 \
+            -ignorestderr --            \
+            tclapp [project app loader] \
+            [project root lib * *]
+
+        # NEXT, include library subdirectories, if any.
+        if {[llength [glob -nocomplain [project root lib * * *]]] > 0} {
+            lappend command [project root lib * * *]
+        }
+
+        # NEXT, do we have any includes?
+        foreach iname [project include names] {
+            set ilib [project root includes $iname lib]
+
+            if {[llength [glob -nocomplain [file join $ilib *]]] > 0} {
+                lappend command [file join $ilib * *]
+            }
+
+            # NEXT, include library subdirectories, if any.
+            if {[llength [glob -nocomplain [file join $ilib * * *]]] > 0} {
+                lappend command [file join $ilib * * *]
+            }
+        }
+
+        # NEXT, add the basekit, if any.
+        if {$basekit ne ""} {
+            lappend command \
+                -basekit $basekit
+        }
+
+        # NEXT, other standard arguments.
+        lappend command \
+            -out     $target          \
+            -archive [project teapot]
+
+        # NEXT, add "require" dependencies
+        foreach rqmt [project require names] {
+            set pkgref "$rqmt [project require version $rqmt]"
+            lappend command \
+                -pkgref $pkgref
+        }
+
+        return $command
+    }
+
+    #-------------------------------------------------------------------
+    # Build docs
+
+    # BuildManPages
+    #
+    # Uses marsutil(n)'s manpage(n) to build manpages in all manpage
+    # directories.
+
+    proc BuildManPages {} {
+        set mandirs [glob -nocomplain [project root docs man*]]
+
+        foreach mandir $mandirs {
+            # Skip non-manpage-directories.
+            if {![file isdirectory $mandir]} {
+                continue
+            }
+
+            # NEXT, validate the section number
+            # TODO: need to support project-specific sections
+            set num [SectionNum [file tail $mandir]]
+            
+            if {![info exists manpageSections($num)]} {
+                throw FATAL "Unknown man page section: \"man$num\""
+            }
+
+            # NEXT, process the man pages in the directory.
+            try {
+                marsutil::manpage format $mandir $mandir \
+                    -project     [project name]          \
+                    -version     [project version]       \
+                    -description [project description]   \
+                    -section     "($num) $manpageSections($num)"
+            } trap SYNTAX {result} {
+                throw FATAL "Syntax error in man page: $result"
+            }
+        }
+    }
+
+    # SectionNum dirname
+    #
+    # dirname  - A manpage directory, man<num>
+    #
+    # Extracts the manpage section number.
+
+    proc SectionNum {dirname} {
+        return [string range $dirname 3 end]
+    }
+    
 
     #-------------------------------------------------------------------
     # Helpers

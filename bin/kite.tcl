@@ -27,6 +27,11 @@ exec tclsh "$0" "$@"
 # strip them out.
 
 # First, remove all TCLLIBPATH directories from the auto_path.
+#
+# NOTE: This code prevents kite.tcl from loading erroneous packages
+# in development.  It fails in kite.kit because it executes after the 
+# first package require.  In kite.kit, that occurs immediately at the 
+# top of the starkit.  It might be better to plan to build Kite as an exe.
 
 if {[info exists env(TCLLIBPATH)]} {
     set old_path $auto_path
@@ -37,6 +42,8 @@ if {[info exists env(TCLLIBPATH)]} {
             lappend auto_path $dir
         }
     }
+
+    set env(TCLLIBPATH) [list]
 }
 
 # Next, get the Kite-specific library directories.  Whether we're
@@ -50,13 +57,30 @@ set libdir  [file normalize [file join $appdir .. lib]]
 lappend auto_path $libdir
 
 #-------------------------------------------------------------------
-# Next, require Tcl/Tk and other required packages.
+# Next, require Tcl/Tk and kiteinfo, so we can require other packages.
 
 package require Tcl 8.6
 package require kiteinfo
 
+#-----------------------------------------------------------------------
+# Next, add any includes libraries to the auto_path.
+#
+# This presumes that the include follows the usual project tree, with
+# all Tcl packages in $root/lib/<package>.
+#
+# TODO: kiteinfo should probably have a routine to do this.
+
+foreach iname [kiteinfo::get includes] {
+    set idir [file join $appdir .. includes $iname lib]
+    lappend auto_path [file normalize $idir]
+}
+
+#-----------------------------------------------------------------------
+# Require other needed packages.
+
 kiteinfo require snit
 
+package require marsutil 3.0
 package require kutils
 package require ktools
 

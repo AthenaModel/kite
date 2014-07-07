@@ -486,6 +486,14 @@ snit::type ::kutils::project {
         return [file normalize [file join ~ .kite teapot]]
     }
 
+    # name
+    #
+    # Returns the project name.
+
+    typemethod name {} {
+        return $info(name)
+    }
+
     # version
     #
     # Returns the full version string.
@@ -501,6 +509,15 @@ snit::type ::kutils::project {
     typemethod pkgversion {} {
         return $info(pkgversion)
     }
+
+    # description
+    #
+    # Returns the project description.
+
+    typemethod description {} {
+        return $info(description)
+    }
+
 
     # intree
     #

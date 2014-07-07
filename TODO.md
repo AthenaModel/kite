@@ -7,6 +7,12 @@
   * -kite-start-require/-kite-end-require tags
   * By default, all "require"'d packages
   * Add -exclude option to lib to exclude specific "require'd" packages.
+* Write man pages
+* Add docstool
+  * Just builds/cleans docs
+* Add log in buildtool when building docs
+* Add ability to build particular things in buildtool.
+* Add ability to handle marsdoc(5) documents in docs/.
 * Test on Linux:
   * Install TDK
   * Build appkit
