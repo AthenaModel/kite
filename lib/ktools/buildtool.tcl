@@ -300,7 +300,6 @@ snit::type ::ktools::buildtool {
 
             # NEXT, process the man pages in the directory.
             try {
-                puts "Building man pages in $mandir..."
                 marsutil::manpage format $mandir $mandir \
                     -project     [project name]          \
                     -version     [project version]       \
