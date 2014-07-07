@@ -31,6 +31,21 @@ snit::type ::kutils::includer {
     #-------------------------------------------------------------------
     # Public Commands
 
+    # uptodate
+    #
+    # Returns 1 if all included packages are up-to-date.
+
+    typemethod uptodate {} {
+        foreach name [project include names] {
+            if {![SignatureMatches $name]} {
+                return 0
+            }
+        }
+
+        return 1
+    }
+
+
     # status
     #
     # Outputs the status of the project's includes.

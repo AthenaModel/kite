@@ -67,6 +67,13 @@ snit::type ::ktools::buildtool {
     typemethod execute {argv} {
         checkargs build 0 0 {} $argv
 
+        # FIRST, check for dependencies.
+        if {![includer uptodate] || ![teacup uptodate]} {
+            puts "WARNING: Some dependencies are not up-to-date."
+            puts "Run \"kite deps\" for details."
+            puts ""
+        }
+
         # TODO: Build make targets
 
         # NEXT, build the app
@@ -83,7 +90,12 @@ snit::type ::ktools::buildtool {
 
         # TODO: build teapot packages.
 
-        # NEXT, build documentation
+        # NEXT, build documentation if marsutil is present.
+        if {[catch {package require marsutil 3.0}]} {
+            puts "WARNING: Can't build documentation, marsutil is unavailable."
+            return
+        }
+
         BuildManPages
     }
     
@@ -265,7 +277,12 @@ snit::type ::ktools::buildtool {
     # directories.
 
     proc BuildManPages {} {
+        # FIRST, get the manpage directories
         set mandirs [glob -nocomplain [project root docs man*]]
+
+        if {[llength $mandirs] == 0} {
+            return
+        }
 
         foreach mandir $mandirs {
             # Skip non-manpage-directories.

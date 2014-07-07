@@ -27,10 +27,26 @@ snit::type ::kutils::teacup {
     #-------------------------------------------------------------------
     # Teapot Commands
 
+    # uptodate
+    #
+    # Returns 1 if all required packages are up-to-date.
+
+    typemethod uptodate {} {
+        foreach name [project require names] {
+            set version [project require version $name]
+
+            if {![$type has $name $version]} {
+                return 0
+            }
+        }
+
+        return 1
+    }
+
     # status
     #
     # Queries the presence of each required package in the local
-    # teapot
+    # teapot and outputs the status to the console.
 
     typemethod status {} {
         if {[llength [project require names]] == 0} {

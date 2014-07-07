@@ -80,7 +80,13 @@ foreach iname [kiteinfo::get includes] {
 
 kiteinfo require snit
 
-package require marsutil 3.0
+# NEXT, load marsutil 3.0, if present.
+if {[catch {package require marsutil 3.0}]} {
+    puts "WARNING: Cannot find package marsutil 3.0."
+    puts "Please do \"kite deps update\" to retrieve it."
+    puts ""
+}
+
 package require kutils
 package require ktools
 
