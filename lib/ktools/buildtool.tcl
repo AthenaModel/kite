@@ -44,20 +44,6 @@ snit::type ::ktools::buildtool {
     pragma -hasinstances no -hastypedestroy no
 
     #-------------------------------------------------------------------
-    # Lookup Tables
-
-    # manpage section titles
-    #
-    # TODO: For non-standard sections, we'll need a way to handle this.
-
-    typevariable manpageSections -array {
-        1 "Executables"
-        5 "File Formats"
-        i "Tcl Interfaces"
-        n "Tcl Commands"
-    }
-
-    #-------------------------------------------------------------------
     # Execution 
 
     # execute argv
@@ -90,13 +76,9 @@ snit::type ::ktools::buildtool {
 
         # TODO: build teapot packages.
 
-        # NEXT, build documentation if marsutil is present.
-        if {[catch {package require marsutil 3.0}]} {
-            puts "WARNING: Can't build documentation, marsutil is unavailable."
-            return
-        }
-
-        BuildManPages
+        # NEXT, build documentation
+        docs manpages
+        docs marsdocs
     }
     
 
@@ -268,59 +250,6 @@ snit::type ::ktools::buildtool {
         return $command
     }
 
-    #-------------------------------------------------------------------
-    # Build docs
-
-    # BuildManPages
-    #
-    # Uses marsutil(n)'s manpage(n) to build manpages in all manpage
-    # directories.
-
-    proc BuildManPages {} {
-        # FIRST, get the manpage directories
-        set mandirs [glob -nocomplain [project root docs man*]]
-
-        if {[llength $mandirs] == 0} {
-            return
-        }
-
-        foreach mandir $mandirs {
-            # Skip non-manpage-directories.
-            if {![file isdirectory $mandir]} {
-                continue
-            }
-
-            # NEXT, validate the section number
-            # TODO: need to support project-specific sections
-            set num [SectionNum [file tail $mandir]]
-            
-            if {![info exists manpageSections($num)]} {
-                throw FATAL "Unknown man page section: \"man$num\""
-            }
-
-            # NEXT, process the man pages in the directory.
-            try {
-                marsutil::manpage format $mandir $mandir \
-                    -project     [project name]          \
-                    -version     [project version]       \
-                    -description [project description]   \
-                    -section     "($num) $manpageSections($num)"
-            } trap SYNTAX {result} {
-                throw FATAL "Syntax error in man page: $result"
-            }
-        }
-    }
-
-    # SectionNum dirname
-    #
-    # dirname  - A manpage directory, man<num>
-    #
-    # Extracts the manpage section number.
-
-    proc SectionNum {dirname} {
-        return [string range $dirname 3 end]
-    }
-    
 
     #-------------------------------------------------------------------
     # Helpers

@@ -1,0 +1,155 @@
+<<manpage project(5) "Kite Project File Format">>
+
+<<section SYNOPSIS>>
+
+<<itemlist>>
+
+<<section DESCRIPTION>>
+
+The man page defines the syntax of Kite's <code>project.kite</code> file.
+The Kite project file defines the project's name, version, external
+dependencies, and build targets, so that Kite can perform various 
+development tasks automatically.<p>
+
+Note that the Kite project file is a Tcl script, and so 
+normal Tcl syntax rules apply.<p>
+
+Every Kite project file begins with a <<iref project>> statement.  This is
+typically followed by one or more build target statements, e.g.,
+<<iref app>>, <<iref appkit>>, and <<iref lib>>.  These are followed by
+<<iref require>> and <<iref include>> statements that define the project's
+external dependencies.<p>
+
+A project's project file is usually created by Kite as part of initializing
+the project's directory tree, and is then updated by the developer as
+needed.<p>
+
+<<section STATEMENTS>>
+
+Kite project files may contain the following statements.<p>
+
+<<deflist statements>>
+
+<<defitem project {project <i>name version description</i>}>>
+
+<b>Required.</b> This statement names the project, its
+current <i>version</i>, and a brief text <i>description</i>.  
+The project name and version are usually defined to match the 
+project's name in the VCS of choice.<p>
+
+For example,<p>
+
+<pre>
+project athena-mars 3.0.0 "Mars Simulation Support Library"
+</pre>
+
+The version number must be a valid Tcl package version number, as 
+described on Tcl's package(n) man page, except that it may include
+an optional suffix.  Tcl package version numbers should consist of two 
+or more integers, separated by dots; the final dot may be replaced by
+"a" or "b", indicating alpha or beta status.  The suffix, if given,
+can be any word preceded by a hyphen.  Thus, the following are valid
+project version numbers:<p>
+
+<ul>
+<li> <tt>1.2</tt>
+<li> <tt>1a2</tt>
+<li> <tt>1.2b3</tt>
+<li> <tt>1.2.3</tt>
+<li> <tt>1.2.3-MYSUFFIX</tt>
+</ul>
+
+<<defitem app {app <i>name</i> ?<i>mode</i>?}>>
+
+This statement tells Kite that the project builds an application as a
+standalone executable for the current platform (i.e., a "starpack").  
+The <i>mode</i> tells Kite whether this is a <b>gui</b> or a 
+<b>console</b> application; the default is <b>gui</b>.<p>
+
+A project file may contain at most one <<iref app>> or <<iref appkit>> 
+statement.<p>
+
+The app's main routine must be found in 
+"<i>root</i>/bin/<i>name</i>.tcl";
+it will be built as "<i>root</i>/bin/<i>name</i>.[exe]".<p>
+
+The easiest way to create a new app is via the <tt>kite new app</tt> or 
+<tt>kite add app</tt> commands.<p>
+
+<<defitem appkit {appkit <i>name</i> ?<i>mode</i>?}>>
+
+This statement tells Kite that the project builds an application as a
+tclsh-dependent cross-platform executable (i.e., a "starkit").  
+The <i>mode</i> tells Kite whether this is a <b>gui</b> or a 
+<b>console</b> application; the default is <b>console</b>.<p>
+
+A project file may contain at most one <<iref app>> or <<iref appkit>> 
+statement.<p>
+
+The app's main routine must be found in 
+"<i>root</i>/bin/<i>name</i>.tcl";
+it will be built as "<i>root</i>/bin/<i>name</i>.kit".<p>
+
+The easiest way to create a new appkit is via the <tt>kite new appkit</tt> 
+or <tt>kite add appkit</tt> commands.<p>
+
+<<defitem lib {lib <i>name</i>}>>
+
+This statement tells Kite that the project defines a Tcl library package
+intended for use by other projects.  The package will be called 
+<i>name</i>; it must reside in "<i>root</i>/lib/<i>name</i>", and will 
+always have the same version number as the project as a whole.<p>
+
+A project may contain any number of library packages.  Note that only
+packages intended for export need to be declared with <<iref lib>>; a 
+project defining an <<iref app>> or <<iref appkit>> will often contain a 
+number of packages intended for use only by the application itself, and 
+these need not be declared.<p>
+
+<<defitem require {require <i>name version</i>}>>
+
+This statement tells Kite that the project wants to run against the 
+teapot package with the given <i>name</i> and <i>version</i>, where 
+<i>version</i> takes any of the normal forms for Tcl's 
+<tt>package require</tt> command.  The package
+will be installed into the local teapot by <tt>kite deps</tt> and will be
+built into the project's <<iref app>> or <<iref appkit>>.<p>
+
+<<defitem include {include <i>name vcs url tag</i>}>>
+
+This statement tells Kite that this project depends on another project 
+called <i>name</i>, and directs Kite to pull the other project's code from 
+its VCS repository into the "<i>root</i>/includes/<i>name</i>" directory
+so that this project can make use of it.<p>
+
+The <i>vcs</i> may be <b>git</b> or <b>svn</b>.  The <i>url</i> is the base 
+URL of the project in the Git or Subversion repository.  The <i>tag</i>
+is the specific version of the project to retrieve.  For Git, the 
+<i>tag</i> can be a branch or tag name; for Subversion, the 
+<i>tag</i> will simply be added to
+the <i>url</i> as <i>url/tag</i>.<p>
+
+Kite assumes that the included project contains one or more Tcl
+packages in its "lib" directory, and thus adds 
+"<i>root</i>/includes/<i>name</i>/lib" to the <tt>auto_path</tt>.<p>
+
+When an <<iref app>> or <<iref appkit>> is built, the included projects 
+will be built into it.  For <<iref lib>>-only projects, the included 
+projects are available for testing but
+will not be built into the exported packages.<p>
+
+<</deflist statements>>
+
+<<section AUTHOR>>
+
+Will Duquette<p>
+
+<<section HISTORY>>
+
+Original file format.<p>
+
+<</manpage>>
+
+
+
+
