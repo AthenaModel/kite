@@ -1,6 +1,12 @@
 # Project TODO List
 
-* Write test for kutils::interdict
+* Allow multiple apps/appkits
+  * Get all external dependencies by default.
+  * Add -exclude option to app/appkit to exclude specific dependencies.
+* Build requirements into lib pkgModules.tcl files.
+  * -kite-start-require/-kite-end-require tags
+  * By default, all "require"'d packages
+  * Add -exclude option to lib to exclude specific "require'd" packages.
 * Test on Linux:
   * Install TDK
   * Build appkit
