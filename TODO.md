@@ -2,9 +2,6 @@
 
 * Add test for blockreplace.
 * Add kutils(n) manpages.
-* Build requirements into lib pkgModules.tcl files.
-  * Add -exclude option to lib to exclude specific "require'd" packages
-    from the automatic "package require"'s.
 * Support for "external documents"
   * MS Office documents and similar will reside on a separate web server;
     we'll update it as we change them.

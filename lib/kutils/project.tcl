@@ -500,7 +500,6 @@ snit::type ::kutils::project {
     # pkgModules.tcl files for the given library.
 
     proc UpdateLibMetadata {lib} {
-        puts "UpdateLibMetadata $lib"
         try {
             # FIRST, pkgIndex.tcl
             set fname [project root lib $lib pkgIndex.tcl]

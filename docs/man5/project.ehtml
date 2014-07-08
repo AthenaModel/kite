@@ -111,6 +111,22 @@ project defining an <<iref app>> or <<iref appkit>> will often contain a
 number of packages intended for use only by the application itself, and 
 these need not be declared.<p>
 
+If the normal template is used when defining the library (i.e., 
+<code>kite new</code> or <code>kite add</code>), then Kite will 
+automatically update a block of <code>package require</code> statements 
+in the library's "pkgModules.tcl" file.  The block will contain all 
+libraries for which a <code>require</code> statement exists in the project 
+file.  The developer may add additional <code>package require</code> 
+statements by hand, if desired, or remove the
+<code>-kite-start-require</code> and <code>-kite-end-require</code> 
+tags from "pkgModules.tcl" and manage the packages entirely by himself.<p>
+
+When a project defines multiple <code>lib</code> packages, it is often the
+case that a given library will not itself require all of the packages that
+are required by the project as whole.  In this case, use the
+<code>-requires</code> option to list the names of those packages to
+include in the <code>package require</code> block.<p>
+
 <<defitem require {require <i>name version</i>}>>
 
 This statement tells Kite that the project wants to run against the 

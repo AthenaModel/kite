@@ -79,7 +79,7 @@ it will be built as "<i>root</i>/bin/<i>name</i>.kit".
 The easiest way to create a new appkit is via the `kite new appkit` or 
 `kite add appkit` commands.
 
-### lib _name_
+### lib _name_ ?-requires list?
 
 This statement tells Kite that the project defines a Tcl library package
 intended for use by other projects.  The package will be called _name_;
@@ -87,9 +87,24 @@ it must reside in "<i>root</i>/lib/<i>name</i>", and will always have the
 same version number as the project as a whole.
 
 A project may contain any number of library packages.  Note that only
-packages intended for export need to be declared with "lib"; a project
+packages intended for export need to be declared with `lib`; a project
 defining an appkit will often contain a number of packages intended for
 use only by the application itself, and these need not be declared.
+
+If the normal template is used when defining the library (i.e., 
+`kite new` or `kite add`), then Kite will automatically update a block
+of `package require` statements in the library's "pkgModules.tcl" file.
+The block will contain all libraries for which a `require` statement
+exists in the project file.  The developer may add additional 
+`package require` statements by hand, if desired, or remove the
+`-kite-start-require` and `-kite-end-require` tags from "pkgModules.tcl"
+and manage the packages entirely by himself.
+
+When a project defines multiple `lib` packages, it is often the case
+that a given library will not itself require all of the packages that
+are required by the project as whole.  In this case, use the 
+`-requires` option to list the names of those packages to include
+in the `package require` block.
 
 ### include _name vcs url tag_
 
