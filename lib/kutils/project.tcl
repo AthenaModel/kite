@@ -483,7 +483,7 @@ snit::type ::kutils::project {
 
     proc SaveKiteInfo {} {
         gentree [project root lib kiteinfo] {
-            pkgIndex            pkgIndex.tcl
+            kiteinfo_pkgIndex   pkgIndex.tcl
             kiteinfo_pkgModules pkgModules.tcl
             kiteinfo            kiteinfo.tcl
         } %project  $info(name) \
