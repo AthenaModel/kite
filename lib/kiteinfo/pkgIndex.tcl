@@ -12,7 +12,7 @@
 #-------------------------------------------------------------------------
 
 # -kite-start-ifneeded  DO NOT EDIT THIS BLOCK BY HAND
-package ifneeded kiteinfo 1.0 [list source [file join $dir pkgModules.tcl]]
+package ifneeded kiteinfo 0.0a1 [list source [file join $dir pkgModules.tcl]]
 # -kite-end-ifneeded
 
 
