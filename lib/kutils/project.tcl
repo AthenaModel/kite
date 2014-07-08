@@ -50,10 +50,7 @@ snit::type ::kutils::project {
     #       gui - 0|1
     #
     #   libs           - List of library package names
-    #   lib-$name      - Info dict for the lib
-    #
-    #       excludes   - List of requires that are excluded from this
-    #                    library
+    #   lib-$name      - Info dict for the lib (not yet needed)
     #
     #   includes       - List of include names
     #   include-$name  - inclusion dictionary for the $name
@@ -133,7 +130,7 @@ snit::type ::kutils::project {
             }
         }
 
-        return $result
+        return $name
     }
 
     # globfiles ?patterns...?
@@ -152,7 +149,7 @@ snit::type ::kutils::project {
             }
         }
 
-        return $result
+        return $name
     }
 
     # FindProjectDirectory
@@ -220,7 +217,7 @@ snit::type ::kutils::project {
         } on error {result eopts} {
             # This will result in a stack trace; add cases above
             # for things we find that aren't really project.kite errors.
-            return {*}$eopts $result
+            error $result
         } finally {
             interp delete $safe            
         }
@@ -318,21 +315,11 @@ snit::type ::kutils::project {
         dict set info(app-$name) gui [expr {$mode eq "gui"}] 
     }
 
-    # LibCmd name ?options?
+    # LibCmd name
     #
-    # name   - The name of the library package and its directory.
-    #          E.g., "kutils".
-    #
-    # Options:
-    #
-    #   -requires list    - A list of "require" names that are
-    #                       explicitly required by this library.
-    #                       Defaults to "*", meaning all. 
-    #
-    # Implementation of the "lib" kite file command.  
+    # Implementation of the "lib" kite file command.
 
-    proc LibCmd {name args} {
-        # FIRST, get the name.
+    proc LibCmd {name} {
         set name [string trim [string tolower $name]]
 
         if {![regexp {^[a-z]\w*$} $name]} {
@@ -342,25 +329,7 @@ snit::type ::kutils::project {
         if {$name in $info(libs)} {
             throw SYNTAX "Duplicate lib name \"$name\""
         }
-
-        # NEXT, get the options
-        dict set libdict requires *
-
-        while {[llength $args] > 0} {
-            set opt [lshift args]
-
-            switch -exact -- $opt {
-                -requires {
-                    dict set libdict requires [lshift args]
-                }
-                default {
-                    throw SYNTAX "Invalid lib option \"$opt\""
-                }
-            }
-        }
-
         ladd info(libs) $name
-        set info(lib-$name) $libdict
     }
 
     # IncludeCmd name vcs url tag
@@ -483,9 +452,9 @@ snit::type ::kutils::project {
 
     proc SaveKiteInfo {} {
         gentree [project root lib kiteinfo] {
-            pkgIndex            pkgIndex.tcl
-            kiteinfo_pkgModules pkgModules.tcl
-            kiteinfo            kiteinfo.tcl
+            pkgIndex   pkgIndex.tcl
+            pkgModules pkgModules.tcl
+            kiteinfo   kiteinfo.tcl
         } %project  $info(name) \
           %package  kiteinfo    \
           %module   kiteinfo    \
@@ -500,7 +469,6 @@ snit::type ::kutils::project {
     # pkgModules.tcl files for the given library.
 
     proc UpdateLibMetadata {lib} {
-        puts "UpdateLibMetadata $lib"
         try {
             # FIRST, pkgIndex.tcl
             set fname [project root lib $lib pkgIndex.tcl]
@@ -544,25 +512,11 @@ snit::type ::kutils::project {
     # library package.
 
     proc LibRequires {lib} {
-        # FIRST, get the list of require names.
-        set reqs *
-
-        if {[info exists info(lib-$lib)]} {
-            set reqs [dict get $info(lib-$lib) requires]
-        }
-
-        # Default to all required packages.
-        if {$reqs eq "*"} {
-            set reqs $info(requires)
-        }
-
         set list [list]
 
-        foreach req $reqs {
-            if {[info exists info(require-$req)]} {
-                set ver $info(require-$req)
-                lappend list "package require $req $ver"
-            }
+        foreach req $info(requires) {
+            set ver $info(require-$req)
+            lappend list "package require $req $ver"
         }
 
         return [join $list \n]
@@ -682,22 +636,6 @@ snit::type ::kutils::project {
     typemethod {lib names} {} {
         return $info(libs)
     }
-
-    # lib get name ?attr?
-    #
-    # name  - the include name
-    # attr  - Optionally, a lib attribute.
-    #
-    # Returns the lib dictionary, or one attribute of it.
-
-    typemethod {lib get} {name {attr ""}} {
-        if {$attr eq ""} {
-            return $info(lib-$name)
-        } else {
-            return [dict get $info(lib-$name) $attr]
-        }
-    }
-
 
     # include names
     #
