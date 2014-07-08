@@ -40,6 +40,7 @@ snit::type ::kutils::project {
     #   version        - The version number, x.y.z-suffix
     #   pkgversion     - The version number, less suffix
     #   description    - The project title
+    #   poc            - Point-of-contact e-mail address
     #   shell          - Shell initialization script for "kite shell -plain"
     #
     #   app            - Name of project app, or "" if none.
@@ -68,6 +69,7 @@ snit::type ::kutils::project {
         version        ""
         pkgversion     ""
         description    ""
+        poc            ""
         app            ""
         libs           {}
         includes       {}
@@ -144,6 +146,7 @@ snit::type ::kutils::project {
         # external dependency.
         set safe [interp create -safe]
         $safe alias project [myproc ProjectCmd]
+        $safe alias poc     [myproc PocCmd]
         $safe alias app     [myproc AppCmd]
         $safe alias appkit  [myproc AppkitCmd]
         $safe alias lib     [myproc LibCmd]
@@ -201,6 +204,16 @@ snit::type ::kutils::project {
         set info(description) $description
     }
     
+    # PocCmd poc
+    #
+    # Implementation of the "poc" kite file command.
+
+    proc PocCmd {poc} {
+        prepare poc -required
+
+        set info(poc)  $poc
+    }
+
     # AppCmd name ?console|gui?
     #
     # Implementation of the "app" kite file command.
@@ -518,6 +531,13 @@ snit::type ::kutils::project {
         return $info(description)
     }
 
+    # poc
+    #
+    # Returns the project POC.
+
+    typemethod poc {} {
+        return $info(poc)
+    }
 
     # intree
     #

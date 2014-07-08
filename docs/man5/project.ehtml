@@ -59,6 +59,11 @@ project version numbers:<p>
 <li> <tt>1.2.3-MYSUFFIX</tt>
 </ul>
 
+<<defitem poc {poc <i>email</i>}>>
+
+Specifies the e-mail address of the project's primary point-of-contact
+(POC).  This is made available to <<xref marsdoc(5)>> documentation.
+
 <<defitem app {app <i>name</i> ?<i>mode</i>?}>>
 
 This statement tells Kite that the project builds an application as a

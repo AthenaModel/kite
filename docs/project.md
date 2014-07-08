@@ -59,6 +59,11 @@ it will be built as "<i>root</i>/bin/<i>name</i>.kit".
 The easiest way to create a new app is via the `kite new app` or 
 `kite add app` commands.
 
+### poc _email_
+
+Specifies the e-mail address of the project's primary point-of-contact
+(POC).  This is made available to marsdoc(5) documentation.
+
 ### appkit _name_ _?mode?_
 
 This statement tells Kite that the project builds an application as a ".kit"

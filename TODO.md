@@ -1,9 +1,5 @@
 # Project TODO List
 
-* Add docstool
-  * Just builds/cleans docs
-* Add "poc" statement to project.kite
-  * Support with -poc documentation option.
 * Documentation questions
   * Development documentation vs. User documentation
   * Docs for libraries
@@ -43,7 +39,6 @@ The remaining major gaps in Kite's tool set:
 
 The remaining major gaps in Kites feature set:
 
-* Handling of .ehtml documentation.
 * Plugins for building other build targets (e.g., HTML help)
 * Handling of other build targets.
   * E.g., C libraries.
@@ -54,7 +49,6 @@ The remaining major gaps in Kites feature set:
 
 What does Mars need that Kite doesn't yet offer?
 
-* Building of documentation
 * Building of "make" targets
   * E.g., C libs
 * Teapot packaging of libs.
@@ -68,12 +62,11 @@ What does Mars need that Kite doesn't yet offer?
 
 What does Athena need that Kite doesn't yet offer?
 
-* Building of documentation
 * "athena_test", which has needs beyond what [kite test] currently gives.
 * "kite clean"
 * Version tagging
 * Make tarballs
 * Make installer
 * Install to home page
-* Ability to create .zip archives.
+* Ability to create .zip/.tgz archives.
 

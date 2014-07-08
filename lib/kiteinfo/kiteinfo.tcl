@@ -21,7 +21,7 @@ namespace eval ::kiteinfo:: {
     package require kutils
     package require ktools
     namespace import kutils::* ktools::*
-} name athena-kite libs {} app-kite {exe kit gui 0} include-mars {vcs git url https://github.jpl.nasa.gov/will/athena-mars.git tag master} version 0.0a1}
+} name athena-kite poc {} libs {} app-kite {exe kit gui 0} include-mars {vcs git url https://github.jpl.nasa.gov/will/athena-mars.git tag master} version 0.0a1}
 
     namespace export \
         get          \

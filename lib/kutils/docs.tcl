@@ -100,6 +100,7 @@ snit::type ::kutils::docs {
                 -project     [project name]          \
                 -version     [project version]       \
                 -description [project description]   \
+                -poc         [project poc]           \
                 -manroots    $manroots               \
                 -anchors                             \
                 {*}$infiles
