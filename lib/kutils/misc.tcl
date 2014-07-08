@@ -17,6 +17,7 @@ namespace eval ::kutils:: {
     variable verbose 0
 
     namespace export \
+        blockreplace \
         checkargs    \
         genfile      \
         gentree      \
@@ -118,6 +119,43 @@ proc ::kutils::interdict {keys values} {
     }
 
     return $d
+}
+
+# blockreplace text tag content
+#
+# text    - A text string, usually the contents of a text file
+# tag     - A replacement tag, e.g., "ifneeded"
+# content - A text string
+#
+# Looks for the 'kite-start' and 'kite-end' lines for the given
+# tag, and replaces the text between them with the given content.
+
+proc ::kutils::blockreplace {text tag content} {
+    # FIRST, prepare
+    set inlines [split $text "\n"]
+    set outlines [list]
+    set inBlock 0
+
+    # NEXT, find and replace the block
+    foreach line $inlines {
+        if {!$inBlock} {
+            if {[string match "# -kite-start-$tag *" $line]} {
+                lappend outlines $line $content
+                set inBlock 1
+            } else {
+                lappend outlines $line
+            }
+        } else {
+            # In Block.  Skip everything but end.
+            if {[string match "# -kite-end-*" $line]} {
+                lappend outlines $line
+                set inBlock 0
+            }
+        }
+    }
+
+    # NEXT, return the new text.
+    return [join $outlines "\n"]
 }
 
 

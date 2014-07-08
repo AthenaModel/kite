@@ -13,16 +13,16 @@
 #-----------------------------------------------------------------------
 # Package Definition
 
-package provide kutils 1.0
+# -kite-start-provide  DO NOT EDIT THIS BLOCK BY HAND
+package provide kutils 0.0a1
+# -kite-end-provide
 
 #-----------------------------------------------------------------------
-# Dependencies
+# Required Packages
 
-# TODO: Figure out whether this belongs here or not.  We'd like to handle
-# all dependencies at the toplevel; but not all libraries need the same
-# ones.
-
-package require snit
+# -kite-start-require  DO NOT EDIT THIS BLOCK BY HAND
+package require snit 2.3
+# -kite-end-require
 
 
 #-----------------------------------------------------------------------

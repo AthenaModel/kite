@@ -1,16 +1,21 @@
 # Project TODO List
 
-* Documentation questions
-  * Development documentation vs. User documentation
-  * Docs for libraries
-  * Docs for apps
-* Allow multiple apps/appkits
-  * Get all external dependencies by default.
-  * Add -exclude option to app/appkit to exclude specific dependencies.
+* Add test for blockreplace.
+* Add kutils(n) manpages.
 * Build requirements into lib pkgModules.tcl files.
   * -kite-start-require/-kite-end-require tags
   * By default, all "require"'d packages
   * Add -exclude option to lib to exclude specific "require'd" packages.
+* Support for "external documents"
+  * MS Office documents and similar will reside on a separate web server;
+    we'll update it as we change them.
+  * project.kite will have an "xdoc" statement:
+    * xdoc mag.docx http://...../mag3.5.docx
+  * External docs can be pulled in using a kite command, so that they
+    can be included in a build.
+* Allow multiple apps/appkits
+  * Get all external dependencies by default.
+  * Add -exclude option to app/appkit to exclude specific dependencies.
 * Write man pages
 * Add ability to build particular things in buildtool.
 * Test on Linux:

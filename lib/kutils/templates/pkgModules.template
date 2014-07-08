@@ -19,6 +19,12 @@ package provide %package 1.0
 # -kite-end-provide
 
 #-----------------------------------------------------------------------
+# Required Packages
+
+# -kite-start-require  DO NOT EDIT THIS BLOCK BY HAND
+# -kite-end-require
+
+#-----------------------------------------------------------------------
 # Namespace definition
 
 namespace eval ::%package:: {

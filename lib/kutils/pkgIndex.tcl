@@ -8,7 +8,9 @@
 # DESCRIPTION:
 #   Kite: kutils package index.
 
-package ifneeded kutils 1.0 [list source [file join $dir pkgModules.tcl]]
+# -kite-start-ifneeded  DO NOT EDIT THIS BLOCK BY HAND
+package ifneeded kutils 0.0a1 [list source [file join $dir pkgModules.tcl]]
+# -kite-end-ifneeded
 
 
 

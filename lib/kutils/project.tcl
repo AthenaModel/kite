@@ -103,6 +103,55 @@ snit::type ::kutils::project {
         return [file join $rootdir {*}$args]
     }
 
+    # globroot ?patterns...?
+    #
+    # patterns - A list of path components, possibly containing wildcards.
+    #
+    # Joins the patterns to the project root directory, and does a 
+    # glob -nocomplain, returning the resulting list.
+
+    typemethod globroot {args} {
+        glob -nocomplain [$type root {*}$args]
+    }
+
+    # globdirs ?patterns...?
+    #
+    # patterns - A list of path components, possibly containing wildcards.
+    #
+    # Joins the patterns to the project root directory, and does a 
+    # glob -nocomplain, returning the directory names in the resulting
+    # list.
+
+    typemethod globdirs {args} {
+        set result [list]
+        foreach name [$type globroot {*}$args] {
+            if {[file isdirectory $name]} {
+                lappend result $name
+            }
+        }
+
+        return $name
+    }
+
+    # globfiles ?patterns...?
+    #
+    # patterns - A list of path components, possibly containing wildcards.
+    #
+    # Joins the patterns to the project root directory, and does a 
+    # glob -nocomplain, returning the names of the normal files 
+    # from the resulting list.
+
+    typemethod globfiles {args} {
+        set result [list]
+        foreach name [$type globroot {*}$args] {
+            if {[file isfile $name]} {
+                lappend result $name
+            }
+        }
+
+        return $name
+    }
+
     # FindProjectDirectory
     #
     # Starting from the current working directory, works its way up
@@ -386,10 +435,11 @@ snit::type ::kutils::project {
             SaveKiteInfo
         }
 
-        # NEXT, for each declared library, update its version number
-        # in the pkgIndex and pkgModules files.
-        foreach lib $info(libs) {
-            UpdateLibVersion $lib
+        # NEXT, for each library in $root/lib, update its version number
+        # and requirements in the pkgIndex and pkgModules files.
+        # Packages can opt out by removing the "-kite" tags.
+        foreach lib [$type globdirs lib *] {
+            UpdateLibMetadata [file tail $lib]
         }
     }
 
@@ -411,14 +461,14 @@ snit::type ::kutils::project {
           %kiteinfo [list [array get info]]
     }
 
-    # UpdateLibVersion lib
+    # UpdateLibMetadata lib
     #
     # lib   - Name of a library package
     #
-    # Updates the version number in the pkgIndex.tcl and pkgModules.tcl
-    # files for the given library.
+    # Updates the version number and requires in the pkgIndex.tcl and 
+    # pkgModules.tcl files for the given library.
 
-    proc UpdateLibVersion {lib} {
+    proc UpdateLibMetadata {lib} {
         try {
             # FIRST, pkgIndex.tcl
             set fname [project root lib $lib pkgIndex.tcl]
@@ -429,7 +479,7 @@ snit::type ::kutils::project {
                 append content \
                     {[list source [file join $dir pkgModules.tcl]]}
 
-                set newText [ReplaceBlock $oldText ifneeded $content]
+                set newText [blockreplace $oldText ifneeded $content]
 
                 writefile $fname $newText -ifchanged
             }
@@ -438,55 +488,40 @@ snit::type ::kutils::project {
             set fname [project root lib $lib pkgModules.tcl]
 
             if {[file exists $fname]} {
-                set oldText [readfile $fname]
+                # FIRST, update "package provide".
+                set text1 [readfile $fname]
                 set content "package provide $lib $info(pkgversion)"
-                set newText [ReplaceBlock $oldText provide $content]
+                set text2 [blockreplace $text1 provide $content]
 
-                writefile $fname $newText -ifchanged
+                # NEXT, update "package require"
+                set content [LibRequires $lib]
+                set text3 [blockreplace $text2 require $content]
+                writefile $fname $text3 -ifchanged
             }
         } trap POSIX {result} {
             throw FATAL "Error updating \"$lib\" version: $result"
         }
     }
 
-    # ReplaceBlock text tag content
+    # LibRequires lib
     #
-    # text    - The contents of a text file
-    # tag     - A replacement tag, e.g., "ifneeded"
-    # content - A text string
+    # lib   - A "lib" package
     #
-    # Looks for the 'kite-start' and 'kite-end' lines for the given
-    # tag, and replaces the text between them with the given content.
+    # Returns a block of "package require" statements matching the
+    # "require" statements in project.kite, as tailored for this 
+    # library package.
 
-    proc ReplaceBlock {text tag content} {
-        # FIRST, prepare
-        set inlines [split $text "\n"]
-        set outlines [list]
-        set inBlock 0
+    proc LibRequires {lib} {
+        set list [list]
 
-        # NEXT, find and replace the block
-        foreach line $inlines {
-            if {!$inBlock} {
-                if {[string match "# -kite-start-$tag *" $line]} {
-                    lappend outlines $line $content
-                    set inBlock 1
-                } else {
-                    lappend outlines $line
-                }
-            } else {
-                # In Block.  Skip everything but end.
-                if {[string match "# -kite-end-*" $line]} {
-                    lappend outlines $line
-                    set inBlock 0
-                }
-            }
+        foreach req $info(requires) {
+            set ver $info(require-$req)
+            lappend list "package require $req $ver"
         }
 
-        # NEXT, return the new text.
-        return [join $outlines "\n"]
-
+        return [join $list \n]
     }
-    
+
 
     #-------------------------------------------------------------------
     # Other Queries
