@@ -1,5 +1,8 @@
 <<manpage project(5) "Kite Project File Format">>
 
+<b>WARNING: The docs/project.md file has the complete project.kite file
+    format specification.  This file may go away in the future.</b><p>
+
 <<section SYNOPSIS>>
 
 <<itemlist>>
