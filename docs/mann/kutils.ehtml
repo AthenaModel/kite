@@ -1,4 +1,4 @@
-<<manpage {kutils(n) misc(n)} "Miscellaneous Commands">>
+<<manpage {kutils(n)} "Kite Utilities">>
 
 <<section SYNOPSIS>>
 
@@ -11,47 +11,35 @@ namespace import ::kutils::*
 
 <<section DESCRIPTION>>
 
-misc(n) is the grab-bag module for <<xref kutils(n)>>; it contains all of
-the individual commands that didn't fit anywhere else.<p>
+kutils(n) is the workhorse package for Kite; most of the application's
+core functionality resides here.  The central module is <<xref project(n)>>,
+which manages the project metadata.<p>
 
-<<section COMMANDS>>
+<<section CONVENTIONS>>
 
-<<deflist commands>>
+Kite is primarily a console application, and all of the code in it is aimed
+in that direction.  To that end:<p>
 
-<<defitem blockreplace {blockreplace <i>text tag content}>>
+<ul>
+<li> Library modules are free to output to the console using "puts".<p>
 
-This command is used to update project files "in place", by replacing
-tagged lines in <i>text</i> with the specified <i>content</i> and returning
-the result.  The tag is a brief string, like "provide" or "require"; it
-is used as follows.<p>
+<li> Information the user will not usually want to see should be written
+     using <<xref misc(n) vputs>>; the user can see it by running
+     Kite with the <b>-verbose</b> flag.<p>
 
-First, the command splits <i>text</i> into lines, and looks for tagged blocks.
-A tagged block looks like this:<p>
+<li> Fatal errors should be flagged by throwing an error with error code
+     <b>FATAL</b>.<p>
 
-<pre>
-# -kite-start-<i>tag</i>
-...
-# -kite-end-<i>tag</i>
-</pre>
-
-The "-kite-start" and "-kite-end" lines must be at the left margin.<p>
-
-Next, the text between the tagged lines is replaced with the <i>content</i>.
-
-
-<<defitem vputs {vputs <i>text...</i>}>>
-
-Outputs the <i>text</i> to the console, only if <code>::kutils::verbose</code>
-is true.  This is used to provide "-verbose" output to the user.<p>
+<li> Error messages should be helpful and friendly, and suggest 
+     possible fixes.  It is often useful to use 
+     <<xref misc(n) outdent>> in conjunction with "throw FATAL" to
+     produce multi-line error messages.<p>
+</ul>
 
 
 <<section ENVIRONMENT>>
 
 Requires Tcl 8.6 or later.<p>
-
-To use this package in a Tcl script, the environment variable
-<code>TCLLIBPATH</code> must include the parent of the package
-directory.<p>
 
 <<section AUTHORS>>
 
@@ -59,7 +47,7 @@ Will Duquette<p>
 
 <<section HISTORY>>
 
-New module.  A few commands were extracted from Mars 2.0.<p>
+New package.<p>
 
 <</manpage>>
 

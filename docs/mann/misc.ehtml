@@ -1,0 +1,155 @@
+<<manpage {kutils(n) misc(n)} "Miscellaneous Commands">>
+
+<<section SYNOPSIS>>
+
+<pre>
+package require kutils <<version>>
+namespace import ::kutils::*
+</pre>
+
+<<itemlist>>
+
+<<section DESCRIPTION>>
+
+misc(n) is the grab-bag module for <<xref kutils(n)>>; it contains all of
+the individual commands that didn't fit anywhere else.<p>
+
+<<section COMMANDS>>
+
+<<deflist commands>>
+
+<<defitem blockreplace {blockreplace <i>text tag content</i>}>>
+
+This command is used to update project files "in place", by replacing
+tagged lines in <i>text</i> with the specified <i>content</i> and returning
+the result.  The tag is a brief string, like "provide" or "require"; it
+is used as follows.<p>
+
+First, the command splits <i>text</i> into lines, and looks for tagged blocks.
+A tagged block looks like this:<p>
+
+<pre>
+# -kite-start-<i>tag</i>
+...
+# -kite-end-<i>tag</i>
+</pre>
+
+The "-kite-start" and "-kite-end" lines must be at the left margin.<p>
+
+Next, the text between the tagged lines is replaced with the <i>content</i>.
+
+<<defitem checkargs {checkargs <i>tool min max argspec argv</i>}>>
+
+This command provides "Usage:" error messages for Kite's "tools", which is
+to say its subcommands.  It validates the length of the argument list
+given the constraints, and throws <b>FATAL</b> with a "Usage:" error 
+message if the constraints are not met.<p>
+
+The <i>tool</i> is the subcommand; <i>min</i>
+and <i>max</i> are the minimum and maximum number of arguments allowed.
+If <i>max</i> is "-", then there is no limit on the number of arguments.<p>
+
+The <i>argspec</i> is an argument specification string, as used in Tcl man
+pages.  For example, the <i>argspec</i> for the "help" tool is "?topic?".<p>
+
+The <i>argv</i> is the actual list of arguments given to the tool.<p>
+
+<<defitem interdict {keys values}>>
+
+Given a list of <i>keys</i> and a matching list of <i>values</i>, returns
+a dictionary of the keys and values.<p>
+
+<<defitem ladd {ladd <i>listvar value</i>}>>
+
+Appends the <i>value</i> to the named list variable, only if the value isn't
+already in the list.  Returns the updated list.<p>
+
+<<defitem lshift {lshift <i>listvar</i>}>>
+
+Removes the first item from the named list variable, and returns it.<p>
+
+<<defitem outdent {outdent <i>block</i>}>>
+
+Given a block of text, outdents the block to the left margin, omitting 
+blank first and last lines.  This is useful for entering blocks of text
+for output to the user in-line in the code: the blocks can be indented
+with the code, but displayed at the margin to the user.<p>
+
+<<defitem prepare {prepare <i>varname</i> ?<i>options...</i>?}>>
+
+This command is used to prepare user input for validation.  The named
+variable's value is trimmed, and then operated on by the options.  The
+options are as follows:<p>
+
+<<deflist options>>
+<<defopt {-required}>>
+Throws <b>SYNTAX</b> if the value is the empty string.<p>
+
+<<defopt {-tolower}>>
+The value is converted to lowercase.<p>
+
+<<defopt {-toupper}>>
+The value is converted to uppercase.<p>
+
+<</deflist options>>
+
+<<defitem readfile {readfile <i>filename</i>}>>
+
+Reads the contents of the named file from disk and returns it.<p>
+
+<<defitem writefile {writefile <i>filename content</i> ?-ifchanged?}>>
+
+Writes the <i>content</i> to the named file, creating the file's directory
+if necessary.  If the <b>-ifchanged</b> option is given, the content is
+only written if it differs from any previous content.<p>
+
+<<defitem genfile {genfile <i>root template path mapping</i>}>>
+
+This command is used to generate a text file given a <i>template</i> and 
+possibly a <i>mapping</i> dictionary of
+"%-tokens" and replacement text strings.  The new file's name is built
+up of a <i>root</i> directory and a <i>path</i> relative
+to the root, using "/" as the path separator.<p> 
+
+Templates are defined as files with extension ".template" in the 
+<code>kutils/templates</code> directory.  The <i>template</i> parameter
+is the file name, minus ".template".<p>
+
+The <<iref genfile>> command reads the template, applies the <i>mapping</i>
+using "string map", and then writes the result to disk using 
+<<iref writefile>>.<p>
+
+<<defitem gentree {gentree <i>root tdict mapping...</i>}>>
+
+This command is a convenience wrapper around <<iref genfile>> that can
+write out multiple files (an entire project tree) as one operation.  The
+<i>root</i> and <i>mapping</i> are defined as for <<iref genfile>>, except
+that the mapping can appear as either a single dictionary argument or as
+multiple words on the command line.  The <i>tdict</i> is a dictionary of
+<i>template</i> and <i>path</i> values, as defined for <<iref genfile>>.<p>
+
+<<defitem vputs {vputs <i>text...</i>}>>
+
+Outputs the <i>text</i> to the console, only if <code>::kutils::verbose</code>
+is true.  This is used to provide "-verbose" output to the user.<p>
+
+
+<<section ENVIRONMENT>>
+
+Requires Tcl 8.6 or later.<p>
+
+To use this package in a Tcl script, the environment variable
+<code>TCLLIBPATH</code> must include the parent of the package
+directory.<p>
+
+<<section AUTHORS>>
+
+Will Duquette<p>
+
+<<section HISTORY>>
+
+New module.  A few commands were extracted from Mars 2.0.<p>
+
+<</manpage>>
+
+
