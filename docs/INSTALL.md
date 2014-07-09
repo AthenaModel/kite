@@ -10,11 +10,9 @@ as follows:
    be able to build starkits or starpacks without it.
 
 3. Drop "kite" in your local ~/bin directory, and mark it executable.
-   Kite is now installed.  To test it, enter
+   Kite is now installed.  To test it:
 
-```
-    $kite
-```
+    $ kite
 
 4. Initialize the local teapot repository.  This will allow Kite to 
    pull in external dependencies safely.  See 'kite help teapot'

@@ -38,7 +38,7 @@ scratch, do the following.
     $ ~/github/athena-kite/bin/kite.tcl build
     $ ~/github/athena-kite/bin/kite.tcl install
 
-10. Return ~/github/athena-kite.
+10. Return to ~/github/athena-kite.
 
 11. Build Kite
 
