@@ -1,7 +1,6 @@
 # Project TODO List
 
 * Next
-  * Add test for blockreplace.
   * Add ability to build particular things in buildtool.
   * Complete kite test suite.
 * When new athena/kite web server is available
