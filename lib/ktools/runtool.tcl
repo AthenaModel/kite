@@ -51,7 +51,10 @@ snit::type ::ktools::runtool {
             throw FATAL "The project.kite file doesn't define an application."
         }
 
-        # FIRST, set up the rest of command.
+        # NEXT, set up the library path.
+        set ::env(TCLLIBPATH) [project libpath]
+
+        # NEXT, set up the rest of command.
         lappend command \
             tclsh [project app loader] {*}$argv \
             >@ stdout 2>@ stderr

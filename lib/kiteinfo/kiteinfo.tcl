@@ -21,7 +21,7 @@ namespace eval ::kiteinfo:: {
     package require kutils
     package require ktools
     namespace import kutils::* ktools::*
-} name athena-kite poc {} libs {} require-marsutil {version 3.0 local 1} app-kite {exe kit gui 0} version 0.0a1}
+} name athena-kite poc William.H.Duquette@jpl.nasa.gov libs {} require-marsutil {version 3.0 local 1} app-kite {exe kit gui 0} version 0.0a1}
 
     namespace export \
         get          \

@@ -1,0 +1,66 @@
+<<manpage {kutils(n) misc(n)} "Miscellaneous Commands">>
+
+<<section SYNOPSIS>>
+
+<pre>
+package require kutils <<version>>
+namespace import ::kutils::*
+</pre>
+
+<<itemlist>>
+
+<<section DESCRIPTION>>
+
+misc(n) is the grab-bag module for <<xref kutils(n)>>; it contains all of
+the individual commands that didn't fit anywhere else.<p>
+
+<<section COMMANDS>>
+
+<<deflist commands>>
+
+<<defitem blockreplace {blockreplace <i>text tag content}>>
+
+This command is used to update project files "in place", by replacing
+tagged lines in <i>text</i> with the specified <i>content</i> and returning
+the result.  The tag is a brief string, like "provide" or "require"; it
+is used as follows.<p>
+
+First, the command splits <i>text</i> into lines, and looks for tagged blocks.
+A tagged block looks like this:<p>
+
+<pre>
+# -kite-start-<i>tag</i>
+...
+# -kite-end-<i>tag</i>
+</pre>
+
+The "-kite-start" and "-kite-end" lines must be at the left margin.<p>
+
+Next, the text between the tagged lines is replaced with the <i>content</i>.
+
+
+<<defitem vputs {vputs <i>text...</i>}>>
+
+Outputs the <i>text</i> to the console, only if <code>::kutils::verbose</code>
+is true.  This is used to provide "-verbose" output to the user.<p>
+
+
+<<section ENVIRONMENT>>
+
+Requires Tcl 8.6 or later.<p>
+
+To use this package in a Tcl script, the environment variable
+<code>TCLLIBPATH</code> must include the parent of the package
+directory.<p>
+
+<<section AUTHORS>>
+
+Will Duquette<p>
+
+<<section HISTORY>>
+
+New module.  A few commands were extracted from Mars 2.0.<p>
+
+<</manpage>>
+
+

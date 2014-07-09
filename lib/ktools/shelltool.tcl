@@ -67,11 +67,14 @@ snit::type ::ktools::shelltool {
 
         lappend command &
 
+        # NEXT, set up the library path.
+        set ::env(TCLLIBPATH) [project libpath]
 
         # NEXT, execute it in the project root, in the background,
         # and exit.
         vputs "Loading <$command>"
         cd [project root]
+
         eval exec $command
     }
 
@@ -116,16 +119,7 @@ snit::type ::ktools::shelltool {
 
     proc WriteShellInitializer {} {
         # FIRST, add the project's own libraries to the auto_path.
-        append out \
-            "# shell.tcl -- Kite shell initialization script\n" \
-            "lappend auto_path [list [project root lib]]\n"
-
-        # NEXT, add any include libraries to the auto_path
-        foreach include [project include names] {
-            set lib [project root includes $include lib]
-            append out \
-                "lappend auto_path [list $lib]\n"
-        }
+        set out "# shell.tcl -- Kite shell initialization script\n"
 
         # NEXT, add any "shell" script from project.kite
         append out "\n" [project shell] "\n"

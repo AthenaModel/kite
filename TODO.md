@@ -14,6 +14,7 @@
       can be included in a build.
   * "Kite server" for locally built packages
 * As time permits/when needed
+  * Add kutils(n) manpages.
   * kite clean
     * Remove bin/*.kit/exe, .kite/*, docs/.../.html, obsolete includes,
       any other kite artifacts.
@@ -25,7 +26,6 @@
   * kite add appkit|lib
     * Add libs or an app/appkit to an existing project.
     * Requires writing the project file, not just reading it.
-  * Add kutils(n) manpages.
   * Allow multiple apps/appkits
     * Get all external dependencies by default.
     * Add -exclude option to app/appkit to exclude specific dependencies.

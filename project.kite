@@ -1,4 +1,5 @@
 project athena-kite 0.0a1 "Athena/Kite Development Tool"
+poc William.H.Duquette@jpl.nasa.gov
 appkit kite
 
 require snit 2.3
