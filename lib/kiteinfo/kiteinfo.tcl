@@ -17,11 +17,11 @@
 
 namespace eval ::kiteinfo:: {
     variable kiteInfo
-    array set kiteInfo {require-snit 2.3 app kite description {Athena/Kite Development Tool} includes mars pkgversion 0.0a1 requires snit shell {
+    array set kiteInfo {require-snit {version 2.3 local 0} app kite description {Athena/Kite Development Tool} includes {} pkgversion 0.0a1 requires {snit marsutil} shell {
     package require kutils
     package require ktools
     namespace import kutils::* ktools::*
-} name athena-kite poc {} libs {} app-kite {exe kit gui 0} include-mars {vcs git url https://github.jpl.nasa.gov/will/athena-mars.git tag master} version 0.0a1}
+} name athena-kite poc {} libs {} require-marsutil {version 3.0 local 1} app-kite {exe kit gui 0} version 0.0a1}
 
     namespace export \
         get          \
@@ -81,7 +81,6 @@ proc ::kiteinfo::require {name} {
     if {$name ni $kiteInfo(requires)} {
         error "unknown package name: \"$name\""
     }
-
-    package require $name $kiteInfo(require-$name)
+    set version [dict get $kiteInfo(require-$name) version]
 }
 

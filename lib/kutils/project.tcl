@@ -63,7 +63,10 @@ snit::type ::kutils::project {
     #       tag - The version/branch tag
     #
     #   requires       - Names of required teapot packages
-    #   require-$name  - Version of required package $name
+    #   require-$name  - Info dictionary for the required package
+    #
+    #       version    - Version of required package $name
+    #       local      - 1 if this is a local package, and 0 otherwise.
     #
     # If values are "", the data has not yet been loaded.
 
@@ -403,21 +406,42 @@ snit::type ::kutils::project {
             [dict create vcs $vcs url $url tag $tag]
     }
 
-    # RequireCmd name version
+    # RequireCmd name version ?options?
     #
     # name      - The name of the teapot package
     # version   - The version number of the teapot package
+    # options   - Any options.
+    #
+    # Options:
+    #    -local   - If so, the project is locally built, and cannot
+    #               be retrieved from the ActiveState teapot.
     #
     # States that the project depends on the given package from 
     # a teapot repository.
 
-    proc RequireCmd {name version} {
+    proc RequireCmd {name version args} {
         if {$name in [concat $info(includes) $info(requires)]} {
             throw SYNTAX "Duplicate include/require name: \"$name\""
         }
 
+        dict set rdict version $version
+        dict set rdict local   0
+
+        while {[llength $args] > 0} {
+            set opt [lshift args]
+            switch -exact -- $opt {
+                -local { 
+                    dict set rdict local 1
+                }
+
+                default {
+                    throw SYNTAX "Unknown option: \"$opt\""
+                }
+            }
+        }
+
         ladd info(requires) $name
-        set info(require-$name) $version
+        set info(require-$name) $rdict
     }
 
     # ShellCmd script
@@ -559,7 +583,7 @@ snit::type ::kutils::project {
 
         foreach req $reqs {
             if {[info exists info(require-$req)]} {
-                set ver $info(require-$req)
+                set ver [dict get $info(require-$req) version]
                 lappend list "package require $req $ver"
             }
         }
@@ -736,7 +760,17 @@ snit::type ::kutils::project {
     # Returns the required package's version.
 
     typemethod {require version} {name} {
-        return $info(require-$name)
+        return [dict get $info(require-$name) version]
+    }
+
+    # require islocal name
+    #
+    # name  - the require name
+    #
+    # Returns 1 if the required package is internally built.
+
+    typemethod {require islocal} {name} {
+        return [dict get $info(require-$name) local]
     }
 
     # shell
@@ -823,7 +857,15 @@ snit::type ::kutils::project {
             puts ""
 
             foreach name $info(requires) {
-                DumpValue "Require:"  "$name $info(require-$name)"
+                array set d $info(require-$name)
+
+                if {$d(local)} {
+                    set where "(Locally built)"
+                } else {
+                    set where "(External)"
+                }
+
+                DumpValue "Require:"  "$name $d(version) $where"
             }
         }
     }

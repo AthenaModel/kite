@@ -127,13 +127,23 @@ When an app or appkit is built, the included projects will be built into it.
 For lib-only projects, the included projects are available for testing, but
 will not be built into the exported packages.
 
-### require _name version_
+### require _name version ?options?_
 
 This statement tells Kite that the project wants to run against the 
 teapot package with the given _name_ and _version_, where _version_
-takes any of the normal forms for `[package require]`.  The package
-will be installed into the local teapot by "kite deps" and will be
-built into the project's **app** or **appkit**.
+takes any of the normal forms for `[package require]`.  
+
+By default, Kite assumes that the package is available from the
+ActiveState Teapot Repository, and will install it into the local 
+teapot on "kite deps update".  If the "-local" option is given, then
+the package is assumed to be locally built, and installed into the
+local teapot by hand.  Kite will report on its absence, but will
+not attempt to fetch it.
+
+Required packages will be built into the project's 
+**app** or **appkit**, and dependencies on required packages will
+be noted in **lib** packages when built as teapot .zip files.
+
 
 ### shell _script_
 

@@ -61,6 +61,10 @@ snit::type ::kutils::teacup {
 
             if {[$type has $name $version]} {
                 puts "  require \"$name $version\" appears to be up-to-date."
+            } elseif [project require islocal $name] {
+                puts "  require \"$name $version\" is not in the repository."
+                puts "     It is locally built, and must be installed by"
+                puts "     the developer."
             } else {
                 puts "  require \"$name $version\" needs to be retrieved."
             }
@@ -82,6 +86,13 @@ snit::type ::kutils::teacup {
     typemethod update {{name ""}} {
         # FIRST, handle individual packages.
         if {$name ne ""} {
+            if {[project require islocal $name]} {
+                throw FATAL [outdent "
+                    Package $name is locally built, and must be installed
+                    by the developer.
+                "]
+            }
+
             set ver [project require version $name]
 
             if {[$type has $name $ver]} {
@@ -107,6 +118,10 @@ snit::type ::kutils::teacup {
         set updateCount 0
 
         foreach rname [project require names] {
+            if {[project require islocal $rname]} {
+                continue
+            }
+
             set ver [project require version $rname]
 
             if {[$type has $rname $ver]} {

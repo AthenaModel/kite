@@ -2,8 +2,7 @@ project athena-kite 0.0a1 "Athena/Kite Development Tool"
 appkit kite
 
 require snit 2.3
-
-include mars git https://github.jpl.nasa.gov/will/athena-mars.git master
+require marsutil 3.0 -local
 
 shell {
     package require kutils
