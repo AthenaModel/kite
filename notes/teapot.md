@@ -145,7 +145,7 @@ here:
 
 Next, we can build the package as follows:
 
-    teacup-pkg generate -t zip -o <output-dir> <package-dir>
+    teapot-pkg generate -t zip -o <output-dir> <package-dir>
 
 This command will actually walk the _package-dir_ tree; a single
 project could reasonable export multiple packages.  The created
@@ -156,7 +156,7 @@ more practical, as they can contain files other than .tcl code.
 
 ## Scanning automatically for packages
 
-The command `teacup-pkg scan` can scan a directory tree and
+The command `teapot-pkg scan` can scan a directory tree and
 build teapot.txt files, extracting dependencies automatically.  However,
 it has problems for my purposes:
 

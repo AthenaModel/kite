@@ -6,6 +6,7 @@
 /docs/man*/*.html
 *.log
 *.kit
+teapot.txt
 
 # SublimeText artifacts
 *.sublime-*

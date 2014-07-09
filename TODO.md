@@ -53,9 +53,7 @@ What does Mars need that Kite doesn't yet offer?
 * Building of "make" targets
   * E.g., C libs
 * Teapot packaging of libs.
-  * Pulling "require" dependencies into teapot.txt.
-  * Install to local teapot
-  * Install to kite server
+  * Install to kite server?
 * "kite clean"
 * Version tagging
 * Install to home page/kite server

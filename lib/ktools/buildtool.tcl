@@ -30,6 +30,7 @@ set ::khelp(build) {
     The "build" tool builds all build targets specified in the
     project's project.kite file.  In particular:
 
+    * Libs will be built as .kite/libzips/package-<name>*.zip.
     * Apps will be built as bin/<name>[.exe]
     * Appkits will be built as bin/<name>.kit
 
@@ -62,6 +63,11 @@ snit::type ::ktools::buildtool {
 
         # TODO: Build make targets
 
+        # NEXT, Build teapot packages.
+        foreach lib [project lib names] {
+            BuildTeapotZip $lib
+        }
+
         # NEXT, build the app
 
         if {[project app name] ne ""} {
@@ -73,8 +79,6 @@ snit::type ::ktools::buildtool {
                 default { error "Unknown application type: \"$exe\"" }
             }
         }
-
-        # TODO: build teapot packages.
 
         # NEXT, build documentation
         docs manpages
@@ -250,6 +254,73 @@ snit::type ::ktools::buildtool {
         return $command
     }
 
+    #-------------------------------------------------------------------
+    # Building Teapot .zip files
+
+    # BuildTeapotZip lib
+    #
+    # lib   - A "lib" from project.kite
+    #
+    # Builds a .zip package for the lib.
+    #
+    # TODO: This supports only pure-Tcl libs at the moment.
+
+    proc BuildTeapotZip {lib} {
+        # FIRST, make sure the library package exists.
+        puts "Building teapot package: $lib [project version]"
+        set libdir [project root lib $lib]
+        if {![file isdirectory $libdir]} {
+            puts [outdent "
+                WARNING: Kite could not build a teapot .zip file for
+                library \"$lib\", because the library package was not
+                not found at $libdir.
+            "]
+            return
+        }
+
+        # NEXT, create its teapot.txt file
+        set contents "Package $lib [project version]\n"                         \
+
+        append contents \
+            "Meta description [project name]: [project description]\n" \
+            "Meta entrykeep\n"                                         \
+            "Meta included *\n"                                        \
+            "Meta platform tcl\n"
+
+        set reqs [project lib get $lib requires]
+        if {$reqs eq "*"} {
+            set reqs [project require names]
+        }
+
+        foreach req $reqs {
+            set ver [project require version $req]
+            append contents "Meta require {$req $ver}\n"
+        }
+
+        writefile [project root lib $lib teapot.txt] $contents
+
+        # NEXT, prepare the build command.
+        set zipdir [project zippath]
+        lappend command \
+            teapot-pkg generate -t zip -o $zipdir $libdir \
+
+        # NEXT, prepare to write logfile.
+        set logfile [project root .kite build_lib_$lib.log]
+        file mkdir [file dirname $logfile]
+
+        lappend command \
+            >&  $logfile
+
+        puts "Building lib $lib"
+        puts "See $logfile for details.\n"
+
+        try {
+            eval exec $command
+        } on error {result} {
+            throw FATAL "Error building lib $lib; see $logfile:\n$result"
+        }
+    }
+    
 
     #-------------------------------------------------------------------
     # Helpers

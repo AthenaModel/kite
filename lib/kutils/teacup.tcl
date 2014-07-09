@@ -213,4 +213,34 @@ snit::type ::kutils::teacup {
 
         return $dicts
     }
+
+    # remove name version
+    #
+    # name    - A package name
+    # version - A version number
+    #
+    # Attempts to remove the given package from the repository.
+    # Throws any error.
+
+    typemethod remove {name version} {
+        lappend command \
+            teacup remove $name $version
+
+        eval exec $command
+    }
+
+    # installfile filename
+    #
+    # filename - Name of a locally produced teapot package
+    #
+    # Attempts to install the package in the local teapot repository.
+    # Throws any error.
+
+    typemethod installfile {filename} {
+        lappend command \
+            teacup install $filename \
+            >@ stdout 2>@ stderr
+
+        eval exec $command
+    }
 }

@@ -52,8 +52,8 @@ snit::type ::kutils::project {
     #   libs           - List of library package names
     #   lib-$name      - Info dict for the lib
     #
-    #       excludes   - List of requires that are excluded from this
-    #                    library
+    #       requires   - List of required package names specific
+    #                    to this library.
     #
     #   includes       - List of include names
     #   include-$name  - inclusion dictionary for the $name
@@ -761,6 +761,17 @@ snit::type ::kutils::project {
 
         lappend path [project root lib]
 
+        return $path
+    }
+
+    # zippath
+    #
+    # Returns the path where "kite build" puts teapot .zip packages,
+    # creating the directory if needed.
+
+    typemethod zippath {} {
+        set path [project root .kite libzips]
+        file mkdir $path
         return $path
     }
 
