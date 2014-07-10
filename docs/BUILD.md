@@ -29,26 +29,15 @@ scratch, do the following.
 
     $ ./bin/kite.tcl deps update
 
-7. Clone athena-mars from github.jpl.nasa.gov into ~/github/athena-mars.
-
-8. Switch to ~/github/athena-mars.
-
-9. Build and install the Mars packages.
-
-    $ ~/github/athena-kite/bin/kite.tcl build
-    $ ~/github/athena-kite/bin/kite.tcl install
-
-10. Return to ~/github/athena-kite.
-
-11. Build Kite
+7. Build Kite
 
     $ ./bin/kite.tcl build
 
-12. Install Kite.  This will copy ./bin/kite.kit to ~/bin/kite.
+8. Install Kite.  This will copy ./bin/kite.kit to ~/bin/kite.
 
     $ ./bin/kite.tcl install
 
-13. Use Kite normally:
+9. Use Kite normally:
 
     $ kite help
 
@@ -57,16 +46,13 @@ scratch, do the following.
 To build a new Kite executable given an existing Kite executable and 
 Tcl development environment, do the following:
 
-1. Build and install the required version of athena-mars, if necessary.
-   This will place it in the local teapot.
+1. Switch to ~/github/athena-kite
 
-2. Switch to ~/github/athena-kite
-
-3. Build Kite.  If there are any issues, follow Kite's instructions.
+2. Build Kite.  If there are any issues, follow Kite's instructions.
 
     $ kite build
 
-4. Install Kite.  NOTE: When installing Kite itself, always run the
+3. Install Kite.  NOTE: When installing Kite itself, always run the
    .tcl script explicitly.  This advice doesn't apply when installing
    other applications built with kite.
 
