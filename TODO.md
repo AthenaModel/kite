@@ -1,15 +1,16 @@
 # Project TODO List
 
 * Architecture
-  * Updated build and install notes.
   * Merge kiteapp/misc.tcl into kiteutils as appropriate.
   * Merge kite.tcl's main code into kiteapp as appropriate.
   * Add kiteutils and kitedocs as "lib"'s
   * Consider making tkcon an external dependency, and calling it 
     directly.
+  * Figure out how to use the right code in development when 
+    kiteutils and kitedocs are in the local teapot.
 * manpage(n)
   * Add test suite
-* marsdoc(n)
+* kitedoc(n)
   * Add test suite.
 * Next
   * Add ability to build particular things in buildtool.
@@ -24,7 +25,6 @@
       can be included in a build.
   * "Kite server" for locally built packages
 * As time permits/when needed
-  * Add kutils(n) manpages.
   * kite clean
     * Remove bin/*.kit/exe, .kite/*, docs/.../.html, obsolete includes,
       any other kite artifacts.

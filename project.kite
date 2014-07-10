@@ -1,6 +1,7 @@
 project athena-kite 0.0a1 "Athena/Kite Development Tool"
 poc William.H.Duquette@jpl.nasa.gov
 appkit kite
+lib kiteutils
 
 require snit 2.3
 require textutil::expander 1.3.1

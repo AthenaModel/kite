@@ -54,7 +54,7 @@ set appdir  [file normalize [file dirname [info script]]]
 set libdir  [file normalize [file join $appdir .. lib]]
 
 # Add Kite libs to the new lib path.
-lappend auto_path $libdir
+set auto_path [linsert $auto_path 0 $libdir]
 
 #-------------------------------------------------------------------
 # Next, require Tcl/Tk and kiteinfo, so we can require other packages.
@@ -83,6 +83,8 @@ kiteinfo require snit
 package require kiteapp
 namespace import kiteutils::*
 namespace import kiteapp::*
+
+puts "kiteutils: $kiteutils::library"
 
 #-----------------------------------------------------------------------
 # Main Program 

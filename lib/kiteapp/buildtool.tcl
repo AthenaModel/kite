@@ -82,7 +82,7 @@ snit::type ::kiteapp::buildtool {
 
         # NEXT, build documentation
         docs manpages
-        docs marsdocs
+        docs kitedocs
     }
     
 
