@@ -80,18 +80,9 @@ foreach iname [kiteinfo::get includes] {
 
 kiteinfo require snit
 
-# NEXT, load marsutil 3.0, if present.
-if {[catch {package require marsutil 3.0}]} {
-    puts "WARNING: Cannot find package marsutil 3.0."
-    puts "Please install it into the local teapot."
-    puts ""
-}
-
-package require kutils
-package require ktools
-
-
-namespace import kutils::*
+package require kiteapp
+namespace import kiteutils::*
+namespace import kiteapp::*
 
 #-----------------------------------------------------------------------
 # Main Program 

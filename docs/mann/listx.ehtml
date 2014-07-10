@@ -1,0 +1,61 @@
+<<manpage {kiteutils(n) listx(n)} "List Utilities">>
+
+<<section SYNOPSIS>>
+
+<pre>
+package require kiteutils <<version>>
+namespace import ::kiteutils::*
+</pre>
+
+<<itemlist>>
+
+<<section DESCRIPTION>>
+
+listx(n) contains a set of list-manipulation commands.<p>
+
+<<section COMMANDS>>
+
+<<deflist>>
+
+<<defitem ladd {ladd <i>listvar value</i>}>>
+
+Appends <i>value</i> to the list stored in <i>listvar</i>, only if it
+isn't already there.  Updates <i>listvar</i> accordingly, and
+returns the (possibly updated) list.<p>
+
+<<defitem ldelete {ldelete <i>listvar value</i>}>>
+
+Removes <i>value</i> from the list stored in <i>listvar</i> if it
+is there.  Updates <i>listvar</i> accordingly, and
+returns the (possibly updated) list.<p>
+
+<<defitem lmaxlen {lmaxlen <i>list</i>}>>
+
+Returns the length of the longest string in the <i>list</i>.<p>
+
+<<defitem lmerge {lmerge <i>listvar list</i>}>>
+
+Merges the elements of <i>list</i> into the list contained in
+variable <i>listvar</i>.  The order of the resulting list is
+arbitrary, but it will contain each unique element of <i>list</i> at
+most once (unless the list in <i>listvar</i> already had duplicates).<p>
+
+<<defitem lshift {lshift <i>listvar</i>}>>
+
+Given the name of a variable containing a list, removes the first
+element from the list and returns it, updating the variable.
+Effectively it pops the first element from the list.<p>
+<</deflist>>
+
+<<section ENVIRONMENT>>
+
+Requires Tcl 8.6 or later.<p>
+
+<<section AUTHORS>>
+
+Will Duquette<p>
+
+<</manpage>>
+
+
+

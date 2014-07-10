@@ -23,6 +23,7 @@ This documentation is intended for the Kite developer.
 <h2>Man Pages</h2>
 
 <ul>
+  <li> <<link man5/index.html "Section (5)">>: File Formats
   <li> <<link mann/index.html "Section (n)">>: Tcl Commands
 </ul>
 

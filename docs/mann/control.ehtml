@@ -1,0 +1,57 @@
+<<manpage {kiteutils(n) control(n)} "Control Structures">>
+
+<<section SYNOPSIS>>
+
+<pre>
+package require kiteutils <<version>>
+namespace import ::kiteutils::*
+</pre>
+
+<<itemlist>>
+
+<<section DESCRIPTION>>
+
+control(n) contains commands the modify the flow of control in some 
+way.<p>
+
+<<section COMMANDS>>
+
+<<deflist>>
+
+<<defitem assert {assert <i>expression</i>}>>
+
+<<iref assert>> tests an invariant Boolean <i>expression</i>.  If the
+expression is false, <<iref assert>> throws the following error:<p>
+
+<tt>Assertion failed: <i>expression</i></tt><p>
+
+The Tcl <code>errorCode</code> variable will be set to "ASSERT".<p>
+
+
+<<defitem callwith {callwith <i>prefix</i> ?<i>args...</i>?}>>
+
+Calls a command <i>prefix</i> with zero or more additional arguments
+in the global scope.  This is to be used when calling callback
+commands.  If <i>prefix</i> is the empty list, then <<iref callwith>>
+does and returns nothing.<p>
+
+
+<<defitem require {require <i>expression message</i>}>>
+
+This is identical to <<iref assert>> except that error message is the
+specified <i>message</i>.<p>
+
+<</deflist>>
+
+<<section ENVIRONMENT>>
+
+Requires Tcl 8.6 or later.<p>
+
+<<section AUTHOR>>
+
+Will Duquette<p>
+
+<</manpage>>
+
+
+
