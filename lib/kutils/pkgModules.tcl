@@ -20,11 +20,7 @@ package provide kutils 0.0a1
 #-----------------------------------------------------------------------
 # Required Packages
 
-# -kite-start-require  DO NOT EDIT THIS BLOCK BY HAND
 package require snit 2.3
-package require marsutil 3.0
-# -kite-end-require
-
 
 #-----------------------------------------------------------------------
 # Namespace definition

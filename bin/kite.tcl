@@ -83,7 +83,7 @@ kiteinfo require snit
 # NEXT, load marsutil 3.0, if present.
 if {[catch {package require marsutil 3.0}]} {
     puts "WARNING: Cannot find package marsutil 3.0."
-    puts "Please do \"kite deps update\" to retrieve it."
+    puts "Please install it into the local teapot."
     puts ""
 }
 
