@@ -158,7 +158,7 @@ snit::type ::kutils::teapot {
             return "non-default"
         }
 
-        if {[TeapotIsLinked]} {
+        if {![TeapotIsLinked]} {
             return "unlinked"
         }
 
@@ -174,8 +174,8 @@ snit::type ::kutils::teapot {
 
     proc TeapotIsLinked {} {
         expr {
-            [project teapot]        in [LinkedTeapots] &&
-            [info nameofexecutable] in [LinkedShells]            
+            [project teapot] in [LinkedTeapots] &&
+            [project tclsh]  in [LinkedShells]            
         }
     }
 
