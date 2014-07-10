@@ -1,8 +1,5 @@
 <<manpage project(5) "Kite Project File Format">>
 
-<b>WARNING: The docs/project.md file has the complete project.kite file
-    format specification.  This file may go away in the future.</b><p>
-
 <<section SYNOPSIS>>
 
 <<itemlist>>
@@ -101,7 +98,7 @@ it will be built as "<i>root</i>/bin/<i>name</i>.kit".<p>
 The easiest way to create a new appkit is via the <tt>kite new appkit</tt> 
 or <tt>kite add appkit</tt> commands.<p>
 
-<<defitem lib {lib <i>name</i>}>>
+<<defitem lib {lib <i>name</i> ?-requires <i>list</i>?}>>
 
 This statement tells Kite that the project defines a Tcl library package
 intended for use by other projects.  The package will be called 
@@ -130,14 +127,22 @@ are required by the project as whole.  In this case, use the
 <code>-requires</code> option to list the names of those packages to
 include in the <code>package require</code> block.<p>
 
-<<defitem require {require <i>name version</i>}>>
+<<defitem require {require <i>name version</i> ?<i>options...</i>?}>>
 
-This statement tells Kite that the project wants to run against the 
-teapot package with the given <i>name</i> and <i>version</i>, where 
-<i>version</i> takes any of the normal forms for Tcl's 
-<tt>package require</tt> command.  The package
-will be installed into the local teapot by <tt>kite deps</tt> and will be
-built into the project's <<iref app>> or <<iref appkit>>.<p>
+This statement tells Kite that the project wants to run against the teapot
+package with the given name and version, where version takes any of the
+normal forms for <code>package require</code>.<p>
+
+By default, Kite assumes that the package is available from the ActiveState
+Teapot Repository, and will install it into the local teapot on 
+<code>kite deps update</code>.  If the <b>-local</b> option is given, then 
+the package is assumed to be locally built and installed into the local 
+teapot by hand. Kite will report on its absence, but will not attempt to 
+fetch it.
+
+Required packages will be built into the project's <<iref app>>
+<<iref appkit>>, and dependencies on required packages will be noted in 
+<<iref lib>> packages when built as teapot .zip files.
 
 <<defitem include {include <i>name vcs url tag</i>}>>
 
@@ -161,6 +166,13 @@ When an <<iref app>> or <<iref appkit>> is built, the included projects
 will be built into it.  For <<iref lib>>-only projects, the included 
 projects are available for testing but
 will not be built into the exported packages.<p>
+
+<<defitem shell {shell <i>script</i>}>>
+
+The <i>script</i> will be automatically loaded in the Tcl shell produced by
+the <code>kite shell</code> command for "lib-only" projects or if 
+<code>kite shell -plain</code> is used. This allows the project to 
+customize the initial state of the shell.
 
 <</deflist statements>>
 

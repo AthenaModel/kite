@@ -1,20 +1,16 @@
 # Project TODO List
 
 * Architecture
-  * Merge kutils and ktools as kite(n).
-  * Copy athena-mars/marsutil to Kite as
-    * kiteutils
-      * marsmisc, template, smartinterp, tclchecker
-        * Prune marsmisc of all things that this Kite doesn't need.
-      * Split marsmisc into appropriate pieces.
-      * Merge kutils/misc.tcl into these pieces as appropriate.
-    * kitedocs
-      * ehtml, marsdoc, manpage.
-    * kiteutils and kitedocs become libs for other projects to use.
-  * athena-mars
-    * External dependency on kiteutils
-    * marsmisc gets restructured, and pruned of all things in kiteutils.
-    * Other modules now in Kite are removed.
+  * Updated build and install notes.
+  * Merge kiteapp/misc.tcl into kiteutils as appropriate.
+  * Merge kite.tcl's main code into kiteapp as appropriate.
+  * Add kiteutils and kitedocs as "lib"'s
+  * Consider making tkcon an external dependency, and calling it 
+    directly.
+* manpage(n)
+  * Add test suite
+* marsdoc(n)
+  * Add test suite.
 * Next
   * Add ability to build particular things in buildtool.
   * Complete kite test suite.
@@ -66,4 +62,20 @@ What does Athena need that Kite doesn't yet offer?
 * Ability to make tarballs (source, docs, installation)
 * Install to Athena home page
 * Automated git version tagging
+
+
+Man Page Processing
+
+* Where do man pages go, when built?
+  *   Do they simply live in the docs/manX directory, as now?
+  *   A developer has to clone Mars and build the docs by hand?
+  *   Perhaps we can push them out to https://oak/kite?
+* At present, man page references can have "roots" so that 
+  Athena man pages can refer to Mars man pages or Tcl man pages
+  or Tk man pages.  Does that even make sense, with this new world?
+* Athena man pages are now strictly for the developer; but the user
+  of Mars might or might not be a developer.
+* An app/appkit could package up the docs, and install them locally.
+* An app/appkit could package up the docs, and display them in a 
+  mybrowser (if mybrowser were part of Mars)
 
