@@ -18,67 +18,51 @@ if {[lsearch [namespace children] ::tcltest] == -1} {
     package require tcltest 2.2 
     eval ::tcltest::configure $argv
 }
+
+namespace import ::tcltest::test
  
 #-----------------------------------------------------------------------
 # Load the package to be tested
 
 package require %package
+namespace import ::%package::*
 
-#-----------------------------------------------------------------------
-# Test Suite
+#-------------------------------------------------------------------
+# Setup
+
+# setup
 #
-# The tests run in a namespace so as not to interfere with other
-# test suites.
+# Set up for tests
 
-namespace eval ::%package::test {
-    #-------------------------------------------------------------------
-    # Set up the test environment
-
-    # Import tcltest(n)
-    namespace import ::tcltest::*
-
-    # Import the code to be tested
-    namespace import ::%package::*
-
-    #-------------------------------------------------------------------
-    # Setup
-
-    # setup
-    #
-    # Set up for tests
-
-    proc setup {} {
-        # TBD
-    }
-
-    # cleanup
-    #
-    # Cleans up after a test.
-
-    proc cleanup {} {
-        # TBD
-    }
-
-
-    #-------------------------------------------------------------------
-    # dummy
-
-    test dummy-1.1 {Dummy} -setup {
-        setup
-    } -body {
-        set result 0
-    } -cleanup {
-        cleanup
-    } -result {1}
-
-
-    #-------------------------------------------------------------------
-    # Cleanup
-
-    cleanupTests
+proc setup {} {
+    # TBD
 }
 
-namespace delete ::%package::test
+# cleanup
+#
+# Cleans up after a test.
+
+proc cleanup {} {
+    # TBD
+}
+
+
+#-------------------------------------------------------------------
+# dummy
+
+test dummy-1.1 {Dummy} -setup {
+    setup
+} -body {
+    set result 0
+} -cleanup {
+    cleanup
+} -result {1}
+
+
+#-------------------------------------------------------------------
+# Cleanup
+
+tcltest::cleanupTests
 
 
 

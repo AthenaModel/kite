@@ -50,7 +50,7 @@ set appdir  [file normalize [file dirname [info script]]]
 set libdir  [file normalize [file join $appdir .. lib]]
 
 # Add the project libs to the new lib path.
-lappend auto_path $libdir
+set auto_path [linsert $auto_path 0 $libdir]
 
 #-----------------------------------------------------------------------
 # Next, require Tcl/Tk and other required packages.
@@ -70,7 +70,7 @@ if {[kiteinfo gui]} {
 
 foreach iname [kiteinfo::get includes] {
     set idir [file join $appdir .. includes $iname lib]
-    lappend auto_path [file normalize $idir]
+    set auto_path [linsert $auto_path 0 [file normalize $idir]]
 }
 
 
