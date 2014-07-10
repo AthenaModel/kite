@@ -17,11 +17,11 @@
 
 namespace eval ::kiteinfo:: {
     variable kiteInfo
-    array set kiteInfo {require-snit {version 2.3 local 0} app kite description {Athena/Kite Development Tool} includes {} pkgversion 0.0a1 requires {snit marsutil} shell {
+    array set kiteInfo {require-textutil::expander {version 1.3.1 local 0} require-snit {version 2.3 local 0} app kite description {Athena/Kite Development Tool} includes {} pkgversion 0.0a1 requires {snit textutil::expander} shell {
     package require kutils
     package require ktools
     namespace import kutils::* ktools::*
-} name athena-kite poc William.H.Duquette@jpl.nasa.gov libs {} require-marsutil {version 3.0 local 1} app-kite {exe kit gui 0} version 0.0a1}
+} name athena-kite poc William.H.Duquette@jpl.nasa.gov libs {} app-kite {exe kit gui 0} version 0.0a1}
 
     namespace export \
         get          \

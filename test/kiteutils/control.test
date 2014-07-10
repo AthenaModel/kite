@@ -1,0 +1,97 @@
+# -*-Tcl-*-
+#-----------------------------------------------------------------------
+# TITLE:
+#    control.test
+#
+# AUTHOR:
+#    Will Duquette
+#
+# DESCRIPTION:
+#    Tcltest test suite for kiteutils(n) control.tcl
+#
+#-----------------------------------------------------------------------
+
+#-----------------------------------------------------------------------
+# Initialize tcltest(n)
+
+if {[lsearch [namespace children] ::tcltest] == -1} {
+    package require tcltest 2.2 
+    eval ::tcltest::configure $argv
+}
+
+# Import tcltest(n)
+namespace import ::tcltest::*
+
+#-----------------------------------------------------------------------
+# Load the package to be tested
+
+package require kiteutils
+namespace import ::kiteutils::*
+
+#-------------------------------------------------------------------
+# assert
+
+test assert-1.1 {Assertion succeeds} -body {
+    assert {1 == 1}
+} -result {}
+
+test assert-1.2 {Assertion fails} -body {
+    global errorCode
+    catch {assert {1 == 2}} result
+    list $errorCode $result
+} -result {ASSERT {Assertion failed: 1 == 2}}
+
+#-------------------------------------------------------------------
+# callwith
+
+test callwith-1.1 {call with no arguments} -body {
+    callwith [list expr {1+1}]
+} -result {2}
+
+test callwith-1.2 {call with one complex argument} -body {
+    callwith expr {2 + 2}
+} -result {4}
+
+test callwith-1.3 {call with several arguments} -body {
+    callwith [list string is] integer -strict {foo bar}
+} -result {0}
+
+test callwith-1.4 {call with error} -body {
+    callwith expr {2 + xyz}
+} -returnCodes {
+    error
+} -result {invalid bareword "xyz"
+in expression "2 + xyz";
+should be "$xyz" or "{xyz}" or "xyz(...)" or ...}
+
+test callwith-1.5 {call with empty prefix} -body {
+    callwith "" a b c d
+} -result {}
+
+
+#-------------------------------------------------------------------
+# require
+
+test require-1.1 {Assertion succeeds} -body {
+    require {1 == 1} "Dummy message"
+} -result {}
+
+test require-1.2 {Assertion fails} -body {
+    global errorCode
+    catch {require {1 == 2} "Dummy message"} result
+    list $errorCode $result
+} -result {ASSERT {Dummy message}}
+
+
+
+#-------------------------------------------------------------------
+# Cleanup
+
+cleanupTests
+
+
+
+
+
+
+

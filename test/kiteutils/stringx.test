@@ -1,0 +1,73 @@
+# -*-Tcl-*-
+#-----------------------------------------------------------------------
+# TITLE:
+#    stringx.test
+#
+# AUTHOR:
+#    Will Duquette
+#
+# DESCRIPTION:
+#    Tcltest test suite for kiteutils(n) stringx.tcl
+#
+#-----------------------------------------------------------------------
+
+#-----------------------------------------------------------------------
+# Initialize tcltest(n)
+
+if {[lsearch [namespace children] ::tcltest] == -1} {
+    package require tcltest 2.2 
+    eval ::tcltest::configure $argv
+}
+
+# Import tcltest(n)
+namespace import ::tcltest::*
+ 
+#-----------------------------------------------------------------------
+# Load the package to be tested
+
+package require kiteutils
+namespace import ::kiteutils::*
+
+#-------------------------------------------------------------------
+# normalize
+
+test normalize-1.1 {strips whitespace} -body {
+    normalize "   abc   def \n ghi \t "
+} -result {abc def ghi}
+
+#-------------------------------------------------------------------
+# outdent
+
+test outdent-1.1 {outdent: empty block} -body {
+    outdent {}
+} -result {}
+
+test outdent-1.2 {outdent: leading blank line} -body {
+    outdent {
+              Now that we have this,
+              we can make things
+              look a lot nicer.}
+} -result {Now that we have this,
+we can make things
+look a lot nicer.}
+
+test outdent-1.3 {outdent: trailing blank line} -body {
+    outdent {Now that we have this,
+              we can make things
+              look a lot nicer.
+            }
+} -result {Now that we have this,
+              we can make things
+              look a lot nicer.}
+       
+
+#-------------------------------------------------------------------
+# Cleanup
+
+cleanupTests
+
+
+
+
+
+

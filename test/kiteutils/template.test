@@ -1,0 +1,52 @@
+# -*-Tcl-*-
+#-----------------------------------------------------------------------
+# TITLE:
+#    template.test
+#
+# PROJECT:
+#    athena-mars
+#
+# DESCRIPTION:
+#    kiteutils(n) test suite for template.tcl
+#
+#-----------------------------------------------------------------------
+
+#-----------------------------------------------------------------------
+# Initialize tcltest(n)
+
+if {[lsearch [namespace children] ::tcltest] == -1} {
+    package require tcltest 2.2 
+    eval ::tcltest::configure $argv
+}
+
+# Import tcltest(n)
+namespace import ::tcltest::*
+
+ 
+#-----------------------------------------------------------------------
+# Load the package to be tested
+
+package require kiteutils
+namespace import ::kiteutils::*
+
+
+#-------------------------------------------------------------------
+# dummy
+
+test dummy-1.1 {Dummy} -body {
+    set result 1
+} -result {1}
+
+
+#-------------------------------------------------------------------
+# Cleanup
+
+cleanupTests
+
+
+
+
+
+
+
+

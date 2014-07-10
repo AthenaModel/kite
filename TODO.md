@@ -1,5 +1,20 @@
 # Project TODO List
 
+* Architecture
+  * Merge kutils and ktools as kite(n).
+  * Copy athena-mars/marsutil to Kite as
+    * kiteutils
+      * marsmisc, template, smartinterp, tclchecker
+        * Prune marsmisc of all things that this Kite doesn't need.
+      * Split marsmisc into appropriate pieces.
+      * Merge kutils/misc.tcl into these pieces as appropriate.
+    * kitedocs
+      * ehtml, marsdoc, manpage.
+    * kiteutils and kitedocs become libs for other projects to use.
+  * athena-mars
+    * External dependency on kiteutils
+    * marsmisc gets restructured, and pruned of all things in kiteutils.
+    * Other modules now in Kite are removed.
 * Next
   * Add ability to build particular things in buildtool.
   * Complete kite test suite.

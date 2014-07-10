@@ -1,0 +1,160 @@
+# -*-Tcl-*-
+#-----------------------------------------------------------------------
+# TITLE:
+#    listx.test
+#
+# AUTHOR:
+#    Will Duquette
+#
+# DESCRIPTION:
+#    Tcltest test suite for kiteutils(n) listx.tcl
+#
+#-----------------------------------------------------------------------
+
+#-----------------------------------------------------------------------
+# Initialize tcltest(n)
+
+if {[lsearch [namespace children] ::tcltest] == -1} {
+    package require tcltest 2.2 
+    eval ::tcltest::configure $argv
+}
+
+# Import tcltest(n)
+namespace import ::tcltest::*
+ 
+#-----------------------------------------------------------------------
+# Load the package to be tested
+
+package require kiteutils
+namespace import ::kiteutils::*
+
+
+#-------------------------------------------------------------------
+# ladd
+
+test ladd-1.1 {value is not yet in list} -body {
+    set a {foo bar}
+    set b [ladd a baz]
+    list $a $b
+} -result {{foo bar baz} {foo bar baz}}
+
+test ladd-1.2 {value is already in list} -body {
+    set a {foo bar}
+    set b [ladd a bar]
+    list $a $b
+} -result {{foo bar} {foo bar}}
+
+test ladd-1.3 {List doesn't yet exist} -body {
+    set b [ladd nonesuch bar]
+    list $nonesuch $b
+} -cleanup {
+    unset nonesuch
+} -result {bar bar}
+
+#-------------------------------------------------------------------
+# ldelete
+
+test ldelete-1.1 {value is not in list} -body {
+    set a {foo bar}
+    set b [ldelete a baz]
+    list $a $b
+} -result {{foo bar} {foo bar}}
+
+test ldelete-1.2 {value is in list} -body {
+    set a {foo bar baz}
+    set b [ldelete a baz]
+    list $a $b
+} -result {{foo bar} {foo bar}}
+
+#-------------------------------------------------------------------
+# lmaxlen
+
+test lmaxlen-1.1 {lmaxlen: empty list} -body {
+    lmaxlen {}
+} -result {0}
+
+test lmaxlen-1.2 {lmaxlen: normal list} -body {
+    lmaxlen [list a bb ccc dd e]
+} -result {3}
+
+#-------------------------------------------------------------------
+# lmerge
+
+test lmerge-1.1 {empty list} -body {
+    set a {foo bar baz}
+    set b {}
+
+    lmerge a $b
+    lsort $a
+} -result {bar baz foo}
+
+test lmerge-1.2 {empty listvar} -body {
+    set a {}
+    set b {foo bar baz}
+
+    lmerge a $b
+    lsort $a
+} -result {bar baz foo}
+
+test lmerge-1.3 {disjoint lists} -body {
+    set a {foo bar baz}
+    set b {bing bang bong}
+
+    lmerge a $b
+    lsort $a
+} -result {bang bar baz bing bong foo}
+
+test lmerge-1.4 {duplicate lists} -body {
+    set a {bing bang bong}
+    set b {bing bang bong}
+
+    lmerge a $b
+    lsort $a
+} -result {bang bing bong}
+
+test lmerge-1.5 {duplicates in second list} -body {
+    set a {bing bang bong}
+    set b {foo foo foo}
+
+    lmerge a $b
+    lsort $a
+} -result {bang bing bong foo}
+
+test lmerge-1.6 {listvar names non-existent variable} -body {
+    unset a
+    lmerge a {foo bar baz}
+    lsort $a
+} -result {bar baz foo}
+
+#-----------------------------------------------------------------------
+# lshift
+
+test lshift-1.1 {lshift: normal list} -body {
+    set list {a b c}
+    set value [lshift list]
+    list $value $list
+} -result {a {b c}}
+
+test lshift-1.2 {lshift: list with one element} -body {
+    set list {a}
+    set value [lshift list]
+    list $value $list
+} -result {a {}}
+
+test lshift-1.3 {lshift: list with no elements} -body {
+    set list {}
+    set value [lshift list]
+    list $value $list
+} -result {{} {}}
+
+
+#-------------------------------------------------------------------
+# Cleanup
+
+cleanupTests
+
+
+
+
+
+

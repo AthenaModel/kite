@@ -1,0 +1,59 @@
+# -*-Tcl-*-
+#-----------------------------------------------------------------------
+# TITLE:
+#    filex.test
+#
+# AUTHOR:
+#    Will Duquette
+#
+# DESCRIPTION:
+#    Tcltest test suite for kiteutils(n) filex.tcl
+#
+#-----------------------------------------------------------------------
+
+#-----------------------------------------------------------------------
+# Initialize tcltest(n)
+
+if {[lsearch [namespace children] ::tcltest] == -1} {
+    package require tcltest 2.2 
+    eval ::tcltest::configure $argv
+}
+
+# Import tcltest(n)
+namespace import ::tcltest::*
+
+#-----------------------------------------------------------------------
+# Load the package to be tested
+
+package require kiteutils
+namespace import ::kiteutils::*
+
+#-------------------------------------------------------------------
+# readfile
+
+test readfile-1.1 {error, cannot read file} -body {
+    readfile noSuchFile.txt
+} -returnCodes {
+    error
+} -match glob -result {*: no such file or directory}
+
+test readfile-1.2 {reads file successful} -setup {
+    set a "file contents"
+    makeFile $a readfile-1.2.txt
+} -body {
+    set b [readfile readfile-1.2.txt]
+    expr {$b eq "$a\n"}
+} -result {1}
+
+
+ 
+#-------------------------------------------------------------------
+# Cleanup
+
+cleanupTests
+
+
+
+
+
+
