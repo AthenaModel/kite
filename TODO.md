@@ -1,5 +1,16 @@
 # Project TODO List
 
+* Architecture changes post-reflection
+  * Remove list of required packages from project.kite's "lib" command.
+  * Replace "lib" statement with "provide".
+  * Put tags around "package require" blocks in provided libs.
+  * Kite automatically updates the versions in the listed package requires.
+    * blockreplace becomes "tagsplit", so that we can base the replacement
+    * on the block being replaced.
+  * Consider using single angle brackets in doc macros.  Looks nicer; and
+    just a modicum of HTML tag macros are required to make it work.
+  * Add "main.tcl" to generated "${app}app" package; make app loader script
+    as generic as possible.
 * Architecture
   * Merge kiteapp/misc.tcl into kiteutils as appropriate.
   * Merge kite.tcl's main code into kiteapp as appropriate.
