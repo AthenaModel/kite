@@ -6,10 +6,10 @@
 #    Will Duquette
 #
 # DESCRIPTION:
-#    kitedocs(n) Package: ehtml processor
+#    kitedocs(n) Package: ehtml(5) processor
 #
-#    This module customizes a textutil::expander object to 
-#    process ehtml.
+#    This module pairs a textutil::expander object with a 
+#    smartinterp(5) to process ehtml(5) safely.
 #
 #-----------------------------------------------------------------------
 
@@ -42,6 +42,7 @@ snit::type ::kitedocs::ehtml {
     delegate method cset        to exp
     delegate method cvar        to exp
     delegate method errmode     to exp
+    delegate method expandonce  to exp as expand
     delegate method lb          to exp
     delegate method rb          to exp
     delegate method setbrackets to exp
@@ -91,10 +92,10 @@ snit::type ::kitedocs::ehtml {
         install exp using textutil::expander ${selfns}::exp
 
         # NEXT, create the smartinterp
-        $self InitializeInterpreter
+        $self RegisterMacros
 
-        # NEXT, macros appear in double angle-brackets.
-        $exp setbrackets "<<" ">>"
+        # NEXT, macros appear in angle brackets by default.
+        $exp setbrackets "<" ">"
 
         # NEXT, macros are evaluated in the smartinterp.
         $exp evalcmd [list $interp eval]
@@ -111,14 +112,71 @@ snit::type ::kitedocs::ehtml {
         $interp destroy
         set interp ""
 
-        $self InitializeInterpreter
+        $self RegisterMacros
     }
 
-    # InitializeInterpreter
+    # expand text
     #
-    # Creates and initializes the macro interpreter.
+    # text    A text string
+    #
+    # Expands a text string in two passes.
 
-    method InitializeInterpreter {} {
+    method expand {text} {
+        # Pass 1 -- for indexing
+        set info(pass) 1
+        $exp expand $text
+
+        # Pass 2 -- for output
+        set info(pass) 2
+        return [$exp expand $text]
+    }
+
+    # expandFile name
+    #
+    # name    An input file name
+    #
+    # Process a file and return the expanded output.
+
+    method expandFile {name} {
+        $self expand [readfile $name]
+    }
+
+    # pass
+    #
+    # Returns the current pass number
+
+    method pass {} {
+        return $info(pass)
+    }
+
+    # textToID text
+    #
+    # Converts a generic string to an ID string.  Leading and trailing
+    # whitespace and internal punctuation is removed, internal whitespace
+    # is converted to "_", and the text is converted to lower case.
+    
+    method textToID {text} {
+        # First, trim any white space and convert to lower case
+        set text [string trim [string tolower $text]]
+        
+        # Next, substitute "_" for internal whitespace, and delete any
+        # non-alphanumeric characters (other than "_", of course)
+        regsub -all {[ ]+} $text "_" text
+        regsub -all {[^a-z0-9_/]} $text "" text
+        
+        return $text
+    }
+
+    #-------------------------------------------------------------------
+    # Macro Registration
+
+
+    # RegisterMacros
+    #
+    # Creates and the macro interpreter and registers the macros
+    # with it.
+
+    method RegisterMacros {} {
         # FIRST, create the interpreter
         install interp using smartinterp ${selfns}::interp \
             -cli     no  \
@@ -193,6 +251,20 @@ snit::type ::kitedocs::ehtml {
             return [uplevel 1 [list subst $tstring]]
         }
 
+        # NEXT, style macros and HTML tags
+        foreach tag {
+            b i code tt em strong pre
+        } {
+            $self StyleMacro $tag
+        }
+
+        foreach tag {
+            ol ul li p
+        } {
+            $self HtmlTag $tag
+            $self HtmlTag /$tag            
+        }
+
         # NEXT, Change Log macros
         $interp smartalias changelog 0 0 {} \
             [mymethod Macro changelog]
@@ -223,58 +295,37 @@ snit::type ::kitedocs::ehtml {
             [mymethod Macro /procedure]
     }
 
-    # expand text
+    # HtmlTag tag
     #
-    # text    A text string
+    # tag  - An html tag name, e.g,. "p"
     #
-    # Expands a text string in two passes.
+    # Translates the tag macro back to the equivalent HTMl tag.
 
-    method expand {text} {
-        # Pass 1 -- for indexing
-        set info(pass) 1
-        $exp expand $text
-
-        # Pass 2 -- for output
-        set info(pass) 2
-        return [$exp expand $text]
+    method HtmlTag {tag} {
+        $interp proc $tag {} [format { 
+            return "<%s>" 
+        } $tag]
     }
 
-    # expandFile name
+    # StyleMacro tag
     #
-    # name    An input file name
+    # tag   - A tag: i, b, pre, etc.
     #
-    # Process a file and return the expanded output.
+    # Defines a style macro, e.g., <i>...</i> or <i ...>.
 
-    method expandFile {name} {
-        $self expand [readfile $name]
+    method StyleMacro {tag} {
+        $interp proc $tag {args} [format {
+            if {[llength $args] == 0} {
+                return "<%s>"
+            } else {
+                return "<%s>$args</%s>"
+            }
+        } $tag $tag $tag]
+
+        $interp proc /$tag {} [format { 
+            return "</%s>" 
+        } $tag]
     }
-
-    # pass
-    #
-    # Returns the current pass number
-
-    method pass {} {
-        return $info(pass)
-    }
-
-    # textToID text
-    #
-    # Converts a generic string to an ID string.  Leading and trailing
-    # whitespace and internal punctuation is removed, internal whitespace
-    # is converted to "_", and the text is converted to lower case.
-    
-    method textToID {text} {
-        # First, trim any white space and convert to lower case
-        set text [string trim [string tolower $text]]
-        
-        # Next, substitute "_" for internal whitespace, and delete any
-        # non-alphanumeric characters (other than "_", of course)
-        regsub -all {[ ]+} $text "_" text
-        regsub -all {[^a-z0-9_/]} $text "" text
-        
-        return $text
-    }
-
 
     #-------------------------------------------------------------------
     # Cross-Reference Management
@@ -433,7 +484,7 @@ snit::type ::kitedocs::ehtml {
     # Returns the left macro bracket, quoted for output.
 
     proc lb {} {
-        return "&lt;&lt;"
+        return "&lt;"
     }
 
     # rb
@@ -441,7 +492,7 @@ snit::type ::kitedocs::ehtml {
     # Returns the right macro bracket, quoted for output.
 
     proc rb {} {
-        return "&gt;&gt;"
+        return "&gt;"
     }
 
     # nbsp text
@@ -562,16 +613,16 @@ snit::type ::kitedocs::ehtml {
     #-------------------------------------------------------------------
     # Procedure Macros
     #
-    # <<procedure>>
+    # <procedure>
     #
-    # <<step>> 
+    # <step> 
     # Directions 
-    # <</step/>> 
+    # </step/> 
     # Example 
-    # <</step>>
+    # </step>
     #    ...
     #
-    # <</procedure>>
+    # </procedure>
 
     # procedure
     #
@@ -629,20 +680,4 @@ snit::type ::kitedocs::ehtml {
     }
     
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

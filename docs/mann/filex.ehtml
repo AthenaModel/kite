@@ -1,39 +1,41 @@
-<<manpage {kiteutils(n) filex(n)} "File Utilities">>
+<manpage {kiteutils(n) filex(n)} "File Utilities">
 
-<<section SYNOPSIS>>
+<section SYNOPSIS>
 
 <pre>
-package require kiteutils <<version>>
+package require kiteutils <version>
 namespace import ::kiteutils::*
 </pre>
 
-<<itemlist>>
+<itemlist>
 
-<<section DESCRIPTION>>
+<section DESCRIPTION>
 
 filex(n) provides utilities for working with files.<p>
 
-<<section COMMANDS>>
+<section COMMANDS>
 
-<<deflist>>
+<deflist>
 
-<<defitem readfile {readfile <i>filename</i>}>>
+<defitem readfile {readfile <i>filename</i>}>
 
 Opens the file with name <i>filename</i>, reads its contents, closes
 the file, and returns the contents.  Throws all of the open and read
 errors.  The file will be closed automatically on read errors.<p>
 
-<</deflist>>
+</deflist>
 
-<<section ENVIRONMENT>>
+<section ENVIRONMENT>
 
 Requires Tcl 8.6 or later.<p>
 
-<<section AUTHOR>>
+<section AUTHOR>
 
 Will Duquette<p>
 
-<</manpage>>
+</manpage>
+
+
 
 
 

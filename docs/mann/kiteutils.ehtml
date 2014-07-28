@@ -1,35 +1,37 @@
-<<manpage kiteutils(n) "Kite Utility API">>
+<manpage kiteutils(n) "Kite Utility API">
 
-<<section SYNOPSIS>>
+<section SYNOPSIS>
 
 <pre>
-package require kiteutils <<version>>
+package require kiteutils <version>
 namespace import ::kiteutils::*
 </pre>
 
-<<itemlist>>
+<itemlist>
 
-<<section DESCRIPTION>>
+<section DESCRIPTION>
 
 kiteutils(n) is a package of low-level infrastructure code of various
 kinds, for use by Kite and other projects.<p>
 
 
-<<section ENVIRONMENT>>
+<section ENVIRONMENT>
 
 Requires Tcl 8.6 or later.<p>
 
-<<section AUTHORS>>
+<section AUTHORS>
 
 Will Duquette<p>
 
-<<section HISTORY>>
+<section HISTORY>
 
 Portions of this package were originally written for JNEM as util(n),
 then migrated to Mars in September 2008 as marsutil(n), and then
 on to Kite in July 2014.<p>
 
-<</manpage>>
+</manpage>
+
+
 
 
 

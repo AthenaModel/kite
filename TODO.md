@@ -7,7 +7,7 @@
   * Kite automatically updates the versions in the listed package requires.
     * blockreplace becomes "tagsplit", so that we can base the replacement
     * on the block being replaced.
-  * Consider using single angle brackets in doc macros.  Looks nicer; and
+  * Using single angle brackets in doc macros.  Looks nicer; and
     just a modicum of HTML tag macros are required to make it work.
   * Add "main.tcl" to generated "${app}app" package; make app loader script
     as generic as possible.

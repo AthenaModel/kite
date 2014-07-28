@@ -1,57 +1,59 @@
-<<manpage {kiteutils(n) control(n)} "Control Structures">>
+<manpage {kiteutils(n) control(n)} "Control Structures">
 
-<<section SYNOPSIS>>
+<section SYNOPSIS>
 
 <pre>
-package require kiteutils <<version>>
+package require kiteutils <version>
 namespace import ::kiteutils::*
 </pre>
 
-<<itemlist>>
+<itemlist>
 
-<<section DESCRIPTION>>
+<section DESCRIPTION>
 
 control(n) contains commands the modify the flow of control in some 
 way.<p>
 
-<<section COMMANDS>>
+<section COMMANDS>
 
-<<deflist>>
+<deflist>
 
-<<defitem assert {assert <i>expression</i>}>>
+<defitem assert {assert <i>expression</i>}>
 
-<<iref assert>> tests an invariant Boolean <i>expression</i>.  If the
-expression is false, <<iref assert>> throws the following error:<p>
+<iref assert> tests an invariant Boolean <i>expression</i>.  If the
+expression is false, <iref assert> throws the following error:<p>
 
 <tt>Assertion failed: <i>expression</i></tt><p>
 
 The Tcl <code>errorCode</code> variable will be set to "ASSERT".<p>
 
 
-<<defitem callwith {callwith <i>prefix</i> ?<i>args...</i>?}>>
+<defitem callwith {callwith <i>prefix</i> ?<i>args...</i>?}>
 
 Calls a command <i>prefix</i> with zero or more additional arguments
 in the global scope.  This is to be used when calling callback
-commands.  If <i>prefix</i> is the empty list, then <<iref callwith>>
+commands.  If <i>prefix</i> is the empty list, then <iref callwith>
 does and returns nothing.<p>
 
 
-<<defitem require {require <i>expression message</i>}>>
+<defitem require {require <i>expression message</i>}>
 
-This is identical to <<iref assert>> except that error message is the
+This is identical to <iref assert> except that error message is the
 specified <i>message</i>.<p>
 
-<</deflist>>
+</deflist>
 
-<<section ENVIRONMENT>>
+<section ENVIRONMENT>
 
 Requires Tcl 8.6 or later.<p>
 
-<<section AUTHOR>>
+<section AUTHOR>
 
 Will Duquette<p>
 
-<</manpage>>
+</manpage>
+
+
 
 
 

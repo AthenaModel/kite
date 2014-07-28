@@ -1,10 +1,10 @@
-<<manpage project(5) "Kite Project File Format">>
+<manpage project(5) "Kite Project File Format">
 
-<<section SYNOPSIS>>
+<section SYNOPSIS>
 
-<<itemlist>>
+<itemlist>
 
-<<section DESCRIPTION>>
+<section DESCRIPTION>
 
 The man page defines the syntax of Kite's <code>project.kite</code> file.
 The Kite project file defines the project's name, version, external
@@ -14,23 +14,23 @@ development tasks automatically.<p>
 Note that the Kite project file is a Tcl script, and so 
 normal Tcl syntax rules apply.<p>
 
-Every Kite project file begins with a <<iref project>> statement.  This is
+Every Kite project file begins with a <iref project> statement.  This is
 typically followed by one or more build target statements, e.g.,
-<<iref app>>, <<iref appkit>>, and <<iref lib>>.  These are followed by
-<<iref require>> and <<iref include>> statements that define the project's
+<iref app>, <iref appkit>, and <iref lib>.  These are followed by
+<iref require> and <iref include> statements that define the project's
 external dependencies.<p>
 
 A project's project file is usually created by Kite as part of initializing
 the project's directory tree, and is then updated by the developer as
 needed.<p>
 
-<<section STATEMENTS>>
+<section STATEMENTS>
 
 Kite project files may contain the following statements.<p>
 
-<<deflist statements>>
+<deflist statements>
 
-<<defitem project {project <i>name version description</i>}>>
+<defitem project {project <i>name version description</i>}>
 
 <b>Required.</b> This statement names the project, its
 current <i>version</i>, and a brief text <i>description</i>.  
@@ -59,19 +59,19 @@ project version numbers:<p>
 <li> <tt>1.2.3-MYSUFFIX</tt>
 </ul>
 
-<<defitem poc {poc <i>email</i>}>>
+<defitem poc {poc <i>email</i>}>
 
 Specifies the e-mail address of the project's primary point-of-contact
-(POC).  This is made available to <<xref kitedoc(5)>> documentation.
+(POC).  This is made available to <xref kitedoc(5)> documentation.
 
-<<defitem app {app <i>name</i> ?<i>mode</i>?}>>
+<defitem app {app <i>name</i> ?<i>mode</i>?}>
 
 This statement tells Kite that the project builds an application as a
 standalone executable for the current platform (i.e., a "starpack").  
 The <i>mode</i> tells Kite whether this is a <b>gui</b> or a 
 <b>console</b> application; the default is <b>gui</b>.<p>
 
-A project file may contain at most one <<iref app>> or <<iref appkit>> 
+A project file may contain at most one <iref app> or <iref appkit> 
 statement.<p>
 
 The app's main routine must be found in 
@@ -81,14 +81,14 @@ it will be built as "<i>root</i>/bin/<i>name</i>.[exe]".<p>
 The easiest way to create a new app is via the <tt>kite new app</tt> or 
 <tt>kite add app</tt> commands.<p>
 
-<<defitem appkit {appkit <i>name</i> ?<i>mode</i>?}>>
+<defitem appkit {appkit <i>name</i> ?<i>mode</i>?}>
 
 This statement tells Kite that the project builds an application as a
 tclsh-dependent cross-platform executable (i.e., a "starkit").  
 The <i>mode</i> tells Kite whether this is a <b>gui</b> or a 
 <b>console</b> application; the default is <b>console</b>.<p>
 
-A project file may contain at most one <<iref app>> or <<iref appkit>> 
+A project file may contain at most one <iref app> or <iref appkit> 
 statement.<p>
 
 The app's main routine must be found in 
@@ -98,7 +98,7 @@ it will be built as "<i>root</i>/bin/<i>name</i>.kit".<p>
 The easiest way to create a new appkit is via the <tt>kite new appkit</tt> 
 or <tt>kite add appkit</tt> commands.<p>
 
-<<defitem lib {lib <i>name</i> ?-requires <i>list</i>?}>>
+<defitem lib {lib <i>name</i> ?-requires <i>list</i>?}>
 
 This statement tells Kite that the project defines a Tcl library package
 intended for use by other projects.  The package will be called 
@@ -106,8 +106,8 @@ intended for use by other projects.  The package will be called
 always have the same version number as the project as a whole.<p>
 
 A project may contain any number of library packages.  Note that only
-packages intended for export need to be declared with <<iref lib>>; a 
-project defining an <<iref app>> or <<iref appkit>> will often contain a 
+packages intended for export need to be declared with <iref lib>; a 
+project defining an <iref app> or <iref appkit> will often contain a 
 number of packages intended for use only by the application itself, and 
 these need not be declared.<p>
 
@@ -127,7 +127,7 @@ are required by the project as whole.  In this case, use the
 <code>-requires</code> option to list the names of those packages to
 include in the <code>package require</code> block.<p>
 
-<<defitem require {require <i>name version</i> ?<i>options...</i>?}>>
+<defitem require {require <i>name version</i> ?<i>options...</i>?}>
 
 This statement tells Kite that the project wants to run against the teapot
 package with the given name and version, where version takes any of the
@@ -140,11 +140,11 @@ the package is assumed to be locally built and installed into the local
 teapot by hand. Kite will report on its absence, but will not attempt to 
 fetch it.
 
-Required packages will be built into the project's <<iref app>>
-<<iref appkit>>, and dependencies on required packages will be noted in 
-<<iref lib>> packages when built as teapot .zip files.
+Required packages will be built into the project's <iref app>
+<iref appkit>, and dependencies on required packages will be noted in 
+<iref lib> packages when built as teapot .zip files.
 
-<<defitem include {include <i>name vcs url tag</i>}>>
+<defitem include {include <i>name vcs url tag</i>}>
 
 This statement tells Kite that this project depends on another project 
 called <i>name</i>, and directs Kite to pull the other project's code from 
@@ -162,29 +162,31 @@ Kite assumes that the included project contains one or more Tcl
 packages in its "lib" directory, and thus adds 
 "<i>root</i>/includes/<i>name</i>/lib" to the <tt>auto_path</tt>.<p>
 
-When an <<iref app>> or <<iref appkit>> is built, the included projects 
-will be built into it.  For <<iref lib>>-only projects, the included 
+When an <iref app> or <iref appkit> is built, the included projects 
+will be built into it.  For <iref lib>-only projects, the included 
 projects are available for testing but
 will not be built into the exported packages.<p>
 
-<<defitem shell {shell <i>script</i>}>>
+<defitem shell {shell <i>script</i>}>
 
 The <i>script</i> will be automatically loaded in the Tcl shell produced by
 the <code>kite shell</code> command for "lib-only" projects or if 
 <code>kite shell -plain</code> is used. This allows the project to 
 customize the initial state of the shell.
 
-<</deflist statements>>
+</deflist statements>
 
-<<section AUTHOR>>
+<section AUTHOR>
 
 Will Duquette<p>
 
-<<section HISTORY>>
+<section HISTORY>
 
 Original file format.<p>
 
-<</manpage>>
+</manpage>
+
+
 
 
 

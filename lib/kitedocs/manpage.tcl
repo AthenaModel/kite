@@ -259,6 +259,12 @@ snit::type ::kitedocs::manpage {
 
         $ehtml smartalias indexlist 1 1 {modules} \
             [myproc indexlist]
+
+        $ehtml smartalias example 0 0 {} \
+            [myproc example]
+
+        $ehtml smartalias /example 0 0 {} \
+            [myproc /example]
     }
     
 
@@ -529,6 +535,7 @@ snit::type ::kitedocs::manpage {
 
     template proc defitem {item text} {
         lappend items $item
+        set text [$ehtml expandonce $text]
         set itemtext($item) $text
     } {
         |<--
@@ -589,12 +596,31 @@ snit::type ::kitedocs::manpage {
         set lastItem [lindex $items end]
         set id "$lastItem$opt"
         lappend optsfor($lastItem) $opt
+        set text [$ehtml expandonce $text]
         set opttext($id) $text
     } {
         |<--
         <dt><b><tt><a name="$id">$text</a></tt></b></dt>
         <dd>
     }
+
+    # example
+    #
+    # Begins a pre-formatted example.
+
+    proc example {} {
+        return "<pre class=\"box\">"
+    }
+
+    # /example
+    #
+    # Ends a pre-formatted example.
+
+    proc /example {} {
+        return "</pre>"
+    }
+
+
 
     #-------------------------------------------------------------------
     # Index File Template

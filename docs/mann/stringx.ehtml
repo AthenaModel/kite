@@ -1,45 +1,47 @@
-<<manpage {kiteutils(n) stringx(n)} "String Utilities">>
+<manpage {kiteutils(n) stringx(n)} "String Utilities">
 
-<<section SYNOPSIS>>
+<section SYNOPSIS>
 
 <pre>
-package require kiteutils <<version>>
+package require kiteutils <version>
 namespace import ::kiteutils::*
 </pre>
 
-<<itemlist>>
+<itemlist>
 
-<<section DESCRIPTION>>
+<section DESCRIPTION>
 
 stringx(n) contains a collection of string-manipulation utilities.<p>
 
-<<section COMMANDS>>
+<section COMMANDS>
 
-<<deflist>>
+<deflist>
 
-<<defitem normalize {normalize <i>text</i>}>>
+<defitem normalize {normalize <i>text</i>}>
 
 Given a text string, trims leading and trailing whitespace, and
 reduces all internal whitespace to single spaces.<p>
 
-<<defitem outdent {outdent <i>block</i>}>>
+<defitem outdent {outdent <i>block</i>}>
 
 Given a block of text, "outdent" deletes any leading blank line or trailing
 blank line. It also determines the longest common whitespace prefix shared 
 by the remaining lines (assuming the whitespace does not contain tab 
 characters) and deletes it from each line.<p>  
 
-<</deflist>>
+</deflist>
 
-<<section ENVIRONMENT>>
+<section ENVIRONMENT>
 
 Requires Tcl 8.6 or later.<p>
 
-<<section AUTHOR>>
+<section AUTHOR>
 
 Will Duquette<p>
 
-<</manpage>>
+</manpage>
+
+
 
 
 

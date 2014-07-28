@@ -1,36 +1,38 @@
-<<manpage kitedocs(n) "Kite Documentation Tools">>
+<manpage kitedocs(n) "Kite Documentation Tools">
 
-<<section SYNOPSIS>>
+<section SYNOPSIS>
 
 <pre>
-package require kitedocs <<version>>
+package require kitedocs <version>
 namespace import ::kitedocs::*
 </pre>
 
-<<itemlist>>
+<itemlist>
 
-<<section DESCRIPTION>>
+<section DESCRIPTION>
 
 kitedocs(n) is a package of documentation tools based on "Extended HTML":
 HTML extended with macros written in Tcl.  In addition to the basic
-<<xref ehtml(n)>> capability, it supports two document formats, 
-<<xref manpage(5)>> for man pages, and <<xref kitedoc(5)>> for
+<xref ehtml(n)> capability, it supports two document formats, 
+<xref manpage(5)> for man pages, and <xref kitedoc(5)> for
 more general documentation.<p>
 
-<<section ENVIRONMENT>>
+<section ENVIRONMENT>
 
 Requires Tcl 8.6 or later.<p>
 
-<<section AUTHORS>>
+<section AUTHORS>
 
 Will Duquette<p>
 
-<<section HISTORY>>
+<section HISTORY>
 
 These tools were originally written for JNEM and Athena, and have 
 evolved since.<p>
 
-<</manpage>>
+</manpage>
+
+
 
 
 
