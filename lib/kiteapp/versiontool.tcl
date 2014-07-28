@@ -43,7 +43,7 @@ snit::type ::kiteapp::versiontool {
     typemethod execute {argv} {
         checkargs version 0 0 {} $argv
 
-        puts "Kite [kiteinfo get version]\n"
+        puts "Kite [kiteinfo version]\n"
     }    
 }
 

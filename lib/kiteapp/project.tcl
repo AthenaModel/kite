@@ -727,24 +727,6 @@ snit::type ::kiteapp::project {
         }
     }
 
-
-    # SaveKiteInfo
-    #
-    # Saves the kiteinfo package to lib/kiteinfo/*.
-    #
-    # TODO: We probably don't want to include everything in info().
-
-    proc SaveKiteInfo {} {
-        gentree [project root lib kiteinfo] {
-            kiteinfo_pkgIndex   pkgIndex.tcl
-            kiteinfo_pkgModules pkgModules.tcl
-            kiteinfo            kiteinfo.tcl
-        } %project  $info(name) \
-          %package  kiteinfo    \
-          %module   kiteinfo    \
-          %kiteinfo [list [array get info]]
-    }
-
     # UpdateLibMetadata lib
     #
     # lib   - Name of a library package

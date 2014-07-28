@@ -63,22 +63,10 @@ package require Tcl 8.6
 package require kiteinfo
 
 #-----------------------------------------------------------------------
-# Next, add any includes libraries to the auto_path.
-#
-# This presumes that the include follows the usual project tree, with
-# all Tcl packages in $root/lib/<package>.
-#
-# TODO: kiteinfo should probably have a routine to do this.
-
-foreach iname [kiteinfo::get includes] {
-    set idir [file join $appdir .. includes $iname lib]
-    lappend auto_path [file normalize $idir]
-}
-
-#-----------------------------------------------------------------------
 # Require other needed packages.
 
-kiteinfo require snit
+# FIXME: should be in kiteapp/pkgModules.tcl, in -kite-require block.
+package require snit
 
 package require kiteapp
 namespace import kiteutils::*

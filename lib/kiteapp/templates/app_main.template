@@ -68,7 +68,7 @@ if {[kiteinfo gui]} {
 # This presumes that the include follows the usual project tree, with
 # all Tcl packages in $root/lib/<package>.
 
-foreach iname [kiteinfo::get includes] {
+foreach iname [kiteinfo includes] {
     set idir [file join $appdir .. includes $iname lib]
     set auto_path [linsert $auto_path 0 [file normalize $idir]]
 }
@@ -78,9 +78,6 @@ foreach iname [kiteinfo::get includes] {
 # FIXME
 
 package require %package
-
-# TODO: Add other needed packages.  (Ideally, this should come from
-# project.kite in some way; perhaps kiteinfo can help?)
 
 # TODO: Import any desired commands into the global namespace.
 
@@ -101,8 +98,7 @@ proc main {argv} {
     #===================================================================
     # FIXME
 
-    array set pdata [kiteinfo get]
-    puts "$pdata(name) $pdata(version): $pdata(description)"
+    puts "[kiteinfo project] [kiteinfo version]: [kiteinfo description]"
     puts ""
     %package hello
     puts ""

@@ -123,7 +123,10 @@ codeblock ::kiteapp::subtree::KiteInfo_kiteinfo {metadata} {
         array set kiteInfo %metadata
 
         namespace export \
-            get          \
+            project      \
+            version      \
+            description  \
+            includes     \
             gui          \
             require
         namespace ensemble create
@@ -132,28 +135,45 @@ codeblock ::kiteapp::subtree::KiteInfo_kiteinfo {metadata} {
     #-----------------------------------------------------------------------
     # Commands
 
-    # get ?parm?
+    # project
     #
-    # parm  - The name of a element in the kiteInfo array
-    #
-    # Returns the value of the given parm.  It's an error if the parm
-    # doesn't exist.  Without a parm, returns a dictionary of the whole
-    # set of data.
-    #
-    # DEPRECATED!
+    # Returns the project name.
+    # FIXME: should be kiteinfo(project) when project.tcl is updated.
 
-    proc ::kiteinfo::get {{parm ""}} {
+    proc ::kiteinfo::project {} {
         variable kiteInfo
 
-        if {$parm eq ""} {
-            return [array get kiteInfo]
-        }
+        return $kiteInfo(name)
+    }
 
-        if {![info exists kiteInfo($parm)]} {
-            error "unknown kiteinfo parameter: \'$parm\'"
-        }
-        
-        return $kiteInfo($parm)
+    # version
+    #
+    # Returns the project version number.
+
+    proc ::kiteinfo::version {} {
+        variable kiteInfo
+
+        return $kiteInfo(version)
+    }
+
+    # description
+    #
+    # Returns the project description.
+
+    proc ::kiteinfo::description {} {
+        variable kiteInfo
+
+        return $kiteInfo(description)
+    }
+
+    # includes
+    #
+    # Returns the names of the "include" libraries.
+
+    proc ::kiteinfo::includes {} {
+        variable kiteInfo
+
+        return $kiteInfo(includes)
     }
 
     # gui
@@ -175,6 +195,8 @@ codeblock ::kiteapp::subtree::KiteInfo_kiteinfo {metadata} {
     #
     # Does a Tcl [package require] on the given package, using the
     # version specified by the "require" statement in project.kite.
+    #
+    # DEPRECATED
 
     proc ::kiteinfo::require {name} {
         variable kiteInfo
