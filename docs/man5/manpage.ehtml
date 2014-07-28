@@ -26,7 +26,7 @@ and use them in your man pages.<p>
 
 <deflist macros>
 
-<defitem manpage {manpage <i>nameList description</i>}>
+<defitem manpage {<lb>manpage <i>nameList description</i><rb>}>
 
 This macro should be the first in the man page, as it expands to the
 HTML header and also the "NAME" section of the man page.<p>
@@ -49,7 +49,7 @@ page.  For example, the man page for <xref kitedocs(n)>'s
 <lb>manpage {kitedocs(n) kitedoc(n)} "Kite Document Formatter"<rb>
 </example>
 
-<defitem /manpage {/manpage}>
+<defitem /manpage {<lb>/manpage<rb>}>
 
 This macro should be the last in the man page, as it expands to the
 HTML footer.  It also adds a timestamp for when the page was
@@ -61,7 +61,7 @@ For example,<p>
 <lb>/manpage<rb>
 </example>
 
-<defitem section {section <i>name</i>}>
+<defitem section {<lb>section <i>name</i><rb>}>
 
 Begins a new section.  By convention, man page section names are
 displayed in all caps; consequently, <i>name</i> is converted to
@@ -74,7 +74,7 @@ The <i>name</i> can be almost anything; however, see
 <xref "MAN PAGE SKELETON"> for a list of the sections found in 
 most man pages.<p>
 
-<defitem subsection {subsection <i>name</i>}>
+<defitem subsection {<lb>subsection <i>name</i><rb>}>
 
 Begins a new subsection under the current <iref section>.
 By convention, man page subsection names are displayed in mixed case.
@@ -84,7 +84,7 @@ their parent section.<p>
 The subsection <i>name</i> can be almost anything, but it should be
 unique within the man page.<p>
 
-<defitem deflist {deflist ?<i>comment text</i>?}>
+<defitem deflist {<lb>deflist ?<i>comment text</i>?<rb>}>
 
 Begins a definition list, which will be terminated by
 <iref /deflist>.  In between will usually be a number of
@@ -104,11 +104,11 @@ text</i> can be used to relate the <iref deflist> to its
 <lb>/deflist commands<rb>
 </example>
 
-<defitem /deflist {/deflist ?<i>comment text</i>?}>
+<defitem /deflist {<lb>/deflist ?<i>comment text</i>?<rb>}>
 
 Terminates a <iref deflist>.<p>
 
-<defitem defitem {defitem <i tag text>}>
+<defitem defitem {<lb>defitem <i tag text><rb>}>
 
 This macro begins an item definition within a <iref deflist>.  An
 "item" is one of whatever the man page is documenting: a Tcl command
@@ -130,7 +130,7 @@ item. For example,<p>
 <lb>defitem mycommand {mycommand <i>value</i> ?<i>optionalValue</i>?}<rb>
 
 This command does nothing in particular, being merely a pedagogical
-example.&lt;p&gt;
+example.<lb>p<rb>;
 </example>
 
 Note that the <i>tag</i> won't necessarily be same as the first token
@@ -145,7 +145,7 @@ first spot:<p>
 Each of the macro definitions in this section is produced by
 <iref defitem>.<p>
 
-<defitem defopt {defopt <i text>}>
+<defitem defopt {<lb>defopt <i text><rb>}>
 
 Programs often have options; Tcl commands and objects often have
 options as well.  When <iref defopt> appears in a definition list,
@@ -173,8 +173,8 @@ Description of the the option...
 <lb>/deflist commands<rb>
 </example>
 
-<defitem example {example}>
-<defitem /example {/example}>
+<defitem example {<lb>example<rb>}>
+<defitem /example {<lb>/example<rb>}>
 
 These macros are used to bracket pre-formatted examples.  The examples
 are displayed in a box with a different background than the rest of
@@ -183,7 +183,7 @@ the page.<p>
 The many examples on this page were formatted using this pair of 
 macros.<p>
 
-<defitem itemlist {itemlist}>
+<defitem itemlist {<lb>itemlist<rb>}>
 
 This macro expands to a list of the items defined in this manpage.
 It's usually used in the "SYNOPSIS" section of the man page, as shown
@@ -194,7 +194,7 @@ in the <xref "MAN PAGE SKELETON">.  The list of macros in the
 If an item has options defined with <iref defopt>, they will appear,
 slightly indented, just below the item in the <iref itemlist>.<p>
 
-<defitem iref {iref <i>item...</i>}>
+<defitem iref {<lb>iref <i>item...</i><rb>}>
 
 The name "iref" stands for "item reference"; this macro creates a
 hyperlink to the definition of <i>item</i> in the same man page.
@@ -209,12 +209,12 @@ expands to a link to <iref defitem>.<p>
 If the item name has multiple tokens, there is no need to quote them;
 <iref iref>'s arguments are accumulated into a single item name.<p>
 
-<defitem version {version}>
+<defitem version {<lb>version<rb>}>
 
 Returns the project version number, as provided to 
 <xref manpage(n)>'s <xref manpage(n) format> subcommand.<p>
 
-<defitem xref {xref <i>id</i> ?<i>anchor</i>?}>
+<defitem xref {<lb>xref <i>id</i> ?<i>anchor</i>?<rb>}>
 
 The <iref xref> macro creates hyperlinks. Generally speaking,
 <i>id</i> identifies the page to link to; <i>anchor</i> is the
@@ -253,7 +253,7 @@ Finally, the <xref ehtml(5)> <xref xhtml(5) xrefset> macro can be
 used to assign ID strings to frequently used URLs; if the <i>id</i> is
 one of these ID strings.<p>
 
-<defitem mktree {mktree}>
+<defitem mktree {<lb>mktree<rb>}>
 
 If included anywhere in the man page, this macro enables use of the
 "mktree" Javascript package for turning nested lists of links into
