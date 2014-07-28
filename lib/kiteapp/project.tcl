@@ -84,7 +84,7 @@ snit::type ::kiteapp::project {
     }
 
     #-------------------------------------------------------------------
-    # Locating the root of the project tree.
+    # File and Directory Queries
 
     # root ?names...?
     #
@@ -186,6 +186,237 @@ snit::type ::kiteapp::project {
 
         return ""
     }
+
+    #-------------------------------------------------------------------
+    # Metadata Queries
+
+    # tclsh
+    #
+    # Returns the name of the development Tclsh (i.e., the one being
+    # used to run Kite).
+
+    typemethod tclsh {} {
+        # Normalizing ensures that the case of the path components
+        # is what it should be on Windows.  (I.e., "C:" rather than
+        # "c:".)
+        return [file normalize [info nameofexecutable]]
+    }
+
+    # teapot
+    #
+    # Returns the path to Kite's local teapot repository
+
+    typemethod teapot {} {
+        return [file normalize [file join ~ .kite teapot]]
+    }
+
+    # name
+    #
+    # Returns the project name.
+
+    typemethod name {} {
+        return $info(name)
+    }
+
+    # version
+    #
+    # Returns the full version string.
+
+    typemethod version {} {
+        return $info(version)
+    }
+
+    # pkgversion
+    #
+    # Returns the [package require] form of the version string.
+
+    typemethod pkgversion {} {
+        return $info(pkgversion)
+    }
+
+    # description
+    #
+    # Returns the project description.
+
+    typemethod description {} {
+        return $info(description)
+    }
+
+    # poc
+    #
+    # Returns the project POC.
+
+    typemethod poc {} {
+        return $info(poc)
+    }
+
+    # intree
+    #
+    # Returns 1 if we're in a project tree, and 0 otherwise.
+
+    typemethod intree {} {
+        return [expr {$rootdir ne ""}]
+    }
+
+    # hasinfo
+    #
+    # Returns 1 if we've successfully loaded project info, and
+    # 0 otherwise.
+
+    typemethod hasinfo {} {
+        return [expr {$info(name) ne ""}]
+    }
+
+    # app name
+    #
+    # Returns the app name, if any.
+
+    typemethod {app name} {} {
+        return $info(app)
+    }
+
+    # app get ?parm?
+    #
+    # parm  - An app parameter (exe, gui)
+    #
+    # Returns the application's parameter dictionary, or the
+    # value of one item.
+
+    typemethod {app get} {{parm ""}} {
+        set dict $info(app-$info(app))
+
+        if {$parm eq ""} {
+            return $dict
+        } else {
+            return [dict get $dict $parm]
+        }
+    }
+
+
+    # app loader
+    #
+    # Returns the project's application loader script.
+
+    typemethod {app loader} {} {
+        if {$info(app) eq ""} {
+            return ""
+        }
+
+        return [project root bin $info(app).tcl]
+    }
+
+    # lib names
+    #
+    # Returns the list of lib names.
+
+    typemethod {lib names} {} {
+        return $info(libs)
+    }
+
+    # lib get name ?attr?
+    #
+    # name  - the include name
+    # attr  - Optionally, a lib attribute.
+    #
+    # Returns the lib dictionary, or one attribute of it.
+
+    typemethod {lib get} {name {attr ""}} {
+        if {$attr eq ""} {
+            return $info(lib-$name)
+        } else {
+            return [dict get $info(lib-$name) $attr]
+        }
+    }
+
+
+    # include names
+    #
+    # Returns the list of include names.
+
+    typemethod {include names} {} {
+        return $info(includes)
+    }
+
+    # include get name ?attr?
+    #
+    # name  - the include name
+    # attr  - Optionally, an include attribute.
+    #
+    # Returns the include dictionary, or one attribute of it.
+
+    typemethod {include get} {name {attr ""}} {
+        if {$attr eq ""} {
+            return $info(include-$name)
+        } else {
+            return [dict get $info(include-$name) $attr]
+        }
+    }
+
+    # require names
+    #
+    # Returns the list of required package names.
+
+    typemethod {require names} {} {
+        return $info(requires)
+    }
+
+    # require version name
+    #
+    # name  - the require name
+    #
+    # Returns the required package's version.
+
+    typemethod {require version} {name} {
+        return [dict get $info(require-$name) version]
+    }
+
+    # require islocal name
+    #
+    # name  - the require name
+    #
+    # Returns 1 if the required package is internally built.
+
+    typemethod {require islocal} {name} {
+        return [dict get $info(require-$name) local]
+    }
+
+    # shell
+    #
+    # Returns the shell initialization script.
+
+    typemethod shell {} {
+        return $info(shell)
+    }
+
+    # libpath
+    #
+    # Returns a Tcl list of library directories associated with this 
+    # project.
+
+    typemethod libpath {} {
+        set path [list]
+
+        foreach iname $info(includes) {
+            lappend path [project root includes $iname lib]
+        }
+
+        lappend path [project root lib]
+
+        return $path
+    }
+
+    # zippath
+    #
+    # Returns the path where "kite build" puts teapot .zip packages,
+    # creating the directory if needed.
+
+    typemethod zippath {} {
+        set path [project root .kite libzips]
+        file mkdir $path
+        return $path
+    }
+
+    
 
     #-------------------------------------------------------------------
     # Reading the information from the project file.
@@ -477,8 +708,6 @@ snit::type ::kiteapp::project {
     #-------------------------------------------------------------------
     # Saving project metadata for use by the project's own code.
 
-
-
     # metadata save
     #
     # Saves the project metadata to disk as appropriate.
@@ -487,7 +716,7 @@ snit::type ::kiteapp::project {
         # FIRST, if there's an app save the kiteinfo package for
         # its use.
         if {$info(app) ne ""} {
-            SaveKiteInfo
+            subtree kiteinfo [array get info]
         }
 
         # NEXT, for each library in $root/lib, update its version number
@@ -591,235 +820,9 @@ snit::type ::kiteapp::project {
         return [join $list \n]
     }
 
-
     #-------------------------------------------------------------------
-    # Other Queries
-
-    # tclsh
-    #
-    # Returns the name of the development Tclsh (i.e., the one being
-    # used to run Kite).
-
-    typemethod tclsh {} {
-        # Normalizing ensures that the case of the path components
-        # is what it should be on Windows.  (I.e., "C:" rather than
-        # "c:".)
-        return [file normalize [info nameofexecutable]]
-    }
-
-    # teapot
-    #
-    # Returns the path to Kite's local teapot repository
-
-    typemethod teapot {} {
-        return [file normalize [file join ~ .kite teapot]]
-    }
-
-    # name
-    #
-    # Returns the project name.
-
-    typemethod name {} {
-        return $info(name)
-    }
-
-    # version
-    #
-    # Returns the full version string.
-
-    typemethod version {} {
-        return $info(version)
-    }
-
-    # pkgversion
-    #
-    # Returns the [package require] form of the version string.
-
-    typemethod pkgversion {} {
-        return $info(pkgversion)
-    }
-
-    # description
-    #
-    # Returns the project description.
-
-    typemethod description {} {
-        return $info(description)
-    }
-
-    # poc
-    #
-    # Returns the project POC.
-
-    typemethod poc {} {
-        return $info(poc)
-    }
-
-    # intree
-    #
-    # Returns 1 if we're in a project tree, and 0 otherwise.
-
-    typemethod intree {} {
-        return [expr {$rootdir ne ""}]
-    }
-
-    # hasinfo
-    #
-    # Returns 1 if we've successfully loaded project info, and
-    # 0 otherwise.
-
-    typemethod hasinfo {} {
-        return [expr {$info(name) ne ""}]
-    }
-
-    # app name
-    #
-    # Returns the app name, if any.
-
-    typemethod {app name} {} {
-        return $info(app)
-    }
-
-    # app get ?parm?
-    #
-    # parm  - An app parameter (exe, gui)
-    #
-    # Returns the application's parameter dictionary, or the
-    # value of one item.
-
-    typemethod {app get} {{parm ""}} {
-        set dict $info(app-$info(app))
-
-        if {$parm eq ""} {
-            return $dict
-        } else {
-            return [dict get $dict $parm]
-        }
-    }
-
-
-    # app loader
-    #
-    # Returns the project's application loader script.
-
-    typemethod {app loader} {} {
-        if {$info(app) eq ""} {
-            return ""
-        }
-
-        return [project root bin $info(app).tcl]
-    }
-
-    # lib names
-    #
-    # Returns the list of lib names.
-
-    typemethod {lib names} {} {
-        return $info(libs)
-    }
-
-    # lib get name ?attr?
-    #
-    # name  - the include name
-    # attr  - Optionally, a lib attribute.
-    #
-    # Returns the lib dictionary, or one attribute of it.
-
-    typemethod {lib get} {name {attr ""}} {
-        if {$attr eq ""} {
-            return $info(lib-$name)
-        } else {
-            return [dict get $info(lib-$name) $attr]
-        }
-    }
-
-
-    # include names
-    #
-    # Returns the list of include names.
-
-    typemethod {include names} {} {
-        return $info(includes)
-    }
-
-    # include get name ?attr?
-    #
-    # name  - the include name
-    # attr  - Optionally, an include attribute.
-    #
-    # Returns the include dictionary, or one attribute of it.
-
-    typemethod {include get} {name {attr ""}} {
-        if {$attr eq ""} {
-            return $info(include-$name)
-        } else {
-            return [dict get $info(include-$name) $attr]
-        }
-    }
-
-    # require names
-    #
-    # Returns the list of required package names.
-
-    typemethod {require names} {} {
-        return $info(requires)
-    }
-
-    # require version name
-    #
-    # name  - the require name
-    #
-    # Returns the required package's version.
-
-    typemethod {require version} {name} {
-        return [dict get $info(require-$name) version]
-    }
-
-    # require islocal name
-    #
-    # name  - the require name
-    #
-    # Returns 1 if the required package is internally built.
-
-    typemethod {require islocal} {name} {
-        return [dict get $info(require-$name) local]
-    }
-
-    # shell
-    #
-    # Returns the shell initialization script.
-
-    typemethod shell {} {
-        return $info(shell)
-    }
-
-    # libpath
-    #
-    # Returns a Tcl list of library directories associated with this 
-    # project.
-
-    typemethod libpath {} {
-        set path [list]
-
-        foreach iname $info(includes) {
-            lappend path [project root includes $iname lib]
-        }
-
-        lappend path [project root lib]
-
-        return $path
-    }
-
-    # zippath
-    #
-    # Returns the path where "kite build" puts teapot .zip packages,
-    # creating the directory if needed.
-
-    typemethod zippath {} {
-        set path [project root .kite libzips]
-        file mkdir $path
-        return $path
-    }
+    # Metadata Dump
+    
 
     # dumpinfo
     #

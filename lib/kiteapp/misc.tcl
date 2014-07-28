@@ -23,6 +23,7 @@ namespace eval ::kiteapp:: {
         gentree      \
         interdict    \
         prepare      \
+        treefile     \
         vputs        \
         writefile
 }
@@ -197,6 +198,23 @@ proc ::kiteapp::writefile {filename content {opt ""}} {
     }
 }
 
+# treefile path content
+#
+# path    - Path of the file to be generated, relative to root, with
+#           "/" as the path separator.
+# content - The content to put there.
+#
+# Outputs the file with the given content.
+
+proc ::kiteapp::treefile {path content} {
+    # FIRST, get the filename.
+    set filename [project root {*}[split $path /]]
+
+    # NEXT, save the file.
+    vputs "Generate file: $filename"
+    writefile $filename $content -ifchanged
+}
+
 # genfile root template path mapping
 #
 # root       - The directory in which the file path is rooted.
@@ -227,6 +245,8 @@ proc ::kiteapp::genfile {root template path mapping} {
     vputs "Generate file: $filename from $template"
     writefile $filename $text -ifchanged
 }
+
+
 
 # gentree root tdict mapping...
 #

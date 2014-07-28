@@ -145,7 +145,7 @@ proc ::kiteutils::CodeBlockMap {template} {
         dict set mapping %$var [uplevel 1 [list set $var]]
     }
 
-    return [string map $mapping $template]
+    return [string map $mapping $template]\n
 }
 
 
