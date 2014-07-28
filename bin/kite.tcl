@@ -72,8 +72,6 @@ package require kiteapp
 namespace import kiteutils::*
 namespace import kiteapp::*
 
-puts "kiteutils: $kiteutils::library"
-
 #-----------------------------------------------------------------------
 # Main Program 
 
