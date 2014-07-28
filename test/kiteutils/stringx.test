@@ -29,6 +29,44 @@ package require kiteutils
 namespace import ::kiteutils::*
 
 #-------------------------------------------------------------------
+# codeblock
+
+test codeblock-1.1 {empty block} -body {
+    codeblock myblock {} {}
+    myblock
+} -result {}
+
+test codeblock-1.2 {block with text} -body {
+    codeblock myblock {} {
+        This is my block.
+        It has two lines.
+    }
+    myblock
+} -result {This is my block.
+It has two lines.}
+
+test codeblock-1.3 {block with args} -body {
+    codeblock myblock {owner thing} {
+        This is %owner block.
+        It has two %thing.
+    }
+    myblock Joe's boots
+} -result {This is Joe's block.
+It has two boots.}
+
+test codeblock-1.4 {block with initbody} -body {
+    codeblock myblock {owner} {
+       set owner [string toupper $owner]
+       set len [string length $owner]
+    } {
+        This is %owner block.
+        "%owner" is %len characters long.
+    }
+    myblock Joe's
+} -result {This is JOE'S block.
+"JOE'S" is 5 characters long.}
+
+#-------------------------------------------------------------------
 # normalize
 
 test normalize-1.1 {strips whitespace} -body {

@@ -17,6 +17,50 @@ stringx(n) contains a collection of string-manipulation utilities.<p>
 
 <deflist>
 
+<defitem codeblock {codeblock <i name arglist> ?<i initbody>? <i template>}>
+
+Defines a command called <i name> in the caller's context; the new command
+will return the block of code contained in the <i template> after making
+several transformations.<p>
+
+First, the <i template> will be outdented using <iref outdent>.  
+Second, double backslashes will be replaced with single backslashes; 
+this allows the generated code block to contain
+continuation backslashes.
+
+Finally, <tt string map> will be called to
+replace the block's arguments with the values in the caller's <i arglist>.
+Argument names appear in the <i template> prefixed by a percent sign, 
+"%".  For example,<p>
+
+<example>
+% <b>codeblock hello {first last} {
+    Hello, %first %last!
+    How are you?
+}</b>
+::hello
+% <b>hello John Doe</b>
+Hello, John Doe!
+How are you?
+%
+</example>
+
+If given, the <i initbody> may transform the arguments in some way or
+define additional scalar local variables for use in the <i template>:<p>
+
+<example>
+codeblock timestamp {seconds} {
+    set date [clock format -fmt "%D"       $seconds]
+    set time [clock format -fmt "%H:%M:%S" $seconds]
+} {
+    Timestamp: at %time on %date
+}
+</example>
+
+The <iref codeblock> command is similar to 
+<xref template(n)>, but is better suited to creating templates of 
+Tcl code.  It can also be used for creating arbitrary strings.<p>
+
 <defitem normalize {normalize <i>text</i>}>
 
 Given a text string, trims leading and trailing whitespace, and
