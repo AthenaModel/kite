@@ -23,7 +23,7 @@ namespace eval ::kiteapp::subtree:: {
 
 proc ::kiteapp::subtree::kiteinfo {metadata} {
     treefile lib/kiteinfo/pkgIndex     [KiteInfo_pkgIndex]
-    treefile lib/kiteinfo/pkgModules   [KiteInfo_pkgIndex]
+    treefile lib/kiteinfo/pkgModules   [KiteInfo_pkgModules]
     treefile lib/kiteinfo/kiteinfo.tcl [KiteInfo_kiteinfo $metadata]
 }
 

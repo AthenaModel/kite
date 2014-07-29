@@ -86,6 +86,18 @@ snit::type ::kiteapp::project {
     #-------------------------------------------------------------------
     # File and Directory Queries
 
+    # newroot name
+    #
+    # name   - A project name
+    #
+    # Creates a new project root directory with the given name, and 
+    # CD's into it.  Does not load or simulate any project metadata.
+
+    typemethod newroot {name} {
+        set rootdir [file join [pwd] $name]
+        file mkdir $rootdir
+    }
+
     # root ?names...?
     #
     # Find and return the directory containing the project.kite file, which

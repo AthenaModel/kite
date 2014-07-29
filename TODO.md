@@ -1,6 +1,7 @@
 # Project TODO List
 
 * Architecture changes post-reflection
+  * Replace existing templates with "subtree"-based code.
   * Make "app" and "appkit" just one kind of tree, with options on the "app"
     command.
   * Remove list of required packages from project.kite's "lib" command.
@@ -11,8 +12,6 @@
     * on the block being replaced.
   * Add "main.tcl" to generated "${app}app" package; make app loader script
     as generic as possible.
-  * Consider using string map to produce templates, instead of template
-    files.
 * Architecture
   * Merge kiteapp/misc.tcl into kiteutils as appropriate.
   * Merge kite.tcl's main code into kiteapp as appropriate.

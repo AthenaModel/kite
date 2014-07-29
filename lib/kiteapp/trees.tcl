@@ -187,12 +187,18 @@ snit::type ::kiteapp::trees {
         puts "Making an app project tree for project \"$project.\""
         puts "The application will be called \"$app\"."
 
-        # NEXT, generate the tree.
+        # NEXT, create the project root directory
+        project newroot $project
         genfile [file join $parent $project] app_project project.kite \
             [dict create %project $project %app $app]
 
+        project loadinfo
 
+        # NEXT, create the rest of the tree.
         MakeAppTree $parent $project $app
+
+        # NEXT, save the project metadata
+        project metadata save
     }
 
     # appkit parent project app
@@ -214,10 +220,15 @@ snit::type ::kiteapp::trees {
         puts "Making an appkit project tree for project \"$project.\""
         puts "The application will be called \"$app.kit\"."
 
-        # NEXT, generate the tree.
+        # NEXT, create the project root directory
+        project newroot $project
+
         genfile [file join $parent $project] appkit_project project.kite \
             [dict create %project $project %app $app]
 
+        project loadinfo
+
+        # NEXT, create the rest of the tree.
         MakeAppTree $parent $project $app
     }
 
@@ -237,20 +248,12 @@ snit::type ::kiteapp::trees {
             gitignore      .gitignore
             app_main       bin/%app.tcl
             docs_index     docs/index.ehtml
-            pkgIndex       lib/%package/pkgIndex.tcl
-            pkgModules     lib/%package/pkgModules.tcl
-            pkgFile        lib/%package/%module.tcl
-            all_tests      test/%package/all_tests.test
-            pkgTest        test/%package/%module.test
         } %project $project \
           %app     $app     \
           %package app_$app \
           %module  app
 
-        # NEXT, load the new project.kite file and save the metadata.
-        cd [file join $parent $project]
-        project loadinfo
-        project metadata save
+        subtree pkg ${app}app main
 
         puts ""
     }
@@ -275,20 +278,25 @@ snit::type ::kiteapp::trees {
         puts "Making a library project tree for project \"$project.\""
         puts "The library package will be called ${libname}(n)."
 
-        # NEXT, generate the tree.
+        project newroot $project
+
         gentree [file join $parent $project] {
             lib_project    project.kite
+        } %project $project \
+          %package $libname \
+
+        project loadinfo
+
+        # NEXT, generate the tree.
+        gentree [file join $parent $project] {
             project_readme README.md
             gitignore      .gitignore
             docs_index     docs/index.ehtml
-            pkgIndex       lib/%package/pkgIndex.tcl
-            pkgModules     lib/%package/pkgModules.tcl
-            pkgFile        lib/%package/%module.tcl
-            all_tests      test/%package/all_tests.test
-            pkgTest        test/%package/%module.test
         } %project $project \
           %package $libname \
           %module  $libname
+
+        subtree pkg $libname $libname
 
         puts ""
     }    
