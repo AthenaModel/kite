@@ -29,7 +29,7 @@ numbering and table-of-contents generation, your document will
 typically look like this:<p>
 
 <ul>
-  <li> The document title, formatted in HTML.
+  <li> The <tt><lb><iref document><rb></tt> header.
   <li> A list of change entries.
   <li> A table of <iref contents>.
   <li> Lists of <iref figures> and <iref tables>.
@@ -39,6 +39,7 @@ typically look like this:<p>
        more subsections.
   <li> Numbered sections may contain <iref table>s and
        <iref figure>s.
+  <li> The <tt><lb>/document<rb></tt> footer.
 </ul><p>
 
 All of these features are optional; in particular, there's no need to
@@ -110,6 +111,9 @@ Returns the banner for the top of the page.  The banner consists of
 the project name, version, and description, as provided to 
 <xref kitedoc(n)>'s <xref kitedoc(n) format> subcommand.<p>
 
+It should rarely be necessary to use this macro directly, as it is
+included automatically by <iref document>.<p>
+
 <defitem contents {<lb>contents<rb>}>
 
 This macro is replaced with a complete table of contents;
@@ -120,6 +124,11 @@ and figures if any tables and figures were defined.<p>
 
 Returns the description for the current project, as passed to
 <xref kitedoc(n)>.<p>
+
+<defitem document {<lb>document <i title><rb>...<lb>/document<rb>}>
+
+These macros begin and end the document, and format the HTML header
+and footer, include the document's title and style sheet.<p>
 
 <defitem figure {<lb>figure <i>id title filename</i><rb>}>
 
@@ -179,8 +188,12 @@ its subsections, with links.<p>
 
 <defitem standardstyle {<lb>standardstyle<rb>}>
 
-Returns the standard list of CSS styles; include it in the
-&lt;style&gt;&lt;/style&gt; tag in the HTML header.<p>
+Returns the standard list of CSS styles, for inclusion in the HTML 
+header.<p>
+
+It should rarely be necessary to use this macro directly, as it is
+included automatically by <iref document>.<p>
+
 
 <defitem table {<lb>table <i>id title</i><rb>...<lb>/table<rb>}>
 

@@ -1,34 +1,23 @@
-<html>
-<head>
-<title><<project>> <<version>>: <<description>></title>
-<style>
-<<standardstyle>>
-</style>
-</head>
+<document "Kite Documentation">
 
-<body>
-<<banner>>
+This documentation is intended for the Kite developer.  In addition,
+the <xref kiteutils(n)> and <xref kitedocs(n)> library packages can
+be used by other projects.<p>
 
-This documentation is intended for the Kite developer.
-
-<h2>Top-level Documents</h2>
+<section doc "Top-level Documents">
 
 <ul>
-  <li> <<link ../README.md "Project README">>
-  <li> <<link INSTALL.md "Installation Instructions">>
-  <li> <<link BUILD.md "Build Instructions">>
-  <li> <<link project.md "Syntax: project.kite file">>
+  <li> <link ../README.md "Project README">
+  <li> <link INSTALL.md   "Installation Instructions">
+  <li> <link BUILD.md     "Build Instructions">
+  <li> <link project.md   "Syntax: project.kite file">
 </ul><p>
 
-<h2>Man Pages</h2>
+<section man "Man Pages">
 
 <ul>
-  <li> <<link man5/index.html "Section (5)">>: File Formats
-  <li> <<link mann/index.html "Section (n)">>: Tcl Commands
+  <li> <link man5/index.html "Section (5)">: File Formats
+  <li> <link mann/index.html "Section (n)">: Tcl Commands
 </ul>
 
-<hr>
-
-<address><<poc>></address>
-</body>
-</html>
+</document>

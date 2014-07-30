@@ -189,8 +189,11 @@ snit::type ::kiteapp::trees {
 
         # NEXT, create the project root directory
         project newroot $project
-        genfile [file join $parent $project] app_project project.kite \
-            [dict create %project $project %app $app]
+
+        writefile [project root project.kite] [outdent "
+            project $project 0.0a1 \"Your Description\"
+            app $app gui
+        "]\n
 
         project loadinfo
 
@@ -223,8 +226,10 @@ snit::type ::kiteapp::trees {
         # NEXT, create the project root directory
         project newroot $project
 
-        genfile [file join $parent $project] appkit_project project.kite \
-            [dict create %project $project %app $app]
+        writefile [project root project.kite] [outdent "
+            project $project 0.0a1 \"Your Description\"
+            appkit $app console
+        "]\n
 
         project loadinfo
 
@@ -244,15 +249,13 @@ snit::type ::kiteapp::trees {
     proc MakeAppTree {parent project app} {
         # FIRST, generate the rest of the tree.
         gentree [file join $parent $project] {
-            project_readme README.md
-            gitignore      .gitignore
             app_main       bin/%app.tcl
-            docs_index     docs/index.ehtml
         } %project $project \
           %app     $app     \
           %package app_$app \
           %module  app
 
+        subtree proj
         subtree pkg ${app}app main
 
         puts ""
@@ -280,22 +283,15 @@ snit::type ::kiteapp::trees {
 
         project newroot $project
 
-        gentree [file join $parent $project] {
-            lib_project    project.kite
-        } %project $project \
-          %package $libname \
+        writefile [project root project.kite] [outdent "
+            project $project 0.0a1 \"Your Description\"
+            lib $libname
+        "]\n
 
         project loadinfo
 
         # NEXT, generate the tree.
-        gentree [file join $parent $project] {
-            project_readme README.md
-            gitignore      .gitignore
-            docs_index     docs/index.ehtml
-        } %project $project \
-          %package $libname \
-          %module  $libname
-
+        subtree proj
         subtree pkg $libname $libname
 
         puts ""

@@ -1,5 +1,15 @@
 # Project TODO List
 
+* Next
+  * Update kitedoc(n) to handle the docs index as defined in "subtree proj",
+    and update docs/index.ehtml accordingly.
+  * Fix kitedocs(n) test failures
+  * Test trees with "subtree proj"
+  * Define "subtree app"; create new style app command.
+  * Update trees to use "subtree app".
+  * Update project(n) to use new style app command.
+  * Update athena-mars' documentation to use the new kite.
+
 * Architecture changes post-reflection
   * Replace existing templates with "subtree"-based code.
   * Make "app" and "appkit" just one kind of tree, with options on the "app"

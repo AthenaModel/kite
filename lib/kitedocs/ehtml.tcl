@@ -259,7 +259,7 @@ snit::type ::kitedocs::ehtml {
         }
 
         foreach tag {
-            ol ul li p
+            ol ul li p tr th td
         } {
             $self HtmlTag $tag
             $self HtmlTag /$tag            

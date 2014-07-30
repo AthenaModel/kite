@@ -593,6 +593,12 @@ snit::type ::kitedocs::kitedoc {
         $ehtml smartalias contents 0 0 {} \
             [myproc contents]
 
+        $ehtml smartalias document 1 1 {title} \
+            [myproc document]
+
+        $ehtml smartalias /document 0 0 {} \
+            [myproc /document]
+
         $ehtml smartalias figure 3 3 {id title filename} \
             [myproc figure]
 
@@ -643,6 +649,41 @@ snit::type ::kitedocs::kitedoc {
 
         $ehtml smartalias version 0 0 {} \
             [myproc version]
+    }
+    
+    #-------------------------------------------------------------------
+    # Document Macros
+
+    # document title
+    #
+    # title   - The document title, for the HTML header
+    #
+    # Formats the HTML for the document header.
+
+    template proc document {title} {
+        |<--
+        <html><head>
+        <title>[project] [version]: $title</title>
+        <style>
+        [standardstyle]
+        </style>
+        </head>
+
+        <body>
+        [banner]
+        <h1>$title</h1>
+    }
+
+    # /document
+    #
+    # Formats the HTML footer.
+
+    template proc /document {} {
+        |<--
+        <hr>
+        <address>[poc]</address>
+        </body>
+        </html>
     }
     
     
