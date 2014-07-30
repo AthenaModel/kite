@@ -6,6 +6,7 @@
   * Replace "lib" requires with -kite-require block.
   * Change "lib" statement to "provide" statement
   * Move "main" from $app.tcl to ${app}app(n)/main.tcl
+    * At same time: app packages shouldn't need a namespace.
   * Update athena-mars to use the new kite.
   * Clean up "kite new", especially documentation.
 

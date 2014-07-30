@@ -25,7 +25,7 @@ namespace eval ::kiteinfo:: {
         description {Athena/Kite Development Tool}
         includes {}
         gui-kite 0
-        pkgversion 0.0a1
+        pkgversion 0.0a2
         requires {snit textutil::expander}
         shell {
     package require kutils
@@ -37,7 +37,7 @@ namespace eval ::kiteinfo:: {
         libs kiteutils
         apps kite
         apptype-kite kit
-        version 0.0a1
+        version 0.0a2
     }
 
     namespace export \

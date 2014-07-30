@@ -13,17 +13,17 @@
 #-----------------------------------------------------------------------
 # Package Definition
 
-# -kite-start-provide  DO NOT EDIT THIS BLOCK BY HAND
-package provide kiteutils 0.0a1
-# -kite-end-provide
+# -kite-provide-start  DO NOT EDIT THIS BLOCK BY HAND
+package provide kiteutils 0.0a2
+# -kite-provide-end
 
 #-----------------------------------------------------------------------
 # Required Packages
 
-# -kite-start-require DO NOT EDIT THIS BLOCK BY HAND
+# -kite-require-start DO NOT EDIT THIS BLOCK BY HAND
 package require snit 2.3
 package require textutil::expander 1.3.1
-# -kite-end-require
+# -kite-require-end
 
 #-----------------------------------------------------------------------
 # Namespace definition
@@ -45,3 +45,7 @@ source [file join $::kiteutils::library stringx.tcl    ]
 source [file join $::kiteutils::library template.tcl   ]
 source [file join $::kiteutils::library tclchecker.tcl ]
 source [file join $::kiteutils::library smartinterp.tcl]
+
+
+
+

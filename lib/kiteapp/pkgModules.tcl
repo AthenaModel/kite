@@ -13,9 +13,9 @@
 #-----------------------------------------------------------------------
 # Package Definition
 
-# -kite-start-provide  DO NOT EDIT THIS BLOCK BY HAND
-package provide kiteapp 0.0a1
-# -kite-end-provide
+# -kite-provide-start  DO NOT EDIT THIS BLOCK BY HAND
+package provide kiteapp 0.0a2
+# -kite-provide-end
 
 #-----------------------------------------------------------------------
 # Required Packages
@@ -65,4 +65,6 @@ source [file join $::kiteapp::library shelltool.tcl       ]
 source [file join $::kiteapp::library teapottool.tcl      ]
 source [file join $::kiteapp::library testtool.tcl        ]
 source [file join $::kiteapp::library versiontool.tcl     ]
+
+
 

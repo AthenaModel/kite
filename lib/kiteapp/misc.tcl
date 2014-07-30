@@ -98,7 +98,7 @@ proc ::kiteapp::blockreplace {text tag content} {
     # NEXT, find and replace the block
     foreach line $inlines {
         if {!$inBlock} {
-            if {[string match "# -kite-start-$tag *" $line]} {
+            if {[string match "# -kite-$tag-start*" $line]} {
                 lappend outlines $line $content
                 set inBlock 1
             } else {
@@ -106,7 +106,7 @@ proc ::kiteapp::blockreplace {text tag content} {
             }
         } else {
             # In Block.  Skip everything but end.
-            if {[string match "# -kite-end-*" $line]} {
+            if {[string match "# -kite-$tag-end*" $line]} {
                 lappend outlines $line
                 set inBlock 0
             }
@@ -185,6 +185,7 @@ proc ::kiteapp::writefile {filename content {opt ""}} {
     # NEXT, write the file, first making sure the directory exists.
     file mkdir [file dirname $filename]
 
+    vputs "writefile $filename"
     set f [open $filename w]
 
     try {
