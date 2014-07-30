@@ -95,17 +95,16 @@ proc ::kiteinfo::includes {} {
     return $kiteInfo(includes)
 }
 
-# gui
+# gui app
+#
+# app  - An application name
 #
 # Returns 1 if the app is supposed to have a GUI, and 0 otherwise.
 
-proc ::kiteinfo::gui {} {
+proc ::kiteinfo::gui {app} {
     variable kiteInfo
 
-    set app $kiteInfo(app)
-    set adict $kiteInfo(app-$app)
-
-    return [dict get $adict gui]
+    return $kiteInfo(gui-$app)
 }
 
 # require name

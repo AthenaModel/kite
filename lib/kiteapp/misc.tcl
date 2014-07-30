@@ -8,8 +8,7 @@
 # DESCRIPTION:
 #   Kite: kiteapp(n) Miscellaneous Commands
 #
-# TODO: Some of these should be deleted once we can make Mars an
-#       external dependency.
+# TODO: Move generic commands to kiteutils(n) (e.g., writefile).
 #
 #-----------------------------------------------------------------------
 
@@ -19,8 +18,6 @@ namespace eval ::kiteapp:: {
     namespace export \
         blockreplace \
         checkargs    \
-        genfile      \
-        gentree      \
         interdict    \
         prepare      \
         treefile     \
@@ -191,7 +188,6 @@ proc ::kiteapp::writefile {filename content {opt ""}} {
     set f [open $filename w]
 
     try {
-        vputs "writefile <$filename>"
         return [puts -nonewline $f $content]
     } finally {
         close $f
@@ -215,60 +211,3 @@ proc ::kiteapp::treefile {path content} {
     writefile $filename $content -ifchanged
 }
 
-# genfile root template path mapping
-#
-# root       - The directory in which the file path is rooted.
-# template   - The name of a kiteapp/*.template file, e.g., "pkgIndex"
-# path       - Path of the file to be generated, relative to root.
-# mapping    - A dict mapping from template parameters to generated code.
-#
-# Generates an output file given a template and a [string map]-style
-# mapping dict.  The $root should be the complete pathname for the
-# root directory.  The $path is the new file's path, relative to the
-# root.  In $path directories should be joined with "/", and the
-# $path can contain template parameters.
-
-proc ::kiteapp::genfile {root template path mapping} {
-    variable library
-
-    # FIRST, get the file name.
-    set filename [file join $root {*}[split [string map $mapping $path] /]]
-
-    # NEXT, get the template text
-    set text [readfile [file join $library templates $template.template]]
-
-    # NEXT, apply the mapping, first adding the template
-    dict set mapping %template $template.template
-    set text [string map $mapping $text]
-
-    # NEXT, save the file.
-    vputs "Generate file: $filename from $template"
-    writefile $filename $text -ifchanged
-}
-
-
-
-# gentree root tdict mapping...
-#
-# root    - Root directory of the tree to generate.
-# tlist   - List of template names and paths.  The paths
-#           should be relative to $root, use "/" as the separator,
-#           and may contain mapping parameters.
-# mapping - The mapping dict, expressed as a single argument or as
-#           parameters and values on the command line.
-#
-# Generates an entire tree, rooted at $root.
-
-proc ::kiteapp::gentree {root tlist args} {
-    # FIRST, get the mapping
-    if {[llength $args] == 1} {
-        set mapping [lindex $args 1]
-    } else {
-        set mapping $args
-    }
-
-    # NEXT, generate each file in the tlist
-    foreach {template path} $tlist {
-        genfile $root $template $path $mapping
-    }
-}

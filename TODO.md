@@ -1,21 +1,15 @@
 # Project TODO List
 
 * Next
-  * Define "subtree app" to handle apps.
-    * Move the last template into this tree.  
-    * It can handle apps vs. appkits.
-    * Update trees to use subtree app for app and appit.
-    * Remove genfile/gentree code and docs (if any docs)
-    * Remove last template.
-  * Create new style app command: -apptype kit|exe -gui
-    * Update project(n)'s parser
-    * Update subtree app.
-  * Update athena-mars documentation to use the new kite.
+  * Replace "-kite-start-*/-kite-end-*" with "-kite-*-start" and 
+    "-kite-*-end"  
+  * Replace "lib" requires with -kite-require block.
+  * Change "lib" statement to "provide" statement
+  * Move "main" from $app.tcl to ${app}app(n)/main.tcl
+  * Update athena-mars to use the new kite.
+  * Clean up "kite new", especially documentation.
 
 * Architecture changes post-reflection
-  * Replace existing templates with "subtree"-based code.
-  * Make "app" and "appkit" just one kind of tree, with options on the "app"
-    command.
   * Remove list of required packages from project.kite's "lib" command.
   * Replace "lib" statement with "provide".
   * Put tags around "package require" blocks in provided libs.
