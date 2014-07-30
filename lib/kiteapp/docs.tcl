@@ -86,6 +86,8 @@ snit::type ::kiteapp::docs {
         # NEXT, determine the manroots.
         set manroots [GetManRoots $dir]
 
+        puts "manroots = $manroots"
+
         # NEXT, format the files one by one
         puts "Formatting documents in $dir..."
 
@@ -137,14 +139,20 @@ snit::type ::kiteapp::docs {
             return
         }
 
-        set count 1
+        set count 0
         set thisdir $dir
         while {$thisdir ne $docroot} {
             incr count
             set thisdir [file dirname $thisdir]
         }
 
-        set relpath "[string repeat "../" $count]man%s/%n.html"
+        if {$count == 0} {
+            set leader "."
+        } else {
+            set leader [string repeat ".." $count]
+        }
+
+        set relpath [file join {*}$leader man%s/%n.html]
 
         return [dict create : $relpath]
     }

@@ -1,8 +1,7 @@
 # Project TODO List
 
 * Next
-  * Update kitedoc(n) to handle the docs index as defined in "subtree proj",
-    and update docs/index.ehtml accordingly.
+  * Man page refs in kitedocs(5) files aren't handled right.
   * Fix kitedocs(n) test failures
   * Test trees with "subtree proj"
   * Define "subtree app"; create new style app command.
