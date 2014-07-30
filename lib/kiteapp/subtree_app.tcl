@@ -112,35 +112,10 @@ codeblock subtree::App_loader {app} {
     }
 
     #-----------------------------------------------------------------------
-    # NEXT, load the application code.
+    # NEXT, load the application code.  This should define the "main"
+    # command.
 
     package require %package
-    namespace import %package::*
-
-    #-----------------------------------------------------------------------
-    # Main Program 
-    #
-    # FIXME: This routine should be defined in the %package(n) package.
-
-    # main argv
-    #
-    # argv       Command line arguments
-    #
-    # This is the main program; it is invoked at the bottom of the file.
-    # It determines the application to invoke, and does so.
-
-    proc main {argv} {
-        #===================================================================
-        # FIXME
-
-        puts "[kiteinfo project] [kiteinfo version]: [kiteinfo description]"
-        puts ""
-        hello $argv
-        puts ""
-
-        # FIXME
-        #===================================================================
-    }
 
     #-----------------------------------------------------------------------
     # Run the program

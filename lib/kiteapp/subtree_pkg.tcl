@@ -20,12 +20,19 @@ namespace eval subtree:: {
 # name   - The package name
 # module - The first $module.tcl file in the package.
 #
-# Saves the package subtree to lib/$name/*.
+# Saves the package subtree to lib/$name/*.  If the module name is
+# "main", it outputs an application main module.
 
 proc subtree::pkg {name module} {
     treefile lib/$name/pkgIndex.tcl    [Pkg_pkgIndex $name]
     treefile lib/$name/pkgModules.tcl  [Pkg_pkgModules $name $module]
-    treefile lib/$name/$module.tcl     [Pkg_module $name $module]
+
+    if {$module eq "main"} {
+        treefile lib/$name/$module.tcl [Pkg_main $name]
+    } else {
+        treefile lib/$name/$module.tcl [Pkg_module $name $module]
+    }
+
     treefile test/$name/all_tests.test [Pkg_all_tests $name]
     treefile test/$name/$module.test   [Pkg_test $name $module]
 }
@@ -147,15 +154,50 @@ codeblock subtree::Pkg_module {name module} {
     #-----------------------------------------------------------------------
     # Commands
 
-    # hello argv
-    #
-    # argv  - Arguments
+    # hello
     #
     # Dummy example proc.
 
-    proc ::%name::hello {argv} {
+    proc ::%name::hello {} {
         puts "%name(n): Hello, world!"
-        return
+    }
+}
+
+# Pkg_main name 
+#
+# name      - The name of the new package
+#
+# Returns the contents of the package's main.tcl file.
+
+codeblock subtree::Pkg_main {name} {
+    set project     [project name]
+    set description [project description]
+} {
+    #-----------------------------------------------------------------------
+    # TITLE:
+    #   main.tcl
+    #
+    # PROJECT:
+    #   %project - %description
+    #
+    # DESCRIPTION:
+    #   %name(n) Package, main module.
+    #
+    #-----------------------------------------------------------------------
+
+    #-----------------------------------------------------------------------
+    # Commands
+
+    # main argv
+    #
+    # argv  - Arguments
+    #
+    # Dummy example main proc.
+
+    proc main {argv} {
+        puts "[kiteinfo project] [kiteinfo version]: [kiteinfo description]"
+        puts ""
+        puts "Arguments: <$argv>"
     }
 }
 

@@ -1,11 +1,11 @@
 # Project TODO List
 
 * Next
-  * Move "main" from $app.tcl to ${app}app(n)/main.tcl
-    * Update app template similarly.
-  * Change "lib" statement to "provide" statement
   * Update athena-mars to use the new kite.
+  * Move Kite's main from kite.tcl to kiteapp/main.tcl.
+    * Ensure Kite uses a standard apploader.
   * Clean up "kite new", especially documentation.
+  * Change "lib" statement to "provide" statement
 
 * Architecture changes post-reflection
   * Remove list of required packages from project.kite's "lib" command.
