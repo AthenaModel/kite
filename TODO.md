@@ -1,13 +1,17 @@
 # Project TODO List
 
 * Next
-  * Man page refs in kitedocs(5) files aren't handled right.
-  * Fix kitedocs(n) test failures
   * Test trees with "subtree proj"
-  * Define "subtree app"; create new style app command.
-  * Update trees to use "subtree app".
-  * Update project(n) to use new style app command.
-  * Update athena-mars' documentation to use the new kite.
+  * Define "subtree app" to handle apps.
+    * Move the last template into this tree.  
+    * It can handle apps vs. appkits.
+    * Update trees to use subtree app for app and appit.
+    * Remove genfile/gentree code and docs (if any docs)
+    * Remove last template.
+  * Create new style app command: -apptype kit|exe -gui
+    * Update project(n)'s parser
+    * Update subtree app.
+  * Update athena-mars documentation to use the new kite.
 
 * Architecture changes post-reflection
   * Replace existing templates with "subtree"-based code.

@@ -84,7 +84,7 @@ test expand-1.2 {custom proc as macro} -setup {
     setup
     trans proc hi {name} {return "Hello, $name!"}
 } -body {
-    trans expand {-<<hi Fred>>-}
+    trans expand {-<hi Fred>-}
 } -cleanup {
     cleanup
 } -result {-Hello, Fred!-}
@@ -97,7 +97,7 @@ test pass-1.1 {two passes} -setup {
     set passes [list]
     trans alias tracker ::tracker
 } -body {
-    trans expand {<<tracker>>}
+    trans expand {<tracker>}
     set passes
 } -cleanup {
     cleanup
@@ -111,7 +111,7 @@ test clear-1.1 {custom proc as macro} -setup {
     trans proc hi {name} {return "Hello, $name!"}
     trans clear
 } -body {
-    trans expand {-<<hi Fred>>-}
+    trans expand {-<hi Fred>-}
 } -returnCodes {
     error
 } -cleanup {
@@ -123,7 +123,7 @@ test clear-1.1 {custom proc as macro} -setup {
 
 test expandFile-1.1 {expands file} -setup {
     setup
-    makeFile "-<<expr 1 + 1>>-" expandFile-1.1.txt
+    makeFile "-<expr 1 + 1>-" expandFile-1.1.txt
 } -body {
     string trim [trans expandFile expandFile-1.1.txt]
 } -cleanup {
@@ -148,7 +148,7 @@ test textToID-1.1 {strips whitespace} -setup {
 test macros-1.1 {hrule} -setup {
     setup
 } -body {
-    trans expand {-<<hrule>>-}
+    trans expand {-<hrule>-}
 } -cleanup {
     cleanup
 } -result {-<p><hr></p>-}
@@ -156,15 +156,15 @@ test macros-1.1 {hrule} -setup {
 test macros-2.1 {lb} -setup {
     setup
 } -body {
-    trans expand {-<<lb>>-}
+    trans expand {-<lb>-}
 } -cleanup {
     cleanup
-} -result {-&lt;&lt;-}
+} -result {-&lt;-}
 
 test macros-3.1 {link} -setup {
     setup
 } -body {
-    trans expand {-<<link foo.html>>-}
+    trans expand {-<link foo.html>-}
 } -cleanup {
     cleanup
 } -result {-<a href="foo.html">foo.html</a>-}
@@ -172,7 +172,7 @@ test macros-3.1 {link} -setup {
 test macros-3.2 {link with anchor} -setup {
     setup
 } -body {
-    trans expand {-<<link foo.html bar>>-}
+    trans expand {-<link foo.html bar>-}
 } -cleanup {
     cleanup
 } -result {-<a href="foo.html">bar</a>-}
@@ -180,7 +180,7 @@ test macros-3.2 {link with anchor} -setup {
 test macros-4.1 {nbsp} -setup {
     setup
 } -body {
-    trans expand {-<<nbsp "a b c">>-}
+    trans expand {-<nbsp "a b c">-}
 } -cleanup {
     cleanup
 } -result {-a&nbsp;b&nbsp;c-}
@@ -188,7 +188,7 @@ test macros-4.1 {nbsp} -setup {
 test macros-5.1 {quote} -setup {
     setup
 } -body {
-    trans expand {-<<quote "<&>">>-}
+    trans expand {-<quote "<&>">-}
 } -cleanup {
     cleanup
 } -result {-&lt;&amp;&gt;-}
@@ -196,7 +196,7 @@ test macros-5.1 {quote} -setup {
 test macros-6.1 {quote} -setup {
     setup
 } -body {
-    trans expand {-<<quote "<&>">>-}
+    trans expand {-<quote "<&>">-}
 } -cleanup {
     cleanup
 } -result {-&lt;&amp;&gt;-}
@@ -204,15 +204,15 @@ test macros-6.1 {quote} -setup {
 test macros-7.1 {rb} -setup {
     setup
 } -body {
-    trans expand {-<<rb>>-}
+    trans expand {-<rb>-}
 } -cleanup {
     cleanup
-} -result {-&gt;&gt;-}
+} -result {-&gt;-}
 
 test macros-8.1 {xref/xrefset} -setup {
     setup
 } -body {
-    trans expand {-<<xref foo(n)>>-}
+    trans expand {-<xref foo(n)>-}
 } -cleanup {
     cleanup
 } -result {-<a href="./mann/foo.html">foo(n)</a>-}
@@ -221,7 +221,7 @@ test macros-8.2 {xref/xrefset} -setup {
     setup
     trans xrefset foo Foo! ./bar.html
 } -body {
-    trans expand {-<<xref foo>>-}
+    trans expand {-<xref foo>-}
 } -cleanup {
     cleanup
 } -result {-<a href="./bar.html">Foo!</a>-}
@@ -229,7 +229,7 @@ test macros-8.2 {xref/xrefset} -setup {
 test macros-8.3 {xrefset returns link} -setup {
     setup
 } -body {
-    trans expand {-<<xrefset foo Foo! ./bar.html>>-}
+    trans expand {-<xrefset foo Foo! ./bar.html>-}
 } -cleanup {
     cleanup
 } -result {-<a href="./bar.html">Foo!</a>-}
@@ -237,7 +237,7 @@ test macros-8.3 {xrefset returns link} -setup {
 test macros-9.1 {swallow} -setup {
     setup
 } -body {
-    trans expand {-<<swallow {expr {1 + 1}}>>-}
+    trans expand {-<swallow {expr {1 + 1}}>-}
 } -cleanup {
     cleanup
 } -result {--}
@@ -245,7 +245,7 @@ test macros-9.1 {swallow} -setup {
 test macros-10.1 {simple macro} -setup {
     setup
 } -body {
-    trans expand {-<<macro hi {name} {Hello, $name!}>><<hi friend>>-}
+    trans expand {-<macro hi {name} {Hello, $name!}><hi friend>-}
 } -cleanup {
     cleanup
 } -result {-Hello, friend!-}
@@ -253,9 +253,9 @@ test macros-10.1 {simple macro} -setup {
 test macros-10.2 {macro with template body} -setup {
     setup
 } -body {
-    trans expand {-<<macro hi {name} {
+    trans expand {-<macro hi {name} {
             set name [string toupper $name]
-        } {Hello, $name!}>><<hi friend>>-}
+        } {Hello, $name!}><hi friend>-}
 } -cleanup {
     cleanup
 } -result {-Hello, FRIEND!-}
@@ -264,11 +264,11 @@ test macros-11.1 {change log} -setup {
     setup
 } -body {
     pexpand {
-        <<changelog>>
-        <<change 7/9/2014 New will>>
+        <changelog>
+        <change 7/9/2014 New will>
         Text describing the change.
-        <</change>>
-        <</changelog>>
+        </change>
+        </changelog>
     }
 } -cleanup {
     cleanup
@@ -297,13 +297,13 @@ test macros-12.1 {procedure} -setup {
     setup
 } -body {
     pexpand {
-        <<procedure>>
-        <<step>>
+        <procedure>
+        <step>
         What to do.
-        <</step/>>
+        </step/>
         How to do it.
-        <</step>>
-        <</procedure>>
+        </step>
+        </procedure>
     }
 } -cleanup {
     cleanup
@@ -329,4 +329,6 @@ How to do it.
 # Cleanup
 
 cleanupTests
+
+
 
