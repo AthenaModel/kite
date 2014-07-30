@@ -192,13 +192,14 @@ snit::type ::kiteapp::trees {
 
         writefile [project root project.kite] [outdent "
             project $project 0.0a1 \"Your Description\"
-            app $app gui
+            app $app -apptype exe -gui
         "]\n
 
         project loadinfo
 
         # NEXT, create the rest of the tree.
-        MakeAppTree $parent $project $app
+        subtree proj
+        subtree app $app
 
         # NEXT, save the project metadata
         project metadata save
@@ -228,40 +229,17 @@ snit::type ::kiteapp::trees {
 
         writefile [project root project.kite] [outdent "
             project $project 0.0a1 \"Your Description\"
-            appkit $app console
+            app $app
         "]\n
 
         project loadinfo
 
         # NEXT, create the rest of the tree.
-        MakeAppTree $parent $project $app
+        subtree proj
+        subtree app $app
 
         # NEXT, save the project metadata
         project metadata save
-    }
-
-
-    # MakeAppTree parent project app
-    #
-    # parent  - The directory in which to create the new tree.
-    # project - The project name, e.g., "athena-mytool"
-    # app     - The application name, e.g., "mytool"
-    #
-    # Builds a default app/appkit template rooted at the given directory.
-    
-    proc MakeAppTree {parent project app} {
-        # FIRST, generate the rest of the tree.
-        gentree [file join $parent $project] {
-            app_main       bin/%app.tcl
-        } %project $project \
-          %app     $app     \
-          %package app_$app \
-          %module  app
-
-        subtree proj
-        subtree pkg ${app}app main
-
-        puts ""
     }
 
 

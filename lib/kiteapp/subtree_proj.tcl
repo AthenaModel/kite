@@ -85,9 +85,9 @@ codeblock ::kiteapp::subtree::Proj_TODO {} {
 codeblock ::kiteapp::subtree::Proj_index {} {
     set project [project name]
 } {
-    <document>
+    <document "Project Documentation">
 
-    <preface doc "Development Documents">Documents</h2>
+    <preface doc "Development Documents">
 
     <ul>
       <li> <link ../README.md "Project README">

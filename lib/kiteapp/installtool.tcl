@@ -146,7 +146,7 @@ snit::type ::kiteapp::installtool {
             file mkdir [file join ~ bin]
 
             # Copy app
-            # TODO: define [project app exefile $app]
+            # TODO: use [project app exefile $app]
 
             if {[project app apptype $app] eq "kit"} {
                 set kitname $app.kit
