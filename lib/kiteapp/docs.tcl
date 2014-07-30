@@ -86,7 +86,7 @@ snit::type ::kiteapp::docs {
         # NEXT, determine the manroots.
         set manroots [GetManRoots $dir]
 
-        puts "manroots = $manroots"
+        vputs "manroots = $manroots"
 
         # NEXT, format the files one by one
         puts "Formatting documents in $dir..."
