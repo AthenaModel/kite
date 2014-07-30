@@ -10,7 +10,7 @@
 #
 #-----------------------------------------------------------------------
 
-namespace eval subtree:: {
+namespace eval ::kiteapp::subtree:: {
     namespace export \
         app
 }
@@ -21,7 +21,7 @@ namespace eval subtree:: {
 #
 # Saves an application's files.
 
-proc subtree::app {app} {
+proc ::kiteapp::subtree::app {app} {
     treefile bin/$app.tcl [App_loader $app]
     pkg ${app}app main
 }
@@ -32,7 +32,7 @@ proc subtree::app {app} {
 #
 # Returns the contents of the default app loader file.
 
-codeblock subtree::App_loader {app} {
+codeblock ::kiteapp::subtree::App_loader {app} {
     set project [project name]
     set package ${app}app
 } {
@@ -161,5 +161,4 @@ codeblock subtree::App_loader {app} {
         puts "\nStack Trace:\n[dict get $eopts -errorinfo]"
     }
 }
-
 

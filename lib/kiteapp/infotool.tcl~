@@ -16,7 +16,7 @@
 set ::ktools(info) {
     arglist     {}
     package     kiteapp
-    ensemble    infotool
+    ensemble    ::kiteapp::infotool
     description "Display information about Kite and this project."
     intree      yes
 }
@@ -29,7 +29,7 @@ set ::khelp(info) {
 #-----------------------------------------------------------------------
 # tool::info ensemble
 
-snit::type infotool {
+snit::type ::kiteapp::infotool {
     # Make it a singleton
     pragma -hasinstances no -hastypedestroy no
 
@@ -49,7 +49,6 @@ snit::type infotool {
         puts ""
     }    
 }
-
 
 
 

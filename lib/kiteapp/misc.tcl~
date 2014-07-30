@@ -15,6 +15,15 @@
 namespace eval ::kiteapp:: {
     variable verbose 0
 
+    namespace export \
+        blockreplace \
+        blocklines   \
+        checkargs    \
+        interdict    \
+        prepare      \
+        treefile     \
+        vputs        \
+        writefile
 }
 
 #-----------------------------------------------------------------------
@@ -27,8 +36,10 @@ namespace eval ::kiteapp:: {
 # Joins its arguments together and prints them to stdout, only if
 # -verbose is on.
 
-proc vputs {args} {
-    if {$::kiteapp::verbose} {
+proc ::kiteapp::vputs {args} {
+    variable verbose
+
+    if {$verbose} {
         puts [join $args]
     }
 }
@@ -43,7 +54,7 @@ proc vputs {args} {
 #
 # Throws an error if there are the wrong number of arguments.
 
-proc checkargs {tool min max argspec argv} {
+proc ::kiteapp::checkargs {tool min max argspec argv} {
     set argc [llength $argv]
     if {($argc < $min) ||
         ($max ne "-" && $argc > $max)
@@ -60,7 +71,7 @@ proc checkargs {tool min max argspec argv} {
 #
 # Returns a dictionary of the keys and values
 
-proc interdict {keys values} {
+proc ::kiteapp::interdict {keys values} {
     set d [dict create]
 
     foreach k $keys v $values {
@@ -79,7 +90,7 @@ proc interdict {keys values} {
 # Looks for the '-kite-$tag-start' and '-kite-$tag-end' lines for the given
 # tag, and replaces the text between them with the given content.
 
-proc blockreplace {text tag content} {
+proc ::kiteapp::blockreplace {text tag content} {
     # FIRST, prepare
     set inlines [split $text "\n"]
     set outlines [list]
@@ -116,7 +127,7 @@ proc blockreplace {text tag content} {
 # tag, and returns a list of the lines in the block of text between them, 
 # the empty list if none.
 
-proc blocklines {text tag} {
+proc ::kiteapp::blocklines {text tag} {
     # FIRST, prepare
     set inlines [split $text "\n"]
     set outlines [list]
@@ -155,7 +166,7 @@ proc blocklines {text tag} {
 # Does a string trim on the named var's value, applies
 # any options, and puts the result back in the var.
 
-proc prepare {varname args} {
+proc kiteapp::prepare {varname args} {
     upvar 1 $varname var
 
     set var [string trim $var]
@@ -196,7 +207,7 @@ proc prepare {varname args} {
 # open/write errors.  If -ifchanged is given, reads the file first,
 # and only writes the content if it's different than what was there.
 
-proc writefile {filename content {opt ""}} {
+proc ::kiteapp::writefile {filename content {opt ""}} {
     # FIRST, If we care, has the file's content changed?
     if {$opt eq "-ifchanged" && [file exists $filename]} {
         set oldContent [readfile $filename]
@@ -209,7 +220,7 @@ proc writefile {filename content {opt ""}} {
     # NEXT, write the file, first making sure the directory exists.
     file mkdir [file dirname $filename]
 
-    vputs "writefile <$filename>"
+    vputs "writefile $filename"
     set f [open $filename w]
 
     try {
@@ -227,7 +238,7 @@ proc writefile {filename content {opt ""}} {
 #
 # Outputs the file with the given content.
 
-proc treefile {path content} {
+proc ::kiteapp::treefile {path content} {
     # FIRST, get the filename.
     set filename [project root {*}[split $path /]]
 
@@ -235,5 +246,4 @@ proc treefile {path content} {
     vputs "Generate file: $filename"
     writefile $filename $content -ifchanged
 }
-
 

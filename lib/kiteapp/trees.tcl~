@@ -31,6 +31,10 @@
 #
 #-----------------------------------------------------------------------
 
+namespace eval ::kiteapp:: {
+    namespace export trees
+}
+
 #-----------------------------------------------------------------------
 # Help for the project trees.
 
@@ -124,7 +128,7 @@ set ::khelp(lib) {
 #-----------------------------------------------------------------------
 # trees ensemble
 
-snit::type trees {
+snit::type ::kiteapp::trees {
     # Make it a singleton
     pragma -hasinstances no -hastypedestroy no
 
@@ -274,7 +278,6 @@ snit::type trees {
         puts ""
     }    
 }
-
 
 
 

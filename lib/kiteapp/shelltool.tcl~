@@ -17,7 +17,7 @@
 set ::ktools(shell) {
     arglist     {}
     package     kiteapp
-    ensemble    shelltool
+    ensemble    ::kiteapp::shelltool
     description "Open interactive Tcl shell"
     intree      yes
 }
@@ -37,7 +37,7 @@ set ::khelp(shell) {
 #-----------------------------------------------------------------------
 # shelltool ensemble
 
-snit::type shelltool {
+snit::type ::kiteapp::shelltool {
     # Make it a singleton
     pragma -hasinstances no -hastypedestroy no
 
@@ -131,7 +131,6 @@ snit::type shelltool {
     }
     
 }
-
 
 
 

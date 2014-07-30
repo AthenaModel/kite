@@ -21,7 +21,7 @@
 set ::ktools(build) {
     arglist     {}
     package     kiteapp
-    ensemble    buildtool
+    ensemble    ::kiteapp::buildtool
     description "Build the entire project."
     intree      yes
 }
@@ -39,7 +39,7 @@ set ::khelp(build) {
 #-----------------------------------------------------------------------
 # buildtool ensemble
 
-snit::type buildtool {
+snit::type ::kiteapp::buildtool {
     # Make it a singleton
     pragma -hasinstances no -hastypedestroy no
 
@@ -319,7 +319,6 @@ snit::type buildtool {
     }
     
 }
-
 
 
 

@@ -21,7 +21,7 @@
 set ::ktools(docs) {
     arglist     {?target? ?-clean?}
     package     kiteapp
-    ensemble    docstool
+    ensemble    ::kiteapp::docstool
     description "Format project documentation."
     intree      yes
 }
@@ -58,7 +58,7 @@ set ::khelp(docs) {
 #-----------------------------------------------------------------------
 # docstool ensemble
 
-snit::type docstool {
+snit::type ::kiteapp::docstool {
     # Make it a singleton
     pragma -hasinstances no -hastypedestroy no
 
@@ -125,7 +125,6 @@ snit::type docstool {
  
     
 }
-
 
 
 

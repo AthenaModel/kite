@@ -16,7 +16,7 @@
 set ::ktools(test) {
     arglist     {?target module options...?}
     package     kiteapp
-    ensemble    testtool
+    ensemble    ::kiteapp::testtool
     description "Runs some or all of the project test suite."
     intree      yes
 }
@@ -51,7 +51,7 @@ set ::khelp(test) {
 #-----------------------------------------------------------------------
 # testtool ensemble
 
-snit::type testtool {
+snit::type ::kiteapp::testtool {
     # Make it a singleton
     pragma -hasinstances no -hastypedestroy no
 
@@ -138,7 +138,6 @@ snit::type testtool {
         }
     }
 }
-
 
 
 

@@ -17,7 +17,7 @@
 set ::ktools(run) {
     arglist     {}
     package     kiteapp
-    ensemble    runtool
+    ensemble    ::kiteapp::runtool
     description "Run application"
     intree      yes
 }
@@ -31,7 +31,7 @@ set ::khelp(run) {
 #-----------------------------------------------------------------------
 # runtool ensemble
 
-snit::type runtool {
+snit::type ::kiteapp::runtool {
     # Make it a singleton
     pragma -hasinstances no -hastypedestroy no
 
@@ -65,7 +65,6 @@ snit::type runtool {
         eval exec $command
     }    
 }
-
 
 
 

@@ -10,7 +10,7 @@
 #
 #-----------------------------------------------------------------------
 
-namespace eval subtree:: {
+namespace eval ::kiteapp::subtree:: {
     namespace export \
         proj
 }
@@ -19,7 +19,7 @@ namespace eval subtree:: {
 #
 # Saves the main project files to the project root.
 
-proc subtree::proj {} {
+proc ::kiteapp::subtree::proj {} {
     treefile .gitignore       [Proj_gitignore]
     treefile README.md        [Proj_README]
     treefile TODO.md          [Proj_TODO]
@@ -30,7 +30,7 @@ proc subtree::proj {} {
 #
 # Returns the contents of the default .gitignore file.
 
-codeblock subtree::Proj_gitignore {} {
+codeblock ::kiteapp::subtree::Proj_gitignore {} {
     # Kite Artifacts
     /.kite
     /includes
@@ -47,7 +47,7 @@ codeblock subtree::Proj_gitignore {} {
 #
 # Returns the contents of the default README.md file.
 
-codeblock subtree::Proj_README {} {
+codeblock ::kiteapp::subtree::Proj_README {} {
     set project [project name]
 } {
     # %project - Your new project
@@ -67,7 +67,7 @@ codeblock subtree::Proj_README {} {
 #
 # Returns the contents of the default TODO.md file.
 
-codeblock subtree::Proj_TODO {} {
+codeblock ::kiteapp::subtree::Proj_TODO {} {
     set project [project name]
 } {
     # %project - To Do List
@@ -82,7 +82,7 @@ codeblock subtree::Proj_TODO {} {
 #
 # Returns the contents of the package's documentation index file.
 
-codeblock subtree::Proj_index {} {
+codeblock ::kiteapp::subtree::Proj_index {} {
     set project [project name]
 } {
     <document "Project Documentation">
@@ -105,4 +105,3 @@ codeblock subtree::Proj_index {} {
 
     </document>
 }
-

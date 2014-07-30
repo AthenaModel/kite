@@ -10,7 +10,7 @@
 #
 #-----------------------------------------------------------------------
 
-namespace eval subtree:: {
+namespace eval ::kiteapp::subtree:: {
     namespace export \
         pkg
 }
@@ -22,7 +22,7 @@ namespace eval subtree:: {
 #
 # Saves the package subtree to lib/$name/*.
 
-proc subtree::pkg {name module} {
+proc ::kiteapp::subtree::pkg {name module} {
     treefile lib/$name/pkgIndex.tcl    [Pkg_pkgIndex $name]
     treefile lib/$name/pkgModules.tcl  [Pkg_pkgModules $name $module]
     treefile lib/$name/$module.tcl     [Pkg_module $name $module]
@@ -36,7 +36,7 @@ proc subtree::pkg {name module} {
 #
 # Returns the contents of the $package(n) pkgIndex.tcl file.
 
-codeblock subtree::Pkg_pkgIndex {name} {
+codeblock ::kiteapp::subtree::Pkg_pkgIndex {name} {
     set project [project name]
     set version [project version]
     set description [project description]
@@ -66,7 +66,7 @@ codeblock subtree::Pkg_pkgIndex {name} {
 #
 # Returns the contents of the $package(n) pkgModules.tcl file.
 
-codeblock subtree::Pkg_pkgModules {name module} {
+codeblock ::kiteapp::subtree::Pkg_pkgModules {name module} {
     set project [project name]
     set version [project version]
     set description [project description]
@@ -121,7 +121,7 @@ codeblock subtree::Pkg_pkgModules {name module} {
 #
 # Returns the contents of the package's $module.tcl file.
 
-codeblock subtree::Pkg_module {name module} {
+codeblock ::kiteapp::subtree::Pkg_module {name module} {
     set project     [project name]
     set description [project description]
 } {
@@ -165,7 +165,7 @@ codeblock subtree::Pkg_module {name module} {
 #
 # Returns the contents of the package's all_tests.test file.
 
-codeblock subtree::Pkg_all_tests {name} {
+codeblock ::kiteapp::subtree::Pkg_all_tests {name} {
     set project     [project name]
     set description [project description]
 } {
@@ -208,7 +208,7 @@ codeblock subtree::Pkg_all_tests {name} {
 #
 # Returns the contents of the package's $module.test file.
 
-codeblock subtree::Pkg_test {name module} {
+codeblock ::kiteapp::subtree::Pkg_test {name module} {
     set project     [project name]
     set description [project description]
 } {
@@ -278,7 +278,6 @@ codeblock subtree::Pkg_test {name module} {
 
     tcltest::cleanupTests
 }
-
 
 
 

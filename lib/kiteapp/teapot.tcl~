@@ -13,10 +13,14 @@
 #
 #-----------------------------------------------------------------------
 
+namespace eval ::kiteapp:: {
+    namespace export teapot
+}
+
 #-----------------------------------------------------------------------
 # teapot ensemble
 
-snit::type teapot {
+snit::type ::kiteapp::teapot {
     # Make it a singleton
     pragma -hasinstances no -hastypedestroy no
 
@@ -221,4 +225,3 @@ snit::type teapot {
 
 
 }
-

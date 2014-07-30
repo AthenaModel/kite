@@ -16,7 +16,7 @@
 set ::ktools(install) {
     arglist     {}
     package     kiteapp
-    ensemble    installtool
+    ensemble    ::kiteapp::installtool
     description "Build and install applications to ~/bin."
     intree      yes
 }
@@ -40,7 +40,7 @@ set ::khelp(install) {
 #-----------------------------------------------------------------------
 # tool::help ensemble
 
-snit::type installtool {
+snit::type ::kiteapp::installtool {
     # Make it a singleton
     pragma -hasinstances no -hastypedestroy no
 
@@ -177,7 +177,6 @@ snit::type installtool {
         }
     }    
 }
-
 
 
 

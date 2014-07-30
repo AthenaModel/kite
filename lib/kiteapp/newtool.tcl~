@@ -16,7 +16,7 @@
 set ::ktools(new) {
     arglist     {template project ?arg?}
     package     kiteapp
-    ensemble    newtool
+    ensemble    ::kiteapp::newtool
     description "Create a new project tree on the disk."
     intree      no
 }
@@ -45,7 +45,7 @@ set ::khelp(new) {
 #-----------------------------------------------------------------------
 # newtool ensemble
 
-snit::type newtool {
+snit::type ::kiteapp::newtool {
     # Make it a singleton
     pragma -hasinstances no -hastypedestroy no
 
@@ -100,7 +100,6 @@ snit::type newtool {
     
 
 }
-
 
 
 

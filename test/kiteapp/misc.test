@@ -27,8 +27,6 @@ namespace import ::tcltest::*
 # Load the package to be tested
 
 package require kiteapp
-namespace import ::kiteapp::*
-namespace import ::kiteutils::*
 
 #-------------------------------------------------------------------
 # Setup
@@ -152,16 +150,16 @@ after
 test blockreplace-1.2 {tag found} -body {
     pprint blockreplace [outdent {
         before
-        # -kite-start-mytag DO NOT EDIT BY HAND
+        # -kite-mytag-start DO NOT EDIT BY HAND
         foo
-        # -kite-end-mytag
+        # -kite-mytag-end
         after
     }] mytag "fred"
 } -result {
 before
-# -kite-start-mytag DO NOT EDIT BY HAND
+# -kite-mytag-start DO NOT EDIT BY HAND
 fred
-# -kite-end-mytag
+# -kite-mytag-end
 after
 }
 

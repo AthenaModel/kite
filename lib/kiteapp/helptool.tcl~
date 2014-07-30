@@ -16,7 +16,7 @@
 set ::ktools(help) {
     arglist     {}
     package     kiteapp
-    ensemble    helptool
+    ensemble    ::kiteapp::helptool
     description "Display this help, or help for a given tool."
     intree      no
 }
@@ -29,7 +29,7 @@ set ::khelp(help) {
 #-----------------------------------------------------------------------
 # tool::help ensemble
 
-snit::type helptool {
+snit::type ::kiteapp::helptool {
     # Make it a singleton
     pragma -hasinstances no -hastypedestroy no
     #-------------------------------------------------------------------
@@ -94,7 +94,6 @@ snit::type helptool {
         }
     }
 }
-
 
 
 

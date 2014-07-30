@@ -19,7 +19,7 @@
 set ::ktools(deps) {
     arglist     {?option...?}
     package     kiteapp
-    ensemble    depstool
+    ensemble    ::kiteapp::depstool
     description "Manage project dependencies"
     intree      yes
 }
@@ -64,7 +64,7 @@ set ::khelp(deps) {
 #-----------------------------------------------------------------------
 # depstool ensemble
 
-snit::type depstool {
+snit::type ::kiteapp::depstool {
     # Make it a singleton
     pragma -hasinstances no -hastypedestroy no
 
@@ -134,7 +134,6 @@ snit::type depstool {
 
 
 }
-
 
 
 

@@ -16,7 +16,7 @@
 set ::ktools(version) {
     arglist     {}
     package     kiteapp
-    ensemble    ::kiteapp::versiontool
+    ensemble    versiontool
     description "Display Kite's version information."
     intree      yes
 }
@@ -29,7 +29,7 @@ set ::khelp(version) {
 #-----------------------------------------------------------------------
 # tool::version ensemble
 
-snit::type ::kiteapp::versiontool {
+snit::type versiontool {
     # Make it a singleton
     pragma -hasinstances no -hastypedestroy no
 
@@ -46,6 +46,7 @@ snit::type ::kiteapp::versiontool {
         puts "Kite [kiteinfo version]\n"
     }    
 }
+
 
 
 

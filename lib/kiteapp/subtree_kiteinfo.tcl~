@@ -10,7 +10,7 @@
 #
 #-----------------------------------------------------------------------
 
-namespace eval subtree:: {
+namespace eval ::kiteapp::subtree:: {
     namespace export \
         kiteinfo
 }
@@ -21,7 +21,7 @@ namespace eval subtree:: {
 #
 # Saves the kiteinfo subtree to lib/kiteinfo/*.
 
-proc subtree::kiteinfo {metadata} {
+proc ::kiteapp::subtree::kiteinfo {metadata} {
     treefile lib/kiteinfo/pkgIndex.tcl   [KiteInfo_pkgIndex]
     treefile lib/kiteinfo/pkgModules.tcl [KiteInfo_pkgModules]
     treefile lib/kiteinfo/kiteinfo.tcl   [KiteInfo_kiteinfo $metadata]
@@ -31,7 +31,7 @@ proc subtree::kiteinfo {metadata} {
 #
 # Returns the contents of the kiteinfo(n) pkgIndex.tcl file.
 
-codeblock subtree::KiteInfo_pkgIndex {} {
+codeblock ::kiteapp::subtree::KiteInfo_pkgIndex {} {
     set project [project name]
     set description [project description]
 } {
@@ -55,7 +55,7 @@ codeblock subtree::KiteInfo_pkgIndex {} {
 #
 # Returns the contents of the kiteinfo(n) pkgModules.tcl file.
 
-codeblock subtree::KiteInfo_pkgModules {} {
+codeblock ::kiteapp::subtree::KiteInfo_pkgModules {} {
     set project [project name]
     set description [project description]
 } {
@@ -96,7 +96,7 @@ codeblock subtree::KiteInfo_pkgModules {} {
 #
 # Returns the contents of the kiteinfo(n) kiteinfo.tcl file.
 
-codeblock subtree::KiteInfo_kiteinfo {metadata} {
+codeblock ::kiteapp::subtree::KiteInfo_kiteinfo {metadata} {
     set project     [project name]
     set description [project description]
 
@@ -215,6 +215,5 @@ codeblock subtree::KiteInfo_kiteinfo {metadata} {
         set version [dict get $kiteInfo(require-$name) version]
     }
 }
-
 
 
