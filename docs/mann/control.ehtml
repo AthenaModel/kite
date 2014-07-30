@@ -35,6 +35,50 @@ in the global scope.  This is to be used when calling callback
 commands.  If <i>prefix</i> is the empty list, then <iref callwith>
 does and returns nothing.<p>
 
+<defitem foroption {foroption <i optvar argvar> ?-all? <i body>}>
+
+The <iref foroption> command is a tool for looping over options and values
+from an argument list.  Here, <i argvar> is the name of the variable
+containing the argument list, and <i optvar> is the name of a variable
+to receive the successive option names.  The <i body> is a set of 
+Tcl <tt switch> cases, one for each valid option.<p>
+
+The options are extracted from the argument list using 
+<xref listx(n) lshift>.  When an option takes a value, the relevant 
+switch case can extract its value from the list in the same way.<p>
+
+It's an <b INVALID> error if <iref foroption> reads an option without
+a matching case.<p>  
+
+By default, <iref foroption> keeps reading options until it reaches
+the end of the argument list, or finds a list item that begins with 
+something other than "-".  In this case, the <i argvar> will contain
+the non-option arguments when <iref foroption> returns.<p>
+
+If the <b -all> option is included, 
+<iref foroption> throws an <b INVALID> error if finds an argument
+that isn't an option or an option value.<p>
+
+For example,<p>
+
+<example>
+proc myproc {args} {
+    array set opts {
+        -this {}
+        -that {}
+    }
+
+    foroption opt args -all {
+        -this -
+        -that { 
+            set opts($opt) [lshift args] 
+        }
+    }
+
+    ...
+}
+</example>
+
 
 <defitem require {require <i>expression message</i>}>
 

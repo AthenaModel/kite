@@ -68,6 +68,38 @@ test callwith-1.5 {call with empty prefix} -body {
     callwith "" a b c d
 } -result {}
 
+#-------------------------------------------------------------------
+# foroption
+
+proc fotest {all args} {
+    set flag  0
+    set value ""
+
+    foroption opt args {*}$all {
+        -flag  { set flag 1              }
+        -value { set value [lshift args] }
+    }
+
+    return [list $flag $value $args]
+}
+
+test foroption-1.1 {Empty arglist} -body {
+    fotest -all
+} -result {0 {} {}}
+
+test foroption-1.2 {with options} -body {
+    fotest -all -flag -value fred
+} -result {1 fred {}}
+
+test foroption-1.3 {with extras} -body {
+    fotest "" -flag -value fred extra args
+} -result {1 fred {extra args}}
+
+test foroption-1.4 {with invalid extras} -body {
+    catch {fotest -all -flag -value fred extra args} result
+    list $errorCode $result
+} -result {INVALID {Unknown option: "extra"}}
+
 
 #-------------------------------------------------------------------
 # require

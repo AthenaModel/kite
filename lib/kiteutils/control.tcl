@@ -17,6 +17,7 @@ namespace eval ::kiteutils:: {
     namespace export    \
         assert          \
         callwith        \
+        foroption       \
         require 
 }
 
@@ -62,3 +63,55 @@ proc ::kiteutils::require {expression message} {
     return -code error -errorcode ASSERT $message
 }
 
+# foroption optvar argvar ?-all? body
+#
+# optvar   - A variable to receive an option, e.g., -myoption
+# argvar   - An argument list
+# body     - A body of switch cases for the options.
+#
+# Steps through the argument list in the argvar, extracting options
+# and passing them to the relevant case in the body.  Continues
+# until all arguments are consumed or it reaches an argument
+# that's not an option.  If -all is given, it assumes that
+# it should consume the entire argument list.
+#
+# The cases may freely refer to the optvar and the argvar.
+#
+# When an unexpected option is found, throws an error.
+# On success, all data read will have been extracted from the argvar.
+
+proc ::kiteutils::foroption {optvar argvar allopt {cases ""}} {
+    upvar 1 $optvar opt
+    upvar 1 $argvar argv
+
+    set allflag 0
+
+    if {$allopt eq "-all"} {
+        set allflag 1
+    } elseif {$cases ne ""} {
+        error "Unexpected flag: \"$allopt\", should be -all"
+    }
+
+    if {$cases eq ""} {
+        set cases $allopt
+    }
+
+    append cases [format {
+        default {
+            throw INVALID "Unknown option: \"$%s\""
+        }
+    } $optvar]
+
+    while {
+        [llength $argv] > 0 &&
+        ($allflag || [string index [lindex $argv 0] 0] eq "-")
+    } {
+        set opt [lshift argv]
+
+        set command [list switch -exact -- $opt $cases] 
+
+        uplevel 1 $command
+    }
+
+    return
+}
