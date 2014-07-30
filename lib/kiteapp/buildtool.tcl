@@ -31,8 +31,7 @@ set ::khelp(build) {
     project's project.kite file.  In particular:
 
     * Libs will be built as .kite/libzips/package-<name>*.zip.
-    * Apps will be built as bin/<name>[.exe]
-    * Appkits will be built as bin/<name>.kit
+    * App will be built as bin/<name>[.exe] or bin/<name>.kit
 
     Build also builds the man pages and documentation.
 }
@@ -68,16 +67,9 @@ snit::type ::kiteapp::buildtool {
             BuildTeapotZip $lib
         }
 
-        # NEXT, build the app
-
-        if {[project app name] ne ""} {
-            set exe [project app get exe]
-
-            switch -exact $exe {
-                pack    { BuildAppPack [project app name] }
-                kit     { BuildAppKit  [project app name] }
-                default { error "Unknown application type: \"$exe\"" }
-            }
+        # NEXT, build the apps
+        foreach app [project app names] {
+            BuildApp $app
         }
 
         # NEXT, build documentation
@@ -89,109 +81,50 @@ snit::type ::kiteapp::buildtool {
     #-------------------------------------------------------------------
     # Building Apps
 
-    # BuildAppKit name
+    # BuildApp app
     #
-    # name   - The name of an appkit
+    # app   - The name of an app
     #
-    # Builds the appkit if possible.  An appkit is a starkit that
-    # includes $root/bin/$name.tcl (the main script) and the entire
-    # lib/ tree (if any).
-    #
-    # It is assumed that TclDevKit is installed and accessible, and
-    # that kite.kit is using the same tclsh as is being used in 
-    # development.
+    # Builds the app.
 
-    proc BuildAppKit {name} {
-        # FIRST, do we have the main script
-        set main [project app loader]
+    proc BuildApp {app} {
+        # FIRST, get relevant data
+        set main    [project app loader $app]
+        set exefile [project app exefile $app]
+        set exepath [project root bin $exefile]
 
+        # NEXT, do we have the main script
         if {![file exists $main]} {
             throw fatal \
-                "Cannot build appkit '$name'; the 'bin/$name.tcl script is missing."
+                "Cannot build app '$app'; the 'bin/$app.tcl script is missing."
         }
 
-        # NEXT, erase the existing kit, if any
-        set kit [project root bin $name.kit]
-
-        if {[file exists $kit]} {
-            vputs "Deleting old $name.kit"
-            catch {file delete -force $kit}
-        }
-
-        # NEXT, begin to build up the command.
-        set command [TclAppCommand $kit]
-
-        # NEXT, prepare to write logfile.
-        set logfile [project root .kite build_$name.log]
-        file mkdir [file dirname $logfile]
-
-        lappend command \
-            >&  $logfile
-
-        # NEXT, Build the appkit
-
-        puts "Building $name.kit as '$kit'"
-        puts "See $logfile for details.\n"
-
-        try {
-            eval exec $command
-        } on error {result} {
-            throw FATAL "Error building $name.kit; see $logfile:\n$result"
-        }
-    }
-
-    # BuildAppPack name
-    #
-    # name   - The name of an app
-    #
-    # Builds the app if possible.  An app is a starpack that
-    # includes $root/bin/$name.tcl (the main script) and the entire
-    # lib/ tree (if any), plus includes and requires.
-    #
-    # It is assumed that TclDevKit is installed and accessible, and
-    # that kite.kit is using the same tclsh as is being used in 
-    # development.
-
-    proc BuildAppPack {name} {
-        # FIRST, do we have the main script
-        set main [project app loader]
-
-        if {![file exists $main]} {
-            throw fatal \
-                "Cannot build app '$name'; the 'bin/$name.tcl script is missing."
-        }
-
-        # NEXT, get the executable name.
-        set exefile [project app name]
-
-        if {$::tcl_platform(platform) eq "windows"} {
-            append exefile .exe
-        } 
-        set exe [project root bin $exefile]
-
-        # NEXT, get the basekit name.
-        set basekit [FindBaseKit [project app get gui]]
-
-        # NEXT, begin to build up the command.
-        set command [TclAppCommand $exe $basekit]
-
-        # NEXT, prepare to write logfile.
-        set logfile [project root .kite build_$name.log]
-        file mkdir [file dirname $logfile]
-
-        lappend command \
-            >&  $logfile
-
-        # NEXT, erase the existing exe file, if any
-
-        if {[file exists $exe]} {
+        # NEXT, erase the existing app, if any
+        if {[file exists $exepath]} {
             vputs "Deleting old $exefile"
-            catch {file delete -force $exe}
+            catch {file delete -force $exepath}
         }
+
+        # NEXT, get the basekit, if any.
+        if {[project app apptype $app] eq "exe"} {
+            set basekit [FindBaseKit [project app gui]]
+        } else {
+            set basekit ""
+        }
+
+        # NEXT, begin to build up the command.
+        set command [TclAppCommand $app $exepath $basekit]
+
+        # NEXT, prepare to write logfile.
+        set logfile [project root .kite build_$app.log]
+        file mkdir [file dirname $logfile]
+
+        lappend command \
+            >&  $logfile
 
         # NEXT, Build the app
 
-        puts "Building $exefile as '$exe'"
+        puts "Building $app as '$exepath'"
         puts "See $logfile for details.\n"
 
         try {
@@ -201,17 +134,18 @@ snit::type ::kiteapp::buildtool {
         }
     }
 
-    # TclAppCommand target ?basekit?
+    # TclAppCommand app target basekit
     #
+    # app      - The name of the app
     # target   - The name of the output file.
     # basekit  - The name of the basekit, or ""
     #
     # Returns the base tclapp command for building apps and app kits.
 
-    proc TclAppCommand {target {basekit ""}} {
+    proc TclAppCommand {app target basekit} {
         lappend command                 \
             -ignorestderr --            \
-            tclapp [project app loader] \
+            tclapp [project app loader $app] \
             [project root lib * *]
 
         # NEXT, include library subdirectories, if any.

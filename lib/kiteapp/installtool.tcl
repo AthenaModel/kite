@@ -63,9 +63,8 @@ snit::type ::kiteapp::installtool {
         }
 
         # NEXT, install any applications.
-        # TODO: Support multiple apps.
-        if {[project app name] ne ""} {
-            InstallApp
+        foreach app [project app names] {
+            InstallApp $app
         }
     }
 
@@ -135,22 +134,25 @@ snit::type ::kiteapp::installtool {
     #-------------------------------------------------------------------
     # Installing Applications
     
-    # InstallApp
+    # InstallApp app
+    #
+    # app  - The named application
     #
     # Installs the application to ~/bin.
 
-    proc InstallApp {} {
+    proc InstallApp {app} {
         try {
             # FIRST, make sure that ~/bin exists.
             file mkdir [file join ~ bin]
 
             # Copy app
-            set app [project app name]
-            if {[project app get exe] eq "kit"} {
+            # TODO: define [project app exefile $app]
+
+            if {[project app apptype $app] eq "kit"} {
                 set kitname $app.kit
                 set source [project root bin $kitname]
                 set target [file join ~ bin $app]
-            } elseif {[project app get exe] eq "pack"} {
+            } elseif {[project app apptype $app] eq "exe"} {
                 if {$::tcl_platform(platform) eq "windows"} {
                     set exename "$app.exe"
                 } else {

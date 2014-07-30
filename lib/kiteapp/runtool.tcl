@@ -45,9 +45,7 @@ snit::type ::kiteapp::runtool {
 
     typemethod execute {argv} {
         # FIRST, is there an app/appkit?
-        set script [project app loader]
-
-        if {$script eq ""} {
+        if {![project hasapp]} {
             throw FATAL "The project.kite file doesn't define an application."
         }
 
@@ -56,8 +54,8 @@ snit::type ::kiteapp::runtool {
 
         # NEXT, set up the rest of command.
         lappend command \
-            tclsh [project app loader] {*}$argv \
-            >@ stdout 2>@ stderr
+            tclsh [project app loader [project app primary]] \
+                {*}$argv >@ stdout 2>@ stderr
 
         # NEXT, execute it in the project root, in the background,
         # and exit.

@@ -1,7 +1,6 @@
 # Project TODO List
 
 * Next
-  * Test trees with "subtree proj"
   * Define "subtree app" to handle apps.
     * Move the last template into this tree.  
     * It can handle apps vs. appkits.
