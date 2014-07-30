@@ -48,10 +48,6 @@ snit::type ::kiteapp::project {
     #   gui-$app       - 1 or 0
     #
     #   libs           - List of library package names
-    #   lib-$name      - Info dict for the lib
-    #
-    #       requires   - List of required package names specific
-    #                    to this library.
     #
     #   includes       - List of include names
     #   include-$name  - inclusion dictionary for the $name
@@ -591,20 +587,14 @@ snit::type ::kiteapp::project {
         set info(gui-$name)     $gui
     }
 
-    # LibCmd name ?options?
+    # LibCmd name
     #
     # name   - The name of the library package and its directory.
-    #          E.g., "kiteapp".
-    #
-    # Options:
-    #
-    #   -requires list    - A list of "require" names that are
-    #                       explicitly required by this library.
-    #                       Defaults to "*", meaning all. 
+    #          E.g., "kiteutils".
     #
     # Implementation of the "lib" kite file command.  
 
-    proc LibCmd {name args} {
+    proc LibCmd {name} {
         # FIRST, get the name.
         set name [string trim [string tolower $name]]
 
@@ -616,24 +606,7 @@ snit::type ::kiteapp::project {
             throw SYNTAX "Duplicate lib name \"$name\""
         }
 
-        # NEXT, get the options
-        dict set libdict requires *
-
-        while {[llength $args] > 0} {
-            set opt [lshift args]
-
-            switch -exact -- $opt {
-                -requires {
-                    dict set libdict requires [lshift args]
-                }
-                default {
-                    throw SYNTAX "Invalid lib option \"$opt\""
-                }
-            }
-        }
-
         ladd info(libs) $name
-        set info(lib-$name) $libdict
     }
 
     # IncludeCmd name vcs url tag
@@ -799,46 +772,31 @@ snit::type ::kiteapp::project {
                 set text2 [blockreplace $text1 provide $content]
 
                 # NEXT, update "package require"
-                set content [LibRequires $lib]
+                set newlines [list]
+
+                foreach line [blocklines $text2 require] {
+                    set line [normalize $line]
+
+                    if {[string match "package require *" $line]} {
+                        set pkg [lindex $line 2]
+
+                        if {$pkg in [project require names]} {
+                            set ver [project require version $pkg]
+
+                            set line [list package require $pkg $ver]
+                        }
+                    }
+
+                    lappend newlines $line
+                }
+
+                set content [join $newlines \n]
                 set text3 [blockreplace $text2 require $content]
                 writefile $fname $text3 -ifchanged
             }
         } trap POSIX {result} {
             throw FATAL "Error updating \"$lib\" version: $result"
         }
-    }
-
-    # LibRequires lib
-    #
-    # lib   - A "lib" package
-    #
-    # Returns a block of "package require" statements matching the
-    # "require" statements in project.kite, as tailored for this 
-    # library package.
-
-    proc LibRequires {lib} {
-        # FIRST, get the list of require names.
-        set reqs *
-
-        if {[info exists info(lib-$lib)]} {
-            set reqs [dict get $info(lib-$lib) requires]
-        }
-
-        # Default to all required packages.
-        if {$reqs eq "*"} {
-            set reqs $info(requires)
-        }
-
-        set list [list]
-
-        foreach req $reqs {
-            if {[info exists info(require-$req)]} {
-                set ver [dict get $info(require-$req) version]
-                lappend list "package require $req $ver"
-            }
-        }
-
-        return [join $list \n]
     }
 
     #-------------------------------------------------------------------

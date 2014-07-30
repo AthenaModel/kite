@@ -20,7 +20,7 @@ package provide kiteutils 0.0a2
 #-----------------------------------------------------------------------
 # Required Packages
 
-# -kite-require-start DO NOT EDIT THIS BLOCK BY HAND
+# -kite-require-start ADD EXTERNAL DEPENDENCIES
 package require snit 2.3
 package require textutil::expander 1.3.1
 # -kite-require-end

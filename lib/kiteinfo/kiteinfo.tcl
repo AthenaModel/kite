@@ -21,7 +21,6 @@ namespace eval ::kiteinfo:: {
     array set kiteInfo {
         require-textutil::expander {version 1.3.1 local 0}
         require-snit {version 2.3 local 0}
-        lib-kiteutils {requires *}
         description {Athena/Kite Development Tool}
         includes {}
         gui-kite 0

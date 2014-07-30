@@ -213,6 +213,14 @@ snit::type ::kiteapp::buildtool {
         }
 
         # NEXT, create its teapot.txt file
+        #
+        # TODO: Get external project requires from the lib's 
+        # pkgModules.tcl file, and add
+        #
+        #    Meta require {$package $version}
+        #
+        # to the teapot.txt
+
         set contents "Package $lib [project version]\n"                         \
 
         append contents \
@@ -220,16 +228,6 @@ snit::type ::kiteapp::buildtool {
             "Meta entrykeep\n"                                         \
             "Meta included *\n"                                        \
             "Meta platform tcl\n"
-
-        set reqs [project lib get $lib requires]
-        if {$reqs eq "*"} {
-            set reqs [project require names]
-        }
-
-        foreach req $reqs {
-            set ver [project require version $req]
-            append contents "Meta require {$req $ver}\n"
-        }
 
         writefile [project root lib $lib teapot.txt] $contents
 

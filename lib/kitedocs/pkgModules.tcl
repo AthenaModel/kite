@@ -21,8 +21,7 @@ package provide kitedocs 0.0a2
 # Required Packages
 
 # -kite-require-start DO NOT EDIT THIS BLOCK BY HAND
-package require snit 2.3
-package require textutil::expander 1.3.1
+
 # -kite-require-end
 
 package require kiteutils

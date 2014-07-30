@@ -17,6 +17,7 @@ namespace eval ::kiteapp:: {
 
     namespace export \
         blockreplace \
+        blocklines   \
         checkargs    \
         interdict    \
         prepare      \
@@ -86,7 +87,7 @@ proc ::kiteapp::interdict {keys values} {
 # tag     - A replacement tag, e.g., "ifneeded"
 # content - A text string
 #
-# Looks for the 'kite-start' and 'kite-end' lines for the given
+# Looks for the '-kite-$tag-start' and '-kite-$tag-end' lines for the given
 # tag, and replaces the text between them with the given content.
 
 proc ::kiteapp::blockreplace {text tag content} {
@@ -117,6 +118,40 @@ proc ::kiteapp::blockreplace {text tag content} {
     return [join $outlines "\n"]
 }
 
+# blocklines text tag
+#
+# text    - A text string, usually the contents of a text file
+# tag     - A replacement tag, e.g., "ifneeded"
+#
+# Looks for the 'kite-$tag-start' and 'kite-$tag-end' lines for the given
+# tag, and returns a list of the lines in the block of text between them, 
+# the empty list if none.
+
+proc ::kiteapp::blocklines {text tag} {
+    # FIRST, prepare
+    set inlines [split $text "\n"]
+    set outlines [list]
+    set inBlock 0
+
+    # NEXT, find and replace the block
+    foreach line $inlines {
+        if {!$inBlock} {
+            if {[string match "# -kite-$tag-start*" $line]} {
+                set inBlock 1
+            }
+        } else {
+            # In Block.  Get everything but the end.
+            if {[string match "# -kite-$tag-end*" $line]} {
+                break
+            } else {
+                lappend outlines $line
+            }
+        }
+    }
+
+    # NEXT, return the new text.
+    return $outlines
+}
 
 # prepare varname ?options?
 #

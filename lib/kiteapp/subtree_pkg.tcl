@@ -94,7 +94,11 @@ codeblock ::kiteapp::subtree::Pkg_pkgModules {name module} {
     #-----------------------------------------------------------------------
     # Required Packages
 
-    # -kite-require-start  DO NOT EDIT THIS BLOCK BY HAND
+    # Add 'package require' statements for this package's external 
+    # dependencies to the following block.  Kite will update the versions 
+    # numbers automatically as they change in project.kite.
+
+    # -kite-require-start ADD EXTERNAL DEPENDENCIES
     # -kite-require-end
 
     #-----------------------------------------------------------------------

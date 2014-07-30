@@ -1,9 +1,6 @@
 # Project TODO List
 
 * Next
-  * Replace "-kite-start-*/-kite-end-*" with "-kite-*-start" and 
-    "-kite-*-end"  
-  * Replace "lib" requires with -kite-require block.
   * Change "lib" statement to "provide" statement
   * Move "main" from $app.tcl to ${app}app(n)/main.tcl
     * At same time: app packages shouldn't need a namespace.
