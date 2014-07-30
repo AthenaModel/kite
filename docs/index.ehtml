@@ -4,16 +4,16 @@ This documentation is intended for the Kite developer.  In addition,
 the <xref kiteutils(n)> and <xref kitedocs(n)> library packages can
 be used by other projects.<p>
 
-<section doc "Top-level Documents">
+<preface doc "Top-level Documents">
 
 <ul>
   <li> <link ../README.md "Project README">
   <li> <link INSTALL.md   "Installation Instructions">
   <li> <link BUILD.md     "Build Instructions">
-  <li> <link project.md   "Syntax: project.kite file">
+  <li> <xref project(5)   "Syntax: project.kite">
 </ul><p>
 
-<section man "Man Pages">
+<preface man "Man Pages">
 
 <ul>
   <li> <link man5/index.html "Section (5)">: File Formats

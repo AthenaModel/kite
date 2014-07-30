@@ -235,6 +235,9 @@ snit::type ::kiteapp::trees {
 
         # NEXT, create the rest of the tree.
         MakeAppTree $parent $project $app
+
+        # NEXT, save the project metadata
+        project metadata save
     }
 
 

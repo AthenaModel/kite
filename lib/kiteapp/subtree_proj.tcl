@@ -87,14 +87,14 @@ codeblock ::kiteapp::subtree::Proj_index {} {
 } {
     <document>
 
-    <section doc "Development Documents">Documents</h2>
+    <preface doc "Development Documents">Documents</h2>
 
     <ul>
       <li> <link ../README.md "Project README">
       <li> FIXME: Top-level docs
     </ul>
 
-    <section man "Man Pages">
+    <preface man "Man Pages">
 
     <ul>
       <li> <link man1/index.html "Section (1)">: Executables

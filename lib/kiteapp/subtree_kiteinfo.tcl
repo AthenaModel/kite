@@ -22,9 +22,9 @@ namespace eval ::kiteapp::subtree:: {
 # Saves the kiteinfo subtree to lib/kiteinfo/*.
 
 proc ::kiteapp::subtree::kiteinfo {metadata} {
-    treefile lib/kiteinfo/pkgIndex     [KiteInfo_pkgIndex]
-    treefile lib/kiteinfo/pkgModules   [KiteInfo_pkgModules]
-    treefile lib/kiteinfo/kiteinfo.tcl [KiteInfo_kiteinfo $metadata]
+    treefile lib/kiteinfo/pkgIndex.tcl   [KiteInfo_pkgIndex]
+    treefile lib/kiteinfo/pkgModules.tcl [KiteInfo_pkgModules]
+    treefile lib/kiteinfo/kiteinfo.tcl   [KiteInfo_kiteinfo $metadata]
 }
 
 # KiteInfo_pkgIndex
@@ -99,7 +99,12 @@ codeblock ::kiteapp::subtree::KiteInfo_pkgModules {} {
 codeblock ::kiteapp::subtree::KiteInfo_kiteinfo {metadata} {
     set project     [project name]
     set description [project description]
-    set metadata    [list $metadata]
+
+    set list [list]
+    foreach {key value} $metadata {
+        lappend list [list $key $value]
+    }
+    set metadata [join $list "\n        "]
 } {
     #-----------------------------------------------------------------------
     # TITLE:
@@ -120,15 +125,19 @@ codeblock ::kiteapp::subtree::KiteInfo_kiteinfo {metadata} {
 
     namespace eval ::kiteinfo:: {
         variable kiteInfo
-        array set kiteInfo %metadata
 
-        namespace export \
-            project      \
-            version      \
-            description  \
-            includes     \
-            gui          \
+        array set kiteInfo {
+            %metadata
+        }
+
+        namespace export \\
+            project      \\
+            version      \\
+            description  \\
+            includes     \\
+            gui          \\
             require
+
         namespace ensemble create
     }
 
