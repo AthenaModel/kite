@@ -2,7 +2,6 @@
 
 * Next
   * Clean up "kite new", especially documentation.
-  * Change "lib" statement to "provide" statement
 
 * Default teapot:
   * Making ~/.kite/teapot the default teapot means that
@@ -10,23 +9,12 @@
   * Perhaps I should just make sure it's linked, and build
     against it.
   * Send note to Andreas: per-user teapots and links.
-* Architecture changes post-reflection
-  * Remove list of required packages from project.kite's "lib" command.
-  * Replace "lib" statement with "provide".
-  * Put tags around "package require" blocks in provided libs.
-  * Kite automatically updates the versions in the listed package requires.
-    * blockreplace becomes "tagsplit", so that we can base the replacement
-    * on the block being replaced.
-  * Add "main.tcl" to generated "${app}app" package; make app loader script
-    as generic as possible.
 * Architecture
   * Merge kiteapp/misc.tcl into kiteutils as appropriate.
   * Merge kite.tcl's main code into kiteapp as appropriate.
-  * Add kiteutils and kitedocs as "lib"'s
-  * Consider making tkcon an external dependency, and calling it 
-    directly.
   * Figure out how to use the right code in development when 
     kiteutils and kitedocs are in the local teapot.
+    * Add this info to 'kite version -verbose'?
 * manpage(n)
   * Add test suite
 * kitedoc(n)
@@ -52,38 +40,34 @@
     * Building the C code as "make" targets
     * Plain C libraries and C extensions
     * Building teapot .zips with hardware architecture
-  * kite add appkit|lib
-    * Add libs or an app/appkit to an existing project.
+  * kite add app|lib
+    * Add libs or an app to an existing project.
     * Requires writing the project file, not just reading it.
-  * Allow multiple apps/appkits
-    * Get all external dependencies by default.
-    * Add -exclude option to app/appkit to exclude specific dependencies.
   * kite retest
     * Execute only tests that failed last time.
 * User testing needed
   * Test on Linux
-  * Text on OS X
 * To ponder
   * Consider using basekits from teapot.
-  * Plugins for building other build targets (e.g., HTML help)
 
 # Remaining Gaps #
 
-What does Mars need that Kite doesn't yet offer?
+## For Mars
 
+* Package tarballs: source, docs, installation
 * ESSENTIAL!  Support for C Libraries/Extensions, for marsgeo(n).
 * Install code/docs to home page/kite server?
 * Automated git version tagging
 
-What does Athena need that Kite doesn't yet offer?
+## For Athena
 
 * "athena_test", which has needs beyond what [kite test] currently gives.
-* Ability to make tarballs (source, docs, installation)
+* Package tarballs: source, docs, installation
 * Install to Athena home page
 * Automated git version tagging
 
 
-Man Page Processing
+## Man Page Processing
 
 * Where do man pages go, when built?
   *   Do they simply live in the docs/manX directory, as now?
