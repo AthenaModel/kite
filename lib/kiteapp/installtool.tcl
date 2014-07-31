@@ -58,8 +58,8 @@ snit::type installtool {
         checkargs install 0 0 {} $argv
 
         # FIRST, install any teapot packages.
-        if {[llength [project lib names]] > 0} {
-            InstallLibs
+        if {[llength [project provide names]] > 0} {
+            InstallProvidedLibraries
         }
 
         # NEXT, install any applications.
@@ -71,11 +71,11 @@ snit::type installtool {
     #-------------------------------------------------------------------
     # Installing Teapot Libraries
     
-    # InstallLibs
+    # InstallProvidedLibraries
     #
     # Installs exported libraries into the local teaput.
 
-    proc InstallLibs {} {
+    proc InstallProvidedLibraries {} {
         # FIRST, make sure there's a local teapot to install them 
         # into.
         if {[teapot state] ne "ok"} {
@@ -91,7 +91,7 @@ snit::type installtool {
 
         # NEXT, for each library, see if it has a package; and if so,
         # install it.
-        foreach lib [project lib names] {
+        foreach lib [project provide names] {
             InstallLib $lib
         }
     }

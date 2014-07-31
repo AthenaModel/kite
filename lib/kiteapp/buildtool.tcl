@@ -63,7 +63,7 @@ snit::type buildtool {
         # TODO: Build make targets
 
         # NEXT, Build teapot packages.
-        foreach lib [project lib names] {
+        foreach lib [project provide names] {
             BuildTeapotZip $lib
         }
 

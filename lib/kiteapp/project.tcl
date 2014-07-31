@@ -43,7 +43,7 @@ snit::type project {
     #   apptype-$app   - kit or exe
     #   gui-$app       - 1 or 0
     #
-    #   libs           - List of library package names
+    #   provides       - List of provided library package names
     #
     #   includes       - List of include names
     #   include-$name  - inclusion dictionary for the $name
@@ -67,7 +67,7 @@ snit::type project {
         description    ""
         poc            ""
         apps           ""
-        libs           {}
+        provides       {}
         includes       {}
         requires       {}
         shell          {}
@@ -347,29 +347,13 @@ snit::type project {
         }
     }
 
-    # lib names
+    # provide names
     #
-    # Returns the list of lib names.
+    # Returns the list of provide names.
 
-    typemethod {lib names} {} {
-        return $info(libs)
+    typemethod {provide names} {} {
+        return $info(provides)
     }
-
-    # lib get name ?attr?
-    #
-    # name  - the include name
-    # attr  - Optionally, a lib attribute.
-    #
-    # Returns the lib dictionary, or one attribute of it.
-
-    typemethod {lib get} {name {attr ""}} {
-        if {$attr eq ""} {
-            return $info(lib-$name)
-        } else {
-            return [dict get $info(lib-$name) $attr]
-        }
-    }
-
 
     # include names
     #
@@ -476,7 +460,7 @@ snit::type project {
         $safe alias project [myproc ProjectCmd]
         $safe alias poc     [myproc PocCmd]
         $safe alias app     [myproc AppCmd]
-        $safe alias lib     [myproc LibCmd]
+        $safe alias provide [myproc ProvideCmd]
         $safe alias include [myproc IncludeCmd]
         $safe alias require [myproc RequireCmd]
         $safe alias shell   [myproc ShellCmd]
@@ -578,19 +562,19 @@ snit::type project {
         }
 
 
-        lappend info(apps) $name
-        set info(apptype-$name) $apptype
-        set info(gui-$name)     $gui
+        lappend info(apps)          $name
+        set     info(apptype-$name) $apptype
+        set     info(gui-$name)     $gui
     }
 
-    # LibCmd name
+    # ProvideCmd name
     #
     # name   - The name of the library package and its directory.
     #          E.g., "kiteutils".
     #
     # Implementation of the "lib" kite file command.  
 
-    proc LibCmd {name} {
+    proc ProvideCmd {name} {
         # FIRST, get the name.
         set name [string trim [string tolower $name]]
 
@@ -598,11 +582,11 @@ snit::type project {
             throw SYNTAX "Invalid lib name \"$name\""
         }
 
-        if {$name in $info(libs)} {
+        if {$name in $info(provides)} {
             throw SYNTAX "Duplicate lib name \"$name\""
         }
 
-        ladd info(libs) $name
+        ladd info(provides) $name
     }
 
     # IncludeCmd name vcs url tag
@@ -826,7 +810,7 @@ snit::type project {
             DumpValue $label $apptext
         }
 
-        foreach name $info(libs) {
+        foreach name $info(provides) {
             DumpValue "Provides:" "${name}(n)"
         }
 
