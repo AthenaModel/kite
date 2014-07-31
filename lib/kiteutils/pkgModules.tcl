@@ -39,6 +39,7 @@ namespace eval ::kiteutils:: {
 # change the order!
 
 source [file join $::kiteutils::library control.tcl    ]
+source [file join $::kiteutils::library dictx.tcl      ]
 source [file join $::kiteutils::library filex.tcl      ]
 source [file join $::kiteutils::library listx.tcl      ]
 source [file join $::kiteutils::library stringx.tcl    ]
