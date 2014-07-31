@@ -36,7 +36,7 @@ proc main {argv} {
         set opt [lshift argv]
 
         switch -exact -- $opt {
-            -verbose  { set ::kutils::verbose 1                }
+            -verbose  { set ::kiteapp::verbose 1               }
             default   { throw FATAL "Unknown option: \"$opt\"" }
         }
     }

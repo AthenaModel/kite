@@ -2,6 +2,7 @@
 
 * Next
   * Clean up "kite new", especially documentation.
+  * Make kite test accumulate output.
 
 * Default teapot:
   * Making ~/.kite/teapot the default teapot means that
