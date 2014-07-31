@@ -16,6 +16,7 @@
 namespace eval ::kiteutils:: {
     namespace export    \
         assert          \
+        bgcatch         \
         callwith        \
         foroption       \
         require 
@@ -34,6 +35,25 @@ proc ::kiteutils::assert {expression} {
 
     return -code error -errorcode ASSERT "Assertion failed: $expression"
 }
+
+# bgcatch script
+#
+# script    An arbitrary Tcl script
+#
+# Evaluates script in the caller's context.  If the script throws
+# an error, bgcatch passes the error to bgerror, and returns normally.
+# bgcatch returns nothing.
+
+proc ::kiteutils::bgcatch {script} {
+    set code [catch [list uplevel 1 $script] result]
+
+    if {$code} {
+        bgerror $result
+    }
+
+    return
+}
+
 
 # callwith prefix args...
 #

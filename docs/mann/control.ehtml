@@ -27,6 +27,12 @@ expression is false, <iref assert> throws the following error:<p>
 
 The Tcl <code>errorCode</code> variable will be set to "ASSERT".<p>
 
+<defitem bgcatch {bgcatch <i>script</i>}>
+
+Executes an arbitrary Tcl <i>script</i> in the caller's context.  If
+the script throws an error, the error is handled by
+<code>bgerror</code>.  <iref bgcatch> never returns a value.<p>
+
 
 <defitem callwith {callwith <i>prefix</i> ?<i>args...</i>?}>
 

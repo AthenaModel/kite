@@ -42,6 +42,27 @@ test assert-1.2 {Assertion fails} -body {
 } -result {ASSERT {Assertion failed: 1 == 2}}
 
 #-------------------------------------------------------------------
+# bgcatch
+
+test bgcatch-1.1 {Script called in caller's context} -body {
+    set a [clock clicks]
+    bgcatch {set b $a}
+    expr {$a == $b}
+} -result {1}
+
+test bgcatch-1.2 {Script called in caller's context} -setup {
+    proc ::bgerror {msg} {
+        puts -nonewline "bgerror: $msg"
+    }
+} -body {
+    bgcatch {error "Simulated Error"}
+} -cleanup {
+    rename ::bgerror ""
+} -output {bgerror: Simulated Error}
+
+
+
+#-------------------------------------------------------------------
 # callwith
 
 test callwith-1.1 {call with no arguments} -body {
