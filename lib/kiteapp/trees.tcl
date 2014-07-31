@@ -51,19 +51,16 @@ set ::khelp(app) {
 
     products the app "<root>/bin/mytool.exe".
 
-    A project can contain at most one application, defined as an 
-    "app" or an "appkit" in the project.kite file.  The application 
-    requires a "main" script in <root>/bin/<appname>.tcl.  For example, 
-    "mytool.exe" executes the file "<root>/bin/mytool.tcl".
+    The application will have:
 
-    This template also creates a Tcl package, app_<kitname>(n), in 
-    "<root>/lib/app_<appname>".  The usual practice is to put most of the
-    app's code in this package (or in other Tcl packages) and have 
-    "<root>/bin/<appname>.tcl" simply invoke it.
+    * A loader script, e.g., bin/<appname>.tcl
+    * A Tcl package, lib/<appname>app, containing the main routine
+      in lib/<appname>app/main.tcl
+    * Standard documentation and test files.
 
     An application can be a console app or a GUI app.  This project tree
     assumes the application should be a GUI app; this can be changed
-    by editing the "app" statement in the generated project.kite.
+    by editing the "app" statement in the generated project.kite file.
 }
 
 set ::khelp(appkit) {
@@ -73,32 +70,33 @@ set ::khelp(appkit) {
     developer tools.
 
     The template takes one optional argument, the root name of the 
-    ".kit" file; this name defaults to the project name.  For example,
+    executable file; this name defaults to the project name.  For example,
 
         $ kite new appkit my-project
 
-    produces the appkit "<root>/bin/my-project.kit".  However,
+    produces the appkit "<root>/bin/my-project.exe" (on Windows).  However,
 
         $ kite new appkit my-project mytool
 
-    products the appkit "<root>/bin/mytool.kit".
+    products the app "<root>/bin/mytool.exe".
 
-    A project can contain at most one application, defined as an 
-    "app" or an "appkit" in the project.kite file.  The application 
-    requires a "main" script in <root>/bin/<kitname>.tcl.  For example, 
-    "mytool.kit" executes the file "<root>/bin/mytool.tcl".
+    The application will have:
 
-    This template also creates a Tcl package, app_<kitname>(n), in 
-    "<root>/lib/app_<kitname>".  The usual practice is to put most of the
-    appkit's code in this package (or in other Tcl packages) and have 
-    "<root>/bin/<kitname>.tcl" simply invoke it.
+    * A loader script, e.g., bin/<appname>.tcl
+    * A Tcl package, lib/<appname>app, containing the main routine
+      in lib/<appname>app/main.tcl
+    * Standard documentation and test files.
+
+    An application can be a console app or a GUI app.  This project tree
+    assumes the application should be a console app; this can be changed
+    by editing the "app" statement in the generated project.kite file.
 }
 
 set ::khelp(lib) {
-    The "lib" project template is for projects that define one or more
-    Tcl library packages for use by other projects.  The template 
-    creates a project tree for a project with one library package;
-    others can be added subsequently.
+    The "lib" project template is for projects that provide one or
+    more Tcl library packages for use by other projects, but do not
+    define any application.  The template creates a project tree for 
+    a project with one library package; others can be added subsequently.
 
     The template takes one optional argument, the name of the 
     library package file; this name defaults to the project name.  
@@ -113,7 +111,7 @@ set ::khelp(lib) {
     products the package "<root>/lib/mylib".
 
     A project can define any number of library packages via the 
-    "lib" statement in the project.kite file.  These should be
+    "provide" statement in the project.kite file.  These should be
     initialized using "kite new lib" or "kite add lib"; this ensures
     that the package files contain the correct markers so that Kite
     can update their version numbers as the version number changes

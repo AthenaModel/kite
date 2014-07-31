@@ -1,8 +1,5 @@
 # Project TODO List
 
-* Next
-  * Clean up "kite new", especially documentation.
-
 * Default teapot:
   * Making ~/.kite/teapot the default teapot means that
     different users are in contention.

@@ -25,7 +25,7 @@ set ::khelp(new) {
     The "new" tool is use to initialize new projects on the disk.  It
     takes the following arguments:
 
-    template   - The project template, one of: appkit
+    template   - The project template, one of: app, appkit or lib
     project    - The project name, e.g., "my-project"
     arg...     - Optional arguments, by template type.
 
@@ -38,7 +38,8 @@ set ::khelp(new) {
 
         ~/github/my-project
 
-    Use "kite help" to find out more about the available templates.
+    Use "kite help" to find out more about the available templates,
+    e.g., "kite help app"
 }
 
 
