@@ -2,7 +2,6 @@
 
 * Next
   * Clean up "kite new", especially documentation.
-  * Make kite test accumulate output.
 
 * Default teapot:
   * Making ~/.kite/teapot the default teapot means that
@@ -12,14 +11,12 @@
   * Send note to Andreas: per-user teapots and links.
 * Architecture
   * Merge kiteapp/misc.tcl into kiteutils as appropriate.
-  * Merge kite.tcl's main code into kiteapp as appropriate.
   * Figure out how to use the right code in development when 
     kiteutils and kitedocs are in the local teapot.
     * Add this info to 'kite version -verbose'?
-* manpage(n)
-  * Add test suite
-* kitedoc(n)
-  * Add test suite.
+* Test suites
+  * kitedoc(n)
+  * manpage(n)
 * Next
   * Add ability to build particular things in buildtool.
   * Complete kite test suite.

@@ -23,6 +23,13 @@ Opens the file with name <i>filename</i>, reads its contents, closes
 the file, and returns the contents.  Throws all of the open and read
 errors.  The file will be closed automatically on read errors.<p>
 
+<defitem writefile {writefile <i filename content> ?-ifchanged?}>
+
+Writes the <i content> to the file with the given <i filename>,
+being careful not to add any extraneous newlines.  If the 
+<b -ifchanged> flag is include, then the <i content> will be
+written only if it differs from the file's existing content.<p>
+
 </deflist>
 
 <section ENVIRONMENT>

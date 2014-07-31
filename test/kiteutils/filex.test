@@ -45,6 +45,46 @@ test readfile-1.2 {reads file successful} -setup {
     expr {$b eq "$a\n"}
 } -result {1}
 
+#-------------------------------------------------------------------
+# writefile
+
+test writefile-1.1 {writes file to disk} -body {
+    set fname "writefile-1.1.txt"
+    set a "my content"
+    writefile $fname $a
+    set b [readfile $fname]
+
+    expr {$a eq $b}
+} -cleanup {
+    removeFile $fname
+} -result {1}
+
+test writefile-1.2 {Writes ifchanged} -body {
+    set fname "writefile-1.3.txt"
+    set a "my content"
+    writefile $fname $a
+    set t1 [file mtime $fname]
+    after 2000
+    writefile $fname "$a plus" -ifchanged
+    set t2 [file mtime $fname]
+    expr {$t1 < $t2}
+} -cleanup {
+    removeFile $fname
+} -result {1}
+
+test writefile-1.3 {Doesn't write when unchanged} -body {
+    set fname "writefile-1.3.txt"
+    set a "my content"
+    writefile $fname $a
+    set t1 [file mtime $fname]
+    after 2000
+    writefile $fname $a -ifchanged
+    set t2 [file mtime $fname]
+    expr {$t1 < $t2}
+} -cleanup {
+    removeFile $fname
+} -result {0}
+
 
  
 #-------------------------------------------------------------------
