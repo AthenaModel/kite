@@ -43,12 +43,13 @@ namespace import kiteutils::*
 # Note: modules are listed in order of dependencies; be careful if you
 # change the order!
 
+source [file join $::kiteapp::library main.tcl            ]
 source [file join $::kiteapp::library misc.tcl            ]
 source [file join $::kiteapp::library project.tcl         ]
 source [file join $::kiteapp::library subtree.tcl         ]
 source [file join $::kiteapp::library subtree_kiteinfo.tcl]
 source [file join $::kiteapp::library subtree_proj.tcl    ]
-source [file join $::kiteapp::library subtree_app.tcl]
+source [file join $::kiteapp::library subtree_app.tcl     ]
 source [file join $::kiteapp::library subtree_pkg.tcl     ]
 source [file join $::kiteapp::library trees.tcl           ]
 source [file join $::kiteapp::library includer.tcl        ]

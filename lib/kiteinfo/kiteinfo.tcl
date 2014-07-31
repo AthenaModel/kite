@@ -33,7 +33,7 @@ namespace eval ::kiteinfo:: {
 }
         name athena-kite
         poc William.H.Duquette@jpl.nasa.gov
-        libs kiteutils
+        libs {kiteutils kitedocs}
         apps kite
         apptype-kite kit
         version 0.0a2

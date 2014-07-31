@@ -1,8 +1,6 @@
 # Project TODO List
 
 * Next
-  * Move Kite's main from kite.tcl to kiteapp/main.tcl.
-    * Ensure Kite uses a standard apploader.
   * Clean up "kite new", especially documentation.
   * Change "lib" statement to "provide" statement
 
