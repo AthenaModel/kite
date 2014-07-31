@@ -174,7 +174,7 @@ snit::type ::kitedocs::manpage {
             try {
                 set output [$ehtml expandFile $infile]
             } on error {result} {
-                throw SYNTAX $result
+                throw SYNTAX "[file tail $infile]:\n$result"
             }
 
             set f [open $outfile w]

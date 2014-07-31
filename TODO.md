@@ -1,12 +1,17 @@
 # Project TODO List
 
 * Next
-  * Update athena-mars to use the new kite.
   * Move Kite's main from kite.tcl to kiteapp/main.tcl.
     * Ensure Kite uses a standard apploader.
   * Clean up "kite new", especially documentation.
   * Change "lib" statement to "provide" statement
 
+* Default teapot:
+  * Making ~/.kite/teapot the default teapot means that
+    different users are in contention.
+  * Perhaps I should just make sure it's linked, and build
+    against it.
+  * Send note to Andreas: per-user teapots and links.
 * Architecture changes post-reflection
   * Remove list of required packages from project.kite's "lib" command.
   * Replace "lib" statement with "provide".
