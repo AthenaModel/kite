@@ -147,6 +147,28 @@ test lshift-1.3 {lshift: list with no elements} -body {
     list $value $list
 } -result {{} {}}
 
+#-------------------------------------------------------------------
+# lzipper
+
+test lzipper-1.1 {lzipper: empty lists} -body {
+    lzipper {} {}
+} -result {}
+
+test lzipper-1.2 {lzipper: individual elements} -body {
+    lzipper [list a] [list 1]
+} -result {a 1}
+
+test lzipper-1.3 {lzipper: full lists} -body {
+    lzipper [list a b c] [list 1 2 3]
+} -result {a 1 b 2 c 3}
+
+test lzipper-1.4 {lzipper: blist is omitted} -body {
+    lzipper [list a b c]
+} -result {a {} b {} c {}}
+
+test lzipper-1.5 {lzipper: alist is empty} -body {
+    lzipper {} [list 1 2 3]
+} -result {{} 1 {} 2 {} 3}
 
 #-------------------------------------------------------------------
 # Cleanup

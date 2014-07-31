@@ -1,5 +1,10 @@
 # Project TODO List
 
+* Problem
+  * kite deps doesn't want to install textutil::expander.  This might
+    simply be because there's no internet connectivity.
+    * Look into this when the 'net's back.
+
 * Default teapot:
   * Making ~/.kite/teapot the default teapot means that
     different users are in contention.
@@ -7,7 +12,6 @@
     against it.
   * Send note to Andreas: per-user teapots and links.
 * Architecture
-  * Merge kiteapp/misc.tcl into kiteutils as appropriate.
   * Figure out how to use the right code in development when 
     kiteutils and kitedocs are in the local teapot.
     * Add this info to 'kite version -verbose'?

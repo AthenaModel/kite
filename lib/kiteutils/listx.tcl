@@ -21,7 +21,8 @@ namespace eval ::kiteutils:: {
         ldelete         \
         lmaxlen         \
         lmerge          \
-        lshift
+        lshift          \
+        lzipper
 }
 
 
@@ -125,4 +126,22 @@ proc ::kiteutils::lshift {listvar} {
     set value [lindex $list 0]
     set list [lrange $list 1 end]
     return $value
+}
+
+# lzipper alist ?blist?
+#
+# alist -  A list
+# blist -  Another list, empty by default.
+#
+# Zips the two lists together, interleaving their entries.  If the
+# items in alist are unique, and blist has no more entries than 
+# alist, the result is valid dictionary.
+
+proc ::kiteutils::lzipper {alist {blist {}}} {
+    set result [list]
+    foreach a $alist b $blist {
+        lappend result $a $b
+    }
+
+    return $result
 }

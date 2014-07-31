@@ -45,6 +45,17 @@ most once (unless the list in <i>listvar</i> already had duplicates).<p>
 Given the name of a variable containing a list, removes the first
 element from the list and returns it, updating the variable.
 Effectively it pops the first element from the list.<p>
+
+<defitem lzipper {lzipper <i alist> ?<i blist>?}>
+
+Returns a list formed by interleaving the elements of the two lists
+<i alist> and <i blist>.  If one list is longer than the other, it is 
+padded with empty items; and if <i blist> is omitted, it's assumed to
+be empty.<p>
+
+Note that calling <iref lzipper> with one argument is a good way to
+create a dictionary with given keys and empty values.<p> 
+
 </deflist>
 
 <section ENVIRONMENT>

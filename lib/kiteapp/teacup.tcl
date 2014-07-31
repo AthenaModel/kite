@@ -219,7 +219,7 @@ snit::type teacup {
         set dicts [list]
 
         foreach row $rows {
-            lappend dicts [interdict $keys [split $row ","]]
+            lappend dicts [lzipper $keys [split $row ","]]
         }
 
         return $dicts

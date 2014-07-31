@@ -53,22 +53,6 @@ proc checkargs {tool min max argspec argv} {
 }
 
 
-# interdict keys values
-#
-# keys   - A list of keys
-# values - A list of values
-#
-# Returns a dictionary of the keys and values
-
-proc interdict {keys values} {
-    set d [dict create]
-
-    foreach k $keys v $values {
-        dict set d $k $v
-    }
-
-    return $d
-}
 
 # blockreplace text tag content
 #
@@ -184,10 +168,6 @@ proc prepare {varname args} {
 
     return
 }
-
-
-
-
 
 # treefile path content
 #
