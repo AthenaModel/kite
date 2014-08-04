@@ -764,6 +764,9 @@ snit::type project {
                             set ver [project require version $pkg]
 
                             set line [list package require $pkg $ver]
+                        } elseif {$pkg in [project provide names]} {
+                            set ver [project version]
+                            set line [list package require $pkg $ver]
                         }
                     }
 
