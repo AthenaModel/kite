@@ -1,13 +1,11 @@
 # Project TODO List
 
 * Libraries
-  * Kite must update "package require" versions for project-provided 
-    packages as well as for project-required packages.
-    * If a project uses a library that it provides, this ensures that it
-      will get the development version.
   * $module.test files should source the package in.
     * If a project uses a library that it provides, this ensures that the
       test will get the development version.
+  * 'kite test' needs to catch test script errors and display them.
+    * i.e., when a test script fails on load.
 * Problem
   * kite deps doesn't want to install textutil::expander.  This might
     simply be because there's no internet connectivity.

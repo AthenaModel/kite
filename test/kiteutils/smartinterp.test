@@ -26,7 +26,7 @@ namespace import ::tcltest::*
 #-----------------------------------------------------------------------
 # Load the package to be tested
 
-package require kiteutils
+source ../../lib/kiteutils/pkgModules.tcl
 namespace import ::kiteutils::*
 
 
@@ -1123,6 +1123,8 @@ test setsig-1.2 {ensemble command} -setup {
 # Cleanup
 
 cleanupTests
+
+
 
 
 

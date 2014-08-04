@@ -25,7 +25,7 @@ namespace import ::tcltest::test
 #-----------------------------------------------------------------------
 # Load the package to be tested
 
-package require kiteutils
+source ../../lib/kiteutils/pkgModules.tcl
 namespace import ::kiteutils::*
 
 
@@ -66,6 +66,8 @@ test dictglob-1.7 {Match succeeds if key and value match.} -body {
 # Cleanup
 
 tcltest::cleanupTests
+
+
 
 
 

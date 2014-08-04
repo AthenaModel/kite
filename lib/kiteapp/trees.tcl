@@ -260,7 +260,7 @@ snit::type trees {
 
         writefile [project root project.kite] [outdent "
             project $project 0.0a1 \"Your Description\"
-            lib $libname
+            provide $libname
         "]\n
 
         project loadinfo

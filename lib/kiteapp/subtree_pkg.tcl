@@ -280,7 +280,7 @@ codeblock subtree::Pkg_test {name module} {
     #-----------------------------------------------------------------------
     # Load the package to be tested
 
-    package require %name
+    source ../../lib/%name/pkgModules.tcl
     namespace import ::%name::*
 
     #-------------------------------------------------------------------
