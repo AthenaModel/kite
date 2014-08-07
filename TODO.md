@@ -1,9 +1,6 @@
 # Project TODO List
 
 * Libraries
-  * $module.test files should source the package in.
-    * If a project uses a library that it provides, this ensures that the
-      test will get the development version.
   * 'kite test' needs to catch test script errors and display them.
     * i.e., when a test script fails on load.
 * Problem
@@ -17,10 +14,6 @@
   * Perhaps I should just make sure it's linked, and build
     against it.
   * Send note to Andreas: per-user teapots and links.
-* Architecture
-  * Figure out how to use the right code in development when 
-    kiteutils and kitedocs are in the local teapot.
-    * Add this info to 'kite version -verbose'?
 * Test suites
   * kitedoc(n)
   * manpage(n)
