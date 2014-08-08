@@ -196,13 +196,18 @@ snit::type docs {
         }
 
         # NEXT, process the man pages in the directory.
+        # TODO: base manroots on required version of Tcl/Tk.
         try {
             puts "Formatting man pages in $mandir..."
             kitedocs::manpage format $mandir $mandir \
                 -project     [project name]          \
                 -version     [project version]       \
                 -description [project description]   \
-                -section     "($num) $manpageSections($num)"
+                -section     "($num) $manpageSections($num)" \
+                -manroots {
+                    tcl: http://www.tcl.tk/man/tcl8.6/TclCmd/%n.htm
+                    tk: http://www.tcl.tk/man/tcl8.6/TkCmd/%n.htm
+                }
         } trap SYNTAX {result} {
             throw FATAL "Syntax error in man page: $result"
         }
