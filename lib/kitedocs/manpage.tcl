@@ -89,6 +89,7 @@ snit::type ::kitedocs::manpage {
     #   -description text  - Project description
     #   -section text      - Manpage Section Title
     #   -manroots dict     - ehtml(n) "manroots"
+    #   -libpath           - Library path for macros
     #
     # Formats the man pages in a man page directory.
 
@@ -100,6 +101,7 @@ snit::type ::kitedocs::manpage {
             description "Your project description"
             section     "Project Man Pages"
             manroots    {: ../man%s/%n.html}
+            libpath     {}
         }
 
         # NEXT, initialize the ehtml processor.
@@ -143,6 +145,9 @@ snit::type ::kitedocs::manpage {
                 }
                 -section {
                     set info(section) $val
+                }
+                -libpath {
+                    set info(libpath) $val
                 }
                 default {
                     error "Unknown option: \"$opt\""
@@ -217,6 +222,11 @@ snit::type ::kitedocs::manpage {
 
     typemethod DefineMacros {} {
         $ehtml clear
+
+        if {$info(libpath) ne ""} {
+            set path [linsert $::auto_path 0 {*}$info(libpath)]
+            $ehtml eval [list set auto_path $path]
+        }
 
         $ehtml smartalias manpage 2 2 {nameList description} \
             [myproc manpage]

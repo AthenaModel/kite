@@ -199,11 +199,12 @@ snit::type docs {
         # TODO: base manroots on required version of Tcl/Tk.
         try {
             puts "Formatting man pages in $mandir..."
-            kitedocs::manpage format $mandir $mandir \
-                -project     [project name]          \
-                -version     [project version]       \
-                -description [project description]   \
+            kitedocs::manpage format $mandir $mandir         \
+                -project     [project name]                  \
+                -version     [project version]               \
+                -description [project description]           \
                 -section     "($num) $manpageSections($num)" \
+                -libpath     [project libpath]               \
                 -manroots {
                     tcl: http://www.tcl.tk/man/tcl8.6/TclCmd/%n.htm
                     tk: http://www.tcl.tk/man/tcl8.6/TkCmd/%n.htm

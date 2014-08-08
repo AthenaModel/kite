@@ -61,6 +61,15 @@ Specifies the section title for the collection of man pages in the
 <i>srcdir</i>.  This section title will be used in the generated
 index page.<p>
 
+<defopt {-libpath <i>path</i>}>
+
+At times it is useful to load a module being documented into the 
+macro interpreter, so that it can help to generate its own documentation.
+The module will usually need to be "package require"'d, which means the
+<tt auto_path> needs to be set up properly.  If this option's value is
+set, then it will be used to set the macro interpreter's 
+<tt auto_path> prior to processing each man page.<p>
+
 <defopt {-manroots <i>roots</i>}>
 
 Specifies a the mapping from man page names to URLs to be used
