@@ -253,7 +253,7 @@ snit::type ::kitedocs::ehtml {
 
         # NEXT, style macros and HTML tags
         foreach tag {
-            b i code tt em strong pre
+            b i code tt em strong sup sub pre
         } {
             $self StyleMacro $tag
         }

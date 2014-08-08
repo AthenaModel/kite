@@ -58,6 +58,8 @@ These macros simply expand to their HTML equivalents.<p>
 <defitem i {<lb>i<rb>...<lb>/i<rb> <b or> <lb>i <i words...><rb>}>
 <defitem pre {<lb>pre<rb>...<lb>/pre<rb> <b or> <lb>pre <i words...><rb>}>
 <defitem strong {<lb>strong<rb>...<lb>/strong<rb> <b or> <lb>strong <i words...><rb>}>
+<defitem sub {<lb>sub<rb>...<lb>/sub<rb> <b or> <lb>sub <i words...><rb>}>
+<defitem sup {<lb>sup<rb>...<lb>/sup<rb> <b or> <lb>sup <i words...><rb>}>
 <defitem tt {<lb>tt<rb>...<lb>/tt<rb> <b or> <lb>tt <i words...><rb>}>
 
 Called with no arguments,
