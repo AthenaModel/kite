@@ -259,11 +259,16 @@ snit::type ::kitedocs::ehtml {
         }
 
         foreach tag {
-            ol ul li p tr th td
+            ol ul li p table th td
         } {
             $self HtmlTag $tag
             $self HtmlTag /$tag            
         }
+
+        $interp proc tr {} {
+            return {<tr valign="top">}
+        }
+        $self HtmlTag /tr
 
         # NEXT, Change Log macros
         $interp smartalias changelog 0 0 {} \

@@ -47,6 +47,10 @@ and use them in your ehtml(5) input.<p>
 <defitem p {<lb>p<rb>...<lb>/p<rb>}>
 <defitem li {<lb>li<rb>...<lb>/li<rb>}>
 <defitem ol {<lb>ol<rb>...<lb>/ol<rb>}>
+<defitem table {<lb>table<rb>...<lb>/table<rb>}>
+<defitem tr {<lb>tr<rb>...<lb>/tr<rb>}>
+<defitem th {<lb>th<rb>...<lb>/th<rb>}>
+<defitem td {<lb>td<rb>...<lb>/td<rb>}>
 <defitem ul {<lb>ul<rb>...<lb>/ul<rb>}>
 
 These macros simply expand to their HTML equivalents.<p>
