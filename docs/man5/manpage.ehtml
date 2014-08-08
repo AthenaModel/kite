@@ -108,6 +108,18 @@ text</i> can be used to relate the <iref deflist> to its
 
 Terminates a <iref deflist>.<p>
 
+<defitem def {<lb>def <i text><rb>}>
+
+This macro begins a non-synopsis entry within a <iref deflist>.  Use
+this for definition-style lists that do not contain cross-referenced 
+items.<p>
+
+The <i>text</i> is the text to display; it may contain
+embedded style macros.<p>
+
+The <iref def> macro is followed by the text that defines the
+named item.<p>
+
 <defitem defitem {<lb>defitem <i tag text><rb>}>
 
 This macro begins an item definition within a <iref deflist>.  An

@@ -242,6 +242,9 @@ snit::type ::kitedocs::manpage {
         $ehtml smartalias /deflist 0 - {comment...} \
             [myproc /deflist]
 
+        $ehtml smartalias def 1 1 {text} \
+            [myproc def]
+
         $ehtml smartalias defitem 2 2 {item text} \
             [myproc defitem]
 
@@ -349,6 +352,7 @@ snit::type ::kitedocs::manpage {
         table {
             margin-top:    4px;
             margin-bottom: 4px;
+            text-align:    left;
         }
         th {
             padding-left: 4px;
@@ -525,6 +529,21 @@ snit::type ::kitedocs::manpage {
         </dl>
     }
 
+    # def text
+    #
+    # text   - Topic in a deflist 
+    #
+    # An entry in a def list that doesn't create a synopsis item.
+    # The text is expanded once, and made bold.
+
+    template proc def {text} {
+        set text [$ehtml expandonce $text]
+    } {
+        |<--
+        <dt><b>$text</b></dt>
+        <dd>
+    }
+
     # defitem item text
     #
     # item     iref identifier for this item
@@ -540,6 +559,25 @@ snit::type ::kitedocs::manpage {
     } {
         |<--
         <dt><b><tt><a name="[$ehtml textToID $item]">$text</a></tt></b></dt>
+        <dd>
+    }
+
+    # defopt text
+    #
+    # text     Text defining an option, e.g., "-foo <i>bar</i>"
+    #
+    # An item in an item list that defines an option to a command.
+
+    template proc defopt {text} {
+        set opt [lindex $text 0]
+        set lastItem [lindex $items end]
+        set id "$lastItem$opt"
+        lappend optsfor($lastItem) $opt
+        set text [$ehtml expandonce $text]
+        set opttext($id) $text
+    } {
+        |<--
+        <dt><b><tt><a name="$id">$text</a></tt></b></dt>
         <dd>
     }
 
@@ -583,25 +621,6 @@ snit::type ::kitedocs::manpage {
             puts stderr "Warning, iref not found: '$tag'"
             return "<tt>$tag</tt>"
         }
-    }
-
-    # defopt text
-    #
-    # text     Text defining an option, e.g., "-foo <i>bar</i>"
-    #
-    # An item in an item list that defines an option to a command.
-
-    template proc defopt {text} {
-        set opt [lindex $text 0]
-        set lastItem [lindex $items end]
-        set id "$lastItem$opt"
-        lappend optsfor($lastItem) $opt
-        set text [$ehtml expandonce $text]
-        set opttext($id) $text
-    } {
-        |<--
-        <dt><b><tt><a name="$id">$text</a></tt></b></dt>
-        <dd>
     }
 
     # example
