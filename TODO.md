@@ -1,9 +1,5 @@
 # Project TODO List
 
-* Libraries
-  * 'kite test' needs to catch test script errors and display them.
-    * i.e., when a test script fails on load.
-
 * Default teapot:
   * Making ~/.kite/teapot the default teapot means that
     different users are in contention.
