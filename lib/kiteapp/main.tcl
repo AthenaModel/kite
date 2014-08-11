@@ -53,8 +53,10 @@ proc main {argv} {
     } elseif {[info exist ktools($tool)]} {
         set treeNeeded [dict get $ktools($tool) intree]
     } else {
-        throw FATAL \
-            "'$tool' is not the name of a Kite tool.  See 'kite help'."
+        throw FATAL [outdent "
+            '$tool' is neither the name of a Kite tool, nor the name of a
+            TCL script to execute.  See 'kite help' for usage information.
+        "]
     }
 
     # NEXT, find the root of the project tree, if any.
