@@ -27,7 +27,7 @@ proc main {argv} {
     # FIRST, given no input display the help; help doesn't care whether
     # we're in a project tree or not.
     if {[llength $argv] == 0} {
-        usetool help
+        UseTool help
         return
     }
 
@@ -42,9 +42,17 @@ proc main {argv} {
     }
 
     # NEXT, get the subcommand and see if we have a matching tool.
+    # Alternatively, we might have a script fileto run.
     set tool [lshift argv]
+    set treeNeeded 0
 
-    if {![info exist ktools($tool)]} {
+    if {[file isfile $tool]} {
+        set script [file normalize $tool]
+        set tool "RunScript"
+        set treeNeeded 1
+    } elseif {[info exist ktools($tool)]} {
+        set treeNeeded [dict get $ktools($tool) intree]
+    } else {
         throw FATAL \
             "'$tool' is not the name of a Kite tool.  See 'kite help'."
     }
@@ -55,7 +63,7 @@ proc main {argv} {
     # NEXT, check whether the tool in question requires a project tree
     # or not.  If it does, load the project info.
 
-    if {[dict get $ktools($tool) intree]} {
+    if {$treeNeeded} {
         if {![project intree]} {
             throw FATAL \
                 "Could not find project.kite in this directory or its parents"
@@ -79,17 +87,21 @@ proc main {argv} {
     }
 
     # NEXT, use the tool, passing it the remaining arguments.
-    usetool $tool $argv
+    if {$tool eq "RunScript"} {
+        RunScript $script $argv
+    } else {
+        UseTool $tool $argv
+    }
 }
 
-# usetool tool ?args...?
+# UseTool tool ?args...?
 #
 # tool - A registered Kite tool
 # argv - Command-line arguments.
 #
 # Calls the tool with the given arguments.
 
-proc usetool {tool {argv ""}} {
+proc UseTool {tool {argv ""}} {
     array set tdata $::ktools($tool)
 
     # FIRST, make sure the tool's package is loaded.
@@ -101,4 +113,17 @@ proc usetool {tool {argv ""}} {
 
     # NEXT, execute it.
     $tdata(ensemble) execute $argv
+}
+
+# RunScript filename ?args...?
+#
+# filename  - Name of a script file
+# argv      - Command-line arguments.
+#
+# Invokes the script in the context of the project.
+
+proc RunScript {filename {argv ""}} {
+    # TODO: We need a platform module!
+    set ::env(TCLLIBPATH) [project libpath]
+    exec tclsh $filename {*} >@ stdout 2>@ stderr
 }

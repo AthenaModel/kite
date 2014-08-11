@@ -68,7 +68,16 @@ snit::type helptool {
 
         puts ""
 
-        puts "\nEnter 'kite help <topic>' for help on a given topic."
+        puts "Enter 'kite help <topic>' for help on a given topic."
+
+        puts ""
+
+        puts [outdent {
+            In addition, 'kite' can be used to execute scripts in
+            the context of the current project's code base:
+
+              $ kite myfile.tcl 1 2 3
+        }]
 
         puts ""
     }

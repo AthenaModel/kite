@@ -3,10 +3,6 @@
 * Libraries
   * 'kite test' needs to catch test script errors and display them.
     * i.e., when a test script fails on load.
-* Problem
-  * kite deps doesn't want to install textutil::expander.  This might
-    simply be because there's no internet connectivity.
-    * Look into this when the 'net's back.
 
 * Default teapot:
   * Making ~/.kite/teapot the default teapot means that
