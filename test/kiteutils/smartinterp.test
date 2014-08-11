@@ -29,7 +29,6 @@ namespace import ::tcltest::*
 source ../../lib/kiteutils/pkgModules.tcl
 namespace import ::kiteutils::*
 
-
 #-------------------------------------------------------------------
 # Setup
 

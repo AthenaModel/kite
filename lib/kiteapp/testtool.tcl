@@ -160,7 +160,12 @@ snit::type testtool {
         }
 
         if {!$verbose} {
-            ShowStats $target $output
+            set errCount [ShowStats $target $output]
+
+            if {$errCount > 0} {
+                puts ""
+                throw FATAL "Test file errors: $errCount"
+            }
         }
     }
 
@@ -169,15 +174,33 @@ snit::type testtool {
     # target   - The test target
     # output   - The tcltest output
     #
-    # Parses throught the test output and finds just the stats.
+    # Parses throught the test output and finds just the stats.  Returns
+    # the number of Test file error blocks found; these represent runtime
+    # errors, not test failures.
 
     proc ShowStats {target output} {
+        set inError 0
+        set errCount 0
         foreach line [split $output \n] {
+            if {[string match "Test file error:*" $line]} {
+                incr errCount
+                set inError 1
+            }
+
+            if {$inError} {
+                puts $line
+                if {[regexp {^\s*\w+\.test\s*$} $line]} {
+                    set inError 0
+                }
+            }
+
             if {[regexp {Total\s+\d+\s+Passed\s+\d+\s+Skipped\s+\d+\s+Failed} $line]} {
                 set pieces [split $line :]
                 puts "$target: [lindex $pieces 1]"
             }
         }
+
+        return $errCount
     }
 }
 
