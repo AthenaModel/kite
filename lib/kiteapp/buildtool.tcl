@@ -30,10 +30,25 @@ set ::khelp(build) {
     The "build" tool builds all build targets specified in the
     project's project.kite file.  In particular:
 
-    * Libs will be built as .kite/libzips/package-<name>*.zip.
-    * App will be built as bin/<name>[.exe] or bin/<name>.kit
+    * Libs are built as .kite/libzips/package-<name>*.zip.
+    * Apps are built as bin/<name>[.exe] or bin/<name>.kit
 
-    Build also builds the man pages and documentation.
+    By default, "build" builds all libraries and applications.  To build
+    libraries only:
+
+      $ kite build lib
+
+    To build specific libraries:
+
+      $ kite build lib mylib1 mylib2 ...
+
+    To build applications only:
+
+      $ kite build app
+
+    To build specific applications:
+
+      $ kite build app myapp1 myapp2
 }
 
 #-----------------------------------------------------------------------
@@ -51,7 +66,10 @@ snit::type buildtool {
     # Executes the tool given the command line arguments.
 
     typemethod execute {argv} {
-        checkargs build 0 0 {} $argv
+        checkargs build 0 - {?app|lib? ?names...?} $argv
+
+        # FIRST, get the arguments.
+        set kind [lshift argv]
 
         # FIRST, check for dependencies.
         if {![includer uptodate] || ![teacup uptodate]} {
@@ -62,19 +80,39 @@ snit::type buildtool {
 
         # TODO: Build make targets
 
-        # NEXT, Build teapot packages.
-        foreach lib [project provide names] {
-            BuildTeapotZip $lib
+        # NEXT, Build provided libraries as teapot packages.
+        if {$kind in {lib ""}} {
+            if {[llength $argv] > 0} {
+                set names $argv
+            } else {
+                set names [project provide names]
+            }
+
+            foreach lib $names {
+                if {$lib ni [project provide names]} {
+                    puts "WARNING, Unknown application: \"$lib\""
+                    continue
+                }
+                BuildTeapotZip $lib
+            }
         }
 
-        # NEXT, build the apps
-        foreach app [project app names] {
-            BuildApp $app
-        }
+        # NEXT, Build applications.
+        if {$kind in {app ""}} {
+            if {[llength $argv] > 0} {
+                set names $argv
+            } else {
+                set names [project app names]
+            }
 
-        # NEXT, build documentation
-        docs manpages
-        docs kitedocs
+            foreach app $names {
+                if {$app ni [project app names]} {
+                    puts "WARNING, Unknown application: \"$app\""
+                    continue
+                }
+                BuildApp $app
+            }
+        }
     }
     
 
