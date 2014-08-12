@@ -1,4 +1,4 @@
-project athena-kite 0.0a3 "Athena/Kite Development Tool"
+project athena-kite 0.0a4 "Athena/Kite Development Tool"
 poc William.H.Duquette@jpl.nasa.gov
 app kite
 provide kiteutils
@@ -8,8 +8,8 @@ require snit 2.3
 require textutil::expander 1.3.1
 
 shell {
-    package require kutils
-    package require ktools
-    namespace import kutils::* ktools::*
+    package require kiteutils
+    package require kitedocs
+    namespace import kiteutils::*
 }
 

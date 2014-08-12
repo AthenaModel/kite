@@ -25,18 +25,18 @@ namespace eval ::kiteinfo:: {
         provides {kiteutils kitedocs}
         includes {}
         gui-kite 0
-        pkgversion 0.0a3
+        pkgversion 0.0a4
         requires {snit textutil::expander}
         shell {
-    package require kutils
-    package require ktools
-    namespace import kutils::* ktools::*
+    package require kiteutils
+    package require kitedocs
+    namespace import kiteutils::*
 }
         name athena-kite
         poc William.H.Duquette@jpl.nasa.gov
         apps kite
         apptype-kite kit
-        version 0.0a3
+        version 0.0a4
     }
 
     namespace export \

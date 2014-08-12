@@ -10,9 +10,6 @@
 #   targets: The app or appkit (if any), teapot packages, docs, and
 #   other build targets specified in project.kite.
 #
-#   TODO: When we actually have more than one kind of build product,
-#   add arguments so that the user can selectively build just one thing.
-#
 #-----------------------------------------------------------------------
 
 #-----------------------------------------------------------------------
@@ -71,6 +68,10 @@ snit::type buildtool {
         # FIRST, get the arguments.
         set kind [lshift argv]
 
+        if {$kind ni {"" lib app}} {
+            throw FATAL "Invalid build type: \"$kind\"."
+        }
+
         # FIRST, check for dependencies.
         if {![includer uptodate] || ![teacup uptodate]} {
             puts "WARNING: Some dependencies are not up-to-date."
@@ -90,7 +91,7 @@ snit::type buildtool {
 
             foreach lib $names {
                 if {$lib ni [project provide names]} {
-                    puts "WARNING, Unknown application: \"$lib\""
+                    puts "WARNING, Unknown library: \"$lib\""
                     continue
                 }
                 BuildTeapotZip $lib

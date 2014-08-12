@@ -25,16 +25,26 @@ set ::khelp(install) {
     The "install" tool installs build products into the local file
     system for general use.
 
-    Applications:
+    Applications are installed into ~/bin, e.g., myapp.kit is installed 
+    as ~/bin/myapp.  Libraries are installed in the default teapot, and  
+    are then accessible to other applications on the same host.
 
-    Apps and appkits are installed into ~/bin.  For example, 
-    appkit myapp.kit is installed as ~/bin/myapp.  Appkits run against 
-    the installed development tclsh.  
+    By default, "install" installs all libraries and applications.  
+    To install libraries only:
 
-    Libraries:
+      $ kite install lib
 
-    Libs are installed into the local teapot, and are then accessible
-    to other applications on the same host.
+    To install specific libraries:
+
+      $ kite install lib mylib1 mylib2 ...
+
+    To install applications only:
+
+      $ kite install app
+
+    To install specific applications:
+
+      $ kite install app myapp1 myapp2
 }
 
 #-----------------------------------------------------------------------
@@ -49,33 +59,55 @@ snit::type installtool {
 
     # execute argv
     #
-    # Builds the build targets, and installs the apps to ~/bin for use.
-    #
-    # TODO: When we really have multiple kinds of build target, support
-    # installing just one kind or one target.
+    # Installs the desired build targets.
 
     typemethod execute {argv} {
-        checkargs install 0 0 {} $argv
+        checkargs install 0 - {?app|lib? ?names...?} $argv
 
-        # FIRST, install any teapot packages.
-        if {[llength [project provide names]] > 0} {
-            InstallProvidedLibraries
+        # FIRST, get the arguments.
+        set kind [lshift argv]
+
+        if {$kind ni {"" lib app}} {
+            throw FATAL "Invalid install type: \"$kind\"."
+        }
+
+        # NEXT, install any teapot packages.
+        if {$kind in {lib ""}} {
+            if {[llength $argv] > 0} {
+                InstallProvidedLibraries $argv
+            } else {
+                InstallProvidedLibraries [project provide names]                
+            }
         }
 
         # NEXT, install any applications.
-        foreach app [project app names] {
-            InstallApp $app
+        if {$kind in {app ""}} {
+            if {[llength $argv] > 0} {
+                set names $argv
+            } else {
+                set names [project app names]
+            }
+
+            foreach app $names {
+                if {$app ni [project app names]} {
+                    puts "WARNING, Unknown application: \"$app\""
+                    continue
+                }
+                InstallApp $app
+            }
         }
     }
 
     #-------------------------------------------------------------------
     # Installing Teapot Libraries
     
-    # InstallProvidedLibraries
+    # InstallProvidedLibraries names
+    #
+    # names  - Names of the libraries to install.
     #
     # Installs exported libraries into the local teaput.
 
-    proc InstallProvidedLibraries {} {
+    proc InstallProvidedLibraries {names} {
         # FIRST, make sure there's a local teapot to install them 
         # into.
         if {[teapot state] ne "ok"} {
@@ -91,7 +123,11 @@ snit::type installtool {
 
         # NEXT, for each library, see if it has a package; and if so,
         # install it.
-        foreach lib [project provide names] {
+        foreach lib $names {
+            if {$lib ni [project provide names]} {
+                puts "WARNING, Unknown library: \"$lib\""
+                continue
+            }
             InstallLib $lib
         }
     }
