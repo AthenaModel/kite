@@ -58,9 +58,9 @@ snit::type project {
     #       version    - Version of required package $name
     #       local      - 1 if this is a local package, and 0 otherwise.
     #
-    #   makes          - Names of "make" directories
-    #   makeall-$dir   - Script to do "make all" for $dir
-    #   makeclean-$dir - Script to do "make clean" for $dir
+    #   srcs           - Names of "src" targets
+    #   build-$src     - Script to build contents of $src
+    #   clean-$src     - Script to clean contents of $src
     #
     # If values are "", the data has not yet been loaded.
 
@@ -74,7 +74,7 @@ snit::type project {
         provides       {}
         includes       {}
         requires       {}
-        makes          {}
+        srcs           {}
         shell          {}
     }
 
@@ -102,6 +102,8 @@ snit::type project {
     #
     # If we cannot find the project directory, throw an error with
     # code FATAL.
+    #
+    # TODO: Split path components on "/" before rejoining?
 
     typemethod root {args} {
         if {$rootdir eq ""} {
@@ -113,13 +115,7 @@ snit::type project {
             return ""
         }
 
-        set list [list]
-
-        foreach arg $args {
-            lappend list {*}[split $arg /]
-        }
-
-        return [file join $rootdir {*}$list]
+        return [file join $rootdir {*}$args]
     }
 
     # globroot ?patterns...?
@@ -417,33 +413,32 @@ snit::type project {
         return [dict get $info(require-$name) local]
     }
 
-    # make paths
+    # src names
     #
-    # Returns the list of "make" directories.  Each entry is a 
-    # relative path with "/" as separator.
+    # Returns the list of "src" directory names.
 
-    typemethod {make paths} {} {
-        return $info(makes)
+    typemethod {src names} {} {
+        return $info(srcs)
     }
 
-    # make allscript path
+    # src build src
     #
-    # path  - A make directory path, as returned by [project make paths]
+    # src  - A src directory name, as returned by [project src names]
     # 
-    # Returns the "make all" script.
+    # Returns the "build" script.
 
-    typemethod {make allscript} {path} {
-        return $info(makeall-$path)
+    typemethod {src build} {src} {
+        return $info(build-$src)
     }
 
-    # make cleanscript path
+    # src clean src
     #
-    # path  - A make directory path, as returned by [project make paths]
+    # src  - A src directory name, as returned by [project src names]
     # 
-    # Returns the "make clean" script.
+    # Returns the "clean" script.
 
-    typemethod {make cleanscript} {path} {
-        return $info(makeclean-$path)
+    typemethod {src clean} {src} {
+        return $info(clean-$src)
     }
 
 
@@ -504,7 +499,7 @@ snit::type project {
         $safe alias provide [myproc ProvideCmd]
         $safe alias include [myproc IncludeCmd]
         $safe alias require [myproc RequireCmd]
-        $safe alias make    [myproc MakeCmd]
+        $safe alias src     [myproc SrcCmd]
         $safe alias shell   [myproc ShellCmd]
 
 
@@ -709,39 +704,42 @@ snit::type project {
         set info(require-$name) $rdict
     }
 
-    # MakeCmd path ?options...?
+    # SrcCmd name ?options...?
     #
-    # path   - The path of the "make directory", with "/" as the separator,
-    #          e.g., "src/libfoo"
+    # name   - The name of the src/* directory
     #
     # Options:
     #
-    #   -makeall script    - Shell script to "make all".
-    #   -makeclean script  - Shell script to "make clean".
+    #   -build script  - Shell script to build contents.
+    #   -clean script  - Shell script to clean contents.
     #
-    # Implementation of the "make" kite file command.  Specifies the
-    # name of a directory containing a "Makefile", and optionally the
-    # specific commands or sequence of commands to use to perform the
-    # "make clean" and "make all" tasks.
+    # Implementation of the "src" kite file command.  Specifies the
+    # name of a src/<name> directory.  Kite assumes the directory contains
+    # a Makefile; however, the project can customize the build and clean
+    # scripts.
 
-    proc MakeCmd {path args} {
-        # FIRST, get the path.
-        set path [string trim $path]
+    proc SrcCmd {name args} {
+        # FIRST, get the name.
+        set name [string trim [string tolower $name]]
 
-        if {$path in $info(makes)} {
-            throw SYNTAX "Duplicate make path \"$path\""
+        if {![regexp {^[a-z]\w*$} $name]} {
+            throw SYNTAX "Invalid src directory name \"$name\""
+        }
+
+        if {$name in $info(srcs)} {
+            throw SYNTAX "Duplicate src directory \"$dir\""
         }
 
         # NEXT, get the options
-        set info(makeall-$path)   "make all"
-        set info(makeclean-$path) "make clean"
+        set info(build-$name) "make clean all"
+        set info(clean-$name) "make clean"
 
         foroption opt args {
-            -makeall   { set info(makeall-$path)   [lshift args] }
-            -makeclean { set info(makeclean-$path) [lshift args] }
+            -build { set info(build-$name) [lshift args] }
+            -clean { set info(clean-$name) [lshift args] }
         }
 
-        lappend info(makes) $path
+        lappend info(srcs) $name
     }
 
     # ShellCmd script
@@ -894,8 +892,8 @@ snit::type project {
             DumpValue "Provides:" "${name}(n)"
         }
 
-        foreach path $info(makes) {
-            DumpValue "Makes:" $path
+        foreach name $info(srcs) {
+            DumpValue "Makes:" src/$name
         }
 
         if {[llength $info(includes)] > 0} {

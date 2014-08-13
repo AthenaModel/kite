@@ -47,12 +47,11 @@ snit::type compiletool {
 
 
         # TODO: Build make targets
-        foreach path [project make paths] {
-            set dir [project root $path]
+        foreach name [project src names] {
+            set dir [project root src $name]
 
-            puts "Making: $path"
-            ExecuteScript $dir [project make cleanscript $path]
-            ExecuteScript $dir [project make allscript $path]
+            puts "Making: src/$name"
+            ExecuteScript $dir [project src build $name]
         }
     }
 
