@@ -58,6 +58,10 @@ snit::type project {
     #       version    - Version of required package $name
     #       local      - 1 if this is a local package, and 0 otherwise.
     #
+    #   makes          - Names of "make" directories
+    #   makeall-$dir   - Script to do "make all" for $dir
+    #   makeclean-$dir - Script to do "make clean" for $dir
+    #
     # If values are "", the data has not yet been loaded.
 
     typevariable info -array {
@@ -70,6 +74,7 @@ snit::type project {
         provides       {}
         includes       {}
         requires       {}
+        makes          {}
         shell          {}
     }
 
@@ -108,7 +113,13 @@ snit::type project {
             return ""
         }
 
-        return [file join $rootdir {*}$args]
+        set list [list]
+
+        foreach arg $args {
+            lappend list {*}[split $arg /]
+        }
+
+        return [file join $rootdir {*}$list]
     }
 
     # globroot ?patterns...?
@@ -406,6 +417,36 @@ snit::type project {
         return [dict get $info(require-$name) local]
     }
 
+    # make paths
+    #
+    # Returns the list of "make" directories.  Each entry is a 
+    # relative path with "/" as separator.
+
+    typemethod {make paths} {} {
+        return $info(makes)
+    }
+
+    # make allscript path
+    #
+    # path  - A make directory path, as returned by [project make paths]
+    # 
+    # Returns the "make all" script.
+
+    typemethod {make allscript} {path} {
+        return $info(makeall-$path)
+    }
+
+    # make cleanscript path
+    #
+    # path  - A make directory path, as returned by [project make paths]
+    # 
+    # Returns the "make clean" script.
+
+    typemethod {make cleanscript} {path} {
+        return $info(makeclean-$path)
+    }
+
+
     # shell
     #
     # Returns the shell initialization script.
@@ -463,6 +504,7 @@ snit::type project {
         $safe alias provide [myproc ProvideCmd]
         $safe alias include [myproc IncludeCmd]
         $safe alias require [myproc RequireCmd]
+        $safe alias make    [myproc MakeCmd]
         $safe alias shell   [myproc ShellCmd]
 
 
@@ -667,6 +709,41 @@ snit::type project {
         set info(require-$name) $rdict
     }
 
+    # MakeCmd path ?options...?
+    #
+    # path   - The path of the "make directory", with "/" as the separator,
+    #          e.g., "src/libfoo"
+    #
+    # Options:
+    #
+    #   -makeall script    - Shell script to "make all".
+    #   -makeclean script  - Shell script to "make clean".
+    #
+    # Implementation of the "make" kite file command.  Specifies the
+    # name of a directory containing a "Makefile", and optionally the
+    # specific commands or sequence of commands to use to perform the
+    # "make clean" and "make all" tasks.
+
+    proc MakeCmd {path args} {
+        # FIRST, get the path.
+        set path [string trim $path]
+
+        if {$path in $info(makes)} {
+            throw SYNTAX "Duplicate make path \"$path\""
+        }
+
+        # NEXT, get the options
+        set info(makeall-$path)   "make all"
+        set info(makeclean-$path) "make clean"
+
+        foroption opt args {
+            -makeall   { set info(makeall-$path)   [lshift args] }
+            -makeclean { set info(makeclean-$path) [lshift args] }
+        }
+
+        lappend info(makes) $path
+    }
+
     # ShellCmd script
     #
     # Implementation of the "shell" kite file command.
@@ -815,6 +892,10 @@ snit::type project {
 
         foreach name $info(provides) {
             DumpValue "Provides:" "${name}(n)"
+        }
+
+        foreach path $info(makes) {
+            DumpValue "Makes:" $path
         }
 
         if {[llength $info(includes)] > 0} {

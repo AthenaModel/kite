@@ -1,5 +1,9 @@
 # Project TODO List
 
+* Building "make" targets
+
+## Notes
+
 * Default teapot:
   * Making ~/.kite/teapot the default teapot means that
     different users are in contention.
@@ -9,9 +13,6 @@
 * Test suites
   * kitedoc(n)
   * manpage(n)
-* Next
-  * Add ability to build particular things in buildtool.
-  * Complete kite test suite.
 * When new athena/kite web server is available
   * Support for "external documents"
     * MS Office documents and similar will reside on a separate web server;
