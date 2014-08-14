@@ -42,32 +42,15 @@ snit::type compiletool {
     typemethod execute {argv} {
         checkargs compile 0 0 {} $argv
 
-        # FIRST, set up environment
-        SetUpProjectEnvironment
-
-
-        # TODO: Build make targets
         foreach name [project src names] {
             set dir [project root src $name]
 
+            puts ""
+            puts [string repeat = 75]
             puts "Making: src/$name"
+            puts ""
             ExecuteScript $dir [project src build $name]
         }
-    }
-
-    # SetUpProjectEnvironment
-    #
-    # Adds environment variables for use by Makefiles or other 
-    # scripts.
-    #
-    # TODO: These should be set when the project info is loaded,
-    # so that they are available to all commands executed by 
-    # Kite.
-
-    proc SetUpProjectEnvironment {} {
-        set ::env(KITE_PROJECT_ROOT) [project root]
-        set ::env(KITE_OS)           [plat id]
-        set ::env(KITE_TCL_HOME)     [plat pathof tclhome]
     }
 
     # ExecuteScript dir script

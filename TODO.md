@@ -1,6 +1,11 @@
 # Project TODO List
 
 * Building "make" targets
+  * 'kite compile' does this; 'kite compile $name' should compile just the
+    one.
+  * 'kite build' builds apps and libs.
+  * 'kite build all' compiles all src, builds apps and libs, and formats
+    all docs.
 
 
 ## Notes
