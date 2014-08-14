@@ -6,7 +6,10 @@
   * 'kite build' builds apps and libs.
   * 'kite build all' compiles all src, builds apps and libs, and formats
     all docs.
-
+* When a project "package require"'s packages it also exports, it should
+  probably use "package require -exact".  That will guarantee that it
+  uses the version within the project itself, rather than settling for
+  something in the teapot.
 
 ## Notes
 

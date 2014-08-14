@@ -17,12 +17,25 @@ set ::ktools(compile) {
     arglist     {}
     package     kiteapp
     ensemble    compiletool
-    description "Compile make directories"
+    description "Compile \"src\" directories"
     intree      yes
 }
 
 set ::khelp(compile) {
-    The "compile" tool is experimental.
+    The 'kite compile' tool compiles the contents of the project's 
+    "src" directories, as defined by the "src" statement in 
+    project.kite.  By default, all such directories are compiled.  
+    Alternatively, the user may specify a list of names.  Note that
+    directories are always compiled in the order in which they are
+    defined in project.kite.
+
+    For example, to compile the contents of the <root>/src/fred and
+    <root>/src/george directories,
+
+        $ kite compile fred george
+
+    See the discussion of the "src" statement in the project(5) manpage
+    for more.
 }
 
 #-----------------------------------------------------------------------
@@ -40,9 +53,24 @@ snit::type compiletool {
     # Executes the tool given the command line arguments.
 
     typemethod execute {argv} {
-        checkargs compile 0 0 {} $argv
+        checkargs compile 0 - {?names?} $argv
+
+        if {[llength $argv] > 0} {
+            foreach name $argv {
+                if {$name ni [project src names]} {
+                    throw FATAL "Unknown src directory: \"$name\""
+                }
+            }
+            set toCompile $argv
+        } else {
+            set toCompile [project src names]
+        }
 
         foreach name [project src names] {
+            if {$name ni $toCompile} {
+                continue
+            }
+
             set dir [project root src $name]
 
             puts ""

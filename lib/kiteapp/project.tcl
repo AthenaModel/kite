@@ -613,9 +613,9 @@ snit::type project {
 
     proc ProvideCmd {name} {
         # FIRST, get the name.
-        set name [string trim [string tolower $name]]
+        set name [string trim $name]
 
-        if {![regexp {^[a-z]\w*$} $name]} {
+        if {![regexp {^[a-zA-Z]\w*$} $name]} {
             throw SYNTAX "Invalid lib name \"$name\""
         }
 
@@ -720,9 +720,9 @@ snit::type project {
 
     proc SrcCmd {name args} {
         # FIRST, get the name.
-        set name [string trim [string tolower $name]]
+        set name [string trim $name]
 
-        if {![regexp {^[a-z]\w*$} $name]} {
+        if {![regexp {^[a-zA-Z]\w*$} $name]} {
             throw SYNTAX "Invalid src directory name \"$name\""
         }
 
