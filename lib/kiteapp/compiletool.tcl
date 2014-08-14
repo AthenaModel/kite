@@ -59,10 +59,15 @@ snit::type compiletool {
     #
     # Adds environment variables for use by Makefiles or other 
     # scripts.
+    #
+    # TODO: These should be set when the project info is loaded,
+    # so that they are available to all commands executed by 
+    # Kite.
 
     proc SetUpProjectEnvironment {} {
         set ::env(KITE_PROJECT_ROOT) [project root]
         set ::env(KITE_OS)           [plat id]
+        set ::env(KITE_TCL_HOME)     [plat pathof tclhome]
     }
 
     # ExecuteScript dir script

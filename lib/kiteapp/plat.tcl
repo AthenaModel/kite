@@ -24,6 +24,9 @@ snit::type plat {
     # Type Variables
 
     # info - Cached info
+    #
+    # id              - The OS ID: linux|osx|windows
+    #
     
     typevariable info -array {
         id {}
@@ -72,6 +75,22 @@ snit::type plat {
     }
 
 
+    #-------------------------------------------------------------------
+    # Paths of important directories
+
+    # pathof tclhome
+    #
+    # The normalized directory path to the "TCL Home" directory.
+    #
+    # TODO: this should be derived from "pathto tclsh" by default, and
+    # should be a configurable parameter.
+
+    typemethod {pathof tclhome} {} {
+        set tclsh [info nameofexecutable]
+        set home [file dirname [file dirname $tclsh]]
+
+        return [file normalize $home]
+    }
     
     
 }
