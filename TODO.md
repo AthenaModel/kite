@@ -1,9 +1,8 @@
 # Project TODO List
 
 * Building "make" targets
-  * 'kite compile' does this; 'kite compile $name' should compile just the
-    one.
-  * 'kite build' builds apps and libs.
+  * Add "provide -binary" option.
+  * Build provided -binary extensions with the appropriate architecture.
   * 'kite build all' compiles all src, builds apps and libs, and formats
     all docs.
 * When a project "package require"'s packages it also exports, it should

@@ -96,7 +96,7 @@ as a standalone executable, will be built using a Tk basekit.<p>
 A project may contain any number of applications; the first listed in
 <tt project.kite> is called the <i primary> application.<p>
 
-<defitem provide {provide <i>name</i>}>
+<defitem provide {provide <i>name</i> ?<i options>?}>
 
 This statement tells Kite that the project provides a Tcl library package
 intended for use by other projects.  The package will be called 
@@ -120,6 +120,52 @@ in that block, corresponding to the external dependencies listed in
 <tt project.kite> for those external libraries this package actually uses,
 Kite will keep their version numbers consistent with those in 
 <tt project.kite>.<p>
+
+<b Binary Packages:> If the project exports a binary Tcl extension, the
+extension should be built as a TEA extension in a 
+"<tt src/mylib>" subdirectory, and installed into "<tt lib/mylib>" when
+it is built.  Then, the <b -binary> option should be used to tell Kite
+that the provided package is a binary extension:<p>
+
+<example>
+provide Mylib -binary
+src Mylib ...
+</example>
+
+<defitem src {src <i name> ?<i options...>?}>
+
+This statement tells Kite that the project contains a directory,
+<tt src/><i name>, containing some kind of code to be 
+compiled.  The directory might define a binary Tcl package, or some 
+other compiled product (i.e., a .a library to be linked with a binary
+Tcl package).<p>
+
+By default, Kite assumes that the named directory contains a 
+<tt Makefile>, and that it can issue "<tt make ...>" commands to build the
+directory's contents and clean up the build products.  Alternatively, the
+user can specify how to do this by passing the following options:<p>
+
+<deflist options>
+
+<defopt {-build <i command>}>
+
+Specifies the command used to build the directory's contents.  
+Defaults to "<tt make clean all>".<p>
+
+<defopt {-clean <i command>}>
+
+Specifies the command used to clean up the directory's build products.
+Defaults to "<tt make clean>".<p>
+
+</deflist options>
+
+If the directory contains a binary extension, the <b -build> command 
+should "install" the extension into "<tt lib/><i name>", 
+and the <b -clean> command should remove it.  In addition, if the project
+needs to export the library it should include the following statement
+in <tt project.kite>:<p>
+
+<example>provide <i name> -binary</example>
 
 <defitem require {require <i>name version</i> ?<i>options...</i>?}>
 
