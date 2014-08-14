@@ -23,9 +23,9 @@ namespace eval ::kiteinfo:: {
         require-snit {version 2.3 local 0}
         description {Athena/Kite Development Tool}
         provides {kiteutils kitedocs}
-        includes {}
         gui-kite 0
-        pkgversion 0.0a4
+        includes {}
+        pkgversion 0.1a0
         requires {snit textutil::expander}
         shell {
     package require kiteutils
@@ -34,9 +34,10 @@ namespace eval ::kiteinfo:: {
 }
         name athena-kite
         poc William.H.Duquette@jpl.nasa.gov
+        srcs {}
         apps kite
         apptype-kite kit
-        version 0.0a4
+        version 0.1a0
     }
 
     namespace export \
