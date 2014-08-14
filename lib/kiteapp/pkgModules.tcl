@@ -14,7 +14,7 @@
 # Package Definition
 
 # -kite-provide-start  DO NOT EDIT THIS BLOCK BY HAND
-package provide kiteapp 0.1a0
+package provide kiteapp 0.1
 # -kite-provide-end
 
 #-----------------------------------------------------------------------
