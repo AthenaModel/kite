@@ -18,6 +18,7 @@ set ::ktools(teapot) {
     package     kiteapp
     ensemble    teapottool
     description "Create local teapot for Kite projects."
+    usage       "?create|link|remove?"
     intree      no
 }
 
@@ -74,7 +75,7 @@ snit::type teapottool {
     # given the command line.
 
     typemethod execute {argv} {
-        checkargs teapot 0 1 {?create?} $argv
+        checkargs teapot 0 1 $argv
 
         set sub [lindex $argv 0]
 

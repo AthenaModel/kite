@@ -18,6 +18,7 @@ set ::ktools(compile) {
     package     kiteapp
     ensemble    compiletool
     description "Compile \"src\" directories"
+    usage       "?<name>...?"
     intree      yes
 }
 
@@ -53,7 +54,7 @@ snit::type compiletool {
     # Executes the tool given the command line arguments.
 
     typemethod execute {argv} {
-        checkargs compile 0 - {?names?} $argv
+        checkargs compile 0 - $argv
 
         if {[llength $argv] > 0} {
             foreach name $argv {

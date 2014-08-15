@@ -20,6 +20,7 @@ set ::ktools(build) {
     package     kiteapp
     ensemble    buildtool
     description "Build the entire project."
+    usage       "?app|lib? ?<name>...?"
     intree      yes
 }
 
@@ -63,7 +64,7 @@ snit::type buildtool {
     # Executes the tool given the command line arguments.
 
     typemethod execute {argv} {
-        checkargs build 0 - {?app|lib? ?names...?} $argv
+        checkargs build 0 - $argv
 
         # FIRST, get the arguments.
         set kind [lshift argv]

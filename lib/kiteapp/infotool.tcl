@@ -18,6 +18,7 @@ set ::ktools(info) {
     package     kiteapp
     ensemble    infotool
     description "Display information about Kite and this project."
+    usage       "?<option>?"
     intree      yes
 }
 
@@ -55,7 +56,7 @@ snit::type infotool {
     # given the command line.
 
     typemethod execute {argv} {
-        checkargs info 0 1 {?option?} $argv
+        checkargs info 0 1 $argv
 
         set opt [lindex $argv 0]
 

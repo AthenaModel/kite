@@ -18,6 +18,7 @@ set ::ktools(new) {
     package     kiteapp
     ensemble    newtool
     description "Create a new project tree on the disk."
+    usage       "<template> <project> ?<arg>...?"
     intree      no
 }
 
@@ -58,7 +59,7 @@ snit::type newtool {
     # Executes the tool given the command line arguments.
 
     typemethod execute {argv} {
-        checkargs new 0 3 {template project ?arg?} $argv
+        checkargs new 0 3 $argv
 
         lassign $argv template project targ
 

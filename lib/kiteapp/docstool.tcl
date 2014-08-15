@@ -23,6 +23,7 @@ set ::ktools(docs) {
     package     kiteapp
     ensemble    docstool
     description "Format project documentation."
+    usage       {?<target>?}
     intree      yes
 }
 
@@ -70,7 +71,7 @@ snit::type docstool {
     # Executes the tool given the command line arguments.
 
     typemethod execute {argv} {
-        checkargs docs 0 1 {?target?} $argv
+        checkargs docs 0 1 $argv
 
         set target [lindex $argv 0]
 

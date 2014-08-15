@@ -21,6 +21,7 @@ set ::ktools(deps) {
     package     kiteapp
     ensemble    depstool
     description "Manage project dependencies"
+    usage       "?update? ?clean|<name>?"
     intree      yes
 }
 
@@ -76,7 +77,7 @@ snit::type depstool {
     # Executes the tool given the command line arguments.
 
     typemethod execute {argv} {
-        checkargs deps 0 2 {?update ?name??} $argv
+        checkargs deps 0 2 $argv
 
         # FIRST, if there are no arguments then just dump the dependency
         # status.

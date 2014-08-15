@@ -18,6 +18,7 @@ set ::ktools(help) {
     package     kiteapp
     ensemble    helptool
     description "Display this help, or help for a given tool."
+    usage       "?<topic>?"
     intree      no
 }
 
@@ -40,7 +41,7 @@ snit::type helptool {
     # Displays the Kite help.
 
     typemethod execute {argv} {
-        checkargs help 0 1 {?topic?} $argv
+        checkargs help 0 1 $argv
 
         set topic [lindex $argv 0]
 
@@ -88,6 +89,8 @@ snit::type helptool {
 
     proc ShowTopic {topic} {
         global khelp
+        global ktools
+
         # For "help", all we can do is display the basic help again.
         if {$topic eq "help"} {
             ShowTopicList
@@ -95,6 +98,11 @@ snit::type helptool {
         }
 
         if {[info exists khelp($topic)]} {
+            puts "\n"
+            if {[info exists ktools($topic)]} {
+                puts "kite $topic [dict get $ktools($topic) usage]"
+                puts [string repeat - 75]
+            }
             puts [outdent $khelp($topic)]
             puts ""
         } else {

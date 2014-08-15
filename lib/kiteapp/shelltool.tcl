@@ -19,6 +19,7 @@ set ::ktools(shell) {
     package     kiteapp
     ensemble    shelltool
     description "Open interactive Tcl shell"
+    usage       "?-plain?"
     intree      yes
 }
 
@@ -49,7 +50,7 @@ snit::type shelltool {
     # Executes the tool given the command line arguments.
 
     typemethod execute {argv} {
-        checkargs shell 0 1 {?-plain?} $argv
+        checkargs shell 0 1 $argv
         set opt [lindex $argv 0]
 
         # FIRST, locate tkcon.

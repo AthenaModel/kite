@@ -18,6 +18,7 @@ set ::ktools(install) {
     package     kiteapp
     ensemble    installtool
     description "Build and install applications to ~/bin."
+    usage       "?app|lib? ?<name>...?"
     intree      yes
 }
 
@@ -62,7 +63,7 @@ snit::type installtool {
     # Installs the desired build targets.
 
     typemethod execute {argv} {
-        checkargs install 0 - {?app|lib? ?names...?} $argv
+        checkargs install 0 - $argv
 
         # FIRST, get the arguments.
         set kind [lshift argv]
