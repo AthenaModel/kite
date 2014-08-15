@@ -112,7 +112,7 @@ snit::type compiletool {
         try {
             exec {*}$command >@ stdout 2>@ stderr 
         } on error {result} {
-            throw FATAL "Error making: $path"
+            throw FATAL "Error making: $dir"
         }   
     }
 }
