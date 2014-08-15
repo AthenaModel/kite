@@ -22,6 +22,7 @@ package provide kiteapp 0.1.1a0
 
 # -kite-require-start ADD EXTERNAL DEPENDENCIES
 package require snit 2.3
+package require platform
 # -kite-require-end
 
 package require kiteutils

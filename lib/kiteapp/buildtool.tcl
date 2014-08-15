@@ -260,13 +260,19 @@ snit::type buildtool {
         #
         # to the teapot.txt
 
+        if {[project provide binary $lib]} {
+            set plat [platform::identify]
+        } else {
+            set plat "tcl"
+        }
+
         set contents "Package $lib [project version]\n"                         \
 
         append contents \
             "Meta description [project name]: [project description]\n" \
             "Meta entrykeep\n"                                         \
             "Meta included *\n"                                        \
-            "Meta platform tcl\n"
+            "Meta platform $plat\n"
 
         writefile [project root lib $lib teapot.txt] $contents
 

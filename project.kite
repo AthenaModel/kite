@@ -4,6 +4,7 @@ app kite
 provide kiteutils
 provide kitedocs
 
+require platform 1.0
 require snit 2.3
 require textutil::expander 1.3.1
 

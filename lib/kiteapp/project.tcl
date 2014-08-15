@@ -44,6 +44,7 @@ snit::type project {
     #   gui-$app       - 1 or 0
     #
     #   provides       - List of provided library package names
+    #   binary-$name   - 1 if package is binary, and 0 otherwise.
     #
     #   includes       - List of include names
     #   include-$name  - inclusion dictionary for the $name
@@ -362,6 +363,16 @@ snit::type project {
         return $info(provides)
     }
 
+    # provide binary name
+    #
+    # name - Name of the provided library
+    #
+    # Returns 1 if the library has a binary component, and 0 otherwise.
+
+    typemethod {provide binary} {name} {
+        return $info(binary-$name)
+    }
+
     # include names
     #
     # Returns the list of include names.
@@ -604,14 +615,18 @@ snit::type project {
         set     info(gui-$name)     $gui
     }
 
-    # ProvideCmd name
+    # ProvideCmd name args
     #
     # name   - The name of the library package and its directory.
     #          E.g., "kiteutils".
     #
+    # Options:
+    #
+    #    -binary    - The package isn't pure-Tcl.
+    #
     # Implementation of the "lib" kite file command.  
 
-    proc ProvideCmd {name} {
+    proc ProvideCmd {name args} {
         # FIRST, get the name.
         set name [string trim $name]
 
@@ -623,7 +638,16 @@ snit::type project {
             throw SYNTAX "Duplicate lib name \"$name\""
         }
 
-        ladd info(provides) $name
+        # NEXT, get the options
+        set binary 0
+
+        foroption opt args -all {
+            -binary { set binary 1 }
+        }
+
+
+        lappend info(provides)     $name
+        set     info(binary-$name) $binary
     }
 
     # IncludeCmd name vcs url tag
@@ -886,28 +910,46 @@ snit::type project {
             }
 
             DumpValue $label $apptext
-        }
-
-        foreach name $info(provides) {
-            DumpValue "Provides:" "${name}(n)"
-        }
-
-        foreach name $info(srcs) {
-            DumpValue "Makes:" src/$name
-        }
-
-        if {[llength $info(includes)] > 0} {
             puts ""
+        }
 
+        if {[llength $info(provides)] == 0} {
+            DumpValue "Provides:" "n/a"
+        } else {
+            foreach name $info(provides) {
+                if {[project provide binary $name]} {
+                    set tag "(Binary)"
+                } else {
+                    set tag "(Pure TCL)"
+                }
+
+                DumpValue "Provides:" "${name}(n)" $tag
+            }
+            puts ""
+        }
+
+        if {[llength $info(srcs)] == 0} {
+            DumpValue "Makes:" "n/a"
+        } else {
+            foreach name $info(srcs) {
+                DumpValue "Makes:" src/$name
+            }
+            puts ""
+        }
+
+        if {[llength $info(includes)] == 0} {
+            DumpValue "Includes:" "n/a"
+        } else {
             foreach name $info(includes) {
                 array set d $info(include-$name)
                 DumpValue "Include:"  "$name as $d(vcs) $d(url) $d(tag)"
             }
+            puts ""
         }
 
-        if {[llength $info(requires)] > 0} {
-            puts ""
-
+        if {[llength $info(requires)] == 0} {
+            DumpValue "Requires:" "n/a"
+        } else {    
             foreach name $info(requires) {
                 array set d $info(require-$name)
 
@@ -917,27 +959,28 @@ snit::type project {
                     set where "(External)"
                 }
 
-                DumpValue "Requires:"  "$name $d(version) $where"
+                DumpValue "Requires:"  "$name $d(version)" $where
             }
         }
     }
 
-    # DumpValue name value
+    # DumpValue name value ?tag?
     #
     # name   - The label, include colon
     # value  - The value to dump
+    # tag    - Additional data.
     #
     # Writes a row with the name and value in two columns.  If
     # the value is "", then "n/a" is output.
 
-    proc DumpValue {name value} {
-        set fmt "%-12s %s"
+    proc DumpValue {name value {tag ""}} {
+        set fmt "%-12s %-20s %s"
 
         if {$value eq ""} {
             set value "n/a"
         }
 
-        puts [format $fmt $name $value]
+        puts [format $fmt $name $value $tag]
     }
     
 }
