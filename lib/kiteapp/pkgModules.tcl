@@ -22,11 +22,11 @@ package provide kiteapp 0.1.1a0
 
 # -kite-require-start ADD EXTERNAL DEPENDENCIES
 package require snit 2.3
-package require platform
+package require platform 1.0
+package require -exact kiteutils 0.1.1a0
+package require -exact kitedocs 0.1.1a0
 # -kite-require-end
 
-package require kiteutils
-package require kitedocs
 
 #-----------------------------------------------------------------------
 # Namespace definition

@@ -1,14 +1,8 @@
 # Project TODO List
 
 * Building "make" targets
-  * Add "provide -binary" option.
-  * Build provided -binary extensions with the appropriate architecture.
   * 'kite build all' compiles all src, builds apps and libs, and formats
     all docs.
-* When a project "package require"'s packages it also exports, it should
-  probably use "package require -exact".  That will guarantee that it
-  uses the version within the project itself, rather than settling for
-  something in the teapot.
 
 ## Notes
 

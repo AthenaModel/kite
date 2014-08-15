@@ -23,10 +23,8 @@ package provide kitedocs 0.1.1a0
 # -kite-require-start ADD EXTERNAL DEPENDENCIES
 package require snit 2.3
 package require textutil::expander 1.3.1
-package require kiteutils 0.1.1a0
+package require -exact kiteutils 0.1.1a0
 # -kite-require-end
-
-package require kiteutils
 
 #-----------------------------------------------------------------------
 # Namespace definition

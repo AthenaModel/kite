@@ -852,24 +852,8 @@ snit::type project {
 
                 # NEXT, update "package require"
                 set newlines [list]
-
                 foreach line [blocklines $text2 require] {
-                    set line [normalize $line]
-
-                    if {[string match "package require *" $line]} {
-                        set pkg [lindex $line 2]
-
-                        if {$pkg in [project require names]} {
-                            set ver [project require version $pkg]
-
-                            set line [list package require $pkg $ver]
-                        } elseif {$pkg in [project provide names]} {
-                            set ver [project version]
-                            set line [list package require $pkg $ver]
-                        }
-                    }
-
-                    lappend newlines $line
+                    lappend newlines [UpdateRequireLine $line]
                 }
 
                 set content [join $newlines \n]
@@ -879,6 +863,52 @@ snit::type project {
         } trap POSIX {result} {
             throw FATAL "Error updating \"$lib\" version: $result"
         }
+    }
+
+    # UpdateRequireLine line
+    #
+    # line   - A line of text in a "require" block.
+    #
+    # Replaces "package require" versions with correct versions.
+
+    proc UpdateRequireLine {line} {
+        # FIRST, get the leader, and normalize the line.
+        regexp {^\s*} $line leader
+        set input [normalize $line]
+
+        # NEXT, is it a package require line?
+        if {![string match "package require *" $input]} {
+            return $line
+        } else {
+            set newline "${leader}package require "
+        }
+
+        # NEXT, is there a "-exact"?
+        set input [lrange [split $input] 2 end]
+        set exact 0
+
+        if {[lindex $input 0] eq "-exact"} {
+            set exact 1
+            lshift input
+        }
+
+        # NEXT, what package is it?
+        set pkg [lshift input]
+
+        if {$pkg in [project require names]} {
+            if {$exact} {
+                append newline "-exact "
+            }
+            append newline "$pkg "
+
+            append newline [project require version $pkg]
+        } elseif {$pkg in [project provide names]} {
+            append newline "-exact $pkg [project version]"
+        } else {
+            set newline $line
+        }
+
+        return $newline
     }
 
     #-------------------------------------------------------------------
