@@ -24,6 +24,15 @@ snit::type project {
     typevariable projfile "project.kite"
 
     #-------------------------------------------------------------------
+    # Constants
+
+    # Default src -build and -clean scripts
+
+    typevariable defaultBuild "make clean all"
+    typevariable defaultClean "make clean"
+    
+
+    #-------------------------------------------------------------------
     # Type variables
 
     # The project's root directory
@@ -615,6 +624,21 @@ snit::type project {
         set     info(gui-$name)     $gui
     }
 
+    # add app name ?options?
+    #
+    # name    - The app name
+    # Options - As for AppCmd
+    #
+    # Adds another app to the existing project info.
+
+    typemethod {add app} {name args} {
+        try {
+            AppCmd $name {*}$args
+        } trap SYNTAX {result} {
+            throw FATAL $result
+        }
+    }
+
     # ProvideCmd name args
     #
     # name   - The name of the library package and its directory.
@@ -648,6 +672,21 @@ snit::type project {
 
         lappend info(provides)     $name
         set     info(binary-$name) $binary
+    }
+
+    # add lib name ?options?
+    #
+    # name    - The lib name
+    # Options - As for ProvideCmd
+    #
+    # Adds another lib to the existing project info.
+
+    typemethod {add lib} {name args} {
+        try {
+            ProvideCmd $name {*}$args
+        } trap SYNTAX {result} {
+            throw FATAL $result
+        }
     }
 
     # IncludeCmd name vcs url tag
@@ -797,6 +836,115 @@ snit::type project {
     }
 
     #-------------------------------------------------------------------
+    # Saving project.kite with current metadata.
+
+    typemethod {kitefile save} {} {
+        # FIRST, build up the contents.
+        set script [list]
+
+        lappend script \
+            "# project.kite" \
+            [list project $info(name) $info(version) $info(description)]
+
+        if {$info(poc) ne ""} {
+            lappend script [list poc $info(poc)]
+        }
+            
+        
+        if {[llength $info(apps)] > 0} {
+            lappend script "" "# Applications"
+
+            foreach name $info(apps) {
+                set item [list app $name -apptype $info(apptype-$name)]
+
+                if {$info(gui-$name)} {
+                    lappend item -gui
+                }
+
+                lappend script $item
+            }
+        }
+
+        if {[llength $info(provides)] > 0} {
+            lappend script "" "# Provided Libraries"
+
+            foreach name $info(provides) {
+                set item [list provide $name]
+
+                if {$info(binary-$name)} {
+                    lappend item -binary
+                }
+
+                lappend script $item
+            }
+        }
+
+        if {[llength $info(srcs)] > 0} {
+            lappend script "" "# Compiled Directories"
+
+            foreach name $info(srcs) {
+                set item [list src $name]
+
+                if {$info(build-$name) ne $defaultBuild} {
+                    lappend item -build $info(build-$name)
+                }
+
+                if {$info(clean-$name) ne $defaultClean} {
+                    lappend item -clean $info(clean-$name)
+                }
+
+                lappend script $item
+            }
+        }
+
+        if {[llength $info(requires)] > 0} {
+            lappend script "" "# External Dependencies"
+
+            foreach name $info(requires) {
+                dict with info(require-$name) {
+                    set item [list require $name $version]
+
+                    if {$local} {
+                        lappend item -local
+                    }
+                }
+
+                lappend script $item
+            }
+        }
+
+        if {[llength $info(includes)] > 0} {
+            lappend script "" "# Included Projects"
+
+            foreach name $info(includes) {
+                dict with info(include-$name) {
+                    set item [list include $name $vcs $url $tag]
+                }
+
+                lappend script $item
+            }
+        }
+
+        if {$info(shell) ne ""} {
+            lappend script "" "# Shell Initialization"
+            lappend script [list shell $info(shell)]
+        }
+
+        lappend script ""
+
+        # NEXT, write it all out.
+        try {
+            file copy -force \
+                [project root project.kite] \
+                [project root project.bak]
+            writefile [project root project.kite] [join $script \n]
+        } on error {result} {
+            throw FATAL "Could not save new project.kite:\n$result"
+        }
+    }
+    
+
+    #-------------------------------------------------------------------
     # Saving project metadata for use by the project's own code.
 
     # metadata save
@@ -925,6 +1073,7 @@ snit::type project {
         DumpValue "Name:"        $info(name)
         DumpValue "Version:"     $info(version)
         DumpValue "Description:" $info(description)
+        puts ""
 
         if {[llength $info(apps)] == 0} {
             DumpValue "App:" "n/a"
@@ -937,9 +1086,9 @@ snit::type project {
                 }
 
                 set apptext "$app ($info(apptype-$app))"
+                DumpValue $label $apptext
             }
 
-            DumpValue $label $apptext
             puts ""
         }
 

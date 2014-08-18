@@ -2,8 +2,6 @@
 
 ## Next
 
-* Implement code to save project.quill given changes.
-* Implement "kite add app"
 
 ## Notes
 
@@ -29,14 +27,6 @@
   * kite clean
     * Remove bin/*.kit/exe, .kite/*, docs/.../.html, obsolete includes,
       any other kite artifacts.
-  * Support for "make" targets
-  * Support for binary Tcl libs (C/C++ extensions)
-    * Building the C code as "make" targets
-    * Plain C libraries and C extensions
-    * Building teapot .zips with hardware architecture
-  * kite add app|lib
-    * Add libs or an app to an existing project.
-    * Requires writing the project file, not just reading it.
   * kite retest
     * Execute only tests that failed last time.
 * User testing needed
