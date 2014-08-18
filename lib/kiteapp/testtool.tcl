@@ -14,16 +14,14 @@
 # Registration
 
 set ::ktools(test) {
-    arglist     {?target module options...?}
     package     kiteapp
     ensemble    testtool
     description "Runs some or all of the project test suite."
+    usage       {?<target> ?<module>?? ?<option>...?}
     intree      yes
 }
 
 set ::khelp(test) {
-    Usage: kite test ?target module options...?
-
     This tool executes some or all of the project's test suite.  The
     test suite consists of a number of "targets", each of which has a
     its own test subdirectory "<root>/test/<target>".  Usually there
@@ -63,7 +61,7 @@ snit::type testtool {
     # Executes the tool given the command line arguments.
 
     typemethod execute {argv} {
-        checkargs test 0 - {?target module options...?} $argv
+        checkargs test 0 - $argv
 
         set target ""
         set module ""
