@@ -20,7 +20,7 @@ defined using a macro processor.  Many basic HTML work unchanged;
 new tags are defined for specific purposes.  Tags not needed for
 purposes of documentation are not provided.<p>
 
-see <xref ehtml(5)> for the basic syntax and standard macros.<p>
+See <xref ehtml(5)> for the basic syntax and standard macros.<p>
 
 Instances of ehtml(n) are wrapper around the Tcllib 
 <xref textutil::expander(n)> module, using a

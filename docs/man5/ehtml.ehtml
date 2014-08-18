@@ -81,6 +81,11 @@ vs.
 The second form is easier to type.  Note that these macros do not 
 expand their arguments.<p>
 
+<defitem img "<lb>img ?attr=value...?<rb>">
+
+Returns an HTML "<lb>img<rb>" tag.  Any arguments are passed through
+as is.<p>
+
 <defitem changelog "<lb>changelog<rb>...<lb>/changelog<rb>">
 
 Defines a change log table.  The content between the beginning and end
@@ -104,6 +109,12 @@ Initial draft.
 <lb>/change<rb>
 <lb>/changelog<rb>
 </example>
+
+<defitem expand "<lb>expand <i text><rb>">
+
+Performs a macro expansion on its input.  This is primarily useful for
+expanding documentation text for a module that computes its documentation
+and returns it in <xref ehtml(5)> format.<p>
 
 <defitem hrule "<lb>hrule<rb>">
 

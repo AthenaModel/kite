@@ -270,6 +270,13 @@ snit::type ::kitedocs::ehtml {
         }
         $self HtmlTag /tr
 
+        $interp proc img {args} {
+            return {<img $args>}
+        }
+
+        $interp smartalias expand 1 1 {text} \
+            [mymethod expandonce]
+
         # NEXT, Change Log macros
         $interp smartalias changelog 0 0 {} \
             [mymethod Macro changelog]
