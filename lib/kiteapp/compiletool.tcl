@@ -14,11 +14,9 @@
 # Registration
 
 set ::ktools(compile) {
-    arglist     {}
-    package     kiteapp
+    usage       {0 - "?<name>...?"}
     ensemble    compiletool
     description "Compile \"src\" directories"
-    usage       "?<name>...?"
     intree      yes
 }
 
@@ -36,7 +34,7 @@ set ::khelp(compile) {
         $ kite compile fred george
 
     See the discussion of the "src" statement in the project(5) manpage
-    for more.
+    for more information.
 }
 
 #-----------------------------------------------------------------------
@@ -54,8 +52,6 @@ snit::type compiletool {
     # Executes the tool given the command line arguments.
 
     typemethod execute {argv} {
-        checkargs compile 0 - $argv
-
         if {[llength $argv] > 0} {
             foreach name $argv {
                 if {$name ni [project src names]} {

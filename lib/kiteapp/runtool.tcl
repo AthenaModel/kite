@@ -15,17 +15,28 @@
 # Registration
 
 set ::ktools(run) {
-    arglist     {}
-    package     kiteapp
+    usage       {0 - "?<arg>...?"}
     ensemble    runtool
     description "Run application"
     intree      yes
 }
 
 set ::khelp(run) {
-    The "run" tool executes the user's app or appkit, i.e., it invokes
-    the ./bin/<app>.tcl file, passing it any command line
+    If the project defines one or more applications, the 'kite run' tool
+    invokes the project's primary application, i.e., it invokes
+    the ./bin/myapp.tcl file and passes it any command line
     arguments.
+
+    To execute an arbitrary script in the context of the project's code
+    base, pass the script name to Kite as the first argument on the
+    command line:
+
+        $ kite myscript.tcl arg1 arg2 arg3
+
+    'kite run' is thus a convenient shorthand for 
+
+        $ cd <root>
+        $ kite ./bin/myapp.tcl ...
 }
 
 #-----------------------------------------------------------------------

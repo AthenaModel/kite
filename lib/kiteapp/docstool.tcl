@@ -19,11 +19,9 @@
 # Registration
 
 set ::ktools(docs) {
-    arglist     {?target? ?-clean?}
-    package     kiteapp
+    usage       {0 1 "?<target>|-clean?"}
     ensemble    docstool
     description "Format project documentation."
-    usage       {?<target>?}
     intree      yes
 }
 
@@ -35,9 +33,9 @@ set ::khelp(docs) {
     By default, this tool formats all of the project's ".ehtml" 
     documentation.  Alternatively, a target may be specified, one of:
 
-    * A path relative to <root>, e.g., "docs" or "docs/dev"
+    * A path relative to <root>, e.g., "docs" or "docs/dev", naming
+      a directory that contains ".ehtml" files.
     * A man page directory, e.g., "mann"
-    * "-clean", meaning to remove all .html files.
 
     Finally, if the "-clean" option is given then the chosen set of 
     formatted documents are deleted instead of formatted.
@@ -71,8 +69,6 @@ snit::type docstool {
     # Executes the tool given the command line arguments.
 
     typemethod execute {argv} {
-        checkargs docs 0 1 $argv
-
         set target [lindex $argv 0]
 
         if {$target eq ""} {

@@ -14,11 +14,9 @@
 # Registration
 
 set ::ktools(help) {
-    arglist     {}
-    package     kiteapp
+    usage       {0 1 "?<topic>?"}
     ensemble    helptool
     description "Display this help, or help for a given tool."
-    usage       "?<topic>?"
     intree      no
 }
 
@@ -41,8 +39,6 @@ snit::type helptool {
     # Displays the Kite help.
 
     typemethod execute {argv} {
-        checkargs help 0 1 $argv
-
         set topic [lindex $argv 0]
 
         if {$topic eq ""} {
@@ -100,7 +96,9 @@ snit::type helptool {
         if {[info exists khelp($topic)]} {
             puts "\n"
             if {[info exists ktools($topic)]} {
-                puts "kite $topic [dict get $ktools($topic) usage]"
+                lassign [dict get $::ktools($topic) usage] min max argspec
+
+                puts "kite $topic $argspec"
                 puts [string repeat - 75]
             }
             puts [outdent $khelp($topic)]

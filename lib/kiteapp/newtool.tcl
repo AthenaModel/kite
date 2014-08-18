@@ -14,33 +14,35 @@
 # Registration
 
 set ::ktools(new) {
-    arglist     {template project ?arg?}
-    package     kiteapp
+    usage       {0 3 "<template> <project> ?<arg>...?"}
     ensemble    newtool
     description "Create a new project tree on the disk."
-    usage       "<template> <project> ?<arg>...?"
     intree      no
 }
 
 set ::khelp(new) {
-    The "new" tool is use to initialize new projects on the disk.  It
+    The 'kite new' tool is use to initialize new projects on the disk.  It
     takes the following arguments:
 
-    template   - The project template, one of: app, appkit or lib
-    project    - The project name, e.g., "my-project"
-    arg...     - Optional arguments, by template type.
+    <template>  - The project template, currently one of app, appkit or lib
+    <project>   - The project name, e.g., "my-project"
+    <arg>...    - Optional arguments, by template type.
 
     For example,
 
         $ cd ~/github
-        $ kite new appkit my-project
+        $ kite new app my-project fred
 
-    creates a complete project skeleton in 
+    creates a complete project skeleton in "~/github/my-project".  The new
+    project defines a skeleton application called "fred".
 
-        ~/github/my-project
+    Use 'kite help' to find out more about the available templates,
+    e.g., 
 
-    Use "kite help" to find out more about the available templates,
-    e.g., "kite help app"
+        $ kite help app
+
+    To add an application or library to an existing project, use the 
+    'kite add' tool.
 }
 
 
@@ -59,8 +61,6 @@ snit::type newtool {
     # Executes the tool given the command line arguments.
 
     typemethod execute {argv} {
-        checkargs new 0 3 $argv
-
         lassign $argv template project targ
 
         if {$template eq ""} {

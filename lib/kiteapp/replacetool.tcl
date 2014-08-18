@@ -15,11 +15,9 @@
 # Registration
 
 set ::ktools(replace) {
-    arglist     {}
-    package     kiteapp
+    usage       {3 - "<target> <subtest> <file> ?<file>...?"}
     ensemble    replacetool
     description "Global string replacement in text files"
-    usage       "<target> <subtest> <file> ?<file>...?"
     intree      no
 }
 
@@ -31,6 +29,10 @@ set ::khelp(replace) {
     "dog" in a set of code files, do this:
 
        $ kite replace cat dog *.tcl
+
+    The tool lists the names of the modified files, and saves a backup
+    file for each.  The backup file has the same name as the original
+    file, with a "~" appended on the end.
 }
 
 #-----------------------------------------------------------------------
@@ -48,8 +50,6 @@ snit::type replacetool {
     # Executes the tool given the command line arguments.
 
     typemethod execute {argv} {
-        checkargs replace 3 - $argv
-
         set target [lindex $argv 0]
         set subtext [lindex $argv 1]
         set files [lrange $argv 2 end]

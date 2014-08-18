@@ -14,28 +14,31 @@
 # Registration
 
 set ::ktools(test) {
-    package     kiteapp
+    usage       {0 - "?<target> ?<module>?? ?<option>...?"}
     ensemble    testtool
     description "Runs some or all of the project test suite."
-    usage       {?<target> ?<module>?? ?<option>...?}
     intree      yes
 }
 
 set ::khelp(test) {
     This tool executes some or all of the project's test suite.  The
     test suite consists of a number of "targets", each of which has a
-    its own test subdirectory "<root>/test/<target>".  Usually there
-    is one target for each package in "<root>/lib", plus one for the
-    application (if any).  
+    its own test subdirectory "<root>/test/<target>".  Kite assumes that 
+    the target has a top-level tcltest(n) test script called 
+    <root>/test/<target>/all_tests.test.
 
-    If no "target" is given, Kite executes tests for all targets; otherwise
-    it runs the named target.  If "target" and "module" are both given,
-    Kite runs the specific test module for the named target.  Any
-    options are passed along to Tcltest. 
+    kite test
+        Executes tests for all targets, and summarizes the results.
+        To see the entire test log, enter 'kite -verbose test'.
 
-    Each target is presumed to have a top-level Tcltest script that
-    runs all of the target's individual tests; it should be called
-    "<root>/test/<target>/<target>.test".  
+    kite test <target> ?<option>...?
+        Executes all tests for the named target; i.e., all tests in
+        <root>/test/<target>.  Any options are passed along to tcltest(n).
+
+    kite test <target> <module> ?<option>...?
+        Executes all tests for the given module within the given target,
+        i.e., <root>/test/<target>/<module>.test.  Any options are passed
+        along to tcltest(n).
 
     For example,
 
@@ -61,8 +64,6 @@ snit::type testtool {
     # Executes the tool given the command line arguments.
 
     typemethod execute {argv} {
-        checkargs test 0 - $argv
-
         set target ""
         set module ""
 

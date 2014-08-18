@@ -33,21 +33,21 @@ proc vputs {args} {
     }
 }
 
-# checkargs tool min max argv
+# checkargs tool argv
 #
 # tool     - The name of the tool
-# min      - The minimum number of arguments.
-# max      - The maximum number of arguments, or "-" for no max
 # argv     - The actual arguments to the tool
 #
 # Throws an error if there are the wrong number of arguments.
 
-proc checkargs {tool min max argv} {
+proc checkargs {tool argv} {
+    lassign [dict get $::ktools($tool) usage] min max argspec
+
     set argc [llength $argv]
+
     if {($argc < $min) ||
         ($max ne "-" && $argc > $max)
     } {
-        set argspec [dict get $::ktools($tool) usage]
         throw FATAL "Usage: kite $tool $argspec"
     }
 }

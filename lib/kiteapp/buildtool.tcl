@@ -16,37 +16,29 @@
 # Registration
 
 set ::ktools(build) {
-    arglist     {}
-    package     kiteapp
+    usage       {0 - "?app|lib? ?<name>...?"}
     ensemble    buildtool
     description "Build the entire project."
-    usage       "?app|lib? ?<name>...?"
     intree      yes
 }
 
 set ::khelp(build) {
-    The "build" tool builds all build targets specified in the
+    The 'kite build' tool builds all build targets specified in the
     project's project.kite file.  In particular:
 
     * Libs are built as .kite/libzips/package-<name>*.zip.
     * Apps are built as bin/<name>[.exe] or bin/<name>.kit
 
-    By default, "build" builds all libraries and applications.  To build
-    libraries only:
+    kite build
+        By default, 'kite build' builds all libraries and applications.
 
-      $ kite build lib
+    kite build lib ?<name>...?
+        Builds all libraries 'provide'd in project.kite, or optionally
+        just those that are named on the command line.
 
-    To build specific libraries:
-
-      $ kite build lib mylib1 mylib2 ...
-
-    To build applications only:
-
-      $ kite build app
-
-    To build specific applications:
-
-      $ kite build app myapp1 myapp2
+    kite build app ?<name>...?
+        Builds all applications listed in project.kite, or optionally
+        just those that are named on the command line.
 }
 
 #-----------------------------------------------------------------------
@@ -64,8 +56,6 @@ snit::type buildtool {
     # Executes the tool given the command line arguments.
 
     typemethod execute {argv} {
-        checkargs build 0 - $argv
-
         # FIRST, get the arguments.
         set kind [lshift argv]
 

@@ -14,11 +14,9 @@
 # Registration
 
 set ::ktools(install) {
-    arglist     {}
-    package     kiteapp
+    usage       {0 - "?app|lib? ?<name>...?"}
     ensemble    installtool
     description "Build and install applications to ~/bin."
-    usage       "?app|lib? ?<name>...?"
     intree      yes
 }
 
@@ -30,22 +28,14 @@ set ::khelp(install) {
     as ~/bin/myapp.  Libraries are installed in the default teapot, and  
     are then accessible to other applications on the same host.
 
-    By default, "install" installs all libraries and applications.  
-    To install libraries only:
+    kite install
+        Installs all libraries and applications.
 
-      $ kite install lib
+    kite install app ?<name>...?
+        Installs all applications, or optionally all named applications.
 
-    To install specific libraries:
-
-      $ kite install lib mylib1 mylib2 ...
-
-    To install applications only:
-
-      $ kite install app
-
-    To install specific applications:
-
-      $ kite install app myapp1 myapp2
+    kite install lib ?<name>...?
+        Installs all libraries, or optionally all named libraries.
 }
 
 #-----------------------------------------------------------------------
@@ -63,8 +53,6 @@ snit::type installtool {
     # Installs the desired build targets.
 
     typemethod execute {argv} {
-        checkargs install 0 - $argv
-
         # FIRST, get the arguments.
         set kind [lshift argv]
 

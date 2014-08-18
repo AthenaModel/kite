@@ -1,8 +1,9 @@
 # Project TODO List
 
-* Building "make" targets
-  * 'kite build all' compiles all src, builds apps and libs, and formats
-    all docs.
+## Next
+
+* Implement code to save project.quill given changes.
+* Implement "kite add app"
 
 ## Notes
 

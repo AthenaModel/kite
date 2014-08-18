@@ -15,24 +15,23 @@
 # Registration
 
 set ::ktools(shell) {
-    arglist     {}
-    package     kiteapp
+    usage       {0 1 "?-plain?"}
     ensemble    shelltool
     description "Open interactive Tcl shell"
-    usage       "?-plain?"
     intree      yes
 }
 
 set ::khelp(shell) {
-    The "shell" tool opens an interactive Tcl shell (tkcon) on the 
-    project codebase.  If there is an app or appkit, the app's 
-    loader script (e.g., bin/myapp.tcl) is loaded in interactive mode
-    (the "main" is not called).  
+    The 'kite shell' tool opens an interactive Tcl shell (tkcon) on the 
+    project codebase.  If the project defines any applications, the 
+    primary application's loader script (e.g., bin/myapp.tcl) is loaded in 
+    interactive mode (i.e., the "main" procedure is defined but not called).  
 
-    If there is no appkit, or if the "-plain" option is given, Kite simply 
-    adds the project library directories to the auto_path.  In this case,
-    the initial state of the shell can be further customized using the
-    "shell" statement in the project.kite file.
+    If there are no applications, or if the "-plain" option is given, 
+    Kite simply adds the project library directories to the auto_path.  
+    No packages are loaded by default.  In this case, the initial state of 
+    the shell can be further customized using the "shell" statement in the 
+    project.kite file.
 }
 
 #-----------------------------------------------------------------------
@@ -50,7 +49,6 @@ snit::type shelltool {
     # Executes the tool given the command line arguments.
 
     typemethod execute {argv} {
-        checkargs shell 0 1 $argv
         set opt [lindex $argv 0]
 
         # FIRST, locate tkcon.

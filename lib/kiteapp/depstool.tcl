@@ -17,48 +17,38 @@
 # Registration
 
 set ::ktools(deps) {
-    arglist     {?option...?}
-    package     kiteapp
+    usage       {0 2 "?update|clean? ?<name>?"}
     ensemble    depstool
     description "Manage project dependencies"
-    usage       "?update? ?clean|<name>?"
     intree      yes
 }
 
 set ::khelp(deps) {
-    The "deps" tool manages the project's external dependencies.  There 
-    are two kinds of dependencies.  External "require" dependencies are 
-    retrieved from teapot.activestate.com; "include" dependencies are 
-    pulled into <project>/includes from local CM repositories and made 
+    The 'kite deps' tool manages the project's external dependencies.  
+    There are two kinds of dependencies.  External "require" dependencies 
+    are retrieved from teapot.activestate.com; "include" dependencies are
+    pulled into <root>/includes from local CM repositories and made 
     available for use by the project.
 
-    To get the status of all external dependencies:
+    kite deps
+        Get the status of all external dependencies.
 
-        $ kite deps
+    kite deps update
+        Retrieve dependencies are are missing or are clearly out of date.
 
-    To retrieve dependencies that are missing or clearly out-of-date:
+    kite deps update <name>
+        Forces a fresh retrieval of the named dependency.
 
-        $ kite deps update
+    kite deps clean
+        Removing "include" statements from project.kite can leave you
+        with obsolete includes in <project>/includes.  Use
 
-    To force the retrieval of a particular dependency,
+            $ kite deps clean
 
-        $ kite deps update <name>
-
-    This will remove the dependency from the local teapot repository or
-    from <project>/includes, and then retrieve a fresh copy.  This is
-    generally only use for dependencies on unstable versions of 
-    software (i.e., an include of a project head, or a require of
-    beta software).
-
-    Removing "include" statements from project.kite can leave you
-    with obsolete includes in <project>/includes.  Use
-
-        $ kite deps clean
-
-    to remove them (or just delete them by hand).
+        to remove them (or just delete them by hand).
 
     When Kite fails to install a required teapot package,
-    see <project>/.kite/install_<package>.log for details.
+    see the <project>/.kite/install_<package>.log file for details.
 }
 
 
@@ -77,8 +67,6 @@ snit::type depstool {
     # Executes the tool given the command line arguments.
 
     typemethod execute {argv} {
-        checkargs deps 0 2 $argv
-
         # FIRST, if there are no arguments then just dump the dependency
         # status.
         set subc [lshift argv]

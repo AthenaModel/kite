@@ -14,16 +14,14 @@
 # Registration
 
 set ::ktools(info) {
-    arglist     {}
-    package     kiteapp
+    usage       {0 1 "?<option>?"}
     ensemble    infotool
     description "Display information about Kite and this project."
-    usage       "?<option>?"
     intree      yes
 }
 
 set ::khelp(info) {
-    The "info" tool displays information about the current project
+    The 'kite info' tool displays information about the current project
     in human readable format.  Most of the information is from the 
     project.kite file.  In addition, the tool can return individual
     pieces of data given an option; this is useful in Makefiles and
@@ -56,8 +54,6 @@ snit::type infotool {
     # given the command line.
 
     typemethod execute {argv} {
-        checkargs info 0 1 $argv
-
         set opt [lindex $argv 0]
 
         # FIRST, handle the default case.

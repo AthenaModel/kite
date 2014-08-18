@@ -106,14 +106,7 @@ proc main {argv} {
 proc UseTool {tool {argv ""}} {
     array set tdata $::ktools($tool)
 
-    # FIRST, make sure the tool's package is loaded.
-    # NOTE: At present, this isn't strictly required; all tools
-    # are defined in ktools(n), which is loaded automatically.
-    # In the long run, we will have tools (and external plugins)
-    # that are loaded only when called for.
-    package require $tdata(package)
-
-    # NEXT, execute it.
+    checkargs $tool $argv
     $tdata(ensemble) execute $argv
 }
 

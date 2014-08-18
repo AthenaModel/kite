@@ -14,11 +14,9 @@
 # Registration
 
 set ::ktools(version) {
-    arglist     {}
-    package     kiteapp
+    usage       {0 0 ""}
     ensemble    versiontool
     description "Display Kite's version information."
-    usage       ""
     intree      yes
 }
 
@@ -42,8 +40,6 @@ snit::type versiontool {
     # Displays version information about Kite itself.
 
     typemethod execute {argv} {
-        checkargs version 0 0 $argv
-
         puts "Kite [kiteinfo version]\n"
     }    
 }
