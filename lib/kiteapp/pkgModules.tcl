@@ -14,7 +14,7 @@
 # Package Definition
 
 # -kite-provide-start  DO NOT EDIT THIS BLOCK BY HAND
-package provide kiteapp 0.1.2
+package provide kiteapp 0.1.3a0
 # -kite-provide-end
 
 #-----------------------------------------------------------------------
@@ -23,8 +23,8 @@ package provide kiteapp 0.1.2
 # -kite-require-start ADD EXTERNAL DEPENDENCIES
 package require snit 2.3
 package require platform 1.0
-package require -exact kiteutils 0.1.2
-package require -exact kitedocs 0.1.2
+package require -exact kiteutils 0.1.3a0
+package require -exact kitedocs 0.1.3a0
 # -kite-require-end
 
 
