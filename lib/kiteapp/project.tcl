@@ -382,6 +382,23 @@ snit::type project {
         return $info(binary-$name)
     }
 
+    # provide teapot name
+    #
+    # name - The name of the library's teapot .zip package on this
+    # platform.
+
+    typemethod {provide teapot} {name} {
+        set ver [project version]
+        
+        if {[project provide binary $name]} {
+            set plat [platform::identify]
+        } else {
+            set plat "tcl"
+        }
+
+        return "package-$name-$ver-$plat.zip"
+    }
+
     # include names
     #
     # Returns the list of include names.

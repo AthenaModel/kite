@@ -129,7 +129,8 @@ snit::type installtool {
 
     proc InstallLib {lib} {
         set ver [project version]
-        set basename "package-$lib-$ver-tcl.zip"
+
+        set basename [project provide teapot $lib]
         set fullname [project root .kite libzips $basename]
 
         # FIRST, is there a package?

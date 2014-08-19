@@ -2,6 +2,13 @@
 
 ## Next
 
+* Improve 'kite add': options on additions, e.g., private libraries.
+  * Options:
+    * -private: Private library, not "provided".
+    * -notest: Library has no test suite 
+  * Constraints:
+    * Can't add app if loader script or lib/nameapp already exists.
+    * Can't add library if lib/name already exists.
 
 ## Notes
 
