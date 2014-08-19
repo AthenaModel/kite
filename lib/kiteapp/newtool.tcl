@@ -63,6 +63,14 @@ snit::type newtool {
     typemethod execute {argv} {
         lassign $argv template project targ
 
+        if {[project intree]} {
+            throw FATAL [outdent "
+                The current working directory is part of a Kite project.
+                Kite will not create a new project within an existing 
+                project tree.
+            "]
+        }
+
         if {$template eq ""} {
             puts "The following project templates may be used:"
             puts ""
