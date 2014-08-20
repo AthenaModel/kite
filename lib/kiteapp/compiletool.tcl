@@ -71,7 +71,7 @@ snit::type compiletool {
             set dir [project root src $name]
 
             puts ""
-            puts [string repeat = 75]
+            puts [string repeat - 75]
             puts "Making: src/$name"
             puts ""
             ExecuteScript $dir [project src build $name]

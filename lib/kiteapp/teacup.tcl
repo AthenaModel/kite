@@ -56,7 +56,7 @@ snit::type teacup {
             set version [project require version $name]
 
             if {[$type has $name $version]} {
-                puts "  require \"$name $version\" appears to be up-to-date."
+                puts "  require \"$name $version\" appears to be up to date."
             } elseif [project require islocal $name] {
                 puts "  require \"$name $version\" is not in the repository."
                 puts "     It is locally built, and must be installed by"

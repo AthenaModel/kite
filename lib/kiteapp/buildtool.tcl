@@ -16,7 +16,7 @@
 # Registration
 
 set ::ktools(build) {
-    usage       {0 - "?app|lib? ?<name>...?"}
+    usage       {0 - "?all|app|lib? ?<name>...?"}
     ensemble    buildtool
     description "Build the entire project."
     intree      yes
@@ -39,6 +39,20 @@ set ::khelp(build) {
     kite build app ?<name>...?
         Builds all applications listed in project.kite, or optionally
         just those that are named on the command line.
+
+    kite build all
+        The previous commands are for day-to-day use.  This command is
+        for performing complete builds of the entire project.  It 
+        is equivalent to:
+
+            kite compile
+            kite test
+            kite docs
+            kite build lib
+            kite build app
+
+        This command will halt if the external dependencies are not 
+        up to date, or if an error occurs at any step of the process.
 }
 
 #-----------------------------------------------------------------------
@@ -47,6 +61,7 @@ set ::khelp(build) {
 snit::type buildtool {
     # Make it a singleton
     pragma -hasinstances no -hastypedestroy no
+
 
     #-------------------------------------------------------------------
     # Execution 
@@ -59,57 +74,124 @@ snit::type buildtool {
         # FIRST, get the arguments.
         set kind [lshift argv]
 
-        if {$kind ni {"" lib app}} {
+        if {$kind ni {"" lib app all}} {
             throw FATAL "Invalid build type: \"$kind\"."
         }
 
         # FIRST, check for dependencies.
-        if {![includer uptodate] || ![teacup uptodate]} {
+        set upToDate [expr {[includer uptodate] && [teacup uptodate]}]
+
+        if {!$upToDate} {
             puts "WARNING: Some dependencies are not up-to-date."
             puts "Run \"kite deps\" for details."
             puts ""
         }
 
-        # TODO: Build make targets
+        if {$kind eq "all"} {
+            if {[llength $argv] > 0} {
+                throw FATAL "Usage: kite build all"
+            }
+
+            if {!$upToDate} {
+                throw FATAL [outdent {
+                    Please resolve the out-of-date dependencies before
+                    using 'kite build all'
+                }]
+            }
+
+            # NEXT, build everything, halting on any error.
+            #
+            # TODO: each of these areas should have a command that indicates
+            # whether or not there's anything to do.  And probably, each
+            # tool should have an underlying implementation library.
+
+            if {[got [project src names]]} {
+                header "Compiling src directories"
+                compiletool execute {}
+            }
+
+            if {[got [project globdirs test *]]} {
+                header "Running project tests."
+                testtool execute {}
+            }
+
+            if {[got [project globfiles docs *.ehtml]]     ||
+                [got [project globfiles docs * *.ehtml]]   ||
+                [got [project globfiles docs * * *.ehtml]]
+            } {
+                header "Building project documentation"
+                docstool execute {}
+            }
+
+            if {[got [project provide names]]} {
+                header "Building library teapot packages"
+                BuildLibs {}
+            }
+                
+            if {[got [project app names]]} {
+                header "Building applications"
+                BuildApps {}
+            }
+            return
+        }
+
 
         # NEXT, Build provided libraries as teapot packages.
         if {$kind in {lib ""}} {
-            if {[llength $argv] > 0} {
-                set names $argv
-            } else {
-                set names [project provide names]
-            }
-
-            foreach lib $names {
-                if {$lib ni [project provide names]} {
-                    puts "WARNING, Unknown library: \"$lib\""
-                    continue
-                }
-                BuildTeapotZip $lib
-            }
+            BuildLibs $argv
         }
 
         # NEXT, Build applications.
         if {$kind in {app ""}} {
-            if {[llength $argv] > 0} {
-                set names $argv
-            } else {
-                set names [project app names]
-            }
-
-            foreach app $names {
-                if {$app ni [project app names]} {
-                    puts "WARNING, Unknown application: \"$app\""
-                    continue
-                }
-                BuildApp $app
-            }
+            BuildApps $argv
         }
     }
     
+    # header text
+    #
+    # text   - header text string
+    #
+    # Outputs a header.
+
+    proc header {text} {
+        puts ""
+        puts [string repeat = 75]
+        puts $text
+        puts ""
+    }
+
+    # got list
+    #
+    # list - A list
+    #
+    # Returns 1 if list has at least one element, and 0 otherwise.
+
+    proc got {list} {
+        return [expr {[llength $list] > 0}]
+    }
 
     #-------------------------------------------------------------------
     # Building Apps
+
+    # BuildApps apps
+    #
+    # apps  - list of app names, or "" for all.
+
+    proc BuildApps {apps} {
+        if {[llength $apps] == 0} {
+            set apps [project app names]
+        }
+
+        foreach app $apps {
+            if {$app ni [project app names]} {
+                # Note: This cannot happen with 'kite build all'.
+                puts "WARNING, Unknown application: \"$app\""
+
+                continue
+            }
+            BuildApp $app
+        }
+    }
 
     # BuildApp app
     #
@@ -220,6 +302,25 @@ snit::type buildtool {
 
     #-------------------------------------------------------------------
     # Building Teapot .zip files
+
+    # BuildLibs libs
+    #
+    # libs   - List of libs to build, or "" for all
+
+    proc BuildLibs {libs} {
+        if {[llength $libs] == 0} {
+            set libs [project provide names]
+        }
+
+        foreach lib $libs {
+            if {$lib ni [project provide names]} {
+                # This cannot happen with 'kite build all'.
+                puts "WARNING, Unknown library: \"$lib\""
+                continue
+            }
+            BuildTeapotZip $lib
+        }
+    }
 
     # BuildTeapotZip lib
     #
