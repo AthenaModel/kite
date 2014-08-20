@@ -2,11 +2,8 @@
 
 ## Next
 
-* 'kite build all' should:
-  * Build distribution files
 * 'kite clean' - Tool to clean up build products.
   * Tools can register clean up handlers.
-* 'kite dist' - tool to build distribution.
 * Improve 'kite add': options on additions, e.g., private libraries.
   * Options:
     * -private: Private library, not "provided".

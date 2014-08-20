@@ -50,6 +50,7 @@ set ::khelp(build) {
             kite docs
             kite build lib
             kite build app
+            kite dist
 
         This command will halt if the external dependencies are not 
         up to date, or if an error occurs at any step of the process.
@@ -131,6 +132,11 @@ snit::type buildtool {
             if {[got [project app names]]} {
                 header "Building applications"
                 BuildApps {}
+            }
+
+            if {[got [project dist names]]} {
+                header "Building distributions"
+                disttool execute {}
             }
             return
         }

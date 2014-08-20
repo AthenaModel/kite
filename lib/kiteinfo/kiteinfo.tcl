@@ -24,10 +24,19 @@ namespace eval ::kiteinfo:: {
         binary-kitedocs 0
         description {Athena/Kite Development Tool}
         provides {kiteutils kitedocs}
+        distpat-install {
+    README.md
+    LICENSE
+    %apps
+    %libs
+    docs/INSTALL.md
+    docs/*.html
+    docs/*/*.html
+}
         gui-kite 0
         includes {}
         binary-kiteutils 0
-        pkgversion 0.1.3a0
+        pkgversion 0.1.3
         requires {platform snit textutil::expander zipfile::encode}
         shell {
     package require kiteutils
@@ -39,10 +48,10 @@ namespace eval ::kiteinfo:: {
         srcs {}
         apps kite
         apptype-kite kit
-        version 0.1.3a0
+        version 0.1.3
         require-zipfile::encode {version 0.3 local 0}
         require-platform {version 1.0 local 0}
-        dists {}
+        dists install
     }
 
     namespace export \
