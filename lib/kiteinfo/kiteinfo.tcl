@@ -26,6 +26,7 @@ namespace eval ::kiteinfo:: {
         provides {kiteutils kitedocs}
         distpat-install {
     README.md
+    INSTALL.md
     LICENSE
     %apps
     %libs

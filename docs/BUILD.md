@@ -1,8 +1,8 @@
 # BUILD.md -- Building Kite
 
-You can clone and build Kite as follows; this is the appropriate approach
-if you do not have a pre-built Kite executable available, if you will
-be working on Kite itself, or if you simply want to keep up with the 
+This file explains how to clone and build Kite.  This is the appropriate 
+approach if you do not have a pre-built Kite executable available, if you 
+will be working on Kite itself, or if you simply want to keep up with the 
 latest snapshot.
 
 ## Bootstrapping Kite
@@ -29,11 +29,13 @@ scratch, do the following.
 
     $ ./bin/kite.tcl deps update
 
-7. Build Kite
+7. Build Kite.  This will run all tests, build all documentation, and so
+   forth.
 
-    $ ./bin/kite.tcl build
+    $ ./bin/kite.tcl build all
 
-8. Install Kite.  This will copy ./bin/kite.kit to ~/bin/kite.
+8. Install Kite.  This will copy ./bin/kite.kit to ~/bin/kite, and install
+   the Kite Tcl libraries into the local teapot.
 
     $ ./bin/kite.tcl install
 

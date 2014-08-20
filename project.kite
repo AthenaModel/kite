@@ -11,6 +11,7 @@ require zipfile::encode 0.3
 
 dist install {
     README.md
+    INSTALL.md
     LICENSE
     %apps
     %libs

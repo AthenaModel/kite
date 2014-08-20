@@ -7,10 +7,10 @@ be used by other projects.<p>
 <preface doc "Top-level Documents">
 
 <ul>
-  <li> <link ../README.md "Project README">
-  <li> <link INSTALL.md   "Installation Instructions">
-  <li> <link BUILD.md     "Build Instructions">
-  <li> <xref project(5)   "Syntax: project.kite">
+  <li> <link ../README.md  "Project README">
+  <li> <link ../INSTALL.md "Installation Instructions">
+  <li> <link BUILD.md      "Build Instructions">
+  <li> <xref project(5)    "Syntax: project.kite">
 </ul><p>
 
 <preface man "Man Pages">
