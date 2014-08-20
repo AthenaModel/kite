@@ -37,7 +37,7 @@ namespace eval ::kiteinfo:: {
         gui-kite 0
         includes {}
         binary-kiteutils 0
-        pkgversion 0.1.3
+        pkgversion 0.1.4a0
         requires {platform snit textutil::expander zipfile::encode}
         shell {
     package require kiteutils
@@ -49,7 +49,7 @@ namespace eval ::kiteinfo:: {
         srcs {}
         apps kite
         apptype-kite kit
-        version 0.1.3
+        version 0.1.4a0
         require-zipfile::encode {version 0.3 local 0}
         require-platform {version 1.0 local 0}
         dists install

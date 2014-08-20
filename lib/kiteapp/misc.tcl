@@ -52,6 +52,40 @@ proc checkargs {tool argv} {
     }
 }
 
+# got list
+#
+# list - A list
+#
+# Returns 1 if list has at least one element, and 0 otherwise.
+
+proc got {list} {
+    return [expr {[llength $list] > 0}]
+}
+
+# clean text pattern...
+#
+# text    - A log text string
+# pattern - A project glob pattern
+#
+# If the patterns matching any project files, outputs the text and 
+# deletes the files.
+
+proc clean {text args} {
+    set files [list]
+
+    foreach pattern $args {
+        lappend files {*}[project globfiles {*}[split $pattern /]]
+    }
+
+    if {![got $files]} {
+        return
+    }
+
+    puts $text
+    foreach file $files {
+        file delete -force $file
+    }
+}
 
 
 # blockreplace text tag content

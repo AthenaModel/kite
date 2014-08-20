@@ -166,16 +166,6 @@ snit::type buildtool {
         puts ""
     }
 
-    # got list
-    #
-    # list - A list
-    #
-    # Returns 1 if list has at least one element, and 0 otherwise.
-
-    proc got {list} {
-        return [expr {[llength $list] > 0}]
-    }
-
     #-------------------------------------------------------------------
     # Building Apps
 
@@ -459,6 +449,46 @@ snit::type buildtool {
         throw FATAL "Could not find basekit."
     }
     
+
+    #-------------------------------------------------------------------
+    # Clean up
+
+    # clean
+    #
+    # Cleans up all build products produced by this tool.
+
+    typemethod clean {} {
+        # FIRST, clean up lib .zips.
+        clean "Cleaning library teapot .zip files..." \
+            .kite/libzips/*.zip
+
+
+        # NEXT, clean up applications
+        set apps [getapps]
+
+        if {[got $apps]} {
+            puts "Cleaning application executables..."
+            foreach app $apps {
+                file delete -force $app
+            }
+        }
+    }
+
+    # getapps 
+    #
+    # Gets a dictionary of the as-built names of the project's 
+    # applications, by destination path.
+    #
+    # TODO: This duplicates code in disttool.  Figure out a good place
+    # to put this.
+
+    proc getapps {} {
+        foreach name [project app names] {
+            lappend result [project root bin [project app exefile $name]]
+        }
+
+        return $result
+    }
 }
 
 

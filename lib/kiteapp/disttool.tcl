@@ -125,7 +125,7 @@ snit::type disttool {
     proc getfiles {pattern} {
         set dict [dict create]
 
-        foreach filename [project globfiles $pattern] {
+        foreach filename [project globfiles {*}[split $pattern /]] {
             dict set dict [dfile $filename] $filename
         }
 

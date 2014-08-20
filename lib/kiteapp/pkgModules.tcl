@@ -14,7 +14,7 @@
 # Package Definition
 
 # -kite-provide-start  DO NOT EDIT THIS BLOCK BY HAND
-package provide kiteapp 0.1.3
+package provide kiteapp 0.1.4a0
 # -kite-provide-end
 
 #-----------------------------------------------------------------------
@@ -24,8 +24,8 @@ package provide kiteapp 0.1.3
 package require snit 2.3
 package require platform 1.0
 package require zipfile::encode 0.3
-package require -exact kiteutils 0.1.3
-package require -exact kitedocs 0.1.3
+package require -exact kiteutils 0.1.4a0
+package require -exact kitedocs 0.1.4a0
 # -kite-require-end
 
 
@@ -61,6 +61,7 @@ source [file join $::kiteapp::library teapot.tcl          ]
 source [file join $::kiteapp::library docs.tcl            ]
 source [file join $::kiteapp::library addtool.tcl         ]
 source [file join $::kiteapp::library buildtool.tcl       ]
+source [file join $::kiteapp::library cleantool.tcl       ]
 source [file join $::kiteapp::library compiletool.tcl     ]
 source [file join $::kiteapp::library depstool.tcl        ]
 source [file join $::kiteapp::library disttool.tcl        ]

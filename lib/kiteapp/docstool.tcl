@@ -79,8 +79,7 @@ snit::type docstool {
         }
 
         if {$target eq "-clean"} {
-            puts "TODO: Provide cleaning services!"
-            # docs clean
+            $type clean
             return
         }
 
@@ -119,8 +118,17 @@ snit::type docstool {
         throw FATAL "Cannot identify docs/ directory from target \"$target\""
     }
 
- 
-    
+    #-------------------------------------------------------------------
+    # Clean up
+
+    # clean
+    #
+    # Removes all built documentation files.
+
+    typemethod clean {} {
+        clean "Cleaning manpage(5) man pages..." docs/man*/*.html
+        clean "Cleaning kitedoc(5) documents..." docs/*.html docs/*/*.html
+    }  
 }
 
 

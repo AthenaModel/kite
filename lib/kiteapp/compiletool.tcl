@@ -112,6 +112,31 @@ snit::type compiletool {
             throw FATAL "Error making: $dir"
         }   
     }
+
+    #-------------------------------------------------------------------
+    # Clean Up
+
+    # clean
+    #
+    # Cleans all compiled build products.
+
+    typemethod clean {} {
+        if {![got [project src names]]} {
+            return
+        }
+        puts "Cleaning src directories..." 
+        foreach name [project src names] {
+            set dir [project root src $name]
+
+            puts ""
+            puts [string repeat - 75]
+            puts "Cleaning: src/$name"
+            puts ""
+            ExecuteScript $dir [project src clean $name]
+        }
+       
+    }
+    
 }
 
 
