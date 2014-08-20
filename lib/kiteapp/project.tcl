@@ -72,6 +72,9 @@ snit::type project {
     #   build-$src     - Script to build contents of $src
     #   clean-$src     - Script to clean contents of $src
     #
+    #   dists          - Names of distribution targets.
+    #   distpat-$dist  - List of path patterns for $dist.
+    #
     # If values are "", the data has not yet been loaded.
 
     typevariable info -array {
@@ -85,6 +88,7 @@ snit::type project {
         includes       {}
         requires       {}
         srcs           {}
+        dists          {}
         shell          {}
     }
 
@@ -478,6 +482,23 @@ snit::type project {
         return $info(clean-$src)
     }
 
+    # dist names
+    #
+    # Returns the list of "dist" target names.
+
+    typemethod {dist names} {} {
+        return $info(dists)
+    }
+
+    # dist patterns dist
+    #
+    # dist  - A dist target name, as returned by [project dist names]
+    # 
+    # Returns the list of file patterns.
+
+    typemethod {dist patterns} {dist} {
+        return $info(distpat-$dist)
+    }
 
     # shell
     #
@@ -537,6 +558,7 @@ snit::type project {
         $safe alias include [myproc IncludeCmd]
         $safe alias require [myproc RequireCmd]
         $safe alias src     [myproc SrcCmd]
+        $safe alias dist    [myproc DistCmd]
         $safe alias shell   [myproc ShellCmd]
 
 
@@ -822,6 +844,30 @@ snit::type project {
         lappend info(srcs) $name
     }
 
+    # DistCmd name patterns
+    #
+    # name     - The name of the distribution target, e.g., "install".
+    # patterns - List of path patterns for files to include.
+    #
+    # Implementation of the "dist" kite file command.  
+
+    proc DistCmd {name patterns} {
+        # FIRST, get the name.
+        set name [string trim $name]
+
+        if {![regexp {^[a-zA-Z]\w*$} $name]} {
+            throw SYNTAX "Invalid distribution name \"$name\""
+        }
+
+        if {$name in $info(dists)} {
+            throw SYNTAX "Duplicate distribution name \"$name\""
+        }
+
+        lappend info(dists)         $name
+        set     info(distpat-$name) $patterns
+    }
+
+
     # ShellCmd script
     #
     # Implementation of the "shell" kite file command.
@@ -939,6 +985,13 @@ snit::type project {
                 }
 
                 lappend script $item
+            }
+        }
+
+        if {$info(dists) ne ""} {
+            lappend script "" "# Distribution Targets"
+            foreach name $info(dists) {
+                lappend script [list dist $name $info(distpat-$name)]
             }
         }
 

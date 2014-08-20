@@ -3,10 +3,7 @@
 ## Next
 
 * 'kite build all' should:
-  * compile
-  * test
-  * docs
-  * build
+  * Build distribution files
 * 'kite clean' - Tool to clean up build products.
   * Tools can register clean up handlers.
 * 'kite dist' - tool to build distribution.

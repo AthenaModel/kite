@@ -28,7 +28,7 @@ namespace eval ::kiteinfo:: {
         includes {}
         binary-kiteutils 0
         pkgversion 0.1.3a0
-        requires {platform snit textutil::expander}
+        requires {platform snit textutil::expander zipfile::encode}
         shell {
     package require kiteutils
     package require kitedocs
@@ -40,7 +40,9 @@ namespace eval ::kiteinfo:: {
         apps kite
         apptype-kite kit
         version 0.1.3a0
+        require-zipfile::encode {version 0.3 local 0}
         require-platform {version 1.0 local 0}
+        dists {}
     }
 
     namespace export \

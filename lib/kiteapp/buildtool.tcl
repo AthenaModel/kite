@@ -327,8 +327,6 @@ snit::type buildtool {
     # lib   - A "lib" from project.kite
     #
     # Builds a .zip package for the lib.
-    #
-    # TODO: This supports only pure-Tcl libs at the moment.
 
     proc BuildTeapotZip {lib} {
         # FIRST, make sure the library package exists.

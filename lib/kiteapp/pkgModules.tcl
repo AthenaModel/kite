@@ -23,6 +23,7 @@ package provide kiteapp 0.1.3a0
 # -kite-require-start ADD EXTERNAL DEPENDENCIES
 package require snit 2.3
 package require platform 1.0
+package require zipfile::encode 0.3
 package require -exact kiteutils 0.1.3a0
 package require -exact kitedocs 0.1.3a0
 # -kite-require-end
@@ -62,6 +63,7 @@ source [file join $::kiteapp::library addtool.tcl         ]
 source [file join $::kiteapp::library buildtool.tcl       ]
 source [file join $::kiteapp::library compiletool.tcl     ]
 source [file join $::kiteapp::library depstool.tcl        ]
+source [file join $::kiteapp::library disttool.tcl        ]
 source [file join $::kiteapp::library docstool.tcl        ]
 source [file join $::kiteapp::library helptool.tcl        ]
 source [file join $::kiteapp::library infotool.tcl        ]

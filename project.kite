@@ -7,6 +7,7 @@ provide kitedocs
 require platform 1.0
 require snit 2.3
 require textutil::expander 1.3.1
+require zipfile::encode 0.3
 
 shell {
     package require kiteutils

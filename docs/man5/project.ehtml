@@ -207,6 +207,43 @@ will be built into it.  For <iref provide>-only projects, the included
 projects are available for testing but
 will not be built into the exported packages.<p>
 
+<defitem dist {dist <i name patterns>}>
+
+The <tt kite dist> command builds distribution .zip files for the project.
+This command defines a distribution target called <i name>; the
+<i patterns> indicate the specific files to include in the .zip file.<p>
+
+The value of <i patterns> is a list of patterns; each pattern is one of the
+following:<p>
+
+<ul>
+<li> A glob pattern relative to the project root, e.g., 
+     "<tt docs/*.html>".  This includes all matching files from the 
+     project tree.<p>
+
+<li> The special pattern <b %apps>.  This includes all of the project's
+     application executables.<p>
+
+<li> The special pattern <b %libs>.  This includes the teapot .zip files
+     for each of the project's <iref provide>d library packages.<p>
+</ul>
+
+A project may define any number of distribution targets; by convention,
+the main one is called "install".<p>
+
+For example, a typical "install" distribution might look like this:<p>
+
+<example>
+dist install {
+    README.md
+    LICENSE.md
+    docs/*.html
+    docs/*/*.html
+    %apps
+    %libs
+}
+</example>
+
 <defitem shell {shell <i>script</i>}>
 
 The <i>script</i> will be automatically loaded in the Tcl shell produced by
