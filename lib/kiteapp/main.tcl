@@ -2,6 +2,12 @@
 # TITLE:
 #   main.tcl
 #
+# PROJECT:
+#   athena-kite: Kite Build Manager for Tcl Projects
+#
+# PACKAGE:
+#   kiteapp(n): Kite Application Package
+#
 # AUTHOR:
 #   Will Duquette
 #

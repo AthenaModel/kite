@@ -2,6 +2,16 @@
 
 ## Next
 
+* Cleanup:
+  * Remove "include" capability.
+  * Work through code, looking for things to improve.
+  * Pull "knowledge" into specific spots.
+  * Better os/env support.
+  * Rationalize "project" queries.
+* Support for pulling external documents into the project tree for
+  making distributions.
+  * Could use a src directory, plus 'curl'
+  * Or direct support.
 * Improve 'kite add': options on additions, e.g., private libraries.
   * Options:
     * -private: Private library, not "provided".
@@ -9,15 +19,26 @@
   * Constraints:
     * Can't add app if loader script or lib/nameapp already exists.
     * Can't add library if lib/name already exists.
+* Testing of kiteapp modules.
+  * Split between UI modules (e.g., <name>tool.tcl) and implementation
+    modules (e.g., tool.tcl).
+  * Can test each.
+* Plug-in architecture.
+  * A plugin defines a new tool.
+  * It provides help, calling info, and so forth.
+    * Provide cleaner interface for existing tools.
+  * Can access "project" API, which will have to be documented.
+  * Provide clean "project" API.
+    * Pass project object into plugins?
 
 ## Notes
 
+* Can create teapot zips directly, using zipfile::encode.
 * Default teapot:
   * Making ~/.kite/teapot the default teapot means that
     different users are in contention.
   * Perhaps I should just make sure it's linked, and build
     against it.
-  * Send note to Andreas: per-user teapots and links.
 * Test suites
   * kitedoc(n)
   * manpage(n)
@@ -30,11 +51,6 @@
     * External docs can be pulled in using a kite command, so that they
       can be included in a build.
   * "Kite server" for locally built packages
-* As time permits/when needed
-  * kite retest
-    * Execute only tests that failed last time.
-* User testing needed
-  * Test on Linux
 * To ponder
   * Consider using basekits from teapot.
 
