@@ -55,13 +55,6 @@ snit::type project {
     #   provides       - List of provided library package names
     #   binary-$name   - 1 if package is binary, and 0 otherwise.
     #
-    #   includes       - List of include names
-    #   include-$name  - inclusion dictionary for the $name
-    #
-    #       vcs - git|svn
-    #       url - The repository URL
-    #       tag - The version/branch tag
-    #
     #   requires       - Names of required teapot packages
     #   require-$name  - Info dictionary for the required package
     #
@@ -85,7 +78,6 @@ snit::type project {
         poc            ""
         apps           ""
         provides       {}
-        includes       {}
         requires       {}
         srcs           {}
         dists          {}
@@ -403,29 +395,6 @@ snit::type project {
         return "package-$name-$ver-$plat.zip"
     }
 
-    # include names
-    #
-    # Returns the list of include names.
-
-    typemethod {include names} {} {
-        return $info(includes)
-    }
-
-    # include get name ?attr?
-    #
-    # name  - the include name
-    # attr  - Optionally, an include attribute.
-    #
-    # Returns the include dictionary, or one attribute of it.
-
-    typemethod {include get} {name {attr ""}} {
-        if {$attr eq ""} {
-            return $info(include-$name)
-        } else {
-            return [dict get $info(include-$name) $attr]
-        }
-    }
-
     # require names
     #
     # Returns the list of required package names.
@@ -514,15 +483,7 @@ snit::type project {
     # project.
 
     typemethod libpath {} {
-        set path [list]
-
-        foreach iname $info(includes) {
-            lappend path [project root includes $iname lib]
-        }
-
-        lappend path [project root lib]
-
-        return $path
+        return [list [project root lib]]
     }
 
     # zippath
@@ -555,7 +516,6 @@ snit::type project {
         $safe alias poc     [myproc PocCmd]
         $safe alias app     [myproc AppCmd]
         $safe alias provide [myproc ProvideCmd]
-        $safe alias include [myproc IncludeCmd]
         $safe alias require [myproc RequireCmd]
         $safe alias src     [myproc SrcCmd]
         $safe alias dist    [myproc DistCmd]
@@ -728,46 +688,6 @@ snit::type project {
         }
     }
 
-    # IncludeCmd name vcs url tag
-    #
-    # name  - Name of included software; used as directory name 
-    #         under <root>/includes/
-    # vcs   - svn | git
-    # url   - URL of the project for cloning/checkout
-    # tag   - The specific version of the software to checkout.
-    #
-    # Pulls the software from the repository at the URL using the
-    # "svn" or "git" command line tool.  The URL is to the project
-    # root.  The tag is the tag or branch to checkout, in a form
-    # appropriate for the VCS.
-    #
-    # For git, the tag can be any branch or tag name.
-    # For svn, the tag is added to the URL, e.g., "trunk", 
-    # "branches/athena_6.3.1", "tags/athena_6.3.1-R12".
-
-    proc IncludeCmd {name vcs url tag} {
-        prepare vcs  -required -tolower
-        prepare name -required
-        prepare url  -required
-        prepare tag  -required
-
-        if {$vcs ni {git svn}} {
-            throw SYNTAX "Unknown VCS on include: \"$vcs\""
-        }
-
-        if {![BaseName? $name]} {
-            throw SYNTAX "Invalid include name: \"$name\""
-        }
-
-        if {$name in [concat $info(includes) $info(requires)]} {
-            throw SYNTAX "Duplicate include/require name: \"$name\""
-        }
-
-        ladd info(includes) $name
-        set info(include-$name) \
-            [dict create vcs $vcs url $url tag $tag]
-    }
-
     # RequireCmd name version ?options?
     #
     # name      - The name of the teapot package
@@ -782,8 +702,8 @@ snit::type project {
     # a teapot repository.
 
     proc RequireCmd {name version args} {
-        if {$name in [concat $info(includes) $info(requires)]} {
-            throw SYNTAX "Duplicate include/require name: \"$name\""
+        if {$name in $info(requires)} {
+            throw SYNTAX "Duplicate require name: \"$name\""
         }
 
         dict set rdict version $version
@@ -970,18 +890,6 @@ snit::type project {
                     if {$local} {
                         lappend item -local
                     }
-                }
-
-                lappend script $item
-            }
-        }
-
-        if {[llength $info(includes)] > 0} {
-            lappend script "" "# Included Projects"
-
-            foreach name $info(includes) {
-                dict with info(include-$name) {
-                    set item [list include $name $vcs $url $tag]
                 }
 
                 lappend script $item
@@ -1182,16 +1090,6 @@ snit::type project {
         } else {
             foreach name $info(srcs) {
                 DumpValue "Makes:" src/$name
-            }
-            puts ""
-        }
-
-        if {[llength $info(includes)] == 0} {
-            DumpValue "Includes:" "n/a"
-        } else {
-            foreach name $info(includes) {
-                array set d $info(include-$name)
-                DumpValue "Include:"  "$name as $d(vcs) $d(url) $d(tag)"
             }
             puts ""
         }

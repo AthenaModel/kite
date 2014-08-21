@@ -17,7 +17,7 @@ normal Tcl syntax rules apply.<p>
 Every Kite project file begins with a <iref project> statement.  This is
 typically followed by one or more build target statements, e.g.,
 <iref app> and <iref provide>.  These are followed by
-<iref require> and <iref include> statements that define the project's
+<iref require> statements that define the project's
 external dependencies.<p>
 
 A project's project file is usually created by Kite as part of initializing
@@ -183,29 +183,6 @@ fetch it.
 Required packages will be built into the project's <iref app>
 and (<b TODO>) dependencies on required packages will be noted in 
 <iref provide> packages when built as teapot .zip files.
-
-<defitem include {include <i>name vcs url tag</i>}>
-
-This statement tells Kite that this project depends on another project 
-called <i>name</i>, and directs Kite to pull the other project's code from 
-its VCS repository into the "<i>root</i>/includes/<i>name</i>" directory
-so that this project can make use of it.<p>
-
-The <i>vcs</i> may be <b>git</b> or <b>svn</b>.  The <i>url</i> is the base 
-URL of the project in the Git or Subversion repository.  The <i>tag</i>
-is the specific version of the project to retrieve.  For Git, the 
-<i>tag</i> can be a branch or tag name; for Subversion, the 
-<i>tag</i> will simply be added to
-the <i>url</i> as <i>url/tag</i>.<p>
-
-Kite assumes that the included project contains one or more Tcl
-packages in its "lib" directory, and thus adds 
-"<i>root</i>/includes/<i>name</i>/lib" to the <tt>auto_path</tt>.<p>
-
-When an <iref app> is built, the included projects 
-will be built into it.  For <iref provide>-only projects, the included 
-projects are available for testing but
-will not be built into the exported packages.<p>
 
 <defitem dist {dist <i name patterns>}>
 

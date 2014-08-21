@@ -26,26 +26,18 @@ set ::ktools(deps) {
 set ::khelp(deps) {
     The 'kite deps' tool manages the project's external dependencies.  
     There are two kinds of dependencies.  External "require" dependencies 
-    are retrieved from teapot.activestate.com; "include" dependencies are
-    pulled into <root>/includes from local CM repositories and made 
-    available for use by the project.
+    are retrieved from teapot.activestate.com; and placed in the local
+    teapot repository; locally-built "require" dependencies are tracked
+    but not retrieved.
 
     kite deps
-        Get the status of all external dependencies.
+        Get the status of all dependencies.
 
     kite deps update
         Retrieve dependencies are are missing or are clearly out of date.
 
     kite deps update <name>
         Forces a fresh retrieval of the named dependency.
-
-    kite deps clean
-        Removing "include" statements from project.kite can leave you
-        with obsolete includes in <project>/includes.  Use
-
-            $ kite deps clean
-
-        to remove them (or just delete them by hand).
 
     When Kite fails to install a required teapot package,
     see the <project>/.kite/install_<package>.log file for details.
@@ -75,9 +67,6 @@ snit::type depstool {
             DisplayStatus
         } elseif {$subc eq "update"} {
             UpdateDependencies [lshift argv]
-        } elseif {$subc eq "clean"} {
-            # Get rid of unneeded includes
-            includer clean
         } else {
             throw FATAL "Unknown subcommand: \"$subc\""
         }
@@ -90,10 +79,7 @@ snit::type depstool {
     # Displays the status of the project dependencies.
 
     proc DisplayStatus {} {
-        # FIRST, show the status of local includes.
-        includer status
-
-        # NEXT, shows the status of required teapot packages.
+        # FIRST, show the status of required teapot packages.
         teacup status
 
         puts "\nTo retrieve out-of-date or missing dependencies, use"
@@ -110,10 +96,7 @@ snit::type depstool {
 
     proc UpdateDependencies {name} {
         if {$name eq ""} {
-            includer update
             teacup update
-        } elseif {$name in [project include names]} {
-            includer retrieve $name
         } elseif {$name in [project require names]} {
             teacup update $name
         } else {

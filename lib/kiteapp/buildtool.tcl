@@ -80,7 +80,7 @@ snit::type buildtool {
         }
 
         # FIRST, check for dependencies.
-        set upToDate [expr {[includer uptodate] && [teacup uptodate]}]
+        set upToDate [teacup uptodate]
 
         if {!$upToDate} {
             puts "WARNING: Some dependencies are not up-to-date."
@@ -259,20 +259,6 @@ snit::type buildtool {
         # NEXT, include library subdirectories, if any.
         if {[llength [glob -nocomplain [project root lib * * *]]] > 0} {
             lappend command [project root lib * * *]
-        }
-
-        # NEXT, do we have any includes?
-        foreach iname [project include names] {
-            set ilib [project root includes $iname lib]
-
-            if {[llength [glob -nocomplain [file join $ilib *]]] > 0} {
-                lappend command [file join $ilib * *]
-            }
-
-            # NEXT, include library subdirectories, if any.
-            if {[llength [glob -nocomplain [file join $ilib * * *]]] > 0} {
-                lappend command [file join $ilib * * *]
-            }
         }
 
         # NEXT, add the basekit, if any.
