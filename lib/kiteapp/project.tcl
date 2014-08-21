@@ -56,10 +56,8 @@ snit::type project {
     #   binary-$name   - 1 if package is binary, and 0 otherwise.
     #
     #   requires       - Names of required teapot packages
-    #   require-$name  - Info dictionary for the required package
-    #
-    #       version    - Version of required package $name
-    #       local      - 1 if this is a local package, and 0 otherwise.
+    #   reqver-$name   - Version of required package $name
+    #   local-$name    - 1 if this is a local package, and 0 otherwise.
     #
     #   srcs           - Names of "src" targets
     #   build-$src     - Script to build contents of $src
@@ -410,7 +408,7 @@ snit::type project {
     # Returns the required package's version.
 
     typemethod {require version} {name} {
-        return [dict get $info(require-$name) version]
+        return $info(reqver-$name)
     }
 
     # require islocal name
@@ -420,7 +418,7 @@ snit::type project {
     # Returns 1 if the required package is internally built.
 
     typemethod {require islocal} {name} {
-        return [dict get $info(require-$name) local]
+        return $info(local-$name)
     }
 
     # src names
@@ -706,24 +704,15 @@ snit::type project {
             throw SYNTAX "Duplicate require name: \"$name\""
         }
 
-        dict set rdict version $version
-        dict set rdict local   0
+        set local 0
 
-        while {[llength $args] > 0} {
-            set opt [lshift args]
-            switch -exact -- $opt {
-                -local { 
-                    dict set rdict local 1
-                }
-
-                default {
-                    throw SYNTAX "Unknown option: \"$opt\""
-                }
-            }
+        foroption opt args {
+            -local { set local 1 }
         }
 
-        ladd info(requires) $name
-        set info(require-$name) $rdict
+        ladd info(requires)    $name
+        set info(reqver-$name) $version
+        set info(local-$name)  $local
     }
 
     # SrcCmd name ?options...?
@@ -884,12 +873,10 @@ snit::type project {
             lappend script "" "# External Dependencies"
 
             foreach name $info(requires) {
-                dict with info(require-$name) {
-                    set item [list require $name $version]
+                set item [list require $name $info(reqver-$name)]
 
-                    if {$local} {
-                        lappend item -local
-                    }
+                if {$info(local-$name)} {
+                    lappend item -local
                 }
 
                 lappend script $item
@@ -1098,15 +1085,14 @@ snit::type project {
             DumpValue "Requires:" "n/a"
         } else {    
             foreach name $info(requires) {
-                array set d $info(require-$name)
-
-                if {$d(local)} {
+                if {[project require islocal $name]} {
                     set where "(Locally built)"
                 } else {
                     set where "(External)"
                 }
 
-                DumpValue "Requires:"  "$name $d(version)" $where
+                DumpValue "Requires:"  \
+                    "$name [project require version $name]" $where
             }
         }
     }
@@ -1121,7 +1107,7 @@ snit::type project {
     # the value is "", then "n/a" is output.
 
     proc DumpValue {name value {tag ""}} {
-        set fmt "%-12s %-20s %s"
+        set fmt "%-12s %-30s %s"
 
         if {$value eq ""} {
             set value "n/a"

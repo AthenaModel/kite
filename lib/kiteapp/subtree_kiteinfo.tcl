@@ -196,24 +196,6 @@ codeblock subtree::KiteInfo_kiteinfo {metadata} {
 
         return $kiteInfo(gui-$app)
     }
-
-    # require name
-    #
-    # name  - Name of a "require"'d teapot package.
-    #
-    # Does a Tcl [package require] on the given package, using the
-    # version specified by the "require" statement in project.kite.
-    #
-    # DEPRECATED
-
-    proc ::kiteinfo::require {name} {
-        variable kiteInfo
-        
-        if {$name ni $kiteInfo(requires)} {
-            error "unknown package name: \"$name\""
-        }
-        set version [dict get $kiteInfo(require-$name) version]
-    }
 }
 
 

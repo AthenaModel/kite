@@ -3,9 +3,8 @@
 ## Next
 
 * Cleanup:
-  * Remove "include" capability.
-  * Use array elements for "require" metadata
-  * 'kite deps' output: use columns, OK|out-of-date
+* project dump: use lmaxlen.
+  * 'kite deps' output: use columns, OK|out-of-date, lmaxlen.
   * Work through code, looking for things to improve.
   * Pull "knowledge" into specific spots.
   * Better os/env support.

@@ -19,8 +19,6 @@ namespace eval ::kiteinfo:: {
     variable kiteInfo
 
     array set kiteInfo {
-        require-textutil::expander {version 1.3.1 local 0}
-        require-snit {version 2.3 local 0}
         binary-kitedocs 0
         description {Athena/Kite Development Tool}
         provides {kiteutils kitedocs}
@@ -34,8 +32,11 @@ namespace eval ::kiteinfo:: {
     docs/*.html
     docs/*/*.html
 }
+        reqver-zipfile::encode 0.3
+        reqver-platform 1.0
         gui-kite 0
-        includes {}
+        reqver-textutil::expander 1.3.1
+        reqver-snit 2.3
         binary-kiteutils 0
         pkgversion 0.1.4a0
         requires {platform snit textutil::expander zipfile::encode}
@@ -48,10 +49,12 @@ namespace eval ::kiteinfo:: {
         poc William.H.Duquette@jpl.nasa.gov
         srcs {}
         apps kite
+        local-zipfile::encode 0
+        local-platform 0
         apptype-kite kit
+        local-textutil::expander 0
+        local-snit 0
         version 0.1.4a0
-        require-zipfile::encode {version 0.3 local 0}
-        require-platform {version 1.0 local 0}
         dists install
     }
 
@@ -120,22 +123,4 @@ proc ::kiteinfo::gui {app} {
     variable kiteInfo
 
     return $kiteInfo(gui-$app)
-}
-
-# require name
-#
-# name  - Name of a "require"'d teapot package.
-#
-# Does a Tcl [package require] on the given package, using the
-# version specified by the "require" statement in project.kite.
-#
-# DEPRECATED
-
-proc ::kiteinfo::require {name} {
-    variable kiteInfo
-    
-    if {$name ni $kiteInfo(requires)} {
-        error "unknown package name: \"$name\""
-    }
-    set version [dict get $kiteInfo(require-$name) version]
 }
