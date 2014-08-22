@@ -8,8 +8,6 @@
 # DESCRIPTION:
 #   Kite: kiteapp(n) Miscellaneous Commands
 #
-# TODO: Move generic commands to kiteutils(n) (e.g., writefile).
-#
 #-----------------------------------------------------------------------
 
 namespace eval ::kiteapp:: {

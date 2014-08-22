@@ -106,8 +106,6 @@ snit::type project {
     #
     # If we cannot find the project directory, throw an error with
     # code FATAL.
-    #
-    # TODO: Split path components on "/" before rejoining?
 
     typemethod root {args} {
         if {$rootdir eq ""} {

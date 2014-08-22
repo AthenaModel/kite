@@ -3,9 +3,12 @@
 ## Next
 
 * Cleanup:
-* 'kite build' failed because 'platform' wasn't in ~/.kite/teapot; but 
-  didn't report that platform was out-of-date.
-* project dump: use lmaxlen.
+  * Flesh out the plat.tcl module.
+  * Update help subsystem to support tree of topics.
+  * Use smartinterp for parsing project.kite.
+  * Add a module for calling execute commands against known helpers, with
+    options for logging.
+  * project dump: use lmaxlen.
   * 'kite deps' output: use columns, OK|out-of-date, lmaxlen.
   * Work through code, looking for things to improve.
   * Pull "knowledge" into specific spots.
