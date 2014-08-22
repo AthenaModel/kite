@@ -47,7 +47,7 @@ tool define info {
         # FIRST, handle the default case.
         # TODO: Move dumpinfo here.
         if {$opt eq ""} {
-            project dumpinfo
+            DisplayInfo
 
             puts ""
             return            
@@ -63,7 +63,85 @@ tool define info {
         }
 
         puts $result
-    }    
+    }
+
+    # DisplayInfo
+    #
+    # Display the project information.
+
+    proc DisplayInfo {} {
+        set title "[project name] [project version] -- [project description]"
+        puts ""
+        puts $title
+        puts [string repeat - [string length $title]]
+
+        if {[got [project app names]]} {
+            puts ""
+            puts "Applications:"
+
+            set table [list]
+
+            foreach app [project app names] {
+                if {[project app gui $app]} {
+                    set tag "GUI"
+                } else {
+                    set tag "Console"
+                }
+                append tag ",[project app apptype $app]"
+                lappend table [list app $app tag ($tag)]
+            }
+
+            table puts $table -indent "    "
+        }
+
+        if {[got [project provide names]]} {
+            puts ""
+            puts "Provided Libraries:"
+
+            set table [list]
+
+            foreach name [project provide names] {
+                if {[project provide binary $name]} {
+                    set tag "(Binary)"
+                } else {
+                    set tag "(Pure TCL)"
+                }
+
+                lappend table [list lib ${name}(n) tag $tag]
+            }
+
+            table puts $table -indent "    "
+        }
+
+
+        if {[got [project src names]]} {
+            puts ""
+            puts "Compiled Directories:"
+            foreach name [project src names] {
+                puts "    src/$name"
+            }
+        }
+
+        if {[got [project require names]]} {
+            puts ""
+            puts "Required Packages:"
+            set table [list]
+
+            foreach name [project require names] {
+                set ver [project require version $name]
+
+                if {[project require islocal $name]} {
+                    set tag "(Locally built)"
+                } else {
+                    set tag "(External)"
+                }
+
+                lappend table [list name "$name $ver" tag $tag]
+            }
+
+            table puts $table -indent "    "
+        }
+    }
 }
 
 

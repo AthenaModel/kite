@@ -3,6 +3,11 @@
 ## Next
 
 * Cleanup:
+  * Fix [project teapot].
+    * The [project teapot] isn't really project-specific.
+      * Put this call somewhere else.  A system module?
+      * Allow Kite to use the normal teapot if it has write-access,
+        as Quill does?
   * Flesh out the plat.tcl module.
     * tool::SHELL should use plat to find tkcon.
   * Update help subsystem to support tree of topics.
@@ -10,7 +15,6 @@
   * Add a module for calling execute commands against known helpers, with
     options for logging.
   * project dump: use lmaxlen.
-  * 'kite deps' output: use columns, OK|out-of-date, lmaxlen.
   * Work through code, looking for things to improve.
   * Pull "knowledge" into specific spots.
   * Better os/env support.
