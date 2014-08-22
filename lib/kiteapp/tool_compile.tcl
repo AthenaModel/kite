@@ -52,6 +52,11 @@ tool define compile {
             set toCompile [project src names]
         }
 
+        if {![got [project src names]]} {
+            puts "This project has no 'src' directories to compile."
+            return
+        }
+
         foreach name [project src names] {
             if {$name ni $toCompile} {
                 continue
@@ -123,9 +128,7 @@ tool define compile {
             puts ""
             ExecuteScript $dir [project src clean $name]
         }
-       
     }
-    
 }
 
 
