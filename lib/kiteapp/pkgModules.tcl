@@ -48,6 +48,8 @@ namespace import kiteutils::*
 source [file join $::kiteapp::library main.tcl            ]
 source [file join $::kiteapp::library misc.tcl            ]
 source [file join $::kiteapp::library plat.tcl            ]
+source [file join $::kiteapp::library deps.tcl            ]
+source [file join $::kiteapp::library table.tcl           ]
 source [file join $::kiteapp::library project.tcl         ]
 source [file join $::kiteapp::library subtree.tcl         ]
 source [file join $::kiteapp::library subtree_kiteinfo.tcl]

@@ -135,7 +135,7 @@ tool define install {
         # NEXT, add it.
         try {
             puts "Installing lib \"$lib $ver\" into the local teapot."
-            if {[teacup has $lib $ver]} {
+            if {[deps has $lib $ver]} {
                 teacup remove $lib $ver
             }
 

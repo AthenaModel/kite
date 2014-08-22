@@ -68,9 +68,12 @@ tool define build {
         }
 
         # FIRST, check for dependencies.
-        set upToDate [teacup uptodate]
+        set upToDate [deps uptodate]
 
-        if {!$upToDate} {
+        if {$upToDate} {
+            puts "All external dependencies are up to date."
+            puts ""
+        } else {
             puts "WARNING: Some dependencies are not up-to-date."
             puts "Run \"kite deps\" for details."
             puts ""

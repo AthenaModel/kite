@@ -15,7 +15,7 @@
 # tool::DEPS
 
 tool define deps {
-    usage       {0 2 "?update|clean? ?<name>?"}
+    usage       {0 2 "?update? ?<name>?"}
     description "Manage project dependencies"
     needstree      yes
 } {
@@ -52,7 +52,7 @@ tool define deps {
         if {$subc eq ""} {
             DisplayStatus
         } elseif {$subc eq "update"} {
-            UpdateDependencies [lshift argv]
+            deps update [lshift argv]
         } else {
             throw FATAL "Unknown subcommand: \"$subc\""
         }
@@ -65,32 +65,50 @@ tool define deps {
     # Displays the status of the project dependencies.
 
     proc DisplayStatus {} {
-        # FIRST, show the status of required teapot packages.
-        teacup status
+        # FIRST, is this even relevant?
+        if {[llength [project require names]] == 0} {
+            puts "The project has no required packages.\n"
+            return
+        }
+
+        # NEXT, build the table.
+        set table [list]
+        set gotLocal 0
+
+        foreach name [project require names] {
+            set row [dict create]
+            set version [project require version $name]
+
+            dict set row nv "$name $version"
+
+            if {[deps has $name $version]} {
+                dict set row status "OK"
+            } elseif {[project require islocal $name]} {
+                dict set row status "Out-of-date, Local"
+                set gotLocal 1
+            } else {
+                dict set row status "Out-of-date"
+                set gotExtern 1
+            }
+
+            lappend table $row
+        }
+
+        puts "Required Package Status:\n"
+
+        table puts $table -indent "   "
 
         puts "\nTo retrieve out-of-date or missing dependencies, use"
         puts "\"kite deps update\".  To force an update of a particular"
         puts "dependency, use \"kite deps update <name>\"."
-    }
 
-    # UpdateDependencies name
-    #
-    # name - A dependency name, or ""
-    #
-    # Updates all out-of-date or missing dependencies, or updates a
-    # specific dependency.
-
-    proc UpdateDependencies {name} {
-        if {$name eq ""} {
-            teacup update
-        } elseif {$name in [project require names]} {
-            teacup update $name
-        } else {
-            throw FATAL "Unknown dependency: \"$name\""
+        if {$gotLocal} {
+            puts ""
+            puts "At least one out-of-date dependency is locally built,"
+            puts "and must be installed into the local teapot by the"
+            puts "developer."
         }
     }
-
-
 }
 
 
