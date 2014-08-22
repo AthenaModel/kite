@@ -7,6 +7,7 @@
 /docs/*/*.html
 teapot.txt
 /*.zip
+*~
 
 # SublimeText artifacts.
 *.sublime-*

@@ -16,7 +16,7 @@
 tool define info {
     usage       {0 1 "?<option>?"}
     description "Display information about Kite and this project."
-    intree      yes
+    needstree      yes
 } {
     The 'kite info' tool displays information about the current project
     in human readable format.  Most of the information is from the 

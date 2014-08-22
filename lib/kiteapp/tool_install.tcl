@@ -16,7 +16,7 @@
 tool define install {
     usage       {0 - "?app|lib? ?<name>...?"}
     description "Build and install applications to ~/bin."
-    intree      yes
+    needstree      yes
 } {
     The "install" tool installs build products into the local file
     system for general use.

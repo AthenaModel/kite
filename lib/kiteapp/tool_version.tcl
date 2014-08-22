@@ -16,7 +16,7 @@
 tool define version {
     usage       {0 0 ""}
     description "Display Kite's version information."
-    intree      no
+    needstree      no
 } {
     The "version" tool displays Kite's own version information.
 } {

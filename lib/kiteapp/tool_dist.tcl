@@ -16,7 +16,7 @@
 tool define dist {
     usage       {0 - "?<target>...?"}
     description "Builds one or more distribution .zip files."
-    intree      yes
+    needstree      yes
 } {
     The 'kite dist' tool is used to build distribution .zip files,
     based on the 'dist' statements in project.kite.  See the project(5)

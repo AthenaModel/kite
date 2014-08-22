@@ -17,7 +17,7 @@
 tool define shell {
     usage       {0 1 "?-plain?"}
     description "Open interactive Tcl shell"
-    intree      yes
+    needstree      yes
 } {
     The 'kite shell' tool opens an interactive Tcl shell (tkcon) on the 
     project codebase.  If the project defines any applications, the 

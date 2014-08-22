@@ -54,7 +54,7 @@ proc main {argv} {
         set tool "RunScript"
         set treeNeeded 1
     } elseif {[tool exists $tool]} {
-        set treeNeeded [tool intree $tool]
+        set treeNeeded [tool needstree $tool]
     } else {
         throw FATAL [outdent "
             '$tool' is neither the name of a Kite tool, nor the name of a

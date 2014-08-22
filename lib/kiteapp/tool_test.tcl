@@ -16,7 +16,7 @@
 tool define test {
     usage       {0 - "?<target> ?<module>?? ?<option>...?"}
     description "Runs some or all of the project test suite."
-    intree      yes
+    needstree      yes
 } {
     This tool executes some or all of the project's test suite.  The
     test suite consists of a number of "targets", each of which has a

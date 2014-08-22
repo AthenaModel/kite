@@ -16,7 +16,7 @@
 tool define teapot {
     usage       {0 1 "?create|link|remove?"}
     description "Create local teapot for Kite projects."
-    intree      no
+    needstree      no
 } {
     The 'kite teapot' tool creates a local teapot repository in 
     ~/.kite/teapot to contain required teapot packages for Kite

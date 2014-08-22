@@ -17,7 +17,7 @@
 tool define replace {
     usage       {3 - "<target> <subtest> <file> ?<file>...?"}
     description "Global string replacement in text files"
-    intree      no
+    needstree      no
 } {
     The 'kite replace' tool replaces all occurrences of <target> with
     <subtext> in the text files listed on the command line.

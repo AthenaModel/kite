@@ -18,7 +18,7 @@
 tool define build {
     usage       {0 - "?all|app|lib? ?<name>...?"}
     description "Build the entire project."
-    intree      yes
+    needstree      yes
 } {
     The 'kite build' tool builds all build targets specified in the
     project's project.kite file.  In particular:

@@ -18,7 +18,7 @@
 tool define docs {
     usage       {0 1 "?<target>|-clean?"}
     description "Format project documentation."
-    intree      yes
+    needstree      yes
 } {
     The 'kite docs' tool formats project documentation in kitedoc(5) and 
     manpage(5) format.  These are Extended HTML (.ehtml) formats; 

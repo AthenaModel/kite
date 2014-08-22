@@ -17,7 +17,7 @@
 tool define clean {
     usage       {0 0 -}
     description "Clean up build artifacts."
-    intree      yes
+    needstree      yes
 } {
     The 'kite clean' tool simply removes the files created by 
     'kite compile', 'kite build', and 'kite docs', leaving a clean

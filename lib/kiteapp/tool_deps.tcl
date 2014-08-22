@@ -17,7 +17,7 @@
 tool define deps {
     usage       {0 2 "?update|clean? ?<name>?"}
     description "Manage project dependencies"
-    intree      yes
+    needstree      yes
 } {
     The 'kite deps' tool manages the project's external dependencies.  
     There are two kinds of dependencies.  External "require" dependencies 

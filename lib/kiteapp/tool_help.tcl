@@ -16,7 +16,7 @@
 tool define help {
     usage       {0 1 "?<topic>?"}
     description "Display this help, or help for a given tool."
-    intree      no
+    needstree      no
 } {
     n/a - The "help" tool is a special case.
 } {

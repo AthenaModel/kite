@@ -17,7 +17,7 @@
 tool define run {
     usage       {0 - "?<arg>...?"}
     description "Run application"
-    intree      yes
+    needstree      yes
 } {
     If the project defines one or more applications, the 'kite run' tool
     invokes the project's primary application, i.e., it invokes

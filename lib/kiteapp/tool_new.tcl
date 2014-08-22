@@ -16,7 +16,7 @@
 tool define new {
     usage       {0 3 "<template> <project> ?<arg>...?"}
     description "Create a new project tree on the disk."
-    intree      no
+    needstree      no
 } {
     The 'kite new' tool is use to initialize new projects on the disk.  It
     takes the following arguments:
@@ -51,7 +51,7 @@ tool define new {
     typemethod execute {argv} {
         lassign $argv template project targ
 
-        if {[project intree]} {
+        if {[project needstree]} {
             throw FATAL [outdent "
                 The current working directory is part of a Kite project.
                 Kite will not create a new project within an existing 

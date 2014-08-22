@@ -16,7 +16,7 @@
 tool define compile {
     usage       {0 - "?<name>...?"}
     description "Compile \"src\" directories"
-    intree      yes
+    needstree      yes
 } {
     The 'kite compile' tool compiles the contents of the project's 
     "src" directories, as defined by the "src" statement in 

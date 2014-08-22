@@ -25,7 +25,7 @@ snit::type tool {
     # tools              - List of tool subcommand names
     # usage-$tool        - List {min max argspec}
     # description-$tool  - One line description of tool
-    # intree-$tool       - True if the tool can only be executed in the
+    # needstree-$tool       - True if the tool can only be executed in the
     #                      context of a project tree, and false otherwise.
 
     typevariable meta -array {
@@ -43,7 +43,7 @@ snit::type tool {
     # body      - The tool's body
     #
     # Defines a tool.  The metadata dictionary defines the tool's 
-    # usage, description, and intree flag.  The help text is passed to the
+    # usage, description, and needstree flag.  The help text is passed to the
     # help subsystem.
     #
     # The body is a snit::type body containing typemethods.  It must 
@@ -61,7 +61,7 @@ snit::type tool {
         ladd meta(tools)             $tool
         set  meta(usage-$tool)       [dict get $mdict usage]
         set  meta(description-$tool) [dict get $mdict description]
-        set  meta(intree-$tool)      [dict get $mdict intree] 
+        set  meta(needstree-$tool)      [dict get $mdict needstree] 
         set  meta(ensemble-$tool)    ::tool::[string toupper $tool]
 
         # NEXT, save the help text
@@ -108,14 +108,14 @@ snit::type tool {
         return "[file tail $::argv0] $tool $argspec"
     }
 
-    # intree tool
+    # needstree tool
     #
     # tool  - The name of a registered tool.
     #
-    # Returns the tool's intree flag.
+    # Returns the tool's needstree flag.
 
-    typemethod intree {tool} {
-        return $meta(intree-$tool)
+    typemethod needstree {tool} {
+        return $meta(needstree-$tool)
     }
 
     # description tool

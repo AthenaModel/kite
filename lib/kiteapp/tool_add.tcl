@@ -17,7 +17,7 @@
 tool define add {
     usage       {2 - "<element> <name> ?<option>...?"}
     description "Add an app or library to the project tree."
-    intree      yes
+    needstree      yes
 } {
     The 'kite add' tool is use to add elements to existing Kite projects,
     i.e., to add a new application or library skeleton.  It take sthe
