@@ -148,6 +148,8 @@ snit::type tool {
 
         # NEXT, execute the tool.
         $meta(ensemble-$tool) execute $argv
+
+        puts ""
     }    
 }
 
