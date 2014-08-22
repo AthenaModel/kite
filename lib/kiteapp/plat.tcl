@@ -21,28 +21,7 @@ snit::type plat {
     pragma -hasinstances no -hastypedestroy no
 
     #-------------------------------------------------------------------
-    # Constants
-
-    # osNames, by flavor
-
-    typevariable osNames -array {
-        linux    "Linux"
-        osx      "Mac OS X"
-        windows  "Windows"
-    }
-    
-
-    #-------------------------------------------------------------------
     # Type Variables
-
-    # info - Cached info
-    #
-    # flavor              - The OS flavor: linux|osx|windows
-    #
-    
-    typevariable info -array {
-        flavor {}
-    }
 
     # pathsTo - important files, by symbolic name.
 
@@ -67,57 +46,6 @@ snit::type plat {
 
         foreach key [array names pathsTo] {
             set pathsTo($key) {}
-        }
-    }
-
-    # flavor
-    #
-    # Returns the platform flavor, one of linux|osx|windows.
-    #
-    # This is the routine that figures out what kind of machine we're
-    # on.  These selectors are enough for most purposes; for actually
-    # setting the "arch", see the standard platform(n) package.
-    #
-    # Note: if we aren't on Windows or OS X, we assume we're on Linux,
-    # or something enough like it not to matter.
-    #
-    # Other parts of the code can query this, if need be; but if they
-    # do the function may need to be refactored into this API. 
-    
-    typemethod flavor {} {
-        if {$info(flavor) eq ""} {
-            switch -glob -- $::tcl_platform(os) {
-                "Windows*" { set info(flavor) windows }
-                "Darwin*"  { set info(flavor) osx     }
-                default    { set info(flavor) linux   }
-            }
-        }
-
-        return $info(flavor)
-    }
-
-    # osname
-    #
-    # Returns the OS name for the platform flavor. 
-    
-    typemethod osname {} {
-        return $osName([plat flavor])
-    }
-
-    # exefile name
-    #
-    # name - A program name or path
-    #
-    # Given the program name or path, adds on the appropriate file 
-    # extensions for executables on this platfor.
-
-    typemethod exefile {name} {
-        if {[plat flavor] eq "windows" && 
-            [file extension $name] != ".exe"
-        } {
-            return "$name.exe"
-        } else {
-            return $name
         }
     }
 
@@ -156,7 +84,7 @@ snit::type plat {
 
             teacup {
                 set bindir [file dirname [plat pathto tclsh]]
-                set path [file join $bindir [plat exefile $name]]
+                set path [file join $bindir [os exefile $name]]
 
                 # TODO: If it isn't next to the tclsh, see if we can
                 # find it on the path.
