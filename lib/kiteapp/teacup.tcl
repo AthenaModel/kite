@@ -6,10 +6,12 @@
 #   Will Duquette
 #
 # DESCRIPTION:
-#   Kite: kiteapp(n) teacup module; commands for using "teacup" to query
-#   the default local teapot repository, and to install packages in it.
-#   To adminstrate the local teapot repository as a whole, see 
-#   teapot.tcl.
+#   Kite: kiteapp(n) teacup proxy.  This module provides a proxy interface
+#   to the teacup executable, translating data formats and handling other
+#   low-level matters.
+#
+#   The deps.tcl module handles the project's external dependencies; and
+#   the teapot.tcl module manages the local teapot.
 #
 #-----------------------------------------------------------------------
 
@@ -23,6 +25,68 @@ snit::type teacup {
     #-------------------------------------------------------------------
     # teacup commands
 
+    # create dirname
+    #
+    # dirname   - The directory name of a teapot to be created.
+    #
+    # Creates a new local teapot at the desired location.  Creates the
+    # parent directory if necessary.
+
+    typemethod create {dirname} {
+        # FIRST, create the parent directory if necessary.
+        file mkdir [file dirname $dirname]
+
+        # NEXT, create the teapot.
+        Call create $dirname
+    }
+
+    # default ?teapot?
+    #
+    # teapot   - The name of the new default depot.
+    #
+    # With no arguments, returns the name of the default teapot.
+    # If teapot is given, sets it to be the default teapot.
+
+    typemethod default {{teapot ""}} {
+        if {$teapot ne ""} {
+            Call default $teapot
+        }
+
+        return [file normalize [string map {\\ /} [Call default]]]
+    }
+
+    # install name version
+    #
+    # name    - A package name
+    # version - A version number
+    #
+    # Attempts to install the given package from the remote repository
+    # into the local teapot.  Throws any error.
+
+    typemethod install {name version} {
+        Call install --with-recommends $name $version
+    }
+
+    # installfile filename
+    #
+    # filename - Name of a locally produced teapot package
+    #
+    # Attempts to install the package in the local teapot repository.
+    # Throws any error.
+
+    typemethod installfile {filename} {
+        Call install $filename >@ stdout 2>@ stderr
+    }
+
+    # link args
+    #
+    # Calls teacup link with the arguments; replaces backslashes
+    # in the output.
+
+    typemethod link {args} {
+        return [string map {\\ /} [Call link {*}$args]]
+    }
+
     # list args
     #
     # args -- teacup command-line arguments
@@ -32,11 +96,8 @@ snit::type teacup {
 
     typemethod list {args} {
         # FIRST, get the CSV
-        set command [list teacup list --as csv {*}$args]
-
         try {
-            vputs "Executing: $command"
-            set output [eval exec $command]
+            set output [Call list --as csv {*}$args]
         } on error {result} {
             throw FATAL "Error querying teapot: $result"
         }
@@ -55,19 +116,6 @@ snit::type teacup {
         return $dicts
     }
 
-    # install name version
-    #
-    # name    - A package name
-    # version - A version number
-    #
-    # Attempts to install the given package from the remote repository
-    # into the local teapot.  Throws any error.
-
-    typemethod install {name version} {
-        exec [plat pathto teacup -required] install --with-recommends \
-            $name $version
-    }
-
     # remove name version
     #
     # name    - A package name
@@ -77,19 +125,16 @@ snit::type teacup {
     # Throws any error.
 
     typemethod remove {name version} {
-        exec [plat pathto teacup -required] remove $name $version
+        Call remove $name $version
     }
 
-    # installfile filename
+    # Call args
     #
-    # filename - Name of a locally produced teapot package
-    #
-    # Attempts to install the package in the local teapot repository.
-    # Throws any error.
+    # Calls the teacup executable with the args, throwing a fatal
+    # error if teacup cannot be found.
 
-    typemethod installfile {filename} {
-        exec [plat pathto teacup -required] install $filename \
-            >@ stdout 2>@ stderr
+    proc Call {args} {
+        return [exec [plat pathto teacup -required] {*}$args]
     }
 }
 

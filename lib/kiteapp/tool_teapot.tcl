@@ -14,7 +14,7 @@
 # tool::TEAPOT
 
 tool define teapot {
-    usage       {0 1 "?create|link|remove?"}
+    usage       {0 1 "?create|link|list|remove?"}
     description "Create local teapot for Kite projects."
     needstree      no
 } {
@@ -42,6 +42,9 @@ tool define teapot {
 
             $ sudo -E kite teapot link
 
+    kite teapot list
+        Displays the content of the local teapot.
+
     kite teapot remove
         Removes ~/.kite/teapot. Removing the local teapot may cause your 
         Kite projects to be unable to find their external dependencies.  
@@ -61,15 +64,64 @@ tool define teapot {
         set sub [lindex $argv 0]
 
         switch -exact -- $sub {
-            ""      { teapot status }
+            ""      { DisplayStatus }
             create  { teapot create }
             link    { teapot link   }
+            list    { DisplayList   }
             remove  { teapot remove }
             default { throw FATAL "Unknown subcommand: \"$sub\""}
         }
 
         puts ""
     }    
+
+
+    # DisplayStatus
+    #
+    # Displays the status of the local teapot.
+
+    proc DisplayStatus {} {
+        set state [teapot state]
+
+        # TODO: Should be [plat pathof teapot]
+        puts "Local teapot: [project teapot]\n"
+
+        switch -exact -- $state {
+            missing {
+                puts "Kite hasn't yet created its local teapot. Please use"
+                puts "'kite teapot create' to do so.  See 'kite help teapot'"
+                puts "for details."
+            }
+
+            non-default {
+                puts "Kite's local teapot isn't the default installation"
+                puts "teapot.  Please use 'kite teapot create' to make it"
+                puts "so.  See 'kite help teapot' for details."
+            }
+
+            unlinked {
+                puts "Kite's local teapot isn't linked to the development"
+                puts "tclsh.  Please use 'kite teapot link' to do so."
+                puts "See 'kite help teapot' for details."
+            }
+
+            ok {
+                puts "Kite's local teapot is ready for use."
+            }
+
+            default {
+                error "Unknown teapot state: \"$state\""
+            }
+        }
+    }
+
+    # DisplayList
+    #
+    # List the packages contained in the local teapot.
+
+    proc DisplayList {} {
+        table puts [teacup list --at-default] -headers 
+    }
 }
 
 

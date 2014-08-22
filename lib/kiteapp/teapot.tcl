@@ -6,10 +6,12 @@
 #   Will Duquette
 #
 # DESCRIPTION:
-#   Kite: kiteapp(n) teapot module; commands for using the "teacup"
-#   executable to create and administrate the local teapot repository
-#   as a whole.  Use teacup.tcl to query the local teapot repository
-#   and to install packages.
+#   Kite: kiteapp(n) teapot module.  This module manages the local teapot,
+#   ensuring that Kite can easily use it to access its external dependencies.
+#
+#   This module is responsible for the local teapot as a whole; see 
+#   deps.tcl for code relating to a project's external dependencies.
+#   Also, teacup.tcl is a proxy to the teacup.exe program.
 #
 #-----------------------------------------------------------------------
 
@@ -20,65 +22,23 @@ snit::type teapot {
     # Make it a singleton
     pragma -hasinstances no -hastypedestroy no
 
-
-    # status
-    #
-    # Displays information about the local teapot.
-
-    typemethod status {} {
-        set state [$type state]
-
-        puts "Local teapot: [project teapot]\n"
-
-        switch -exact -- $state {
-            missing {
-                puts "Kite hasn't yet created its local teapot. Please use"
-                puts "'kite teapot create' to do so.  See 'kite help teapot'"
-                puts "for details."
-            }
-
-            non-default {
-                puts "Kite's local teapot isn't the default installation"
-                puts "teapot.  Please use 'kite teapot create' to make it"
-                puts "so.  See 'kite help teapot' for details."
-            }
-
-            unlinked {
-                puts "Kite's local teapot isn't linked to the development"
-                puts "tclsh.  Please use 'kite teapot link' to do so."
-                puts "See 'kite help teapot' for details."
-            }
-
-            ok {
-                puts "Kite's local teapot is ready for use."
-            }
-
-            default {
-                error "Unknown teapot state: \"$state\""
-            }
-        }
-    }
-
-
     # create
     #
     # Creates the Kite teapot, if need be, and links it to the
     # current tclsh.
+    #
+    # TODO: We need a better place to get the local teapot name.
 
     typemethod create {} {
         # FIRST, create the teapot
         if {[$type state] eq "missing"} {
             puts "Creating teapot at [project teapot]..."
-            file mkdir [file dirname [project teapot]]
-            lappend command \
-                teacup create [project teapot]
-
-            eval exec $command
+            teacup create [project teapot]
         }
 
         # NEXT, make it the default teapot.
         puts "Making Kite teapot the default installation teapot."
-        exec teacup default [project teapot] 
+        teacup default [project teapot] 
 
         # NEXT, suggest that the user link it.
         puts ""
@@ -100,9 +60,9 @@ snit::type teapot {
     # Links the Kite teapot to the current tclsh.
 
     typemethod link {} {
-        puts "Linking Kite teapot to [info nameofexecutable]..."
+        puts "Linking Kite teapot to [plat pathto tclsh -required]..."
         try {
-            exec teacup link make [project teapot] [info nameofexecutable]
+            teacup link make [project teapot] [plat pathto tclsh]
         } trap CHILDSTATUS {result eopts} {
             if {[string match "*cannot be written.*" $result]} {
                 puts "Error: $result"
@@ -125,7 +85,7 @@ snit::type teapot {
     typemethod remove {} {
         # FIRST, unlink the teapot.
         puts "Unlinking Kite teapot from [info nameofexecutable]..."
-        exec teacup link cut [project teapot] [info nameofexecutable]
+        teacup link cut [project teapot] [info nameofexecutable]
 
         # NEXT, remove it it.
         puts "Removing [project teapot] from disk"
@@ -150,7 +110,7 @@ snit::type teapot {
             return "missing"
         }
 
-        if {[project teapot] ne [DefaultTeapot]} {
+        if {[project teapot] ne [teacup default]} {
             return "non-default"
         }
 
@@ -180,8 +140,7 @@ snit::type teapot {
     # Retrieves the shells linked to the local teapot
 
     proc LinkedShells {} {
-        set links [eval exec teacup link info [project teapot]]
-        set links [string map {\\ /} $links] 
+        set links [teacup link info [project teapot]]
 
         foreach {dummy path} $links {
             set newpath [file normalize $path]
@@ -196,8 +155,7 @@ snit::type teapot {
     # Retrieves the teapots linked to the current tclsh.
 
     proc LinkedTeapots {} {
-        set links [eval exec teacup link info [info nameofexecutable]]
-        set links [string map {\\ /} $links] 
+        set links [teacup link info [plat pathto tclsh]]
 
         foreach {dummy path} $links {
             set newpath [file normalize $path]
@@ -206,19 +164,6 @@ snit::type teapot {
 
         return $result
     }
-
-    # DefaultTeapot
-    #
-    # Retrieves the default teapot.
-
-    proc DefaultTeapot {} {
-        set def [eval exec teacup default]
-        set def [string map {\\ /} $def] 
-
-        return [file normalize $def]
-    }
-
-
 
 }
 

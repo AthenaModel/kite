@@ -96,7 +96,7 @@ tool define shell {
         set app [exec which tkcon]
 
         if {[file exists $app]} {
-            return $app
+            return [list tclsh $app]
         }
 
         throw FATAL "Please install the \"tkcon\" shell application."
