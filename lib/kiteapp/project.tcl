@@ -332,11 +332,7 @@ snit::type project {
         if {[project app apptype $app] eq "kit"} {
             return $app.kit
         } elseif {[project app apptype $app] eq "exe"} {
-            if {$::tcl_platform(platform) eq "windows"} {
-                return exefile "$app.exe"
-            } else {
-                return exefile $app
-            }
+            return [os exefile $app]
         } else {
             error "Unknown application type"
         }

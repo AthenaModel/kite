@@ -3,13 +3,19 @@
 ## Next
 
 * Cleanup:
-  * Add "env" tool.
+  * Look for [info nameofexecutable]
+  * Compare docs.tcl with tool_docs.tcl and make sure there's a clean
+    division.
+    * Add a call to docs.tcl indicating whether there are documents
+      that will be processed.
+    * Probably should support arbitrary depths.
   * Update help subsystem to support tree of topics.
   * Use smartinterp for parsing project.kite.
-  * project dump: use lmaxlen.
   * Work through code, looking for things to improve.
   * Pull "knowledge" into specific spots.
   * Rationalize "project" queries.
+* Build kite as exe
+  * Need to find tclsh, and deal with its version.
 * Support for pulling external documents into the project tree for
   making distributions.
   * Could use a src directory, plus 'curl'

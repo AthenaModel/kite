@@ -92,10 +92,6 @@ tool define build {
             }
 
             # NEXT, build everything, halting on any error.
-            #
-            # TODO: each of these areas should have a command that indicates
-            # whether or not there's anything to do.  And probably, each
-            # tool should have an underlying implementation library.
 
             if {[got [project src names]]} {
                 header "Compiling src directories"
