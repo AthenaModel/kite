@@ -28,6 +28,7 @@ snit::type plat {
     typevariable pathsTo -array {
         tclsh  {}
         teacup {}
+        tkcon  {}
     }
 
     #-------------------------------------------------------------------
@@ -40,10 +41,6 @@ snit::type plat {
     # cache.
 
     typemethod reset {} {
-        foreach key [array names info] {
-            set info($key) {}
-        }
-
         foreach key [array names pathsTo] {
             set pathsTo($key) {}
         }
@@ -83,11 +80,16 @@ snit::type plat {
             }
 
             teacup {
-                set bindir [file dirname [plat pathto tclsh]]
-                set path [file join $bindir [os exefile $name]]
+                set path [FindNear tclsh [os exefile teacup]]
+            }
 
-                # TODO: If it isn't next to the tclsh, see if we can
-                # find it on the path.
+            tkcon {
+                set name "tkcon"
+                if {[os flavor] eq "windows"} {
+                    append name ".tcl"
+                }
+
+                set path [FindNear tclsh $name]
             }
         }
 
@@ -103,6 +105,26 @@ snit::type plat {
         }
 
         return $pathsTo($name)
+    }
+
+    # FindNear tool filename
+    #
+    # tool      - A known tool
+    # filename  - A file name
+    #
+    # Looks for the filename in the same directory as the known tool.
+    # If not found, looks on the PATH.
+
+    proc FindNear {tool filename} {
+        set dir [file dirname [plat pathto $tool]]
+
+        set path [file join $dir $filename]
+
+        if {[file isfile $path]} {
+            return $path
+        }
+
+        return [os pathfind $filename]
     }
     
 

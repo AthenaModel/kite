@@ -4,16 +4,11 @@
 
 * Cleanup:
   * Add "env" tool.
-  * Flesh out the plat.tcl module.
-    * tool::SHELL should use plat to find tkcon.
   * Update help subsystem to support tree of topics.
   * Use smartinterp for parsing project.kite.
-  * Add a module for calling execute commands against known helpers, with
-    options for logging.
   * project dump: use lmaxlen.
   * Work through code, looking for things to improve.
   * Pull "knowledge" into specific spots.
-  * Better os/env support.
   * Rationalize "project" queries.
 * Support for pulling external documents into the project tree for
   making distributions.
