@@ -1,6 +1,6 @@
 #-----------------------------------------------------------------------
 # TITLE:
-#   compiletool.tcl
+#   tool_compile.tcl
 #
 # AUTHOR:
 #   Will Duquette
@@ -11,16 +11,13 @@
 #-----------------------------------------------------------------------
 
 #-----------------------------------------------------------------------
-# Registration
+# tool::COMPILE
 
-set ::ktools(compile) {
+tool define compile {
     usage       {0 - "?<name>...?"}
-    ensemble    compiletool
     description "Compile \"src\" directories"
     intree      yes
-}
-
-set ::khelp(compile) {
+} {
     The 'kite compile' tool compiles the contents of the project's 
     "src" directories, as defined by the "src" statement in 
     project.kite.  By default, all such directories are compiled.  
@@ -35,15 +32,7 @@ set ::khelp(compile) {
 
     See the discussion of the "src" statement in the project(5) manpage
     for more information.
-}
-
-#-----------------------------------------------------------------------
-# compiletool ensemble
-
-snit::type compiletool {
-    # Make it a singleton
-    pragma -hasinstances no -hastypedestroy no
-
+} {
     #-------------------------------------------------------------------
     # Execution 
 

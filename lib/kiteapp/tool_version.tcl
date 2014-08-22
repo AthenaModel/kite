@@ -1,6 +1,6 @@
 #-----------------------------------------------------------------------
 # TITLE:
-#   versiontool.tcl
+#   tool_version.tcl
 #
 # AUTHOR:
 #   Will Duquette
@@ -11,27 +11,15 @@
 #-----------------------------------------------------------------------
 
 #-----------------------------------------------------------------------
-# Registration
+# tool::VERSION
 
-set ::ktools(version) {
+tool define version {
     usage       {0 0 ""}
-    ensemble    versiontool
     description "Display Kite's version information."
-    intree      yes
-}
-
-set ::khelp(version) {
+    intree      no
+} {
     The "version" tool displays Kite's own version information.
-}
-
-
-#-----------------------------------------------------------------------
-# tool::version ensemble
-
-snit::type versiontool {
-    # Make it a singleton
-    pragma -hasinstances no -hastypedestroy no
-
+} {
     #-------------------------------------------------------------------
     # Execution
 

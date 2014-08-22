@@ -27,13 +27,10 @@
 # It determines the application to invoke, and does so.
 
 proc main {argv} {
-    global ktools
-    global kopts
-
     # FIRST, given no input display the help; help doesn't care whether
     # we're in a project tree or not.
     if {[llength $argv] == 0} {
-        UseTool help
+        tool use help
         return
     }
 
@@ -56,8 +53,8 @@ proc main {argv} {
         set script [file normalize $tool]
         set tool "RunScript"
         set treeNeeded 1
-    } elseif {[info exist ktools($tool)]} {
-        set treeNeeded [dict get $ktools($tool) intree]
+    } elseif {[tool exists $tool]} {
+        set treeNeeded [tool intree $tool]
     } else {
         throw FATAL [outdent "
             '$tool' is neither the name of a Kite tool, nor the name of a
@@ -98,22 +95,8 @@ proc main {argv} {
     if {$tool eq "RunScript"} {
         RunScript $script $argv
     } else {
-        UseTool $tool $argv
+        tool use $tool $argv
     }
-}
-
-# UseTool tool ?args...?
-#
-# tool - A registered Kite tool
-# argv - Command-line arguments.
-#
-# Calls the tool with the given arguments.
-
-proc UseTool {tool {argv ""}} {
-    array set tdata $::ktools($tool)
-
-    checkargs $tool $argv
-    $tdata(ensemble) execute $argv
 }
 
 # RunScript filename ?args...?

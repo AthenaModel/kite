@@ -1,6 +1,6 @@
 #-----------------------------------------------------------------------
 # TITLE:
-#   cleantool.tcl
+#   tool_clean.tcl
 #
 # AUTHOR:
 #   Will Duquette
@@ -12,38 +12,30 @@
 #-----------------------------------------------------------------------
 
 #-----------------------------------------------------------------------
-# Registration
+# tool::CLEAN
 
-set ::ktools(clean) {
+tool define clean {
     usage       {0 0 -}
-    ensemble    cleantool
     description "Clean up build artifacts."
     intree      yes
-}
-
-set ::khelp(clean) {
+} {
     The 'kite clean' tool simply removes the files created by 
     'kite compile', 'kite build', and 'kite docs', leaving a clean
     project tree. 
-}
-
-#-----------------------------------------------------------------------
-
-snit::type cleantool {
-    # Make it a singleton
-    pragma -hasinstances no -hastypedestroy no
-
+} {
     #-------------------------------------------------------------------
     # Execution 
 
     # execute argv
     #
     # Executes the tool given the command line arguments.
+    # TODO: Consider adding a "clean" flag to tool metadata.  If true,
+    # call clean.  
 
     typemethod execute {argv} {
-        compiletool clean
-        docstool clean
-        buildtool clean
+        tool::COMPILE clean
+        tool::DOCS    clean
+        tool::BUILD   clean
     }
 
 }

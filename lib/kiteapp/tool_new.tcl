@@ -1,6 +1,6 @@
 #-----------------------------------------------------------------------
 # TITLE:
-#   newtool.tcl
+#   tool_new.tcl
 #
 # AUTHOR:
 #   Will Duquette
@@ -11,16 +11,13 @@
 #-----------------------------------------------------------------------
 
 #-----------------------------------------------------------------------
-# Registration
+# tool::NEW
 
-set ::ktools(new) {
+tool define new {
     usage       {0 3 "<template> <project> ?<arg>...?"}
-    ensemble    newtool
     description "Create a new project tree on the disk."
     intree      no
-}
-
-set ::khelp(new) {
+} {
     The 'kite new' tool is use to initialize new projects on the disk.  It
     takes the following arguments:
 
@@ -43,16 +40,7 @@ set ::khelp(new) {
 
     To add an application or library to an existing project, use the 
     'kite add' tool.
-}
-
-
-#-----------------------------------------------------------------------
-# newtool ensemble
-
-snit::type newtool {
-    # Make it a singleton
-    pragma -hasinstances no -hastypedestroy no
-
+} {
     #-------------------------------------------------------------------
     # Execution 
 

@@ -1,6 +1,6 @@
 #-----------------------------------------------------------------------
 # TITLE:
-#   buildtool.tcl
+#   tool_build.tcl
 #
 # AUTHOR:
 #   Will Duquette
@@ -13,16 +13,13 @@
 #-----------------------------------------------------------------------
 
 #-----------------------------------------------------------------------
-# Registration
+# tool::BUILD
 
-set ::ktools(build) {
+tool define build {
     usage       {0 - "?all|app|lib? ?<name>...?"}
-    ensemble    buildtool
     description "Build the entire project."
     intree      yes
-}
-
-set ::khelp(build) {
+} {
     The 'kite build' tool builds all build targets specified in the
     project's project.kite file.  In particular:
 
@@ -54,16 +51,7 @@ set ::khelp(build) {
 
         This command will halt if the external dependencies are not 
         up to date, or if an error occurs at any step of the process.
-}
-
-#-----------------------------------------------------------------------
-# buildtool ensemble
-
-snit::type buildtool {
-    # Make it a singleton
-    pragma -hasinstances no -hastypedestroy no
-
-
+} {
     #-------------------------------------------------------------------
     # Execution 
 
@@ -108,12 +96,12 @@ snit::type buildtool {
 
             if {[got [project src names]]} {
                 header "Compiling src directories"
-                compiletool execute {}
+                tool use compile
             }
 
             if {[got [project globdirs test *]]} {
                 header "Running project tests."
-                testtool execute {}
+                tool use test
             }
 
             if {[got [project globfiles docs *.ehtml]]     ||
@@ -121,7 +109,7 @@ snit::type buildtool {
                 [got [project globfiles docs * * *.ehtml]]
             } {
                 header "Building project documentation"
-                docstool execute {}
+                tool use docs
             }
 
             if {[got [project provide names]]} {
@@ -136,7 +124,7 @@ snit::type buildtool {
 
             if {[got [project dist names]]} {
                 header "Building distributions"
-                disttool execute {}
+                tool use dist
             }
             return
         }

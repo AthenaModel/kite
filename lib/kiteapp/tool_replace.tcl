@@ -1,6 +1,6 @@
 #-----------------------------------------------------------------------
 # TITLE:
-#   replacetool.tcl
+#   tool_replace.tcl
 #
 # AUTHOR:
 #   Will Duquette
@@ -12,16 +12,13 @@
 #-----------------------------------------------------------------------
 
 #-----------------------------------------------------------------------
-# Registration
+# tool::REPLACE
 
-set ::ktools(replace) {
+tool define replace {
     usage       {3 - "<target> <subtest> <file> ?<file>...?"}
-    ensemble    replacetool
     description "Global string replacement in text files"
     intree      no
-}
-
-set ::khelp(replace) {
+} {
     The 'kite replace' tool replaces all occurrences of <target> with
     <subtext> in the text files listed on the command line.
 
@@ -33,15 +30,7 @@ set ::khelp(replace) {
     The tool lists the names of the modified files, and saves a backup
     file for each.  The backup file has the same name as the original
     file, with a "~" appended on the end.
-}
-
-#-----------------------------------------------------------------------
-# replacetool ensemble
-
-snit::type replacetool {
-    # Make it a singleton
-    pragma -hasinstances no -hastypedestroy no
-
+} {
     #-------------------------------------------------------------------
     # Execution 
 

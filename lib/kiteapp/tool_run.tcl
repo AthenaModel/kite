@@ -1,6 +1,6 @@
 #-----------------------------------------------------------------------
 # TITLE:
-#   runtool.tcl
+#   tool_run.tcl
 #
 # AUTHOR:
 #   Will Duquette
@@ -12,16 +12,13 @@
 #-----------------------------------------------------------------------
 
 #-----------------------------------------------------------------------
-# Registration
+# tool::RUN
 
-set ::ktools(run) {
+tool define run {
     usage       {0 - "?<arg>...?"}
-    ensemble    runtool
     description "Run application"
     intree      yes
-}
-
-set ::khelp(run) {
+} {
     If the project defines one or more applications, the 'kite run' tool
     invokes the project's primary application, i.e., it invokes
     the ./bin/myapp.tcl file and passes it any command line
@@ -37,15 +34,7 @@ set ::khelp(run) {
 
         $ cd <root>
         $ kite ./bin/myapp.tcl ...
-}
-
-#-----------------------------------------------------------------------
-# runtool ensemble
-
-snit::type runtool {
-    # Make it a singleton
-    pragma -hasinstances no -hastypedestroy no
-
+} {
     #-------------------------------------------------------------------
     # Execution 
 

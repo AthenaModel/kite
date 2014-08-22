@@ -1,6 +1,6 @@
 #-----------------------------------------------------------------------
 # TITLE:
-#   docstool.tcl
+#   tool_docs.tcl
 #
 # AUTHOR:
 #   Will Duquette
@@ -10,23 +10,17 @@
 #   targets: The app or appkit (if any), teapot packages, docs, and
 #   other docs targets specified in project.kite.
 #
-#   TODO: When we actually have more than one kind of docs product,
-#   add arguments so that the user can selectively docs just one thing.
-#
 #-----------------------------------------------------------------------
 
 #-----------------------------------------------------------------------
-# Registration
+# tool::DOCS
 
-set ::ktools(docs) {
+tool define docs {
     usage       {0 1 "?<target>|-clean?"}
-    ensemble    docstool
     description "Format project documentation."
     intree      yes
-}
-
-set ::khelp(docs) {
-    The "docs" tool formats project documentation in kitedoc(5) and 
+} {
+    The 'kite docs' tool formats project documentation in kitedoc(5) and 
     manpage(5) format.  These are Extended HTML (.ehtml) formats; 
     see the Kite man pages for more details.
 
@@ -52,15 +46,7 @@ set ::khelp(docs) {
     section numbers, table of contents, and so forth.  kitedoc(5)
     documents may be found in <root>/docs and any of its non-manpage
     subdirectories.
-}
-
-#-----------------------------------------------------------------------
-# docstool ensemble
-
-snit::type docstool {
-    # Make it a singleton
-    pragma -hasinstances no -hastypedestroy no
-
+} {
     #-------------------------------------------------------------------
     # Execution 
 

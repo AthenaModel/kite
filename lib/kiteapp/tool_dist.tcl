@@ -1,6 +1,6 @@
 #-----------------------------------------------------------------------
 # TITLE:
-#   disttool.tcl
+#   tool_dist.tcl
 #
 # AUTHOR:
 #   Will Duquette
@@ -11,16 +11,13 @@
 #-----------------------------------------------------------------------
 
 #-----------------------------------------------------------------------
-# Registration
+# tool::DIST
 
-set ::ktools(dist) {
+tool define dist {
     usage       {0 - "?<target>...?"}
-    ensemble    disttool
     description "Builds one or more distribution .zip files."
     intree      yes
-}
-
-set ::khelp(dist) {
+} {
     The 'kite dist' tool is used to build distribution .zip files,
     based on the 'dist' statements in project.kite.  See the project(5)
     man page for more information about specifying distribution 
@@ -36,16 +33,7 @@ set ::khelp(dist) {
         <project>-<version>-<target>.zip
 
     If the <target> is "install", it is omitted.
-}
-
-
-#-----------------------------------------------------------------------
-# disttool ensemble
-
-snit::type disttool {
-    # Make it a singleton
-    pragma -hasinstances no -hastypedestroy no
-
+} {
     #-------------------------------------------------------------------
     # Execution 
 

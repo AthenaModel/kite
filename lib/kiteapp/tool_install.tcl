@@ -1,6 +1,6 @@
 #-----------------------------------------------------------------------
 # TITLE:
-#   installtool.tcl
+#   tool_install.tcl
 #
 # AUTHOR:
 #   Will Duquette
@@ -11,16 +11,13 @@
 #-----------------------------------------------------------------------
 
 #-----------------------------------------------------------------------
-# Registration
+# tool::INSTALL
 
-set ::ktools(install) {
+tool define install {
     usage       {0 - "?app|lib? ?<name>...?"}
-    ensemble    installtool
     description "Build and install applications to ~/bin."
     intree      yes
-}
-
-set ::khelp(install) {
+} {
     The "install" tool installs build products into the local file
     system for general use.
 
@@ -36,15 +33,7 @@ set ::khelp(install) {
 
     kite install lib ?<name>...?
         Installs all libraries, or optionally all named libraries.
-}
-
-#-----------------------------------------------------------------------
-# tool::help ensemble
-
-snit::type installtool {
-    # Make it a singleton
-    pragma -hasinstances no -hastypedestroy no
-
+} {
     #-------------------------------------------------------------------
     # Execution
 

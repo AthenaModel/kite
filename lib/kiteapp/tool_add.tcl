@@ -1,6 +1,6 @@
 #-----------------------------------------------------------------------
 # TITLE:
-#   addtool.tcl
+#   tool_add.tcl
 #
 # AUTHOR:
 #   Will Duquette
@@ -12,16 +12,13 @@
 #-----------------------------------------------------------------------
 
 #-----------------------------------------------------------------------
-# Registration
+# tool::ADD
 
-set ::ktools(add) {
+tool define add {
     usage       {2 - "<element> <name> ?<option>...?"}
-    ensemble    addtool
     description "Add an app or library to the project tree."
     intree      yes
-}
-
-set ::khelp(add) {
+} {
     The 'kite add' tool is use to add elements to existing Kite projects,
     i.e., to add a new application or library skeleton.  It take sthe
     following arguments:
@@ -54,16 +51,7 @@ set ::khelp(add) {
     'app' statement in project.kite; similarly, the 'kite add lib'
     command takes the same options as the 'provide' statement in
     project.kite.
-}
-
-
-#-----------------------------------------------------------------------
-# addtool ensemble
-
-snit::type addtool {
-    # Make it a singleton
-    pragma -hasinstances no -hastypedestroy no
-
+} {
     #-------------------------------------------------------------------
     # Execution 
 

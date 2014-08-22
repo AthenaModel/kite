@@ -1,6 +1,6 @@
 #-----------------------------------------------------------------------
 # TITLE:
-#   depstool.tcl
+#   tool_deps.tcl
 #
 # AUTHOR:
 #   Will Duquette
@@ -9,21 +9,16 @@
 #   Kite "deps" tool.  This tool reports on the state of the project
 #   dependencies, and can update them.
 #
-# TODO: Support for teapot dependencies.
-#
 #-----------------------------------------------------------------------
 
 #-----------------------------------------------------------------------
-# Registration
+# tool::DEPS
 
-set ::ktools(deps) {
+tool define deps {
     usage       {0 2 "?update|clean? ?<name>?"}
-    ensemble    depstool
     description "Manage project dependencies"
     intree      yes
-}
-
-set ::khelp(deps) {
+} {
     The 'kite deps' tool manages the project's external dependencies.  
     There are two kinds of dependencies.  External "require" dependencies 
     are retrieved from teapot.activestate.com; and placed in the local
@@ -41,16 +36,7 @@ set ::khelp(deps) {
 
     When Kite fails to install a required teapot package,
     see the <project>/.kite/install_<package>.log file for details.
-}
-
-
-#-----------------------------------------------------------------------
-# depstool ensemble
-
-snit::type depstool {
-    # Make it a singleton
-    pragma -hasinstances no -hastypedestroy no
-
+} {
     #-------------------------------------------------------------------
     # Execution 
 

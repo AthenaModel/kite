@@ -1,6 +1,6 @@
 #-----------------------------------------------------------------------
 # TITLE:
-#   teapottool.tcl
+#   tool_teapot.tcl
 #
 # AUTHOR:
 #   Will Duquette
@@ -11,16 +11,13 @@
 #-----------------------------------------------------------------------
 
 #-----------------------------------------------------------------------
-# Registration
+# tool::TEAPOT
 
-set ::ktools(teapot) {
+tool define teapot {
     usage       {0 1 "?create|link|remove?"}
-    ensemble    teapottool
     description "Create local teapot for Kite projects."
     intree      no
-}
-
-set ::khelp(teapot) {
+} {
     The 'kite teapot' tool creates a local teapot repository in 
     ~/.kite/teapot to contain required teapot packages for Kite
     projects.  This is so that we do not need to use 'sudo' when
@@ -51,16 +48,7 @@ set ::khelp(teapot) {
 
         Because this command unlinks the tclsh from the teapot, you may need
         to use 'sudo' on Linux or OS X, just as for 'kite teapot link'.
-}
-
-
-#-----------------------------------------------------------------------
-# tool::info ensemble
-
-snit::type teapottool {
-    # Make it a singleton
-    pragma -hasinstances no -hastypedestroy no
-
+} {
     #-------------------------------------------------------------------
     # Execution
 

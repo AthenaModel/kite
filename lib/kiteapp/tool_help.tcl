@@ -1,6 +1,6 @@
 #-----------------------------------------------------------------------
 # TITLE:
-#   helptool.tcl
+#   tool_help.tcl
 #
 # AUTHOR:
 #   Will Duquette
@@ -11,26 +11,15 @@
 #-----------------------------------------------------------------------
 
 #-----------------------------------------------------------------------
-# Registration
+# tool::HELP
 
-set ::ktools(help) {
+tool define help {
     usage       {0 1 "?<topic>?"}
-    ensemble    helptool
     description "Display this help, or help for a given tool."
     intree      no
-}
-
-set ::khelp(help) {
+} {
     n/a - The "help" tool is a special case.
-}
-
-
-#-----------------------------------------------------------------------
-# tool::help ensemble
-
-snit::type helptool {
-    # Make it a singleton
-    pragma -hasinstances no -hastypedestroy no
+} {
     #-------------------------------------------------------------------
     # Execution
 
@@ -57,10 +46,8 @@ snit::type helptool {
 
         puts "Several tools are available:\n"
 
-        foreach tool [lsort [array names ::ktools]] {
-            array set tdata $::ktools($tool)
-
-            puts [format "%-10s - %s" $tool $tdata(description)]
+        foreach tool [lsort [tool names]] {
+            puts [format "%-10s - %s" $tool [tool description $tool]]
         }
 
         puts ""
@@ -85,7 +72,6 @@ snit::type helptool {
 
     proc ShowTopic {topic} {
         global khelp
-        global ktools
 
         # For "help", all we can do is display the basic help again.
         if {$topic eq "help"} {
@@ -95,10 +81,8 @@ snit::type helptool {
 
         if {[info exists khelp($topic)]} {
             puts "\n"
-            if {[info exists ktools($topic)]} {
-                lassign [dict get $::ktools($topic) usage] min max argspec
-
-                puts "kite $topic $argspec"
+            if {[tool exists $topic]} {
+                puts [tool usage $topic]
                 puts [string repeat - 75]
             }
             puts [outdent $khelp($topic)]

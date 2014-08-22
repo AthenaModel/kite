@@ -1,6 +1,6 @@
 #-----------------------------------------------------------------------
 # TITLE:
-#   testtool.tcl
+#   tool_test.tcl
 #
 # AUTHOR:
 #   Will Duquette
@@ -11,16 +11,13 @@
 #-----------------------------------------------------------------------
 
 #-----------------------------------------------------------------------
-# Registration
+# tool::TEST
 
-set ::ktools(test) {
+tool define test {
     usage       {0 - "?<target> ?<module>?? ?<option>...?"}
-    ensemble    testtool
     description "Runs some or all of the project test suite."
     intree      yes
-}
-
-set ::khelp(test) {
+} {
     This tool executes some or all of the project's test suite.  The
     test suite consists of a number of "targets", each of which has a
     its own test subdirectory "<root>/test/<target>".  Kite assumes that 
@@ -46,16 +43,7 @@ set ::khelp(test) {
     $ kite test mylib                     - Runs tests for mylib(n)
     $ kite test mylib mymodule            - Runs mylib/mymodule.test
     $ kite test mylib -match mytest-1.*   - Runs tests matching a pattern
-}
-
-
-#-----------------------------------------------------------------------
-# testtool ensemble
-
-snit::type testtool {
-    # Make it a singleton
-    pragma -hasinstances no -hastypedestroy no
-
+} {
     #-------------------------------------------------------------------
     # Execution 
 

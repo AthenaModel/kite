@@ -1,6 +1,6 @@
 #-----------------------------------------------------------------------
 # TITLE:
-#   infotool.tcl
+#   tool_info.tcl
 #
 # AUTHOR:
 #   Will Duquette
@@ -11,16 +11,13 @@
 #-----------------------------------------------------------------------
 
 #-----------------------------------------------------------------------
-# Registration
+# tool::INFO
 
-set ::ktools(info) {
+tool define info {
     usage       {0 1 "?<option>?"}
-    ensemble    infotool
     description "Display information about Kite and this project."
     intree      yes
-}
-
-set ::khelp(info) {
+} {
     The 'kite info' tool displays information about the current project
     in human readable format.  Most of the information is from the 
     project.kite file.  In addition, the tool can return individual
@@ -35,16 +32,7 @@ set ::khelp(info) {
                  the project.kite file).
     -tclhome   - The root of the TCL installation tree.
     -version   - The project version number.
-}
-
-
-#-----------------------------------------------------------------------
-# tool::info ensemble
-
-snit::type infotool {
-    # Make it a singleton
-    pragma -hasinstances no -hastypedestroy no
-
+} {
     #-------------------------------------------------------------------
     # Execution
 
@@ -57,6 +45,7 @@ snit::type infotool {
         set opt [lindex $argv 0]
 
         # FIRST, handle the default case.
+        # TODO: Move dumpinfo here.
         if {$opt eq ""} {
             project dumpinfo
 

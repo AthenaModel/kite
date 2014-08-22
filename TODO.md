@@ -3,6 +3,10 @@
 ## Next
 
 * Cleanup:
+  * intree => needstree
+  * 'kite compile' should output message if there are no src directories.
+* 'kite build' failed because 'platform' wasn't in ~/.kite/teapot; but 
+  didn't report that platform was out-of-date.
 * project dump: use lmaxlen.
   * 'kite deps' output: use columns, OK|out-of-date, lmaxlen.
   * Work through code, looking for things to improve.

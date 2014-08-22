@@ -1,6 +1,6 @@
 #-----------------------------------------------------------------------
 # TITLE:
-#   shelltool.tcl
+#   tool_shell.tcl
 #
 # AUTHOR:
 #   Will Duquette
@@ -12,16 +12,13 @@
 #-----------------------------------------------------------------------
 
 #-----------------------------------------------------------------------
-# Registration
+# tool::SHELL
 
-set ::ktools(shell) {
+tool define shell {
     usage       {0 1 "?-plain?"}
-    ensemble    shelltool
     description "Open interactive Tcl shell"
     intree      yes
-}
-
-set ::khelp(shell) {
+} {
     The 'kite shell' tool opens an interactive Tcl shell (tkcon) on the 
     project codebase.  If the project defines any applications, the 
     primary application's loader script (e.g., bin/myapp.tcl) is loaded in 
@@ -32,15 +29,7 @@ set ::khelp(shell) {
     No packages are loaded by default.  In this case, the initial state of 
     the shell can be further customized using the "shell" statement in the 
     project.kite file.
-}
-
-#-----------------------------------------------------------------------
-# shelltool ensemble
-
-snit::type shelltool {
-    # Make it a singleton
-    pragma -hasinstances no -hastypedestroy no
-
+} {
     #-------------------------------------------------------------------
     # Execution 
 
