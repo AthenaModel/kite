@@ -125,10 +125,11 @@ tool define test {
 
         # NEXT, set up the library path.
         set ::env(TCLLIBPATH) [project libpath]
+        set tclsh [plat pathto tclsh -required]
 
         # NEXT, set up the command.
         lappend command \
-            tclsh $testfile {*}$optlist
+            $tclsh $testfile {*}$optlist
 
         if {$verbose} {
             lappend command \

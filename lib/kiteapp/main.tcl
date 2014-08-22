@@ -102,9 +102,11 @@ proc main {argv} {
 # argv      - Command-line arguments.
 #
 # Invokes the script in the context of the project.
+#
+# TODO: tclsh proxy?
 
 proc RunScript {filename {argv ""}} {
-    # TODO: We need a platform module!
     set ::env(TCLLIBPATH) [project libpath]
-    exec tclsh $filename {*} >@ stdout 2>@ stderr
+    set tclsh [plat pathto tclsh -required]
+    exec $tclsh $filename {*}$argv >@ stdout 2>@ stderr
 }

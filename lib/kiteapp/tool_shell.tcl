@@ -41,6 +41,7 @@ tool define shell {
         set opt [lindex $argv 0]
 
         # FIRST, locate tkcon.
+        # TODO: Move this to plat.
         set shellapp [FindTkCon]
 
         # NEXT, set up the rest of command.

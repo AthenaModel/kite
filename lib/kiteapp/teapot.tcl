@@ -170,8 +170,8 @@ snit::type teapot {
 
     proc TeapotIsLinked {} {
         expr {
-            [project teapot] in [LinkedTeapots] &&
-            [project tclsh]  in [LinkedShells]            
+            [project teapot]     in [LinkedTeapots] &&
+            [plat pathto tclsh]  in [LinkedShells]            
         }
     }
 

@@ -21,17 +21,35 @@ snit::type plat {
     pragma -hasinstances no -hastypedestroy no
 
     #-------------------------------------------------------------------
+    # Constants
+
+    # osNames, by flavor
+
+    typevariable osNames -array {
+        linux    "Linux"
+        osx      "Mac OS X"
+        windows  "Windows"
+    }
+    
+
+    #-------------------------------------------------------------------
     # Type Variables
 
     # info - Cached info
     #
-    # id              - The OS ID: linux|osx|windows
+    # flavor              - The OS flavor: linux|osx|windows
     #
     
     typevariable info -array {
-        id {}
+        flavor {}
     }
-    
+
+    # pathsTo - important files, by symbolic name.
+
+    typevariable pathsTo -array {
+        tclsh  {}
+        teacup {}
+    }
 
     #-------------------------------------------------------------------
     # Queries
@@ -44,13 +62,17 @@ snit::type plat {
 
     typemethod reset {} {
         foreach key [array names info] {
-            set info($key) ""
+            set info($key) {}
+        }
+
+        foreach key [array names pathsTo] {
+            set pathsTo($key) {}
         }
     }
 
-    # id
+    # flavor
     #
-    # Returns the platform ID, one of linux|osx|windows.
+    # Returns the platform flavor, one of linux|osx|windows.
     #
     # This is the routine that figures out what kind of machine we're
     # on.  These selectors are enough for most purposes; for actually
@@ -62,18 +84,99 @@ snit::type plat {
     # Other parts of the code can query this, if need be; but if they
     # do the function may need to be refactored into this API. 
     
-    typemethod id {} {
-        if {$info(id) eq ""} {
+    typemethod flavor {} {
+        if {$info(flavor) eq ""} {
             switch -glob -- $::tcl_platform(os) {
-                "Windows*" { set info(id) windows }
-                "Darwin*"  { set info(id) osx     }
-                default    { set info(id) linux   }
+                "Windows*" { set info(flavor) windows }
+                "Darwin*"  { set info(flavor) osx     }
+                default    { set info(flavor) linux   }
             }
         }
 
-        return $info(id)
+        return $info(flavor)
     }
 
+    # osname
+    #
+    # Returns the OS name for the platform flavor. 
+    
+    typemethod osname {} {
+        return $osName([plat flavor])
+    }
+
+    # exefile name
+    #
+    # name - A program name or path
+    #
+    # Given the program name or path, adds on the appropriate file 
+    # extensions for executables on this platfor.
+
+    typemethod exefile {name} {
+        if {[plat flavor] eq "windows" && 
+            [file extension $name] != ".exe"
+        } {
+            return "$name.exe"
+        } else {
+            return $name
+        }
+    }
+
+    #-------------------------------------------------------------------
+    # Paths to important files
+
+    # pathto name ?options? 
+    #
+    # name  - Symbolic name of an important file.
+    #
+    # Options:
+    #    -required  - It's a fatal error if the file cannot be found.
+    #
+    # Attempts to determine the path to the file, taking the OS flavor
+    # into account as needed.  Returns the normalized path, or "" if
+    # it can't find it.
+
+    typemethod pathto {name args} {
+        # FIRST, get the options.
+        set required 0
+        foroption opt args {
+            -required { set required 1 }
+        }
+
+        # NEXT, if we already have it just return it.
+        if {$pathsTo($name) ne ""} {
+            return $pathsTo($name)
+        }
+
+        # NEXT, get the path.
+        switch -exact -- $name {
+            tclsh {
+                # TODO: We should find this on the path.
+                set path [info nameofexecutable]
+            }
+
+            teacup {
+                set bindir [file dirname [plat pathto tclsh]]
+                set path [file join $bindir [plat exefile $name]]
+
+                # TODO: If it isn't next to the tclsh, see if we can
+                # find it on the path.
+            }
+        }
+
+        if {[file isfile $path]} {
+            set pathsTo($name) [file normalize $path]
+        }
+
+        if {$required && $pathsTo($name) eq ""} {
+            throw FATAL [outdent "
+                Kite needs '$name' to perform the requested action,
+                but cannot locate it on the disk.
+            "]
+        }
+
+        return $pathsTo($name)
+    }
+    
 
     #-------------------------------------------------------------------
     # Paths of important directories

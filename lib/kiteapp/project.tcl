@@ -201,20 +201,6 @@ snit::type project {
     #-------------------------------------------------------------------
     # Metadata Queries
 
-    # tclsh
-    #
-    # Returns the name of the development Tclsh (i.e., the one being
-    # used to run Kite).
-    #
-    # TODO: Move all helper paths to a platform module.
-
-    typemethod tclsh {} {
-        # Normalizing ensures that the case of the path components
-        # is what it should be on Windows.  (I.e., "C:" rather than
-        # "c:".)
-        return [file normalize [info nameofexecutable]]
-    }
-
     # teapot
     #
     # Returns the path to Kite's local teapot repository
