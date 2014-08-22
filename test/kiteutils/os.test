@@ -1,0 +1,149 @@
+# -*-Tcl-*-
+#-----------------------------------------------------------------------
+# TITLE:
+#    os.test
+#
+# AUTHOR:
+#    Will Duquette
+#
+# DESCRIPTION:
+#    Tcltest test suite for kiteutils(n) os.tcl
+#
+#-----------------------------------------------------------------------
+
+#-----------------------------------------------------------------------
+# Initialize tcltest(n)
+
+if {[lsearch [namespace children] ::tcltest] == -1} {
+    package require tcltest 2.2 
+    eval ::tcltest::configure $argv
+}
+
+# Import tcltest(n)
+namespace import ::tcltest::test
+
+#-----------------------------------------------------------------------
+# Load the package to be tested
+
+source ../../lib/kiteutils/pkgModules.tcl
+namespace import ::kiteutils::*
+
+#-----------------------------------------------------------------------
+# Setup
+
+proc setup {os} {
+    set ::saveOS $::tcl_platform(os)
+
+    set ::tcl_platform(os) $os
+}
+
+proc cleanup {} {
+    set ::tcl_platform(os) $::saveOS
+}
+
+
+#-------------------------------------------------------------------
+# flavor
+
+test flavor-1.1 {windows} -setup {
+    setup Windows
+} -body {
+    os flavor
+} -cleanup {
+    cleanup
+} -result {windows}
+
+test flavor-1.2 {osx} -setup {
+    setup Darwin
+} -body {
+    os flavor
+} -cleanup {
+    cleanup
+} -result {osx}
+
+test flavor-1.3 {linux} -setup {
+    setup Anything
+} -body {
+    os flavor
+} -cleanup {
+    cleanup
+} -result {linux}
+
+#-------------------------------------------------------------------
+# name
+
+test name-1.1 {pretty name} -setup {
+    setup Darwin
+} -body {
+    os name
+} -cleanup {
+    cleanup
+} -result {Mac OS X}
+
+#-------------------------------------------------------------------
+# exefile
+
+test exefile-1.1 {linux/osx} -setup {
+    setup Darwin
+} -body {
+    os exefile myapp
+} -cleanup {
+    cleanup
+} -result {myapp}
+ 
+test exefile-1.2 {windows} -setup {
+    setup Windows
+} -body {
+    os exefile myapp
+} -cleanup {
+    cleanup
+} -result {myapp.exe}
+
+test exefile-1.3 {once only} -setup {
+    setup Windows
+} -body {
+    os exefile myapp.exe
+} -cleanup {
+    cleanup
+} -result {myapp.exe}
+
+#-------------------------------------------------------------------
+# pathfind
+
+test pathfind-1.1 {find this tclsh on path} -setup {
+    set oldPath $::env(PATH)
+    set ::env(PATH) "/foo:[file dirname [info nameofexecutable]]:/bar"
+    set tclsh [file tail [info nameofexecutable]]
+} -body {
+    set path [os pathfind $tclsh]
+
+    expr {[info nameofexecutable] eq $path}
+} -cleanup {
+    set ::env(PATH) $oldPath
+} -result {1}
+
+test pathfind-1.2 {find this tclsh on path} -setup {
+    set oldPath $::env(PATH)
+    set ::env(PATH) "/foo:/bar"
+    set tclsh [file tail [info nameofexecutable]]
+} -body {
+    set path [os pathfind $tclsh]
+
+    expr {$path eq ""}
+} -cleanup {
+    set ::env(PATH) $oldPath
+} -result {1}
+
+
+#-------------------------------------------------------------------
+# Cleanup
+
+tcltest::cleanupTests
+
+
+
+
+
+
+
+

@@ -1,0 +1,55 @@
+<manpage {kiteutils(n) os(n)} "OS Abstraction Layer">
+
+<section SYNOPSIS>
+
+<pre>
+package require kiteutils <version>
+namespace import ::kiteutils::*
+</pre>
+
+<itemlist>
+
+<section DESCRIPTION>
+
+os(n) provides an OS abstraction layer for Kite.<p>
+
+<section COMMANDS>
+
+<deflist>
+
+<defitem "os flavor" {os flavor}>
+
+Returns the "flavor" of the operating system, one of
+<b linux>, <b osx>, or <b windows>, which is specific enough for most of
+Kite's needs.  (To find the actual architecture, use 
+<b>platform::identify</b> in the standard platform(n) package.)<p>
+
+<defitem "os name" {os name}>
+
+Returns a prettier version of the flavor, e.g., "Windows".<p>
+
+<defitem "os exefile" {os exefile <i name>}>
+
+Adds ".exe" to the name of an executable file on those platforms that require it.<p>
+
+<defitem "os pathfind" {os pathfind <i name>}>
+
+Looks for the named executable on the user's <b PATH>, returning
+the normalized path on success, and "" on failure.<p>
+
+</deflist>
+
+<section ENVIRONMENT>
+
+Requires Tcl 8.6 or later.<p>
+
+<section AUTHOR>
+
+Will Duquette<p>
+
+</manpage>
+
+
+
+
+

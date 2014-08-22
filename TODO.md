@@ -3,11 +3,7 @@
 ## Next
 
 * Cleanup:
-  * Fix [project teapot].
-    * The [project teapot] isn't really project-specific.
-      * Put this call somewhere else.  A system module?
-      * Allow Kite to use the normal teapot if it has write-access,
-        as Quill does?
+  * Add "env" tool.
   * Flesh out the plat.tcl module.
     * tool::SHELL should use plat to find tkcon.
   * Update help subsystem to support tree of topics.
