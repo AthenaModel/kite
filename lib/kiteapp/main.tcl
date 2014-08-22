@@ -35,17 +35,12 @@ proc main {argv} {
     }
 
     # NEXT, get any options
-    while {[string match "-*" [lindex $argv 0]]} {
-        set opt [lshift argv]
-
-        switch -exact -- $opt {
-            -verbose  { set ::kiteapp::verbose 1               }
-            default   { throw FATAL "Unknown option: \"$opt\"" }
-        }
+    foroption opt argv {
+        -verbose { set ::kiteapp::verbose 1 }
     }
 
     # NEXT, get the subcommand and see if we have a matching tool.
-    # Alternatively, we might have a script fileto run.
+    # Alternatively, we might have a script file to run.
     set tool [lshift argv]
     set treeNeeded 0
 
@@ -66,7 +61,7 @@ proc main {argv} {
     project root
 
     # NEXT, check whether the tool in question requires a project tree
-    # or not.  If it does, load the project info.
+    # or not.  If it does, load the project metadata from project.kite.
 
     if {$treeNeeded} {
         if {![project intree]} {
@@ -77,21 +72,23 @@ proc main {argv} {
         project loadinfo
     }
 
-    # NEXT, If we have a project tree then save the project info to the 
-    # kiteinfo package so that the
-    # project's code has access to it at run-time.  Note that the content
-    # will change only if the project's project.kite file has changed
-    # (or if Kite itself changes the data being saved).
+    # NEXT, If we have a project tree, the project metadata might have
+    # changed.  There are number of places in the project's code that
+    # are automatically updated when metadata changes, notably the 
+    # kiteinfo(n) package and version numbers of pkgIndex and pkgModules
+    # files.  Save any changed data back into the project tree.
     #
-    # Thus, saving it everytime guarantees that the code is always
-    # up-to-date without generating a stream of changes into the 
-    # VCS repository.
+    # NOTE: Care is taken that project file content changes only if 
+    # metadata has actually changed.  This, we are guaranteed that the
+    # code is always consistent with the metadata without generating a
+    # stream of trivial changes into the VCS repository.
 
     if {[project hasinfo]} {
         project metadata save
     }
 
-    # NEXT, use the tool, passing it the remaining arguments.
+    # NEXT, either run the user's script or use the selected tool,
+    # passing along the remaining arguments.
     if {$tool eq "RunScript"} {
         RunScript $script $argv
     } else {
