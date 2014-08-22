@@ -10,6 +10,10 @@
 #   targets: The app or appkit (if any), teapot packages, docs, and
 #   other build targets specified in project.kite.
 #
+# TODO: Move basekit-finding code to plat.tcl.
+# TODO: Generate libzips directly, using zipfile::encode.
+# TODO: tclapp.tcl tclapp proxy?
+#
 #-----------------------------------------------------------------------
 
 #-----------------------------------------------------------------------
@@ -360,24 +364,6 @@ tool define build {
 
     #-------------------------------------------------------------------
     # Helpers
-
-    # GetTeapotDir
-    #
-    # For ActiveTcl, the default teapot is in $TCL_HOME/lib/teapot.
-    #
-    # TODO: Kite should have its own local teapot on the machine.
-    # TODO: This routine assumes the default teapot location for
-    # Windows only.
-
-    proc GetTeapotDir {} {
-        set shell [info nameofexecutable]
-        set tclhome [file dirname [file dirname $shell]]
-        set teacup [file join $tclhome bin teacup]
-
-        # Assume the default teacup repository
-        set result [exec $teacup default]
-        return [string trim $result]
-    }
 
     # FindBaseKit gflag
     #

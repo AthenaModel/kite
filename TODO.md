@@ -9,6 +9,10 @@
     * Add a call to docs.tcl indicating whether there are documents
       that will be processed.
     * Probably should support arbitrary depths.
+  * tool_build
+    * Find basekits in plat.tcl.
+    * Provide tclapp proxy in tclapp.tcl?
+    * Generate lib .zips directly, using zipfile::encode?
   * Update help subsystem to support tree of topics.
   * Use smartinterp for parsing project.kite.
   * Work through code, looking for things to improve.
