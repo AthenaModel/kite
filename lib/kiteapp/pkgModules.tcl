@@ -42,24 +42,38 @@ namespace import kiteutils::*
 #-----------------------------------------------------------------------
 # Submodules
 #
-# Note: modules are listed in order of dependencies; be careful if you
+# Note: modules may be listed in order of dependencies; be careful if you
 # change the order!
 
+# Main Routine
 source [file join $::kiteapp::library main.tcl            ]
+
+# Application Infrastructure
 source [file join $::kiteapp::library misc.tcl            ]
-source [file join $::kiteapp::library plat.tcl            ]
-source [file join $::kiteapp::library deps.tcl            ]
 source [file join $::kiteapp::library table.tcl           ]
+source [file join $::kiteapp::library plat.tcl            ]
+
+# Proxies for Helper Applications
+source [file join $::kiteapp::library tclsh.tcl           ]
+source [file join $::kiteapp::library teacup.tcl          ]
+
+# Project Metadata
 source [file join $::kiteapp::library project.tcl         ]
+
+# Tool Infrastructure
+source [file join $::kiteapp::library deps.tcl            ]
+source [file join $::kiteapp::library teapot.tcl          ]
+source [file join $::kiteapp::library docs.tcl            ]
+
+# Project Trees and Subtrees
 source [file join $::kiteapp::library subtree.tcl         ]
 source [file join $::kiteapp::library subtree_kiteinfo.tcl]
 source [file join $::kiteapp::library subtree_proj.tcl    ]
 source [file join $::kiteapp::library subtree_app.tcl     ]
 source [file join $::kiteapp::library subtree_pkg.tcl     ]
 source [file join $::kiteapp::library trees.tcl           ]
-source [file join $::kiteapp::library teacup.tcl          ]
-source [file join $::kiteapp::library teapot.tcl          ]
-source [file join $::kiteapp::library docs.tcl            ]
+
+# Kite tools (application subcommands)
 source [file join $::kiteapp::library tool.tcl            ]
 source [file join $::kiteapp::library tool_add.tcl        ]
 source [file join $::kiteapp::library tool_build.tcl      ]

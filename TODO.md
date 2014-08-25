@@ -3,7 +3,6 @@
 ## Next
 
 * Cleanup:
-  * Look for [info nameofexecutable]
   * Consider making it so that kite.tcl can bootstrap itself even if
     textutil::expander and zipfile::encode are not present.
   * Compare docs.tcl with tool_docs.tcl and make sure there's a clean

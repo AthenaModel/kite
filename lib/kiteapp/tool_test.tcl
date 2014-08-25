@@ -123,30 +123,20 @@ tool define test {
             throw FATAL "Cannot find \"$module.test\"."
         }
 
-        # NEXT, set up the library path.
-        set ::env(TCLLIBPATH) [project libpath]
-        set tclsh [plat pathto tclsh -required]
-
-        # NEXT, set up the command.
-        lappend command \
-            $tclsh $testfile {*}$optlist
-
-        if {$verbose} {
-            lappend command \
-                >@ stdout 2>@ stderr
-        } else {
-            lappend command \
-                2>@1
-        }
-
+        # NEXT, Run the tests
         cd $testdir
+
         try {
-            # There won't be any output unless -brief is given
-            set output [eval exec $command]
+            if {$verbose} {
+                set output [tclsh show $testfile {*}$optlist]
+            } else {
+                set output [tclsh call $testfile {*}$optlist]
+            }
         } on error {result} {
             throw FATAL "Error running tests: $result"
         }
 
+        # NEXT, show summary of results unless output was verbose.
         if {!$verbose} {
             set errCount [ShowStats $target $output]
 

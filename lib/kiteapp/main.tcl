@@ -90,23 +90,8 @@ proc main {argv} {
     # NEXT, either run the user's script or use the selected tool,
     # passing along the remaining arguments.
     if {$tool eq "RunScript"} {
-        RunScript $script $argv
+        tclsh show $script {*}$argv >@ stdout 2>@ stderr
     } else {
         tool use $tool $argv
     }
-}
-
-# RunScript filename ?args...?
-#
-# filename  - Name of a script file
-# argv      - Command-line arguments.
-#
-# Invokes the script in the context of the project.
-#
-# TODO: tclsh proxy?
-
-proc RunScript {filename {argv ""}} {
-    set ::env(TCLLIBPATH) [project libpath]
-    set tclsh [plat pathto tclsh -required]
-    exec $tclsh $filename {*}$argv >@ stdout 2>@ stderr
 }

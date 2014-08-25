@@ -40,27 +40,19 @@ tool define shell {
     typemethod execute {argv} {
         set opt [lindex $argv 0]
 
-        # FIRST, begin the command.
-        lappend command \
-            [plat pathto tclsh -required] \
-            [plat pathto tkcon -required]
+        # FIRST, get Tkcon.
+        set tkcon [plat pathto tkcon -required]
 
-        if {[project hasapp] && $opt ne "-plain"} {
-            lappend command [project app loader [project app primary]]
-        } else {
-            set script [WriteShellInitializer]
-            lappend command $script
-        }
-
-        # NEXT, set up the library path.
-        set ::env(TCLLIBPATH) [project libpath]
-
-        # NEXT, execute it in the project root, in the background,
-        # and exit.
-        vputs "Loading <$command>"
+        # NEXT, call it in the appropriate way.
         cd [project root]
 
-        eval exec $command
+
+        if {[project hasapp] && $opt ne "-plain"} {
+            tclsh show $tkcon [project app loader [project app primary]]
+        } else {
+            set script [WriteShellInitializer]
+            tclsh show $tkcon $script
+        }
     }
     
     # WriteShellInitializer

@@ -49,21 +49,9 @@ tool define run {
             throw FATAL "The project.kite file doesn't define an application."
         }
 
-        # NEXT, set up the library path.
-        set ::env(TCLLIBPATH) [project libpath]
-        set tclsh [plat pathto tclsh -required]
-
-        # NEXT, set up the rest of command.
-        lappend command \
-            $tclsh [project app loader [project app primary]] \
-                {*}$argv >@ stdout 2>@ stderr
-
-        # NEXT, execute it in the project root, in the background,
-        # and exit.
-        vputs "Executing <$command>"
-        
-        cd [project root]
-        eval exec $command
+        # NEXT, run it in the project's root directory, showing all
+        # output.
+        tclsh show [project app loader [project app primary]] {*}$argv
     }    
 }
 
