@@ -85,13 +85,13 @@ tool define info {
                 if {[project app gui $app]} {
                     set tag "GUI"
                 } else {
-                    set tag "Console"
+                    set tag "console"
                 }
-                append tag ",[project app apptype $app]"
+                append tag ", [project app apptype $app]"
                 lappend table [list app $app tag ($tag)]
             }
 
-            table puts $table -indent "    "
+            table puts $table -indent "  "
         }
 
         if {[got [project provide names]]} {
@@ -110,7 +110,7 @@ tool define info {
                 lappend table [list lib ${name}(n) tag $tag]
             }
 
-            table puts $table -indent "    "
+            table puts $table -indent "  "
         }
 
 
@@ -118,7 +118,7 @@ tool define info {
             puts ""
             puts "Compiled Directories:"
             foreach name [project src names] {
-                puts "    src/$name"
+                puts "  src/$name"
             }
         }
 
@@ -139,7 +139,7 @@ tool define info {
                 lappend table [list name "$name $ver" tag $tag]
             }
 
-            table puts $table -indent "    "
+            table puts $table -indent "  "
         }
     }
 }

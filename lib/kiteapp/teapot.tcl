@@ -84,10 +84,10 @@ snit::type teapot {
 
     typemethod remove {} {
         # FIRST, unlink the teapot.
-        puts "Unlinking Kite teapot from [info nameofexecutable]..."
-        teacup link cut [project teapot] [info nameofexecutable]
+        puts "Unlinking Kite teapot from [plat pathto tclsh -required]..."
+        teacup link cut [project teapot] [plat pathto tclsh]
 
-        # NEXT, remove it it.
+        # NEXT, remove it.
         puts "Removing [project teapot] from disk"
         file delete -force [project teapot]
     }

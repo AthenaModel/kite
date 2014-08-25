@@ -33,23 +33,60 @@ tool define env {
     typemethod execute {argv} {
         puts ""
         puts "Kite thinks it is running on [os name]."
-        puts ""
 
+        puts ""
         puts "Helpers:"
 
-        table puts [GetHelpers] -indent "    "
+        table puts [GetPathsTo] -indent "  "
+
+        puts ""
+        puts "Directories:"
+        table puts [GetPathsOf] -indent "  "
     }
 
-    # GetHelpers
+    # GetPathsTo
     #
     # Gets the helper information in a "table".
 
-    proc GetHelpers {} {
+    proc GetPathsTo {} {
         set table [list]
 
-        lappend table [list t tclsh  p [plat pathto tclsh]]
-        lappend table [list t tkcon  p [plat pathto tkcon]]
-        lappend table [list t teacup p [plat pathto teacup]]
+        # TODO: Provide "names" call?
+        foreach t {
+            tclsh
+            tkcon
+            teacup
+        } {
+            set p [plat pathto $t]
+
+            if {$p eq ""} {
+                set p "(NOT FOUND)"
+            }
+
+            lappend table [list t $t p $p]
+        }
+
+        return $table
+    }
+
+    # GetPathsOf
+    #
+    # Gets the helper information in a "table".
+
+    proc GetPathsOf {} {
+        set table [list]
+
+        foreach t {
+            tclhome
+        } {
+            set p [plat pathof $t]
+
+            if {$p eq ""} {
+                set p "(NOT FOUND)"
+            }
+
+            lappend table [list t $t p $p]
+        }
 
         return $table
     }

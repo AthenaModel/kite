@@ -135,14 +135,17 @@ snit::type plat {
     #
     # The normalized directory path to the "TCL Home" directory.
     #
-    # TODO: this should be derived from "pathto tclsh" by default, and
-    # should be a configurable parameter.
+    # TODO: this should be a configurable parameter.
 
     typemethod {pathof tclhome} {} {
-        set tclsh [info nameofexecutable]
-        set home [file dirname [file dirname $tclsh]]
+        set tclsh [plat pathto tclsh]
 
-        return [file normalize $home]
+        if {$tclsh eq ""} {
+            return ""
+        } else {
+            set home [file dirname [file dirname $tclsh]]
+            return [file normalize $home]
+        }
     }
     
     

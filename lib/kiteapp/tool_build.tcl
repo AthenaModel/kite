@@ -206,7 +206,7 @@ tool define build {
 
         # NEXT, get the basekit, if any.
         if {[project app apptype $app] eq "exe"} {
-            set basekit [FindBaseKit [project app gui]]
+            set basekit [FindBaseKit [project app gui $app]]
         } else {
             set basekit ""
         }
@@ -227,6 +227,7 @@ tool define build {
         puts "See $logfile for details.\n"
 
         try {
+            vputs "Command = <$command>"
             eval exec $command
         } on error {result} {
             throw FATAL "Error building $exefile; see $logfile:\n$result"
@@ -255,7 +256,7 @@ tool define build {
         # NEXT, add the basekit, if any.
         if {$basekit ne ""} {
             lappend command \
-                -basekit $basekit
+                -prefix $basekit
         }
 
         # NEXT, other standard arguments.
@@ -370,6 +371,8 @@ tool define build {
     # gflag  - If 1, we need a Tk base-kit.
     #
     # Finds the basekit executable, based on the platform.
+    #
+    # TODO: This should be in plat.tcl.
 
     proc FindBaseKit {gflag} {
         # FIRST, determine the base-kit pattern.
@@ -382,7 +385,7 @@ tool define build {
         }
 
         if {$::tcl_platform(platform) eq "windows"} {
-            set basedir [file dirname [info nameofexecutable]]
+            set basedir [file dirname [plat pathto tclsh -required]]
             set pattern [file join $basedir $prefix].exe
         } elseif {$::tcl_platform(os) eq "Darwin"} {
             # OS X
@@ -390,7 +393,7 @@ tool define build {
             set pattern [file join $basedir $prefix]
         } else {
             # Linux -- Tentative!
-            set basedir [file dirname [info nameofexecutable]]
+            set basedir [file dirname [plat pathto tclsh -required]]
             set pattern [file join $basedir $prefix]
         }
 
