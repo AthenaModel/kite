@@ -356,12 +356,12 @@ snit::type project {
         return $info(binary-$name)
     }
 
-    # provide teapot name
+    # provide zipfile name
     #
     # name - The name of the library's teapot .zip package on this
     # platform.
 
-    typemethod {provide teapot} {name} {
+    typemethod {provide zipfile} {name} {
         set ver [project version]
         
         if {[project provide binary $name]} {

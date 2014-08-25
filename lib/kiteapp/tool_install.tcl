@@ -119,8 +119,8 @@ tool define install {
     proc InstallLib {lib} {
         set ver [project version]
 
-        set basename [project provide teapot $lib]
-        set fullname [project root .kite libzips $basename]
+        set basename [project provide zipfile $lib]
+        set fullname [file join [project zippath] $basename]
 
         # FIRST, is there a package?
         if {![file isfile $fullname]} {

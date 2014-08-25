@@ -96,9 +96,6 @@ tool define dist {
         }
         append name ".zip"
 
-        file mkdir [project root .kite]
-        file mkdir [project root .kite dist]
-
         set fullname [project root $name]
         puts "Building distribution '$target' as\n  $fullname"
         $e write $fullname

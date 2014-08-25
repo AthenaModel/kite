@@ -345,7 +345,7 @@ tool define build {
         writefile [project root lib $lib teapot.txt] $contents
 
         # NEXT, save the package file.
-        set zipname package-$lib-[project version]-$plat.zip
+        set zipname [project provide zipfile $lib]
         set zipfile [file join [project zippath] $zipname]
 
         try {
