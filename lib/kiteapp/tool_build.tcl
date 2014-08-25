@@ -305,10 +305,7 @@ tool define build {
     # lib   - A "lib" from project.kite
     #
     # Builds a .zip package for the lib.
-    #
-    # TODO: Consider using zipfile::encode.  However, it doesn't
-    # handle full directory trees automatically.
-    
+
     proc BuildTeapotZip {lib} {
         # FIRST, make sure the library package exists.
         puts "Building teapot package: $lib [project version]"
@@ -347,23 +344,12 @@ tool define build {
 
         writefile [project root lib $lib teapot.txt] $contents
 
-        # NEXT, prepare the build command.
-        set zipdir [project zippath]
-        lappend command \
-            teapot-pkg generate -t zip -o $zipdir $libdir \
-
-        # NEXT, prepare to write logfile.
-        set logfile [project root .kite build_lib_$lib.log]
-        file mkdir [file dirname $logfile]
-
-        lappend command \
-            >&  $logfile
-
-        puts "Building lib $lib"
-        puts "See $logfile for details.\n"
+        # NEXT, save the package file.
+        set zipname package-$lib-[project version]-$plat.zip
+        set zipfile [file join [project zippath] $zipname]
 
         try {
-            eval exec $command
+            zipper folder $libdir $zipfile -recurse
         } on error {result} {
             throw FATAL "Error building lib $lib; see $logfile:\n$result"
         }

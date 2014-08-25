@@ -11,9 +11,6 @@
     * Add a call to docs.tcl indicating whether there are documents
       that will be processed.
     * Probably should support arbitrary depths.
-  * tool_build
-    * Generate lib .zips directly, using zipfile::encode?
-      * Probably.
   * Update help subsystem to support tree of topics.
   * Use smartinterp for parsing project.kite.
   * Work through code, looking for things to improve.
@@ -46,7 +43,6 @@
 
 ## Notes
 
-* Can create teapot zips directly, using zipfile::encode.
 * Default teapot:
   * Making ~/.kite/teapot the default teapot means that
     different users are in contention.
