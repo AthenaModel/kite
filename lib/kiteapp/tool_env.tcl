@@ -37,58 +37,11 @@ tool define env {
         puts ""
         puts "Helpers:"
 
-        table puts [GetPathsTo] -indent "  "
+        table puts [plat tableof pathsto] -indent "  "
 
         puts ""
         puts "Directories:"
-        table puts [GetPathsOf] -indent "  "
-    }
-
-    # GetPathsTo
-    #
-    # Gets the helper information in a "table".
-
-    proc GetPathsTo {} {
-        set table [list]
-
-        # TODO: Provide "names" call?
-        foreach t {
-            tclsh
-            tkcon
-            teacup
-        } {
-            set p [plat pathto $t]
-
-            if {$p eq ""} {
-                set p "(NOT FOUND)"
-            }
-
-            lappend table [list t $t p $p]
-        }
-
-        return $table
-    }
-
-    # GetPathsOf
-    #
-    # Gets the helper information in a "table".
-
-    proc GetPathsOf {} {
-        set table [list]
-
-        foreach t {
-            tclhome
-        } {
-            set p [plat pathof $t]
-
-            if {$p eq ""} {
-                set p "(NOT FOUND)"
-            }
-
-            lappend table [list t $t p $p]
-        }
-
-        return $table
+        table puts [plat tableof pathsof] -indent "  "
     }
 }
 

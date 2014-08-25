@@ -61,7 +61,7 @@ snit::type tool {
         ladd meta(tools)             $tool
         set  meta(usage-$tool)       [dict get $mdict usage]
         set  meta(description-$tool) [dict get $mdict description]
-        set  meta(needstree-$tool)      [dict get $mdict needstree] 
+        set  meta(needstree-$tool)   [dict get $mdict needstree] 
         set  meta(ensemble-$tool)    ::tool::[string toupper $tool]
 
         # NEXT, save the help text

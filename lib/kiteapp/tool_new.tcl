@@ -51,7 +51,7 @@ tool define new {
     typemethod execute {argv} {
         lassign $argv template project targ
 
-        if {[project needstree]} {
+        if {[project intree]} {
             throw FATAL [outdent "
                 The current working directory is part of a Kite project.
                 Kite will not create a new project within an existing 

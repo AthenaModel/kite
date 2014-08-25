@@ -11,7 +11,6 @@
       that will be processed.
     * Probably should support arbitrary depths.
   * tool_build
-    * Find basekits in plat.tcl.
     * Provide tclapp proxy in tclapp.tcl?
     * Generate lib .zips directly, using zipfile::encode?
   * Update help subsystem to support tree of topics.

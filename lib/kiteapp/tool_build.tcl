@@ -206,7 +206,11 @@ tool define build {
 
         # NEXT, get the basekit, if any.
         if {[project app apptype $app] eq "exe"} {
-            set basekit [FindBaseKit [project app gui $app]]
+            if {[project app gui $app]} {
+                set basekit [plat pathto basekit.tk]
+            } else {
+                set basekit [plat pathto basekit.tcl]
+            }
         } else {
             set basekit ""
         }
@@ -360,55 +364,6 @@ tool define build {
         } on error {result} {
             throw FATAL "Error building lib $lib; see $logfile:\n$result"
         }
-    }
-    
-
-    #-------------------------------------------------------------------
-    # Helpers
-
-    # FindBaseKit gflag
-    #
-    # gflag  - If 1, we need a Tk base-kit.
-    #
-    # Finds the basekit executable, based on the platform.
-    #
-    # TODO: This should be in plat.tcl.
-
-    proc FindBaseKit {gflag} {
-        # FIRST, determine the base-kit pattern.
-        set tv [info tclversion]
-
-        if {$gflag} {
-            set prefix "base-tk${tv}-thread*"
-        } else {
-            set prefix "base-tcl${tv}-thread*"
-        }
-
-        if {$::tcl_platform(platform) eq "windows"} {
-            set basedir [file dirname [plat pathto tclsh -required]]
-            set pattern [file join $basedir $prefix].exe
-        } elseif {$::tcl_platform(os) eq "Darwin"} {
-            # OS X
-            set basedir "/Library/Tcl/basekits"
-            set pattern [file join $basedir $prefix]
-        } else {
-            # Linux -- Tentative!
-            set basedir [file dirname [plat pathto tclsh -required]]
-            set pattern [file join $basedir $prefix]
-        }
-
-        set allfiles [glob -nocomplain $pattern]
-
-        # NEXT, strip out library files
-        foreach file $allfiles {
-            if {[file extension $file] in {.dll .dylib .so}} {
-                continue
-            }
-
-            return $file
-        }
-
-        throw FATAL "Could not find basekit."
     }
     
 
