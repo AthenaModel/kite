@@ -51,6 +51,7 @@ source [file join $::kiteapp::library main.tcl            ]
 # Application Infrastructure
 source [file join $::kiteapp::library misc.tcl            ]
 source [file join $::kiteapp::library table.tcl           ]
+source [file join $::kiteapp::library zipper.tcl          ]
 source [file join $::kiteapp::library plat.tcl            ]
 
 # Proxies for Helper Applications

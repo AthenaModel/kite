@@ -5,14 +5,15 @@
 * Cleanup:
   * Consider making it so that kite.tcl can bootstrap itself even if
     textutil::expander and zipfile::encode are not present.
+  * Probably need to include Trf, etc., in Kite's requires.
   * Compare docs.tcl with tool_docs.tcl and make sure there's a clean
     division.
     * Add a call to docs.tcl indicating whether there are documents
       that will be processed.
     * Probably should support arbitrary depths.
   * tool_build
-    * Provide tclapp proxy in tclapp.tcl?
     * Generate lib .zips directly, using zipfile::encode?
+      * Probably.
   * Update help subsystem to support tree of topics.
   * Use smartinterp for parsing project.kite.
   * Work through code, looking for things to improve.
