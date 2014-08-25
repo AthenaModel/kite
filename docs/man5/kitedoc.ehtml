@@ -130,6 +130,12 @@ Returns the description for the current project, as passed to
 These macros begin and end the document, and format the HTML header
 and footer, include the document's title and style sheet.<p>
 
+<defitem example {<lb>example<rb>...<lb>/example<rb>}>
+
+These macros are used to bracket pre-formatted examples.  The examples
+are displayed in a box with a different background than the rest of
+the page.<p>
+
 <defitem figure {<lb>figure <i>id title filename</i><rb>}>
 
 Adds a figure to the document.  The figure is identified by

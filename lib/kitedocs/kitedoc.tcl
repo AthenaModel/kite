@@ -608,6 +608,12 @@ snit::type ::kitedocs::kitedoc {
         $ehtml smartalias description 0 0 {} \
             [myproc description]
 
+        $ehtml smartalias example 0 0 {} \
+            [myproc example]
+
+        $ehtml smartalias /example 0 0 {} \
+            [myproc /example]
+
         $ehtml smartalias poc 0 0 {} \
             [myproc poc]
 
@@ -956,6 +962,22 @@ snit::type ::kitedocs::kitedoc {
 
     proc standardstyle {} {
         return $css
+    }
+
+    # example
+    #
+    # Begins a pre-formatted example.
+
+    proc example {} {
+        return "<pre class=\"box\">"
+    }
+
+    # /example
+    #
+    # Ends a pre-formatted example.
+
+    proc /example {} {
+        return "</pre>"
     }
 
 }
