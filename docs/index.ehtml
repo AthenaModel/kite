@@ -11,6 +11,7 @@ be used by other projects.<p>
   <li> <link ../INSTALL.md "Installation Instructions">
   <li> <link BUILD.md      "Build Instructions">
   <li> <xref project(5)    "Syntax: project.kite">
+  <li> <link kdg.html      "Kite Developer's Guide">
 </ul><p>
 
 <preface man "Man Pages">

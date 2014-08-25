@@ -1,0 +1,195 @@
+<document "Kite Developer's Guide">
+
+<hrule>
+
+<contents>
+
+<hrule>
+
+<preface audience "Audience">
+
+This guide is intended for the Kite developer, but may also be of use to
+the Kite user as it documents Kite's expectations for the content of the
+project tree.<p>
+
+<section project "The Project Tree">
+
+<section lib "Libraries">
+
+<section app "Applications">
+
+<section dep "Dependency Management">
+
+A Kite project can have the following kinds of external dependency:<p>
+
+<ul>
+<li> Teapot packages
+    <ul>
+    <li> From remote teapot repository
+    <li> Locally built and installed
+    </ul>
+<li> Basekits
+    <ul>
+    <li> For the current platform
+    <li> With and without Tk
+    </ul>
+</ul><p>
+
+<section dep.teapot "Teapot Packages">
+
+A teapot package is a Tcl package installed in a remote or local "teapot"
+repository, using the teapot-related tools that ship with ActiveTcl.<p>
+
+The user specifies dependencies on teapot packages in by adding 
+<xref project(5) require>
+statements to their <tt project.kite> file, e.g.,<p>
+
+<example>
+require snit 2.3
+</example>
+
+<section dep.teapot.remote "Retrieving Teapot Packages from Remote Repositories">
+
+Projects will often require packages produced non-locally.  Kite will
+attempt to retrieve these from a remote teapot repository, usually
+<tt http://teapot.activestate.com>.  By default, every required package is
+assumed to be non-local.<p>
+
+Kite uses the <tt teacup> tool to retrieve remote packages; see 
+<xref teapot> for details.<p>
+
+<section dep.teapot.local "Locally-built Teapot Packages">
+
+A project may depend on library packages produced by other local projects.
+It will retrieve these from the local teapot, just as for other external 
+packages, and will track whether the local teapot contains the required
+versions.  However, it will never attempt to retrieve them from a remote
+teapot repository; rather the developer ensure that they are installed
+locally.<p>
+
+To mark a package as locally produced, use the `-local` flag:<p>
+
+<example>
+require kitedocs 1.0.0 -local
+</example>
+
+<section dep.basekits "Basekits">
+
+A basekit is a single-file Tcl interpreter that can be used as the 
+"prefix" of a wrapped stand-alone executable.  As such, basekits are an 
+implicit dependency of any project that builds stand-alone executables.<p>
+
+ActiveState includes two basekits with the ActiveTcl installation, one that 
+includes Tk and one that doesn't.  The non-Tk basekit is smaller, resulting
+in smaller executables when Tk isn't required; but the distinction is
+especially important on Windows systems, where Tk applications do not have
+access to stdin, stdout, and stderr.<p>
+
+At present, Kite is delivered as a .kit, and is run using the development
+Tcl installation; and finds the basekits for the current system relative
+to that Tcl installation.  This means that Kite can only build executables
+for the specific platform on which it is running.<p>
+
+Basekits can also be retrieved from 
+<tt http://teapot.activestate.com> using the
+<tt teacup> tool.  In the future, Kite may take advantage of this 
+to support cross-platform builds.<p>
+
+<section dep.basekits.locating "Locating Basekits">
+
+ActiveState's basekits are distinguished by the following variables:<p>
+
+<ul>
+<li> Whether or not Tk is included.
+<li> Whether the basekit supports multiple threads or not.
+<li> The version of Tcl/Tk
+<li> The platform for which it was built.
+</ul>
+
+<section dep.basekits.locating.dist "In ActiveTcl Distributions">
+
+For basekits distributed with ActiveTcl, these features are represented
+in the filename as follows:<p>
+
+<tt>base-<i tcltk><i x.y>-[thread-]-<i platform>[.exe]</tt><p>
+
+where <i tcltk> is either "<tt tcl>" or "<tt tk>", "<i x.y>" is the Tcl
+version, "thread-" is present or not, and <i platform> is the build  
+platform as returned by the standard Tcl <tt platform::identify> command.<p>
+
+As of 2014, ActiveState's freely available builds of ActiveTcl 8.5 and 8.6
+are all threaded, so the "<tt thread->" component can be assumed.<p>
+
+On Windows and Linux, the basekits are installed into the same directory
+as the <i tclsh> executable.  On OS X, at least as of ActiveTcl 8.6, the
+basekits are installed in the <tt /Library/Tcl/basekits> directory.<p>
+
+ActiveTcl generally also provides dynamic Tcl/Tk libraries, which have
+the same base name as the basekit but a different file extension
+(<tt .so>, <tt .dll>, or <tt .dylib>).  When looking for the basekit,
+it's usually necessary to filter these out.<p>
+
+<section dep.basekits.locating.teapot "In the Teapot">
+
+Basekits can also be retrieved from the the remote teapot repository.  
+Artifacts in the repository are identified by four components:<p>
+
+<ul>
+<li> The entity type, usually <tt package> or <tt application>.  For 
+    basekits, this is always <tt application>.<p>
+
+<li> The artifact's name.  For basekits, this will be either 
+    <tt base-tcl-thread> or <tt base-tk-thread>.<p>
+
+<li> The version.  This is an ActiveState version number, which is usually
+    <i x.y.z.w.buildNum>, e.g., <tt 8.6.1.1.298358>.<p>
+
+<li> The platform on which it was built, e.g., <tt win32-ix86>,
+    <tt macosx10.5-i386-x86_64>, or <tt linux-glibc2.3-ix86>.<p>
+</ul>
+
+To pull down the desired basekit, then, it's generally necessary to
+get a list of the available basekits and decide which one best fits the
+desired version and current platform.  This can be tricky.  Windows and
+Linux come in 32-bit and 64-bit flavors; and the 
+<tt platform::identify> value for the development platform often won't 
+exactly match that of the appropriate basekit.<p>
+
+In general, then, follow these rules:<p>
+
+<ul>
+<li> Always look for an <tt application>.<p>
+
+<li> For a console application, look for <tt base-tcl-thread>; for
+    a GUI application, look for <tt base-tk-thread>.<p>
+
+<li> For Tcl version <i>X.Y</i>, look for the largest version 
+    (per <tt package vcompare>) that matches "X.Y*".<p>
+
+<li> Match the platform as follows:
+    <ul>
+    <li> 32-bit Windows: "<tt win32-ix86>".
+    <li> 64-bit Windows: "<tt win32-x86_64>".
+    <li> 32-bit Linux: "<tt linux-*-ix86>".
+    <li> 64-bit Linux: "<tt linux-*-x86_64>".
+    <li> 64-bit Mac OSX: "<tt macosx*-x86_64>".
+    </ul><p>
+</ul>
+
+Having selected these four components, you can retrieve the basekit as
+follows:
+
+<example>
+$ teacup get --is application --output <i folder> \
+    <i name> <i version> <i platform>
+</example>
+
+The basekit will be saved to the specified <i folder>, and will be called<p>
+
+<tt>application-<i name>-<i version>-<i platform>[.exe]</tt><p>
+
+<section comp "Compilation">
+
+<section teapot "Teapot Management">
+
+</document>
