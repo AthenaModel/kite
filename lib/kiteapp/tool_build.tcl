@@ -263,10 +263,15 @@ tool define build {
                 -prefix $basekit
         }
 
-        # NEXT, other standard arguments.
-        lappend command \
-            -out     $target          \
-            -archive [project teapot]
+        # NEXT, add options
+        lappend command -out $target
+
+        foreach repo [teacup repos] {
+            lappend command -archive $repo
+        }
+
+        # Follow package requirements
+        lappend command -follow
 
         # NEXT, add "require" dependencies
         foreach rqmt [project require names] {

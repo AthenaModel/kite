@@ -128,6 +128,30 @@ snit::type teacup {
         Call remove $name $version
     }
 
+    # repos
+    #
+    # Returns the paths of the repositories linked to the current
+    # tclsh.
+
+    typemethod repos {} {
+        set repos [list]
+
+        set out [$type link info [plat pathto tclsh -required]]
+        set len [string length "Repository "]
+
+        foreach line [split $out \n] {
+            if {[string match "Repository *" $line]} {
+                lappend repos [file normalize [string range $line $len end]]
+            }
+        }
+
+        # Move the project teapot to the front.
+        ldelete repos [project teapot]
+        set repos [linsert $repos 0 [project teapot]]
+
+        return $repos
+    }
+
     # Call args
     #
     # Calls the teacup executable with the args, throwing a fatal
