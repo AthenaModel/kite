@@ -8,6 +8,9 @@
 teapot.txt
 /*.zip
 *~
+/bin/*-windows.exe
+/bin/*-linux
+/bin/*-osx
 
 # SublimeText artifacts.
 *.sublime-*

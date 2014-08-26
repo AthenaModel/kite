@@ -20,6 +20,19 @@ snit::type tclsh {
     pragma -hasinstances no -hastypedestroy no
 
     #-------------------------------------------------------------------
+    # Constants
+
+    # blockCommand: a command that executes a script in the global
+    # context and outputs the result to stdout.
+
+    typevariable blockCommand {
+        proc _outputBlock_ {script} {
+            puts [uplevel #0 $script]
+        }
+    }
+    
+
+    #-------------------------------------------------------------------
     # tclsh commands
 
     # show args
@@ -44,6 +57,33 @@ snit::type tclsh {
         set ::env(TCLLIBPATH) [project libpath]
         set tclsh [plat pathto tclsh -required]
         return [exec $tclsh {*}$args 2>@1]
+    }
+
+    # script script
+    #
+    # script   - A Tcl script
+    #
+    # Executes the Tcl script in the context of the project, and
+    # returns all output.  Errors propagate normally.
+
+    typemethod script {script} {
+        assert {[project intree]}
+
+        # FIRST, run in project root folder.
+        set chdir [list cd [project root]]
+
+        append realScript \
+            $chdir                      \n \
+            $blockCommand               \n \
+            [list _outputBlock_ $script] \n
+
+
+        # NEXT, save the script.
+        set sname [project root .kite tclscript.tcl]
+        writefile $sname $realScript
+
+        # NEXT, call it and return the result.
+        return [$type call $sname]
     }
 
 }

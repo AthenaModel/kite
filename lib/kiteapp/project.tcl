@@ -332,7 +332,7 @@ snit::type project {
         if {[project app apptype $app] eq "kit"} {
             return $app.kit
         } elseif {[project app apptype $app] eq "exe"} {
-            return [os exefile $app]
+            return [os exefile $app-[os flavor]]
         } else {
             error "Unknown application type"
         }
@@ -462,6 +462,17 @@ snit::type project {
 
     typemethod libpath {} {
         return [list [project root lib]]
+    }
+
+    # auto_path
+    #
+    # Returns the auto_path of the development Tcl shell in the project
+    # context.
+
+    typemethod auto_path {} {
+        return [tclsh script {
+            set auto_path
+        }]
     }
 
     # zippath

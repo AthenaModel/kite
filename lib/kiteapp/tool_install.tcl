@@ -160,22 +160,15 @@ tool define install {
             # FIRST, make sure that ~/bin exists.
             file mkdir [file join ~ bin]
 
-            # Copy app
-            # TODO: use [project app exefile $app]
+            # NEXT, get source and target
+            set source [project root bin [project app exefile $app]]
+
+            set target [file join ~/bin [os exefile $app]]
 
             if {[project app apptype $app] eq "kit"} {
-                set kitname $app.kit
-                set source [project root bin $kitname]
                 set target [file join ~ bin $app]
             } elseif {[project app apptype $app] eq "exe"} {
-                if {$::tcl_platform(platform) eq "windows"} {
-                    set exename "$app.exe"
-                } else {
-                    set exename $app
-                }
-
-                set source [project root bin $exename]
-                set target [file join ~ bin $exename]
+                set target [file join ~ bin [os exefile $app]]
             }
 
             if {![file exists $source]} {

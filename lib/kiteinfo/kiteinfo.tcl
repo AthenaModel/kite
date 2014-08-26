@@ -51,7 +51,7 @@ namespace eval ::kiteinfo:: {
         apps kite
         local-zipfile::encode 0
         local-platform 0
-        apptype-kite kit
+        apptype-kite exe
         local-textutil::expander 0
         local-snit 0
         version 0.1.4a0

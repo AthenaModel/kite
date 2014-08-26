@@ -1,6 +1,6 @@
 project athena-kite 0.1.4a0 "Athena/Kite Development Tool"
 poc William.H.Duquette@jpl.nasa.gov
-app kite
+app kite -apptype exe
 provide kiteutils
 provide kitedocs
 

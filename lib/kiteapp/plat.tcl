@@ -103,8 +103,7 @@ snit::type plat {
         # NEXT, get the path.
         switch -exact -- $name {
             tclsh {
-                # TODO: We should find this on the path.
-                set path [info nameofexecutable]
+                set path [os pathfind [os exefile tclsh]]
             }
 
             teacup {
