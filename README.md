@@ -14,9 +14,8 @@ tool for Tcl development.  The initial goals are these:
 * Reduce the dependency on Makefiles, except for building C/C++ code.
 * Manage the dependencies on Mars and on the required basekit explicitly,
   rather than relying on Subversion's svn:externals to pull them in.
-  (This is in preparation for a move to git.)
 * Abstract Subversion out of the formal build process, e.g., Kite should
-  be able to build the application and tag it using the de facto CM tool.
+  be able to build the application without reference to the VCS.
 * Allow greater modularization of the Mars and Athena codebase: instead 
   of two huge projects (Mars and Athena) allow a number of smaller,
   more easily manageable projects.  For example, the latlong conversion
@@ -34,27 +33,18 @@ Kite currently assumes the following things about the user's development environ
 * A version of ActiveTcl is installed on the system.
 * The tclsh is on the path; it can be executed from the command line as "tclsh".
 * The "teacup" app (installed with ActiveTcl) is also on the path.
-* TclDevKit is installed on the system, and tclapp and teapot-pkg are on the path.
+* TclDevKit is installed on the system, and tclapp is on the path.
 
-## Things to Try Later
-
-We can try doing some of the following in order to simplify development.
-
-* Run with basekits in development as well as run-time.  The base-kit then becomes the
-  equivalent of clojure.jar for a Leiningen project.
-* It seems to be possible to create starkits and starpacks as "zipkits" given AT 8.6 and
-  vfs::zip without using tclapp.  This would be a major step forward, as we could then
-  do without TDK, but would require pulling packages from a teapot into the local vfs.
 
 # Copyright
 
-Copyright 2014, by the California Institute of Technology. ALL RIGHTS RESERVED. 
-United States Government Sponsorship acknowledged. Any commercial use must be 
-negotiated with the Office of Technology Transfer at the California Institute 
-of Technology.
+Copyright 2014, by the California Institute of Technology. ALL RIGHTS
+RESERVED.  United States Government Sponsorship acknowledged. Any
+commercial use must be  negotiated with the Office of Technology Transfer
+at the California Institute  of Technology.
  
-This software may be subject to U.S. export control laws. By accepting this software, 
-the user agrees to comply with all applicable U.S. export laws and regulations. User 
-has the responsibility to obtain export licenses, or other export authority as may be 
-required before exporting such information to foreign countries or providing access to 
-foreign persons.
+This software may be subject to U.S. export control laws. By accepting this
+software,  the user agrees to comply with all applicable U.S. export laws
+and regulations. User  has the responsibility to obtain export licenses, or
+other export authority as may be  required before exporting such
+information to foreign countries or providing access to  foreign persons.

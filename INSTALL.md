@@ -17,7 +17,7 @@ To install Kite given an installation .zip file, do the following.
 5. In that directory, copy the executable to your ~/bin directory (or
    somewhere else on your PATH).
 
-    $ cp <kite>/bin/kite.kit ~/bin/kite
+    $ cp <kite>/bin/kite-windows.exe ~/bin/kite
 
 6. Kite is now installed.  To test it:
 
@@ -31,3 +31,4 @@ To install Kite given an installation .zip file, do the following.
    In the Kite directory, e.g.,
 
     $ teacup install package-kiteutils-<version>-tcl.zip
+    $ teacup install package-kitedocs-<version>-tcl.zip

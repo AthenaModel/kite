@@ -34,8 +34,8 @@ scratch, do the following.
 
     $ ./bin/kite.tcl build all
 
-8. Install Kite.  This will copy ./bin/kite.kit to ~/bin/kite, and install
-   the Kite Tcl libraries into the local teapot.
+8. Install Kite.  This will copy ./bin/kite-windows.exe (or whatever) 
+   to ~/bin/kite, and install the Kite Tcl libraries into the local teapot.
 
     $ ./bin/kite.tcl install
 
@@ -54,9 +54,7 @@ Tcl development environment, do the following:
 
     $ kite build
 
-3. Install Kite.  NOTE: When installing Kite itself, always run the
-   .tcl script explicitly.  This advice doesn't apply when installing
-   other applications built with kite.
+3. Install Kite.
 
     $ ./bin/kite.tcl install
 
