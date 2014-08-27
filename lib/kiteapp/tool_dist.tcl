@@ -35,6 +35,15 @@ tool define dist {
     If the <target> is "install", it is omitted.
 } {
     #-------------------------------------------------------------------
+    # Transient data
+
+    # trans
+
+    typevariable trans -array {
+        counter 0
+    }
+    
+    #-------------------------------------------------------------------
     # Execution 
 
     # execute argv
@@ -72,20 +81,22 @@ tool define dist {
         set e [zipfile::encode %AUTO%]
 
         # NEXT, get the files that match the pattern.
-        set droot [project name]
-        set sroot [project root]
+        set patterns [project dist patterns $target]
+        set trans(counter) 0
+        set zroot [project name]
 
-        foreach pattern [project dist patterns $target] {
-            if {$pattern eq "%apps"} {
-                set dict [getapps]
-            } elseif {$pattern eq "%libs"} {
-                set dict [getlibs]
-            } else {
-                set dict [getfiles $pattern]
+        while {[got $patterns]} {
+            set pattern [lshift patterns]
+
+            switch -exact -- $pattern {
+                %apps   { set dict [GetApps]                  }
+                %libs   { set dict [GetLibs]                  }
+                %get    { set dict [GetURL [lshift patterns]] }
+                default { set dict [GetFiles $pattern]        }
             }
 
-            dict for {dfile sfile} $dict {
-                $e file: $dfile 0 $sfile
+            dict for {zfile dfile} $dict {
+                $e file: $zroot/$zfile 0 $dfile
             }
         }
 
@@ -102,65 +113,88 @@ tool define dist {
         rename $e ""
     }
 
-    # getfiles pattern
+    # GetFiles pattern
     #
     # Gets arbitrary files given a glob pattern and returns a dictionary
     # of file paths by destination path.
 
-    proc getfiles {pattern} {
+    proc GetFiles {pattern} {
         set dict [dict create]
 
         foreach filename [project globfiles {*}[split $pattern /]] {
-            dict set dict [dfile $filename] $filename
+            dict set dict [zfile $filename] $filename
         }
 
         return $dict
     } 
 
-    # getapps 
+    # GetApps 
     #
     # Gets a dictionary of the as-built names of the project's 
     # applications, by destination path.
 
-    proc getapps {} {
+    proc GetApps {} {
         set dict [dict create]
         foreach name [project app names] {
             set filename [project root bin [project app exefile $name]]
             if {[file isfile $filename]} {
-                dict set dict [dfile $filename] $filename
+                dict set dict [zfile $filename] $filename
             }
         }
 
         return $dict
     }
 
-    # getlibs 
+    # GetLibs 
     #
     # Gets a dictionary of the files to zip by destination path.
 
-    proc getlibs {} {
+    proc GetLibs {} {
         set dict [dict create]
         set pattern "package-*-[project version]-*.zip"
 
         foreach name [project globfiles .kite libzips $pattern] {
-            set dfile [project name]/[file tail $name]
-            dict set dict $dfile $name 
+            set zfile [project name]/[file tail $name]
+            dict set dict $zfile $name 
         }
 
         return $dict
     }
 
-    # dfile filename
+    # GetURL pair
+    #
+    # pair  - a zfile/URL pair.
+    #
+    # Plucks the document at the URL, and returns an fdict.
+
+    proc GetURL {pair} {
+        lassign $pair zfile url
+        set dfile [project root .kite tempfile[incr trans(counter)]]
+
+        try {
+            pluck file $dfile $url
+        } trap NOTFOUND {result} {
+            throw FATAL [outdent "
+                Could not %get file \"$zfile\" from URL:
+                $url
+                => $result
+            "]
+        }
+
+        return [dict create $zfile $dfile]
+    }
+
+    # zfile filename
     #
     # filename  - Absolute path to a project file
     #
-    # Replaces the absolute project root with the project name.
+    # Removes the absolute project root.
 
-    proc dfile {filename} {
+    proc zfile {filename} {
         set slen [string length [project root]]
         set relfile [string replace $filename 0 $slen]
 
-        return [project name]/$relfile
+        return $relfile
     }
 }
 

@@ -203,6 +203,11 @@ following:<p>
 
 <li> The special pattern <b %libs>.  This includes the teapot .zip files
      for each of the project's <iref provide>d library packages.<p>
+
+<li> The special pattern <b %get>, which is followed by a list of two
+     elements: a relative path and a URL.  Kite will retrieve the document
+     at the URL, and include it in the distribution .zip file at the 
+     given path.  This is useful for large documents in binary formats.<p>
 </ul>
 
 A project may define any number of distribution targets; by convention,
@@ -214,6 +219,7 @@ For example, a typical "install" distribution might look like this:<p>
 dist install {
     README.md
     LICENSE.md
+    %get { docs/ug.docx http://www.example.com/ug.docx }
     docs/*.html
     docs/*/*.html
     %apps
