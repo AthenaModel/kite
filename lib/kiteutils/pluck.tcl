@@ -15,9 +15,16 @@
 #-----------------------------------------------------------------------
 
 #-----------------------------------------------------------------------
+# Exported commands
+
+namespace eval ::kiteutils:: {
+    namespace export pluck
+}
+
+#-----------------------------------------------------------------------
 # pluck ensemble.
 
-snit::type pluck {
+snit::type ::kiteutils::pluck {
     pragma -hasinstances no -hastypedestroy no
 
     #-------------------------------------------------------------------
