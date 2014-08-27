@@ -6,7 +6,11 @@
 #   Will Duquette
 #
 # DESCRIPTION:
-#   Support for "pluckbing" files from an HTTP server.
+#   Support for "plucking" files from an HTTP server.
+#   If tls is loaded and registered, this module can pluck from https
+#   servers as well.  Since tls is a binary extension, that's 
+#   an application/project-level decision; see the http(n) man page
+#   for details on how to do it.
 #
 #-----------------------------------------------------------------------
 
@@ -21,7 +25,7 @@ snit::type pluck {
 
     # file fname url
     #
-    # fname  - The file name at which to save the pluckbed document.
+    # fname  - The file name at which to save the plucked document.
     # url    - The URL from which to pluck it.
     #
     # Retrieves the contents at the URL, and saves it in the named
@@ -29,6 +33,9 @@ snit::type pluck {
     # throws NOTFOUND.
 
     typemethod file {fname url} {
+        # FIRST, require http; it's always available
+        package require http
+
         # FIRST, retrieve the URL
         try {
             set token [http::geturl $url]
@@ -50,7 +57,6 @@ snit::type pluck {
         # TODO: text/* documents could be saved using 
         # writefile.
 
-        vputs "pluck file: $fname $url"
         set f [open $fname wb]
 
         try {

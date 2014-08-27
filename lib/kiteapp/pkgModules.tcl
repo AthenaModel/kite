@@ -57,7 +57,6 @@ source [file join $::kiteapp::library misc.tcl            ]
 source [file join $::kiteapp::library table.tcl           ]
 source [file join $::kiteapp::library zipper.tcl          ]
 source [file join $::kiteapp::library plat.tcl            ]
-source [file join $::kiteapp::library pluck.tcl           ]
 
 # Proxies for Helper Applications
 source [file join $::kiteapp::library tclsh.tcl           ]
