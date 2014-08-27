@@ -20,6 +20,7 @@ namespace eval ::kiteinfo:: {
 
     array set kiteInfo {
         binary-kitedocs 0
+        local-tls 0
         description {Athena/Kite Development Tool}
         provides {kiteutils kitedocs}
         distpat-install {
@@ -39,7 +40,7 @@ namespace eval ::kiteinfo:: {
         reqver-snit 2.3
         binary-kiteutils 0
         pkgversion 0.1.4a0
-        requires {platform snit textutil::expander zipfile::encode}
+        requires {platform snit textutil::expander zipfile::encode tls}
         shell {
     package require kiteutils
     package require kitedocs
@@ -49,6 +50,7 @@ namespace eval ::kiteinfo:: {
         poc William.H.Duquette@jpl.nasa.gov
         srcs {}
         apps kite
+        reqver-tls 1.6
         local-zipfile::encode 0
         local-platform 0
         apptype-kite exe

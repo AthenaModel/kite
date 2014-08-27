@@ -24,10 +24,14 @@ package provide kiteapp 0.1.4a0
 package require snit 2.3
 package require platform 1.0
 package require zipfile::encode 0.3
+package require tls 1.6
 package require -exact kiteutils 0.1.4a0
 package require -exact kitedocs 0.1.4a0
 # -kite-require-end
 
+# HTTP is always present, and we always want https.
+package require http
+::http::register https 443 ::tls::socket
 
 #-----------------------------------------------------------------------
 # Namespace definition
@@ -53,6 +57,7 @@ source [file join $::kiteapp::library misc.tcl            ]
 source [file join $::kiteapp::library table.tcl           ]
 source [file join $::kiteapp::library zipper.tcl          ]
 source [file join $::kiteapp::library plat.tcl            ]
+source [file join $::kiteapp::library pluck.tcl           ]
 
 # Proxies for Helper Applications
 source [file join $::kiteapp::library tclsh.tcl           ]
