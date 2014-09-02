@@ -353,11 +353,14 @@ snit::type ::kitedocs::manpage {
             margin-left: -5%;
         }
         pre.box {
-            background:     #FFFF99 ;
+            background:     #FFFDD1 ;
             border:         1px solid blue;
             padding-top:    2px;
             padding-bottom: 2px;
             padding-left:   4px;
+        }
+        span.boxlabel {
+            background:     #E3E08F ;
         }
         table {
             margin-top:    4px;
@@ -649,6 +652,45 @@ snit::type ::kitedocs::manpage {
         return "</pre>"
     }
 
+    # listing ?firstline?
+    #
+    # Begins a code listing with line numbers; the first line number
+    # defaults to 1, but can be set.
+
+    proc listing {{firstline 1}} {
+        # FIRST, push the context.
+        $ehtml cpush listing
+        $ehtml cset firstline $firstline
+
+        return
+    }
+
+    # /listing
+    #
+    # Ends a code listing.
+
+    proc /listing {} {
+        # FIRST, get the first line number.
+        set firstline [$ehtml cget firstline]
+
+        # NEXT, pop the context.
+        set text [string trim [$ehtml cpop listing]]
+
+        # NEXT, number the lines!
+        set codelist [list "<pre class=\"box\">"]
+
+        set i $firstline
+        foreach line [split $text \n] {
+            set line [format "<span class=\"boxlabel\">%04d</span> %s" \
+                            $i $line]
+            lappend codelist $line
+            incr i
+        }
+
+        lappend codelist "</pre>"
+
+        return "[join $codelist \n]\n"
+    }
 
 
     #-------------------------------------------------------------------

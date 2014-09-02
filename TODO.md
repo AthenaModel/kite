@@ -3,6 +3,7 @@
 ## Next
 
 * Cleanup:
+  * Define a notion of ehtml(n) macro sets.
   * Compare docs.tcl with tool_docs.tcl and make sure there's a clean
     division.
     * Add a call to docs.tcl indicating whether there are documents
@@ -13,10 +14,6 @@
   * Work through code, looking for things to improve.
   * Pull "knowledge" into specific spots.
   * Rationalize "project" queries.
-* Support for pulling external documents into the project tree for
-  making distributions.
-  * Could use a src directory, plus 'curl'
-  * Or direct support.
 * Cross-platform builds
   * Need to manage Tcl version.
 * Improve 'kite add': options on additions, e.g., private libraries.

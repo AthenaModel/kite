@@ -1,5 +1,18 @@
 <manpage kitedoc(5) "Mars Document Format">
 
+<swallow {
+proc tag {name {argspec ""}} {
+    if {$argspec eq ""} {
+        return "[tt][lb]$name[rb][/tt]"
+    } else {
+        return "[tt][lb]$name [expand $argspec][rb][/tt]"
+    }
+}
+proc xtag {name} {
+    return "[tt][lb][iref $name][rb][/tt]"
+}
+}>
+
 <section SYNOPSIS>
 
 <itemlist>
@@ -29,17 +42,17 @@ numbering and table-of-contents generation, your document will
 typically look like this:<p>
 
 <ul>
-  <li> The <tt><lb><iref document><rb></tt> header.
+  <li> The <xtag document></tt> header.
   <li> A list of change entries.
-  <li> A table of <iref contents>.
-  <li> Lists of <iref figures> and <iref tables>.
-  <li> Zero or more <iref preface> sections.  A preface section has
+  <li> A table of <xtag contents>.
+  <li> Lists of <xtag figures> and <xtag tables>.
+  <li> Zero or more <xtag preface> sections.  A preface section has
        a title but no section number, and cannot have subsections.
   <li> Zero or more numbered sections, each of which may have zero or
        more subsections.
-  <li> Numbered sections may contain <iref table>s and
-       <iref figure>s.
-  <li> The <tt><lb>/document<rb></tt> footer.
+  <li> Numbered sections may contain <xtag table>s and
+       <xtag figure>s.
+  <li> The <tag /document> footer.
 </ul><p>
 
 All of these features are optional; in particular, there's no need to
@@ -77,11 +90,11 @@ numbered and titled as follows:<p>
 
 In the kitedoc(5) input, the section headers are written as follows:<p>
 
-<pre>
-    <lb>section intro "Introduction"<rb>
-    <lb>section intro.conventions "Conventions used in this document"<rb>
-    <lb>section intro.references "References"<rb>
-</pre>
+<example>
+<tag section {intro "Introduction"}>
+<tag section {intro.conventions "Conventions used in this document"}>
+<tag section {intro.references "References"}>
+</example>
 
 In essence, each component of the numeric section number is replaced
 by a short word. You may nest sections six levels deep, but
@@ -105,38 +118,48 @@ and use them in your documents.<p>
 
 <deflist macros>
 
-<defitem banner {<lb>banner<rb>}>
+<defitem banner {<tag banner>}>
 
 Returns the banner for the top of the page.  The banner consists of
 the project name, version, and description, as provided to 
 <xref kitedoc(n)>'s <xref kitedoc(n) format> subcommand.<p>
 
 It should rarely be necessary to use this macro directly, as it is
-included automatically by <iref document>.<p>
+included automatically by <xtag document>.<p>
 
-<defitem contents {<lb>contents<rb>}>
+<defitem contents {<tag contents>}>
 
 This macro is replaced with a complete table of contents;
 the table of contents is automatically followed by lists of tables 
 and figures if any tables and figures were defined.<p>
 
-<defitem description {<lb>description<rb>}>
+<defitem description {<tag description>}>
 
 Returns the description for the current project, as passed to
 <xref kitedoc(n)>.<p>
 
-<defitem document {<lb>document <i title><rb>...<lb>/document<rb>}>
+<defitem document {<tag document "<i title>">...<tag /document>}>
 
 These macros begin and end the document, and format the HTML header
 and footer, include the document's title and style sheet.<p>
 
-<defitem example {<lb>example<rb>...<lb>/example<rb>}>
+<defitem example {<tag example>...<tag /example>}>
 
 These macros are used to bracket pre-formatted examples.  The examples
 are displayed in a box with a different background than the rest of
 the page.<p>
 
-<defitem figure {<lb>figure <i>id title filename</i><rb>}>
+<defitem listing {<tag listing {?<i firstline>?}>...<tag /listing>}>
+
+These macros are used to bracket pre-formatted code listings.  Line
+numbers are added, so that the surrounding text can refer to specific
+lines.  The listing is displayed in a box with a different background than 
+the rest of the page.<p>
+
+By default, the first line is numbered 1; set <i firstline> to pick 
+a different number.<p>
+
+<defitem figure {<tag figure {<i>id title filename</i>}>}>
 
 Adds a figure to the document.  The figure is identified by
 <i>id</i>, which must have the form <code>fig.<i>name</i></code>;
@@ -146,28 +169,28 @@ same directory as the generated HTML file, and must be a format
 recognized by the browser (e.g., GIF, PNG, or JPEG).<p>
 
 Figures will be auto-numbered, and included in the list of
-<iref figures>.<p>
+<xtag figures>.<p>
 
-<defitem figures {<lb>figures<rb>}>
+<defitem figures {<tag figures>}>
 
 This macro will be replaced by a list of the figures found in the
 document.  Note that it is rarely necessary to use this macro
-explicitly, because the table of <iref contents> will include it
+explicitly, because the table of <xtag contents> will include it
 automatically if there are any figures in the document.<p>
 
-<defitem poc {<lb>poc<rb>}>
+<defitem poc {<tag poc>}>
 
 Returns the <xref kitedoc(n)> point-of-contact e-mail address
 as a "mailto" link.<p>
 
-<defitem preface {<lb>preface <i>id title</i><rb>}>
+<defitem preface {<tag preface {<i>id title</i>}>}>
 
 Adds an unnumbered section header to the document; it is uniquely
 identifed by <i>id</i>, and has the specified <i>title</i>:<p>
 
-<pre>
-     <lb>preface foreward "Author's Foreward"<rb>
-</pre>
+<example>
+<tag preface {foreword "Author's Foreword"}>
+</example>
 
 Unnumbered sections may not have subsections; hence, the <i>id</i> may
 not contain any periods.<p>
@@ -175,65 +198,76 @@ not contain any periods.<p>
 Unnumbered sections may appear anywhere in the document, but really
 shouldn't be used anyway but the beginning or the end.<p>
 
-<defitem project {<lb>project<rb>}>
+<defitem project {<tag project>}>
 
 Returns the short name for the current project, as passed to
 <xref kitedoc(n)>.<p>
 
-<defitem section {<lb>section <i>id title</i><rb>}>
+<defitem section {<tag section {<i>id title</i>}>}>
 
 Adds a numbered section header to the document; the section has the
 specified <i>id</i> and <i>title</i>.  See
 <xref "Section Identifiers"> for a discussion of how to choose
 the <i>id</i>.<p>
 
-<defitem sectioncontents {<lb>sectioncontents <i>id</i><rb>}>
+<defitem sectioncontents {<tag sectioncontents {<i>id</i>}>}>
 
 Returns a table of contents for section <i>id</i>, that is, a list of
 its subsections, with links.<p>
 
-<defitem standardstyle {<lb>standardstyle<rb>}>
+<defitem standardstyle {<tag standardstyle>}>
 
 Returns the standard list of CSS styles, for inclusion in the HTML 
 header.<p>
 
 It should rarely be necessary to use this macro directly, as it is
-included automatically by <iref document>.<p>
+included automatically by <xtag document>.<p>
 
 
-<defitem table {<lb>table <i>id title</i><rb>...<lb>/table<rb>}>
+<defitem table {<tag table {<i>id title</i>}>...<tag /table>}>
 
-Contains and captions a table object; the user is responsible for the
-content, which may be an HTML table, a block of preformatted text, or
-anything else.  If it is an HTML table, the author is responsible for
-adding the &lt;table&gt; and &lt;/table&gt; tags.  The table <i>id</i>
+Contains and captions a table object.  The table <i>id</i>
 must have the form <code>tab.<i>name</i></code>, while the title is
 arbitrary.<p>
 
 Tables will be auto-numbered, and included in the list of
-<iref tables>.<p>
+<xtag tables>.<p>
 
-<defitem th {<lb>th<rb>...<lb>/th<rb>}>
+<defitem textfigure {<tag textfigure {<i>id title</i>}>}>
+
+Adds a "text figure" to the document, i.e., a figure consisting of
+an <xtag example> or <xtag listing> rather than an image file.  The
+relevant <tag example> or <tag listing> should follow immediately
+after the <tag textfigure> tag.<p>
+
+The figure is identified by
+<i>id</i>, which must have the form <code>fig.<i>name</i></code>;
+the <i>title</i> will be included in the caption.<p>
+
+Text figures will be auto-numbered, and included in the list of
+<xtag figures>.<p>
+
+<defitem th {<tag th>...<tag /th>}>
 
 Brackets a "pretty" table header.<p>
 
-<defitem td {<lb>td<rb>...<lb>/td<rb>}>
+<defitem td {<tag td>...<tag /td>}>
 
 Brackets a "pretty" table row.<p>
 
-<defitem tables {<lb>tables<rb>}>
+<defitem tables {<tag tables>}>
 
 This macro will be replaced by a list of the tables found in the
 document.  Note that it is rarely necessary to use this macro
-explicitly, because the table of <iref contents> will include it
+explicitly, because the table of <xtag contents> will include it
 automatically if there are any tables in the document.<p>
 
-<defitem version {<lb>version<rb>}>
+<defitem version {<tag version>}>
 
 Returns the version number for the current project, as passed to
 <xref kitedoc(n)>.<p>
 
-<defitem xref {<lb>xref <i>id</i> ?<i>anchor</i>?<rb>}>
+<defitem xref {<tag xref {<i>id</i> ?<i>anchor</i>?}>}>
 
 Creates a cross-reference link given a cross-reference <i>id</i>.
 If <i>anchor</i> is specified, it's used as the link text; otherwise,
@@ -264,7 +298,9 @@ The valid cross-reference IDs are as follows:<p>
        <xref ehtml(5) xrefset> macro.  For example, the
        following macro registers a link to the Tcl linsert(n) man page:<p>
 
-       <pre><lb>xrefset linsert(n) http://www.tcl.tk/man/tcl8.4/TclCmd/linsert.htm<rb></pre>
+<example>
+<lb>xrefset linsert(n) http://www.tcl.tk/man/tcl8.4/TclCmd/linsert.htm<rb>
+</example>
 </ul><p>
 
 </deflist>

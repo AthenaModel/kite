@@ -85,11 +85,14 @@ snit::type ::kitedocs::kitedoc {
             margin-right: 1%;
         }
         pre.box {
-            background:     #FFFF99 ;
+            background:     #FFFDD1 ;
             border:         1px solid blue;
             padding-top:    2px;
             padding-bottom: 2px;
             padding-left:   4px;
+        }
+        span.boxlabel {
+            background:     #E3E08F ;
         }
         table {
             margin-top:    4px;
@@ -614,6 +617,12 @@ snit::type ::kitedocs::kitedoc {
         $ehtml smartalias /example 0 0 {} \
             [myproc /example]
 
+        $ehtml smartalias listing 0 1 {?firstline?} \
+            [myproc listing]
+
+        $ehtml smartalias /listing 0 0 {} \
+            [myproc /listing]
+
         $ehtml smartalias poc 0 0 {} \
             [myproc poc]
 
@@ -640,6 +649,9 @@ snit::type ::kitedocs::kitedoc {
 
         $ehtml smartalias tables 0 0 {} \
             [myproc tables]
+
+        $ehtml smartalias textfigure 2 2 {id title} \
+            [myproc textfigure]
 
         $ehtml smartalias th 0 0 {} \
             [myproc th]
@@ -807,12 +819,30 @@ snit::type ::kitedocs::kitedoc {
 
     template proc figure {id title filename} {
         if {[$ehtml pass] == 1} {
-            AddFigureId $id $ttle
+            AddFigureId $id $title
             return
         }
     } {
         <p><a name="$id" href="#toc.$id"><center><img src="./$filename"><br/>
         <b>$doc(title-$id)</b></center></a></p>
+    }
+
+    # textfigure id title
+    # 
+    # id        Xref ID
+    # title     Figure title
+    #
+    # Includes a titled figure in the document.  The figure itself
+    # is the following block of text.
+
+    template proc textfigure {id title} {
+        if {[$ehtml pass] == 1} {
+            AddFigureId $id $title
+            return
+        }
+    } {
+        <p><a name="$id" href="#toc.$id"><center>
+        <b>$doc(title-$id)</b></center></a>
     }
 
     #-------------------------------------------------------------------
@@ -980,6 +1010,45 @@ snit::type ::kitedocs::kitedoc {
         return "</pre>"
     }
 
+    # listing ?firstline?
+    #
+    # Begins a code listing with line numbers; the first line number
+    # defaults to 1, but can be set.
+
+    proc listing {{firstline 1}} {
+        # FIRST, push the context.
+        $ehtml cpush listing
+        $ehtml cset firstline $firstline
+
+        return
+    }
+
+    # /listing
+    #
+    # Ends a code listing.
+
+    proc /listing {} {
+        # FIRST, get the first line number.
+        set firstline [$ehtml cget firstline]
+
+        # NEXT, pop the context.
+        set text [string trim [$ehtml cpop listing]]
+
+        # NEXT, number the lines!
+        set codelist [list "<pre class=\"box\">"]
+
+        set i $firstline
+        foreach line [split $text \n] {
+            set line [format "<span class=\"boxlabel\">%04d</span> %s" \
+                            $i $line]
+            lappend codelist $line
+            incr i
+        }
+
+        lappend codelist "</pre>"
+
+        return "[join $codelist \n]\n"
+    }
 }
 
 
