@@ -99,23 +99,18 @@ snit::type ::kiteutils::os {
     # the full, normalized path; or "" if not found.
 
     typemethod pathfind {exe} {
-        # FIRST, if there's no PATH we're done.
-        if {![info exists ::env(PATH)] || $::env(PATH) eq ""} {
+        # FIRST, if there's no PATH we're done.  However, env(PATH)
+        # is peculiar; so just grab it.
+        set path ""
+        catch {set path $::env(PATH)}
+
+        if {$path eq ""} {
             return ""
         }
 
         # NEXT, try it with the default path separator.
         set sep $::tcl_platform(pathSeparator)
-        set result [FindOnPath $exe [split $::env(PATH) $sep]]
-
-        if {$result ne ""} {
-            return $result
-        }
-
-        # NEXT, if we're on Windows using bash, we should try ":" as well.
-        if {$sep ne ":"} {
-            return [FindOnPath $exe [split $::env(PATH) ":"]]
-        }
+        set result [FindOnPath $exe [split $path $sep]]
     }
 
     # FindOnPath exe dirlist
