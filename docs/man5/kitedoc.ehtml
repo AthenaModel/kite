@@ -149,16 +149,6 @@ These macros are used to bracket pre-formatted examples.  The examples
 are displayed in a box with a different background than the rest of
 the page.<p>
 
-<defitem listing {<tag listing {?<i firstline>?}>...<tag /listing>}>
-
-These macros are used to bracket pre-formatted code listings.  Line
-numbers are added, so that the surrounding text can refer to specific
-lines.  The listing is displayed in a box with a different background than 
-the rest of the page.<p>
-
-By default, the first line is numbered 1; set <i firstline> to pick 
-a different number.<p>
-
 <defitem figure {<tag figure {<i>id title filename</i>}>}>
 
 Adds a figure to the document.  The figure is identified by
@@ -177,6 +167,23 @@ This macro will be replaced by a list of the figures found in the
 document.  Note that it is rarely necessary to use this macro
 explicitly, because the table of <xtag contents> will include it
 automatically if there are any figures in the document.<p>
+
+<defitem listing {<tag listing {?<i firstline>?}>...<tag /listing>}>
+
+These macros are used to bracket pre-formatted code listings.  Line
+numbers are added, so that the surrounding text can refer to specific
+lines.  The listing is displayed in a box with a different background than 
+the rest of the page.<p>
+
+By default, the first line is numbered 1; set <i firstline> to pick 
+a different number.<p>
+
+<defitem marker {<tag marker {<i symbol>}>}>
+
+Defines a marker in an <xtag example> or <xtag listing>.  The marker 
+displays the <i symbol> in a rounded box with a red background, and 
+is used to point out lines of interest for discussion in the following
+paragraphs.  It will look best at the end of the line.<p>
 
 <defitem poc {<tag poc>}>
 

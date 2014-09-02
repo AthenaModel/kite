@@ -131,6 +131,16 @@ snit::type ::kitedocs::kitedoc {
             background-color: #EEEEEE;
         }
 
+        div.marker {
+            position: absolute;
+            display: inline;
+            font-family: Verdana;
+            background: red;
+            border: 1px solid black;
+            border-radius: 5px;
+            padding-left: 2px;
+            padding-right: 2px;
+        }
     }
 
 
@@ -623,6 +633,9 @@ snit::type ::kitedocs::kitedoc {
         $ehtml smartalias /listing 0 0 {} \
             [myproc /listing]
 
+        $ehtml smartalias marker 1 1 {symbol} \
+            [myproc marker]
+
         $ehtml smartalias poc 0 0 {} \
             [myproc poc]
 
@@ -1048,6 +1061,18 @@ snit::type ::kitedocs::kitedoc {
         lappend codelist "</pre>"
 
         return "[join $codelist \n]\n"
+    }
+
+    # marker symbol
+    #
+    # symbol  - A symbol, e.g., "A" or "B"
+    #
+    # Adds a "marker" to the text at this spot.  This is useful
+    # in examples and listings, as an indicator for reference in the
+    # prose.
+
+    proc marker {symbol} {
+        return "<div class=\"marker\">$symbol</div>"
     }
 }
 
