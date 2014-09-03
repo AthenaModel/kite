@@ -149,7 +149,6 @@ snit::type ::kitedocs::kitedoc {
         }
 
         div.mark {
-            position: absolute;
             display: inline;
             font-family: Verdana;
             font-size: 75%;

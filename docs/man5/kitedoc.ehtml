@@ -191,18 +191,17 @@ a different number.<p>
 <defitem mark {<tag mark {<i symbol>}>}>
 
 Defines a marker in an <xtag example> or <xtag listing>.  The marker 
-displays the <i symbol> in a rounded box with a red background, and 
+displays the <i symbol> in a small rounded box with a red background, and 
 is used to point out lines of interest for discussion in the following
-paragraphs.  It floats so as not to change the line height, and will look 
-best at the end of the line.<p>
+paragraphs.<p>
 
 To use the same marker as a <xtag topic> in a <xtag topiclist>, use 
 <xtag markref> to format it.<p>
 
 <defitem markref {<tag markref {<i symbol>}>}>
 
-Creates a marker with the same appearance as <xtag mark>, but suitable
-for use as the <xtag topic> in a <xtag topiclist>.<p>
+Creates a larger version of an <xtag mark>; the larger version looks 
+better as the <xtag topic> in a <xtag topiclist>.<p>
 
 <defitem poc {<tag poc>}>
 
