@@ -84,14 +84,21 @@ snit::type ::kitedocs::kitedoc {
             margin-left: 1%;
             margin-right: 1%;
         }
-        pre.box {
+        pre.example {
             background:     #FFFDD1 ;
             border:         1px solid blue;
             padding-top:    2px;
             padding-bottom: 2px;
             padding-left:   4px;
         }
-        span.boxlabel {
+        pre.listing {
+            background:     #FFFDD1 ;
+            border:         1px solid blue;
+            padding-top:    4px;
+            padding-bottom: 4px;
+            padding-left:   4px;
+        }
+        span.linenum {
             background:     #E3E08F ;
         }
         table {
@@ -131,11 +138,34 @@ snit::type ::kitedocs::kitedoc {
             background-color: #EEEEEE;
         }
 
-        div.marker {
+        /* Topic List formatting classes */
+        tr.topic {
+            display:flex;       
+            align-items:flex-start;
+        }
+
+        td.topicname {
+            min-width: 1.5em;
+        }
+
+        div.mark {
             position: absolute;
             display: inline;
             font-family: Verdana;
-            background: red;
+            font-size: 75%;
+            background: black;
+            color: white;
+            border: 1px solid black;
+            border-radius: 5px;
+            padding-left: 2px;
+            padding-right: 2px;
+        }
+        div.markref {
+            display: inline;
+            font-family: Verdana;
+            font-size: 100%;
+            background: black;
+            color: white;
             border: 1px solid black;
             border-radius: 5px;
             padding-left: 2px;
@@ -606,6 +636,15 @@ snit::type ::kitedocs::kitedoc {
         $ehtml smartalias contents 0 0 {} \
             [myproc contents]
 
+        $ehtml smartalias deflist 0 - {comment...} \
+            [myproc deflist]
+
+        $ehtml smartalias def 1 1 {text} \
+            [myproc def]
+
+        $ehtml smartalias /deflist 0 - {comment...} \
+            [myproc /deflist]
+
         $ehtml smartalias document 1 1 {title} \
             [myproc document]
 
@@ -633,8 +672,11 @@ snit::type ::kitedocs::kitedoc {
         $ehtml smartalias /listing 0 0 {} \
             [myproc /listing]
 
-        $ehtml smartalias marker 1 1 {symbol} \
-            [myproc marker]
+        $ehtml smartalias mark 1 1 {symbol} \
+            [myproc mark]
+
+        $ehtml smartalias markref 1 1 {symbol} \
+            [myproc markref]
 
         $ehtml smartalias poc 0 0 {} \
             [myproc poc]
@@ -671,6 +713,18 @@ snit::type ::kitedocs::kitedoc {
 
         $ehtml smartalias /th 0 0 {} \
             [myproc /th]
+
+        $ehtml smartalias topiclist 0 0 {} \
+            [myproc topiclist]
+
+        $ehtml smartalias topic 1 1 {text} \
+            [myproc topic]
+
+        $ehtml smartalias /topic 0 0 {} \
+            [myproc /topic]
+
+        $ehtml smartalias /topiclist 0 0 {} \
+            [myproc /topiclist]
 
         $ehtml smartalias tr 0 0 {} \
             [myproc tr]
@@ -952,6 +1006,170 @@ snit::type ::kitedocs::kitedoc {
     }
 
     #-------------------------------------------------------------------
+    # Definition Lists
+
+    # deflist args
+    #
+    # Begins a definition list. The args don't matter, but can be used
+    # as comments.  
+    template proc deflist {args} {
+        |<--
+        <dl>
+    }
+
+    # /deflist args
+    #
+    # Ends a definition list.   The args don't matter, but can be used
+    # as comments. 
+    template proc /deflist {args} {
+        |<--
+        </dl>
+    }
+
+    # def text
+    #
+    # text   - Topic in a deflist 
+    #
+    # An entry in a def list that doesn't create a synopsis item.
+    # The text is expanded once, and made bold.
+
+    template proc def {text} {
+        set text [$ehtml expandonce $text]
+    } {
+        |<--
+        <dt><b>$text</b></dt>
+        <dd>
+    }
+
+    #-------------------------------------------------------------------
+    # Topic Lists
+
+    # topiclist
+    #
+    # Begins a topic list: topic strings and descriptions in parallel
+    # columns.
+
+    template proc topiclist {} {
+        |<--
+        <table class="topiclist">
+    }
+
+    # topic text
+    #
+    # text    - Topic text to be expanded.
+    #
+    # Specifies a topic, and begins to enclose the description of the
+    # topic.
+
+    template proc topic {text} {
+        |<--
+        <tr class="topic">
+        <td class="topicname">[$ehtml expandonce $text]</td>
+        <td class="topictext">
+    }
+
+    template proc /topic {} {
+        |<--
+        </td>
+        </tr>
+    }
+    
+    # /topiclist
+    #
+    # Terminates a topic list.
+
+    template proc /topiclist {} {
+        |<--
+        </table>
+    }
+
+    #-------------------------------------------------------------------
+    # Examples, listings, and marks
+    
+    # example
+    #
+    # Begins a pre-formatted example.
+
+    proc example {} {
+        return "<pre class=\"example\">"
+    }
+
+    # /example
+    #
+    # Ends a pre-formatted example.
+
+    proc /example {} {
+        return "</pre>"
+    }
+
+    # listing ?firstline?
+    #
+    # Begins a code listing with line numbers; the first line number
+    # defaults to 1, but can be set.
+
+    proc listing {{firstline 1}} {
+        # FIRST, push the context.
+        $ehtml cpush listing
+        $ehtml cset firstline $firstline
+
+        return
+    }
+
+    # /listing
+    #
+    # Ends a code listing.
+
+    proc /listing {} {
+        # FIRST, get the first line number.
+        set firstline [$ehtml cget firstline]
+
+        # NEXT, pop the context.
+        set text [string trim [$ehtml cpop listing]]
+
+        # NEXT, number the lines!
+        set codelist [list "<pre class=\"listing\">"]
+
+        set i $firstline
+        foreach line [split $text \n] {
+            set line [format "<span class=\"linenum\">%04d</span> %s" \
+                            $i $line]
+            lappend codelist $line
+            incr i
+        }
+
+        lappend codelist "</pre>"
+
+        return "[join $codelist \n]\n"
+    }
+
+    # mark symbol
+    #
+    # symbol  - A symbol, e.g., "A" or "B"
+    #
+    # Adds a "mark" to the text at this spot.  This is useful
+    # in examples and listings, as an indicator for reference in the
+    # prose.  It floats in place so that it doesn't disturb the
+    # height of the line in the listing.  Put it at the end of the
+    # line.
+
+    proc mark {symbol} {
+        return "<div class=\"mark\">$symbol</div>"
+    }
+
+    # markref symbol
+    #
+    # symbol  - A symbol, e.g., "A" or "B"
+    #
+    # Adds a reference to a "mark" to the text at this spot.  The markref
+    # looks like the mark but doesn't float.  Use it in topiclists and the
+    # like.
+
+    proc markref {symbol} {
+        return "<div class=\"markref\">$symbol</div>"
+    }
+
+
+    #-------------------------------------------------------------------
     # Miscellaneous Macros
 
     # project
@@ -1007,73 +1225,6 @@ snit::type ::kitedocs::kitedoc {
         return $css
     }
 
-    # example
-    #
-    # Begins a pre-formatted example.
-
-    proc example {} {
-        return "<pre class=\"box\">"
-    }
-
-    # /example
-    #
-    # Ends a pre-formatted example.
-
-    proc /example {} {
-        return "</pre>"
-    }
-
-    # listing ?firstline?
-    #
-    # Begins a code listing with line numbers; the first line number
-    # defaults to 1, but can be set.
-
-    proc listing {{firstline 1}} {
-        # FIRST, push the context.
-        $ehtml cpush listing
-        $ehtml cset firstline $firstline
-
-        return
-    }
-
-    # /listing
-    #
-    # Ends a code listing.
-
-    proc /listing {} {
-        # FIRST, get the first line number.
-        set firstline [$ehtml cget firstline]
-
-        # NEXT, pop the context.
-        set text [string trim [$ehtml cpop listing]]
-
-        # NEXT, number the lines!
-        set codelist [list "<pre class=\"box\">"]
-
-        set i $firstline
-        foreach line [split $text \n] {
-            set line [format "<span class=\"boxlabel\">%04d</span> %s" \
-                            $i $line]
-            lappend codelist $line
-            incr i
-        }
-
-        lappend codelist "</pre>"
-
-        return "[join $codelist \n]\n"
-    }
-
-    # marker symbol
-    #
-    # symbol  - A symbol, e.g., "A" or "B"
-    #
-    # Adds a "marker" to the text at this spot.  This is useful
-    # in examples and listings, as an indicator for reference in the
-    # prose.
-
-    proc marker {symbol} {
-        return "<div class=\"marker\">$symbol</div>"
-    }
 }
 
 
