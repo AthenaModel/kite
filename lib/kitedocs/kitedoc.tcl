@@ -140,8 +140,7 @@ snit::type ::kitedocs::kitedoc {
 
         /* Topic List formatting classes */
         tr.topic {
-            display:flex;       
-            align-items:flex-start;
+            vertical-align: baseline;
         }
 
         td.topicname {
@@ -159,7 +158,7 @@ snit::type ::kitedocs::kitedoc {
             padding-left: 2px;
             padding-right: 2px;
         }
-        div.markref {
+        div.bigmark {
             display: inline;
             font-family: Verdana;
             font-size: 100%;
@@ -632,6 +631,9 @@ snit::type ::kitedocs::kitedoc {
         $ehtml smartalias banner 0 0 {} \
             [myproc banner]
 
+        $ehtml smartalias bigmark 1 1 {symbol} \
+            [myproc bigmark]
+
         $ehtml smartalias contents 0 0 {} \
             [myproc contents]
 
@@ -673,9 +675,6 @@ snit::type ::kitedocs::kitedoc {
 
         $ehtml smartalias mark 1 1 {symbol} \
             [myproc mark]
-
-        $ehtml smartalias markref 1 1 {symbol} \
-            [myproc markref]
 
         $ehtml smartalias poc 0 0 {} \
             [myproc poc]
@@ -1155,16 +1154,16 @@ snit::type ::kitedocs::kitedoc {
         return "<div class=\"mark\">$symbol</div>"
     }
 
-    # markref symbol
+    # bigmark symbol
     #
     # symbol  - A symbol, e.g., "A" or "B"
     #
-    # Adds a reference to a "mark" to the text at this spot.  The markref
+    # Adds a reference to a "mark" to the text at this spot.  The bigmark
     # looks like the mark but doesn't float.  Use it in topiclists and the
     # like.
 
-    proc markref {symbol} {
-        return "<div class=\"markref\">$symbol</div>"
+    proc bigmark {symbol} {
+        return "<div class=\"bigmark\">$symbol</div>"
     }
 
 

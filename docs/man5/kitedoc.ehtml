@@ -127,6 +127,11 @@ the project name, version, and description, as provided to
 It should rarely be necessary to use this macro directly, as it is
 included automatically by <xtag document>.<p>
 
+<defitem bigmark {<tag bigmark {<i symbol>}>}>
+
+Creates a larger version of an <xtag mark>; the larger version looks 
+better as the <xtag topic> in a <xtag topiclist>.<p>
+
 <defitem contents {<tag contents>}>
 
 This macro is replaced with a complete table of contents;
@@ -195,13 +200,8 @@ displays the <i symbol> in a small rounded box with a red background, and
 is used to point out lines of interest for discussion in the following
 paragraphs.<p>
 
-To use the same marker as a <xtag topic> in a <xtag topiclist>, use 
-<xtag markref> to format it.<p>
-
-<defitem markref {<tag markref {<i symbol>}>}>
-
-Creates a larger version of an <xtag mark>; the larger version looks 
-better as the <xtag topic> in a <xtag topiclist>.<p>
+Use <xtag bigmark> to display the same marker as an <xtag topic> in a 
+<xtag topiclist>.<p>
 
 <defitem poc {<tag poc>}>
 

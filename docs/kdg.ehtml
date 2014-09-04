@@ -1,9 +1,38 @@
 <document "Kite Developer's Guide">
 
 <swallow {
-    proc root {path} {
-        return "[tt][expand $path][/tt]"
-    }    
+    proc root {{path ""}} {
+        if {$path ne ""} {
+            return "[tt][i root]/[expand $path][/tt]"
+        } else {
+            return "[tt][i root]/[/tt]"
+        }
+    }
+
+    # <table ...>
+    # <treedir path> Description </treedir>
+    #    ...
+    # </table>
+
+    macro treedir {path} {
+        set trans {
+            +   &nbsp;&nbsp;&nbsp;&nbsp; 
+            (   <i> 
+            )   </i>
+        }
+
+        set path [string map $trans  $path]
+    } {
+        |<--
+        [tr]<td><b><tt>$path</tt></b></td>
+        <td>
+    }
+
+    macro /treedir {} {
+        |<--
+        </td>
+        [/tr]
+    }
 }>
 
 <hrule>
@@ -25,6 +54,100 @@ project tree.<p>
 <hrule>
 
 <section projtree "The Project Tree">
+
+A typical Kite project tree has some or all of the following parts.<p>
+
+<table tab.projtree "Project Directory Tree">
+<th><td>Path</td> <td>Description</td></th>
+
+<treedir (root)/>       Root of the project tree</treedir>
+<treedir +project.kite> <xref projfile "Kite Project File">
+                        </treedir>
+<treedir +bin/>         <xref app "Application"> loader scripts and 
+                        ancillary tools.</treedir>
+<treedir ++(name).tcl>  Application loader script for application <i name>.
+                        </treedir>
+<treedir +docs/>        <xref docs "Project documentation"></treedir>
+<treedir ++man1/>       Man page section (1): Executables</treedir>
+<treedir ++man5/>       Man page section (5): File Formats</treedir>
+<treedir ++mann/>       Man page section (n): Tcl Commands</treedir>
+<treedir ++mani/>       Man page section (i): Tcl Interfaces</treedir>
+<treedir +lib/>         Tcl <xref lib "Library Packages"> </treedir>
+<treedir ++(name)/>     Tcl source code for package
+                        <i>name</i></treedir>
+<treedir ++(name)app/>  Tcl source code for application <i name>.
+                        </treedir>
+<treedir +test/>        <xref testing "Project test suites">.  
+                        <tt test/> directories are usually parallel to
+                        <tt lib/> directories.</treedir>
+<treedir ++(name)/>     Test suite for package <i>name</i></treedir>
+<treedir +src/>         <xref comp "Compiled source directories"></treedir>
+<treedir ++(name)/>     Compiled source directory <i>name</i></treedir>
+<treedir +.kite/>       Kite transient data directory.</treedir>
+</table><p>
+
+The project <root> directory will frequently contain other files, e.g., 
+<tt README> and <tt LICENSE> files, and of course other subdirectories may 
+be added as needed.<p>
+
+<section projtree.new "Creating New Project Trees">
+
+It is possible to set up a Kite project tree by hand, but it is more 
+usually to use the <tt kite new> command.  At present, <tt kite new>
+supports three templates:<p>
+
+<topiclist>
+<topic "<b lib>"> 
+A project that provides a Tcl library package for external use.
+The project includes stub documentation and the package's 
+<root lib/> and <root test/> directories.<p>
+</topic>
+
+<topic "<b app>">
+A project that provides an application, delivered as a standalone executable
+for the current platform.  The package includes the stub documentation,
+the application's loader script (<root "bin/<i name>.tcl">), and an 
+application implementation package called <tt><i name>app</tt>.  The 
+package includes both <root lib/> and <root test/> directories.
+The application's loader script calls the <tt main> command, which is
+defined by the implementation package.<p>
+</topic>
+
+<topic "<b appkit>">
+A project that provides an application, delivered as a "starkit".
+The project tree's contents are the same as for the <b app> template.<p>
+</topic>
+
+</topiclist>
+
+Other templates might be added over time, as well as support for
+project template plugins.<p>
+
+<section projtree.add "Adding Elements to a Project Tree">
+
+The tree created by <tt kite new> is just a starting point;
+additional elements can be added by hand, or by using <tt kite add>.<p>
+
+At present, <tt kite add> supports two element templates:<p>
+
+<topiclist>
+<topic "<b lib>"> 
+Adds a new library package called <i name> to the project tree, in the
+form of the package's <root lib/> and <root test/> directories, and
+updates the <xref projfile "project file"> accordingly.<p>
+</topic>
+
+<topic "<b app>">
+Adds a new application package called <i name> to the project tree, 
+including its loader script and its implementation package's  
+<root lib/> and <root test/> directories, and
+updates the <xref projfile "project file"> accordingly.<p>
+</topic>
+
+</topiclist>
+
+
+
 
 <hrule>
 
@@ -69,13 +192,13 @@ package ifneeded mylib 1.2.3 [list source [file join $dir pkgModules.tcl]] <mark
 </listing>
 
 <topiclist>
-<topic {<markref A>}>
+<topic {<bigmark A>}>
 These lines are Kite update marks.  They bracket code that Kite will update
 or replace as the project metadata changes.  In this case, the code is
 replaced altogether whenever the project's version number changes.<p>
 </topic>
 
-<topic {<markref B>}>
+<topic {<bigmark B>}>
 This is the <tt package ifneeded> command, which loads the package when
 it is required by the application.  There are several things to notice about
 this line:<p>
@@ -151,20 +274,20 @@ source [file join $::mylib::library module2.tcl]
 </listing>
 
 <topiclist>
-<topic "<markref A>">
+<topic "<bigmark A>">
 These lines are Kite update marks.  They bracket code that Kite will
 update or replace as the project metadata changes.  In this case, the 
 code is replaced altogether whenever the package version number changes.<p>
 </topic>
 
-<topic "<markref B>">
+<topic "<bigmark B>">
 This is the <tt package provide> command; it tells TCL the name and version
 number of the provided package.  The package version number should always
 match the project version number, and so Kite updates this block automatically
 whenever the project version number changes.<p>
 </topic>
 
-<topic "<markref C>">
+<topic "<bigmark C>">
 More Kite update marks.  Any <tt package require> statements found between
 these marks that correspond to libraries either <tt require>'d or 
 <tt provide>'d in the <xref projfile "project file"> will have their
@@ -172,14 +295,14 @@ version numbers updated.  Other lines will be left alone.  Note that
 the <tt package require> command must be the only thing on the line.<p>
 </topic>
 
-<topic "<markref D>">
+<topic "<bigmark D>">
 This is an example of a package that is <tt require>'d in the 
 project file.  Kite knows the desired version number, and will update this
 line to include it.  If the <tt -exact> flag is included, Kite will 
 preserve it.<p>
 </topic>
 
-<topic "<markref E>">
+<topic "<bigmark E>">
 This is an example of a package that is <tt provide>'d by this same
 project.  Because provided packages might be available in the local 
 teapot (see <xref tbd>), Kite always includes the <tt -exact> flag;
@@ -189,14 +312,14 @@ in deployment, and the version in the same project tree during
 development.<p>
 </topic>
 
-<topic "<markref F>">
+<topic "<bigmark F>">
 Every package gets a namespace with the same name.  It might or might
 not put its code in that namespace (application implementation packages
 often leave their code in the global namespace), but it's useful to 
 always have a private namespace.<p>
 </topic>
 
-<topic "<markref G>">
+<topic "<bigmark G>">
 Every package gets a variable called <tt library> in its private namespace.
 This variable contains the path of the package's directory, whether it's
 a normal disk directory or included in a virtual file system.  It's used
@@ -206,7 +329,7 @@ image files, the application can find them relative to
 <tt ::mylib::library>.<p>
 </topic>
 
-<topic "<markref H>">
+<topic "<bigmark H>">
 Finally, the package's modules are loaded in any logical sequence.  The
 idiom shown here, using <tt file join> with the package's 
 <tt library> variable, is guaranteed to work on every platform.<p>
@@ -267,20 +390,20 @@ proc ::mylib::myproc {text} { <mark C>
 }
 </listing>
 
-In general, a package module contains whatever code you need it to contain.
+In general, a package module contains whatever code you need it to contain.<p>
 
 <topiclist>
-<topic "<markref A>">
+<topic "<bigmark A>">
 Note that the module doesn't call either <tt package provide> or 
 <tt package require>.  That's the job of the <tt pkgModules.tcl> file.<p>
 </topic>
 
-<topic "<markref B>">
+<topic "<bigmark B>">
 You don't need to put your code in the package namespace; but if you do,
 you might want to export some commands.<p>
 </topic>
 
-<topic "<markref C>">
+<topic "<bigmark C>">
 You'll have to write this yourself.<p>
 </topic>
 
