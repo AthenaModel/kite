@@ -39,7 +39,7 @@ namespace eval ::kiteinfo:: {
         reqver-textutil::expander 1.3.1
         reqver-snit 2.3
         binary-kiteutils 0
-        pkgversion 0.1.5
+        pkgversion 0.1.6a0
         requires {platform snit textutil::expander zipfile::encode tls}
         shell {
     package require kiteutils
@@ -56,7 +56,7 @@ namespace eval ::kiteinfo:: {
         apptype-kite exe
         local-textutil::expander 0
         local-snit 0
-        version 0.1.5
+        version 0.1.6a0
         dists install
     }
 
