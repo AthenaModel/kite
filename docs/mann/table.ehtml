@@ -1,0 +1,65 @@
+<manpage {kiteutils(n) table(n)} "Table Formatting Utilities">
+
+<section SYNOPSIS>
+
+<pre>
+package require kiteutils <version>
+namespace import ::kiteutils::*
+</pre>
+
+<itemlist>
+
+<section DESCRIPTION>
+
+For the purposes of this module, a <i>table</i> is a list of dictionaries,
+usually with identical keys (or at least with a core of identical keys).<p>
+
+table(n) provides code for formatting text tables for console output;
+eventually, it might provide other table-related utilities as well.<p>
+
+<section COMMANDS>
+
+<deflist commands>
+
+<defitem "table format" {table format <i table> ?<i options...>?}>
+
+Formats the table for monospace text output, and returns the formatted
+text.  The options are as follows:<p>
+
+<deflist options>
+
+<defopt {-leader <i text>}>
+
+Adds the leader <i text> to the beginning of each line of the output.
+The leader defaults to the empty string.<p>
+
+<defopt {-headers}>
+
+If given, the output will include column headers.  The text of the 
+column headers is simply the key names in the table's dictionaries.
+Each column header label is separated from the column's data by a row
+of hyphens as wide as the column.<p>
+
+</deflist options>
+
+<defitem "table puts" {table puts <i table> ?<i options...>?}>
+
+This is a convenience command; it calls <iref table format> and 
+writes the result to standard out.<p>
+
+</deflist commands>
+
+<section ENVIRONMENT>
+
+Requires Tcl 8.6 or later.<p>
+
+<section AUTHOR>
+
+Will Duquette<p>
+
+</manpage>
+
+
+
+
+

@@ -6,16 +6,24 @@
 #   Will Duquette
 #
 # DESCRIPTION:
-#   Support for outputting text tables to the console.
-#
-#   An input table is a list of dictionaries with identical keys.
+#   kiteutils(n): Table formatting utilities.
+# 
+#   A table is a list of dictionaries with identical keys.
 #
 #-----------------------------------------------------------------------
+
+#-----------------------------------------------------------------------
+# Exported commands
+
+namespace eval ::kiteutils:: {
+    namespace export    \
+        table
+}
 
 #-----------------------------------------------------------------------
 # table ensemble.
 
-snit::type table {
+snit::type ::kiteutils::table {
     pragma -hasinstances no -hastypedestroy no
 
     #-------------------------------------------------------------------

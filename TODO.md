@@ -2,6 +2,7 @@
 
 ## Next
 
+* Test suite for table(n).
 * Cleanup:
   * Define a notion of ehtml(n) macro sets.
   * Compare docs.tcl with tool_docs.tcl and make sure there's a clean
@@ -37,22 +38,10 @@
 
 ## Notes
 
-* Default teapot:
-  * Making ~/.kite/teapot the default teapot means that
-    different users are in contention.
-  * Perhaps I should just make sure it's linked, and build
-    against it.
 * Test suites
   * kitedoc(n)
   * manpage(n)
 * When new athena/kite web server is available
-  * Support for "external documents"
-    * MS Office documents and similar will reside on a separate web server;
-      we'll update it as we change them.
-    * project.kite will have an "xdoc" statement:
-      * xdoc mag.docx http://...../mag3.5.docx
-    * External docs can be pulled in using a kite command, so that they
-      can be included in a build.
   * "Kite server" for locally built packages
 * To ponder
   * Consider using basekits from teapot.
