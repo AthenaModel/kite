@@ -47,7 +47,7 @@ tool define shell {
         cd [project root]
 
 
-        if {[project hasapp] && $opt ne "-plain"} {
+        if {[got [project app names]] && $opt ne "-plain"} {
             tclsh show $tkcon [project app loader [project app primary]]
         } else {
             set script [WriteShellInitializer]

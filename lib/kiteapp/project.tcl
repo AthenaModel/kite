@@ -256,14 +256,6 @@ snit::type project {
         return [expr {$info(name) ne ""}]
     }
 
-    # hasapp
-    #
-    # Returns 1 if the project defines an application.
-
-    typemethod hasapp {} {
-        return [expr {[llength $info(apps)] > 0}]
-    }
-
     # app names
     #
     # Returns the list of project app names, if any.

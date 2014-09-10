@@ -45,7 +45,7 @@ tool define run {
 
     typemethod execute {argv} {
         # FIRST, is there an app/appkit?
-        if {![project hasapp]} {
+        if {![got [project app names]]} {
             throw FATAL "The project.kite file doesn't define an application."
         }
 
