@@ -182,21 +182,17 @@ snit::type trees {
         puts "The application will be called \"$app\"."
 
         # NEXT, create the project root directory
-        project newroot $project
-
-        writefile [project root project.kite] [outdent "
-            project $project 0.0a1 \"Your Description\"
-            app $app -apptype exe -gui
-        "]\n
-
-        project loadinfo
+        project new $project
 
         # NEXT, create the rest of the tree.
+        # TODO: Refactor with tool_add.
+        project add app $app -apptype exe -gui
         subtree proj
         subtree app $app
 
         # NEXT, apply the project metadata to the code.
         metadata apply
+        project save
     }
 
     # appkit parent project app
@@ -219,21 +215,17 @@ snit::type trees {
         puts "The application will be called \"$app.kit\"."
 
         # NEXT, create the project root directory
-        project newroot $project
-
-        writefile [project root project.kite] [outdent "
-            project $project 0.0a1 \"Your Description\"
-            app $app
-        "]\n
-
-        project loadinfo
+        project new $project
 
         # NEXT, create the rest of the tree.
+        # TODO: Refactor with tool_add.
+        project add app $app -apptype kit
         subtree proj
         subtree app $app
 
         # NEXT, apply the project metadata to the code.
         metadata apply
+        project save
     }
 
 
@@ -256,20 +248,17 @@ snit::type trees {
         puts "Making a library project tree for project \"$project.\""
         puts "The library package will be called ${libname}(n)."
 
-        project newroot $project
+        # FIRST, create the project root directory
+        project new $project
 
-        writefile [project root project.kite] [outdent "
-            project $project 0.0a1 \"Your Description\"
-            provide $libname
-        "]\n
-
-        project loadinfo
-
-        # NEXT, generate the tree.
+        # NEXT, create the rest of the tree
+        project add lib $libname
         subtree proj
         subtree pkg $libname $libname
 
-        puts ""
+        # NEXT, apply the project metadata to the code.
+        metadata apply
+        project save
     }    
 }
 

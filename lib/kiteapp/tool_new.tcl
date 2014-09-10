@@ -94,6 +94,9 @@ tool define new {
         # The existing templates all take the first three arguments
         # with an optional fourth argument.
         trees $template $dirname $project $targ
+
+        metadata apply
+        project save
     }
     
 

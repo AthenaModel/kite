@@ -83,18 +83,6 @@ snit::type project {
     #-------------------------------------------------------------------
     # File and Directory Queries
 
-    # newroot name
-    #
-    # name   - A project name
-    #
-    # Creates a new project root directory with the given name, and 
-    # CD's into it.  Does not load or simulate any project metadata.
-
-    typemethod newroot {name} {
-        set rootdir [file join [pwd] $name]
-        file mkdir $rootdir
-    }
-
     # root ?names...?
     #
     # Find and return the directory containing the project.kite file, which
@@ -771,6 +759,28 @@ snit::type project {
     #-------------------------------------------------------------------
     # Saving project.kite with current metadata.
 
+    # new name ?description?
+    #
+    # name        - A project name
+    # description - The project's description.
+    #
+    # Creates a new project root directory with the given name, and 
+    # CD's into it.  Sets the initial project metadata.
+
+    typemethod new {name {description "Your project description"}} {
+        set rootdir [file join [pwd] $name]
+        file mkdir $rootdir
+        cd $rootdir
+
+        set info(name)        $name
+        set info(version)     "0.0.0a0"
+        set info(description) $description
+
+        project save
+        project loadinfo
+    }
+
+
     typemethod save {} {
         # FIRST, build up the contents.
         set script [list]
@@ -860,9 +870,11 @@ snit::type project {
 
         # NEXT, write it all out.
         try {
-            file copy -force \
-                [project root project.kite] \
-                [project root project.bak]
+            if {[file exists [project root project.kite]]} {
+                file copy -force \
+                    [project root project.kite] \
+                    [project root project.bak]
+            }
             writefile [project root project.kite] [join $script \n]
         } on error {result} {
             throw FATAL "Could not save new project.kite:\n$result"
