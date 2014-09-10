@@ -55,7 +55,7 @@ namespace eval ::kiteinfo:: {
         apptype-kite exe
         local-textutil::expander 0
         local-snit 0
-        version 0.1.6a1
+        version 0.2.0
         dists install
     }
 
