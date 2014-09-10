@@ -77,8 +77,8 @@ tool define add {
             }
         }     
 
-        project metadata save
-        project kitefile save
+        metadata apply
+        project save
     }
     
     # MakeApp name argv

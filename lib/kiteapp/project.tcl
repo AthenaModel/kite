@@ -102,8 +102,7 @@ snit::type project {
     # name for later.  If "names..." are given, join them to the 
     # dir name and return that.
     #
-    # If we cannot find the project directory, throw an error with
-    # code FATAL.
+    # Returns "" if the project directory cannot be found.
 
     typemethod root {args} {
         if {$rootdir eq ""} {
@@ -780,7 +779,7 @@ snit::type project {
     #-------------------------------------------------------------------
     # Saving project.kite with current metadata.
 
-    typemethod {kitefile save} {} {
+    typemethod save {} {
         # FIRST, build up the contents.
         set script [list]
 

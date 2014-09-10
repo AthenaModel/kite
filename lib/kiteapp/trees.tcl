@@ -195,8 +195,8 @@ snit::type trees {
         subtree proj
         subtree app $app
 
-        # NEXT, save the project metadata
-        project metadata save
+        # NEXT, apply the project metadata to the code.
+        metadata apply
     }
 
     # appkit parent project app
@@ -232,8 +232,8 @@ snit::type trees {
         subtree proj
         subtree app $app
 
-        # NEXT, save the project metadata
-        project metadata save
+        # NEXT, apply the project metadata to the code.
+        metadata apply
     }
 
 
