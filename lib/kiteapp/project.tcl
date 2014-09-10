@@ -463,17 +463,6 @@ snit::type project {
         return [list [project root lib]]
     }
 
-    # auto_path
-    #
-    # Returns the auto_path of the development Tcl shell in the project
-    # context.
-
-    typemethod auto_path {} {
-        return [tclsh script {
-            set auto_path
-        }]
-    }
-
     # zippath
     #
     # Returns the path where "kite build" puts teapot .zip packages,

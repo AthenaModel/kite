@@ -35,6 +35,19 @@ snit::type tclsh {
     #-------------------------------------------------------------------
     # tclsh commands
 
+    # auto_path
+    #
+    # Returns the auto_path of the development Tcl shell in the project
+    # context.
+
+    typemethod auto_path {} {
+        return [$type script {
+            set auto_path
+        }]
+    }
+
+
+
     # show args
     #
     # Calls the tclsh executable with the args, throwing a fatal
