@@ -69,7 +69,11 @@ proc main {argv} {
                 "Could not find project.kite in this directory or its parents"
         }
 
-        project load
+        try {
+            project load
+        } trap SYNTAX {result} {
+            throw FATAL "Could not load project file:\n--> $result"
+        }
     }
 
     # NEXT, If we have a project tree, the project metadata might have

@@ -50,6 +50,8 @@ source [file join $::kiteutils::library template.tcl   ]
 source [file join $::kiteutils::library tclchecker.tcl ]
 source [file join $::kiteutils::library smartinterp.tcl]
 
+source [file join $::kiteutils::library project.tcl    ]
+
 
 
 

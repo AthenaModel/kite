@@ -62,7 +62,6 @@ source [file join $::kiteapp::library tclsh.tcl           ]
 source [file join $::kiteapp::library teacup.tcl          ]
 
 # Project Metadata
-source [file join $::kiteapp::library project.tcl         ]
 source [file join $::kiteapp::library metadata.tcl        ]
 
 # Tool Infrastructure

@@ -2,6 +2,9 @@
 
 ## Next
 
+* Clean up "kite new" syntax.  
+  * In particular, provide option for description.
+
 * Test suite for table(n).
 * Cleanup:
   * Define a notion of ehtml(n) macro sets.
@@ -41,20 +44,13 @@
 * Test suites
   * kitedoc(n)
   * manpage(n)
-* When new athena/kite web server is available
-  * "Kite server" for locally built packages
 * To ponder
   * Consider using basekits from teapot.
 
 # Remaining Gaps #
 
-## For Mars
-
-* Install code/docs to home page/kite server?
-
 ## For Athena
 
 * "athena_test", which has needs beyond what [kite test] currently gives.
-* Install to Athena home page
 
 

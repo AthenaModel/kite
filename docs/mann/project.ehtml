@@ -1,0 +1,331 @@
+<manpage {kiteutils(n) project(n)} "Kite Project Metadata Manager">
+
+<section SYNOPSIS>
+
+<pre>
+package require kiteutils <version>
+namespace import ::kiteutils::*
+</pre>
+
+<itemlist>
+
+<section DESCRIPTION>
+
+Most modules in <xref kiteutils(n)> are intended for use by general
+applications.  The project(n) module is specifically for use by 
+Kite itself, and for external development tools that need access to 
+Kite project metadata.<p>
+
+In particular, project(n) contains the code to:<p>
+
+<ul>
+<li> Locate the root of the project tree containing the current working 
+directory, if any.
+<li> Load the project metadata from its <tt project.kite> file.
+<li> Make the metadata available to the client.
+<li> Update the metadata in certain ways.
+<li> Save an updated project.kite.
+<li> Create new, empty project trees.
+</ul>
+
+In general, the commands that modify or create project trees should be 
+left for Kite's use.<p>
+
+The <xref project(5)> man page defines the syntax of the 
+<tt project.kite> file.<p>
+
+
+<subsection "Reading Project Metadata">
+
+First, use <iref project root> to find the root directory of the project tree
+that contains the current working directory.  If it returns the empty string,
+you are not in a project tree.<p>
+
+Next, use <iref project load> to load the project metadata.  It will read
+the project's <tt project.kite> file, throwing <b SYNTAX> on error.<p>
+
+Next, use the various commands to query the metadata.<p>
+
+<section COMMANDS>
+
+<deflist commands>
+
+<defitem "project add" {project add <i subcommand> ?<i args...>?}>
+
+The subcommands of this command add new elements to the project
+metadata.  Note that they do not add anything to project tree itself;
+the code to create new project elements on the disk resides in Kite itself.
+As a result, these commands should be used only by Kite itself.<p>
+
+<deflist add>
+
+<defitem "project add app" {project add app <i name> ?<i options...>?}>
+
+Adds a new application to the project metadata, as though it had been
+read from <tt project.kite>.<p>
+
+<defitem "project add lib" {project add lib <i name> ?<i options...>?}>
+
+Adds a new provided library package to the project metadata, as though it 
+had been read from <tt project.kite>.<p>
+
+</deflist add>
+
+<defitem "project app" {project app <i subcommand> ?<i args...>?}>
+
+The subcommands of this command return information about any 
+applications defined by the project.<p>
+
+<deflist app>
+
+<defitem "project app names" {project app names}>
+
+Returns a list of the names of the applications defined by the project.<p>
+
+<defitem "project app primary" {project app primary}>
+
+Returns the name of the project's primary application (the first defined
+in the project file), or "" if the project doesn't include any applications.<p>
+
+<defitem "project app apptype" {project app apptype <i app>}>
+
+Returns the executable type for the named <i app>, <b kit> or <b exe>.<p>
+
+<defitem "project app gui" {project app gui <i app>}>
+
+Returns 1 if the named <i app> intends to use Tk, and 0 otherwise.<p>
+
+<defitem "project app loader" {project app loader <i app>}>
+
+Returns the name of the project's application loader script, which is 
+generally <tt><i root>/bin/<i app>.tcl</tt>.<p>
+
+<defitem "project app exefile" {project app exefile <i app>}>
+
+Returns the name of the executable produced for <i app> on the current
+platform.<p>
+
+</deflist app>
+
+<defitem "project description" {project description}>
+
+Returns the project's description string, a kind of project title.<p>
+
+<defitem "project dist" {project dist <i subcommand> ?<i args...>?}>
+
+The subcommands of this command return information about any
+distribution .zip files defined by the project.<p>
+
+<deflist dist>
+
+<defitem "project dist names" {project dist names}>
+
+Returns a list of the names of the distribution sets defined by
+the project.<p>
+
+<defitem "project dist patterns" {project dist patterns <i dist>}>
+
+Each distribution set is defined by a list of patterns which determine
+which files are included in the .zip file.  This command returns the
+list for the named <i dist> set.<p>
+
+</deflist dist>
+
+<defitem "project getinfo" {project getinfo}>
+
+This command returns a dictionary of all of the project's metadata.
+The return value is in an internal format which can change without
+notice.<p>
+
+<defitem "project globdirs" {project globdirs ?<i patterns...>?}>
+
+This command is like <iref project globroot>, but returns only the names
+of project directories that match the joined patterns.<p>
+
+<defitem "project globfiles" {project globfiles ?<i patterns...>?}>
+
+This command is like <iref project globroot>, but returns only the names
+of genuine files that match the joined patterns, i.e., it excludes
+directories and so forth.<p>
+
+<defitem "project globroot" {project globroot ?<i patterns...>?}>
+
+This command joins its arguments to the project's root directory, as
+<iref project root> does, and then passes the resulting pattern to 
+<tt><link "http://www.tcl.tk/man/tcl8.6/TclCmd/glob.htm" "glob"></tt>,
+returning the resulting list.  If no files are found, the result is
+the empty list.<p>
+
+<defitem "project hasinfo" {project hasinfo}>
+
+Returns 1 if project metadata has been successfully loaded, and 0
+otherwise.<p>
+
+<defitem "project intree" {project intree}>
+
+After <iref project root> has been called at least once, this command
+returns 1 if the current working directory is within a Kite project
+tree, and 0 otherwise.<p>
+
+<defitem "project intree" {project intree}>
+
+After <iref project root> has been called at least once, this command
+returns 1 if the current working directory is within a Kite project
+tree, and 0 otherwise.<p>
+
+<defitem "project load" {project load}>
+
+Attempts to load the project metadata from the <tt project.kite> file.
+Be sure to call <iref project root> first, and verify that there is a
+profile file to load.  Once the metadata has been loaded, 
+<iref project hasinfo> will return 1.<p>
+
+<defitem "project libpath" {project libpath}>
+
+Returns a Tcl list of library directories associated with this project.
+This is typically used to initialize TCL_LIB_PATH prior to invoking 
+an external tclsh.<p>
+
+<defitem "project name" {project name}>
+
+Returns the project's name.<p>
+
+<defitem "project new" {project new <i name> ?<i description>?}>
+
+Creates a new project called <i name> in a subdirectory of the current
+working also called <i name>.  The project's description defaults to 
+"Your project description".<p>
+
+This command is for use by Kite itself, and should be used with
+caution.<p>
+
+
+<defitem "project poc" {project poc}>
+
+Returns the e-mail address of the project's point-of-contact.<p>
+
+<defitem "project provide" {project provide <i subcommand> ?<i args...>?}>
+
+The subcommands of this command return information about any 
+library packages provided by the project for external use.<p>
+
+<deflist provide>
+
+<defitem "project provide names" {project provide names}>
+
+Returns a list of the names of the library packages 
+provided by the project.<p>
+
+<defitem "project provide binary" {project provide binary <i lib>}>
+
+Returns 1 if the named <i lib> is a compiled binary extension, and 0
+if it is pure-Tcl.<p>
+
+<defitem "project provide zipfile" {project provide zipfile <i lib>}>
+
+Provides the base name of the teapot .zip file Kite produces when building
+the provided library.<p>
+
+</deflist provide>
+
+<defitem "project require" {project require <i subcommand> ?<i args...>?}>
+
+The subcommands of this command return information about any 
+external library packages required by the project.<p>
+
+<deflist require>
+
+<defitem "project require names" {project require names}>
+
+Returns a list of the names of the external library packages
+required by the project.<p>
+
+<defitem "project require version" {project require version <i lib>}>
+
+Returns the version number of the named <i lib> that the project requires.<p>
+
+<defitem "project require islocal" {project require islocal <i lib>}>
+
+Returns 1 if the required <i lib> is locally built (and so must be
+installed manually by the developer) and 0 if it is available remotely
+(i.e., from <tt teapot.activestate.com>).<p>
+
+</deflist require>
+
+<defitem "project root" {project root ?<i args...>?}>
+
+Called with no arguments, this command locates the root directory of the 
+Kite project containing the current working directory, i.e., the directory
+in which <tt project.kite> is found.  If arguments are provided, they 
+are joined to the root directory as by 
+<tt><link "http://www.tcl.tk/man/tcl8.6/TclCmd/file.htm" "file join"></tt>
+and the result is returned.<p>
+
+If no project is found, the command returns the empty string whether it
+is given arguments or not.<p>
+
+<defitem "project save" {project save}>
+
+Saves the current metadata to <tt project.kite>.  This is useful only
+after using one of the <iref project add> commands, and should be left
+to Kite itself.<p>
+
+<defitem "project shell" {project shell}>
+
+Returns the shell initialization script defined in the project file,
+or "" if none.<p>
+
+<defitem "project src" {project src <i subcommand> ?<i args...>?}>
+
+The subcommands of this command return information about any 
+"<tt src>/" directories defined by the project.  "<tt src>/"
+directories usually contain non-Tcl code that needs to compiled and 
+built into a binary Tcl extension.<p>
+
+<deflist src>
+
+<defitem "project src names" {project src names}>
+
+Returns a list of the names of the "<tt src>/" directory names
+defined by the project.<p>
+
+<defitem "project src build" {project src build <i src>}>
+
+Returns the build command for the named <i src> directory, the 
+command used to compile the contents of the directory.<p>
+
+<defitem "project src clean" {project src clean <i src>}>
+
+Returns the clean command for the named <i src> directory, the
+command used to clean up all build products for the directory.<p>
+
+</deflist src>
+
+
+<defitem "project version" {project version}>
+
+Returns the project's version number, which must be a valid Tcl package 
+version number.<p>
+
+<defitem "project zippath" {project zippath}>
+
+Returns the absolute path of the directory in which Kite places the
+teapot .zip files it builds for provided library packages.<p>
+
+
+</deflist commands>
+
+<section ENVIRONMENT>
+
+Requires Tcl 8.6 or later.<p>
+
+<section AUTHORS>
+
+Will Duquette<p>
+
+</manpage>
+
+
+
+
+
