@@ -450,12 +450,12 @@ snit::type project {
     #-------------------------------------------------------------------
     # Reading the information from the project file.
 
-    # loadinfo
+    # load
     #
     # Loads the information from the project file.  We must be
     # in a project tree.
 
-    typemethod loadinfo {} {
+    typemethod load {} {
         # FIRST, set up the safe interpreter
         # TODO: Use a smartinterp(n), once we can claim Mars as an
         # external dependency.
@@ -777,7 +777,7 @@ snit::type project {
         set info(description) $description
 
         project save
-        project loadinfo
+        project load
     }
 
 

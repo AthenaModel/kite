@@ -69,7 +69,7 @@ proc main {argv} {
                 "Could not find project.kite in this directory or its parents"
         }
 
-        project loadinfo
+        project load
     }
 
     # NEXT, If we have a project tree, the project metadata might have
