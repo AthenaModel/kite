@@ -84,7 +84,7 @@ proc main {argv} {
     # stream of trivial changes into the VCS repository.
 
     if {[project hasinfo]} {
-        project metadata save
+        metadata apply
     }
 
     # NEXT, either run the user's script or use the selected tool,

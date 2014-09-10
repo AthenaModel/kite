@@ -42,8 +42,7 @@ snit::type project {
     # info - the project info array
     #
     #   name           - The project name
-    #   version        - The version number, x.y.z-suffix
-    #   pkgversion     - The version number, less suffix
+    #   version        - The version number, x.y.z
     #   description    - The project title
     #   poc            - Point-of-contact e-mail address
     #   shell          - Shell initialization script for "kite shell -plain"
@@ -71,7 +70,6 @@ snit::type project {
     typevariable info -array {
         name           ""
         version        ""
-        pkgversion     ""
         description    ""
         poc            ""
         apps           ""
@@ -201,6 +199,15 @@ snit::type project {
     #-------------------------------------------------------------------
     # Metadata Queries
 
+    # getinfo
+    #
+    # Returns a raw dictionary of all project metadata.  Note that
+    # this format can change without notice!
+
+    typemethod getinfo {} {
+        return [array get info]
+    }
+
     # teapot
     #
     # Returns the path to Kite's local teapot repository
@@ -219,18 +226,10 @@ snit::type project {
 
     # version
     #
-    # Returns the full version string.
+    # Returns the project version string.
 
     typemethod version {} {
         return $info(version)
-    }
-
-    # pkgversion
-    #
-    # Returns the [package require] form of the version string.
-
-    typemethod pkgversion {} {
-        return $info(pkgversion)
     }
 
     # description
@@ -558,7 +557,6 @@ snit::type project {
 
         set info(name)        $name
         set info(version)     $version
-        set info(pkgversion)  [lindex [split $version -] 0]
         set info(description) $description
     }
     
@@ -789,13 +787,13 @@ snit::type project {
 
     # Version? ver
     #
-    # ver   - A version number, e.g, 1.2.3-B12 or 1.2.3-SNAPSHOT.
+    # ver   - A Tcl version number, e.g, 1.2.3 or 1.2.3b2
     #
     # Validates the version, which must be a valid Tcl package 
-    # version number with an optional "-suffix".
+    # version number.
 
     proc Version? {ver} {
-        return [regexp {^(\d[.])*\d[.ab]\d(-\w+)?$} $ver]
+        return [regexp {^(\d[.])*\d[.ab]\d$} $ver]
     }
 
     #-------------------------------------------------------------------
@@ -897,122 +895,6 @@ snit::type project {
         } on error {result} {
             throw FATAL "Could not save new project.kite:\n$result"
         }
-    }
-    
-
-    #-------------------------------------------------------------------
-    # Saving project metadata for use by the project's own code.
-
-    # metadata save
-    #
-    # Saves the project metadata to disk as appropriate.
-
-    typemethod {metadata save} {} {
-        # FIRST, if there's an app save the kiteinfo package for
-        # its use.
-        if {[llength $info(apps)] > 0} {
-            subtree kiteinfo [array get info]
-        }
-
-        # NEXT, for each library in $root/lib, update its version number
-        # and requirements in the pkgIndex and pkgModules files.
-        # Packages can opt out by removing the "-kite" tags.
-        foreach lib [$type globdirs lib *] {
-            UpdateLibMetadata [file tail $lib]
-        }
-    }
-
-    # UpdateLibMetadata lib
-    #
-    # lib   - Name of a library package
-    #
-    # Updates the version number and requires in the pkgIndex.tcl and 
-    # pkgModules.tcl files for the given library.
-
-    proc UpdateLibMetadata {lib} {
-        try {
-            # FIRST, pkgIndex.tcl
-            set fname [project root lib $lib pkgIndex.tcl]
-
-            if {[file exists $fname]} {
-                set oldText [readfile $fname]
-                set content "package ifneeded $lib $info(pkgversion) "
-                append content \
-                    {[list source [file join $dir pkgModules.tcl]]}
-
-                set newText [blockreplace $oldText ifneeded $content]
-
-                writefile $fname $newText -ifchanged
-            }
-
-            # NEXT, pkgModules.tcl
-            set fname [project root lib $lib pkgModules.tcl]
-
-            if {[file exists $fname]} {
-                # FIRST, update "package provide".
-                set text1 [readfile $fname]
-                set content "package provide $lib $info(pkgversion)"
-                set text2 [blockreplace $text1 provide $content]
-
-                # NEXT, update "package require"
-                set newlines [list]
-                foreach line [blocklines $text2 require] {
-                    lappend newlines [UpdateRequireLine $line]
-                }
-
-                set content [join $newlines \n]
-                set text3 [blockreplace $text2 require $content]
-                writefile $fname $text3 -ifchanged
-            }
-        } trap POSIX {result} {
-            throw FATAL "Error updating \"$lib\" version: $result"
-        }
-    }
-
-    # UpdateRequireLine line
-    #
-    # line   - A line of text in a "require" block.
-    #
-    # Replaces "package require" versions with correct versions.
-
-    proc UpdateRequireLine {line} {
-        # FIRST, get the leader, and normalize the line.
-        regexp {^\s*} $line leader
-        set input [normalize $line]
-
-        # NEXT, is it a package require line?
-        if {![string match "package require *" $input]} {
-            return $line
-        } else {
-            set newline "${leader}package require "
-        }
-
-        # NEXT, is there a "-exact"?
-        set input [lrange [split $input] 2 end]
-        set exact 0
-
-        if {[lindex $input 0] eq "-exact"} {
-            set exact 1
-            lshift input
-        }
-
-        # NEXT, what package is it?
-        set pkg [lshift input]
-
-        if {$pkg in [project require names]} {
-            if {$exact} {
-                append newline "-exact "
-            }
-            append newline "$pkg "
-
-            append newline [project require version $pkg]
-        } elseif {$pkg in [project provide names]} {
-            append newline "-exact $pkg [project version]"
-        } else {
-            set newline $line
-        }
-
-        return $newline
     }
 }
 
