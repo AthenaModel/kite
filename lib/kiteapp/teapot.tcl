@@ -22,6 +22,15 @@ snit::type teapot {
     # Make it a singleton
     pragma -hasinstances no -hastypedestroy no
 
+    # local
+    #
+    # Returns the name of the local teapot Kite uses if the default
+    # ActiveTcl teapot is read-only.
+
+    typemethod local {} {
+        return [file normalize [file join ~ .kite teapot]]
+    }
+
     # create
     #
     # Creates the Kite teapot, if need be, and links it to the
@@ -32,13 +41,13 @@ snit::type teapot {
     typemethod create {} {
         # FIRST, create the teapot
         if {[$type state] eq "missing"} {
-            puts "Creating teapot at [project teapot]..."
-            teacup create [project teapot]
+            puts "Creating teapot at [teapot local]..."
+            teacup create [teapot local]
         }
 
         # NEXT, make it the default teapot.
         puts "Making Kite teapot the default installation teapot."
-        teacup default [project teapot] 
+        teacup default [teapot local] 
 
         # NEXT, suggest that the user link it.
         puts ""
@@ -62,14 +71,14 @@ snit::type teapot {
     typemethod link {} {
         puts "Linking Kite teapot to [plat pathto tclsh -required]..."
         try {
-            teacup link make [project teapot] [plat pathto tclsh]
+            teacup link make [teapot local] [plat pathto tclsh]
         } trap CHILDSTATUS {result eopts} {
             if {[string match "*cannot be written.*" $result]} {
                 puts "Error: $result"
                 puts ""
                 puts "Consider using 'sudo -E'.  See 'kite help teapot' for details.\n"
                 throw FATAL \
-                    "Failed to link [project teapot] to the tclsh."
+                    "Failed to link [teapot local] to the tclsh."
             } else {
                 # Rethrow
                 return {*}$eopts $result
@@ -85,11 +94,11 @@ snit::type teapot {
     typemethod remove {} {
         # FIRST, unlink the teapot.
         puts "Unlinking Kite teapot from [plat pathto tclsh -required]..."
-        teacup link cut [project teapot] [plat pathto tclsh]
+        teacup link cut [teapot local] [plat pathto tclsh]
 
         # NEXT, remove it.
-        puts "Removing [project teapot] from disk"
-        file delete -force [project teapot]
+        puts "Removing [teapot local] from disk"
+        file delete -force [teapot local]
     }
 
     #-------------------------------------------------------------------
@@ -106,11 +115,11 @@ snit::type teapot {
     # missing     - Project teapot does not exist
 
     typemethod state {} {
-        if {![file exists [project teapot]]} {
+        if {![file exists [teapot local]]} {
             return "missing"
         }
 
-        if {[project teapot] ne [teacup default]} {
+        if {[teapot local] ne [teacup default]} {
             return "non-default"
         }
 
@@ -130,7 +139,7 @@ snit::type teapot {
 
     proc TeapotIsLinked {} {
         expr {
-            [project teapot]     in [LinkedTeapots] &&
+            [teapot local]     in [LinkedTeapots] &&
             [plat pathto tclsh]  in [LinkedShells]            
         }
     }
@@ -140,7 +149,7 @@ snit::type teapot {
     # Retrieves the shells linked to the local teapot
 
     proc LinkedShells {} {
-        set links [teacup link info [project teapot]]
+        set links [teacup link info [teapot local]]
 
         foreach {dummy path} $links {
             set newpath [file normalize $path]

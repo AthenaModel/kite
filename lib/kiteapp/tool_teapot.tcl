@@ -83,8 +83,8 @@ tool define teapot {
     proc DisplayStatus {} {
         set state [teapot state]
 
-        # TODO: Should be [plat pathof teapot]
-        puts "Local teapot: [project teapot]\n"
+        # TODO: Maybe should be [plat pathof teapot]
+        puts "Local teapot: [teapot local]\n"
 
         switch -exact -- $state {
             missing {

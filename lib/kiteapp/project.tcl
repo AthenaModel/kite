@@ -208,14 +208,6 @@ snit::type project {
         return [array get info]
     }
 
-    # teapot
-    #
-    # Returns the path to Kite's local teapot repository
-
-    typemethod teapot {} {
-        return [file normalize [file join ~ .kite teapot]]
-    }
-
     # name
     #
     # Returns the project name.

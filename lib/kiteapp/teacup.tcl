@@ -145,9 +145,9 @@ snit::type teacup {
             }
         }
 
-        # Move the project teapot to the front.
-        ldelete repos [project teapot]
-        set repos [linsert $repos 0 [project teapot]]
+        # Move the local teapot to the front.
+        ldelete repos [teapot local]
+        set repos [linsert $repos 0 [teapot local]]
 
         return $repos
     }
