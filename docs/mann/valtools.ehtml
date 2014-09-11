@@ -1,0 +1,57 @@
+<manpage {kiteutils(n) valtools(n)} "Validation Tools">
+
+<section SYNOPSIS>
+
+<pre>
+package require kiteutils <version>
+namespace import ::kiteutils::*
+</pre>
+
+<itemlist>
+
+<section DESCRIPTION>
+
+valtools(n) contains commands to aid in the validation of user input.<p>
+
+<section COMMANDS>
+
+<deflist commands>
+
+<defitem prepare {prepare <i varname> ?<i options...>?}>
+
+Prepares the content of variable <i varname> for further validation.
+First, the content is trimmed of leading and trailing whitespace.  Then,
+the options are applied in order.  Some options transform the value; others
+can begin to validate it.  The latter throw <b INVALID> on error.<p>
+
+The options are as follows:<p>
+
+<deflist options>
+
+<defopt {-tolower}>
+The variable's value is converted to lower case.<p>
+
+<defopt {-toupper}>
+The variable's value is converted to upper case.<p>
+
+<defopt {-required}>
+Throws <b INVALID> if the value is the empty string.<p>
+
+</deflist options>
+
+</deflist commands>
+
+<section ENVIRONMENT>
+
+Requires Tcl 8.6 or later.<p>
+
+<section AUTHORS>
+
+Will Duquette<p>
+
+</manpage>
+
+
+
+
+

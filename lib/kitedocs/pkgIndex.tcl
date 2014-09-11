@@ -9,7 +9,7 @@
 #   kitedocs(n) package index.
 
 # -kite-ifneeded-start  DO NOT EDIT THIS BLOCK BY HAND
-package ifneeded kitedocs 0.2.0 [list source [file join $dir pkgModules.tcl]]
+package ifneeded kitedocs 0.2.1a0 [list source [file join $dir pkgModules.tcl]]
 # -kite-ifneeded-end
 
 

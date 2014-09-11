@@ -31,16 +31,6 @@ proc vputs {args} {
     }
 }
 
-# got list
-#
-# list - A list
-#
-# Returns 1 if list has at least one element, and 0 otherwise.
-
-proc got {list} {
-    return [expr {[llength $list] > 0}]
-}
-
 # clean text pattern...
 #
 # text    - A log text string
@@ -139,48 +129,6 @@ proc blocklines {text tag} {
     return $outlines
 }
 
-# prepare varname ?options?
-#
-# varname - The name of the parameter variable
-#
-# Options:
-#
-#   -required         - Value must not be ""
-#   -toupper          - Convert to upper case
-#   -tolower          - Convert to lower case
-#
-# Does a string trim on the named var's value, applies
-# any options, and puts the result back in the var.
-
-proc prepare {varname args} {
-    upvar 1 $varname var
-
-    set var [string trim $var]
-
-    while {[llength $args] > 0} {
-        set opt [lshift args] 
-
-        switch -exact -- $opt {
-            -tolower { 
-                set var [string tolower $var] 
-            }
-            
-            -toupper { 
-                set var [string toupper $var] 
-            }
-
-            -required {
-                if {$var eq ""} {
-                    throw SYNTAX "Missing $varname value"
-                }
-            }
-
-            default  { error "Unknown option: \"$opt\""}
-        }
-    }
-
-    return
-}
 
 # treefile path content
 #

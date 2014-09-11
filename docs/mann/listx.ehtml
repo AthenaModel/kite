@@ -17,6 +17,11 @@ listx(n) contains a set of list-manipulation commands.<p>
 
 <deflist>
 
+<defitem got {got <i>list</i>}>
+
+Returns 1 if the <i>list</i> has at least one element, and 0 if it is
+empty.<p>
+
 <defitem ladd {ladd <i>listvar value</i>}>
 
 Appends <i>value</i> to the list stored in <i>listvar</i>, only if it

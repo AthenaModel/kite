@@ -1,0 +1,89 @@
+# -*-Tcl-*-
+#-----------------------------------------------------------------------
+# TITLE:
+#    misc.test
+#
+# AUTHOR:
+#    Will Duquette
+#
+# DESCRIPTION:
+#    Tcltest test suite for kiteutils(n) valtools.tcl
+#
+#-----------------------------------------------------------------------
+
+#-----------------------------------------------------------------------
+# Initialize tcltest(n)
+
+if {[lsearch [namespace children] ::tcltest] == -1} {
+    package require tcltest 2.2 
+    eval ::tcltest::configure $argv
+}
+
+# Import tcltest(n)
+namespace import ::tcltest::*
+
+ 
+#-----------------------------------------------------------------------
+# Load the package to be tested
+
+source ../../lib/kiteutils/pkgModules.tcl
+
+namespace import kiteutils::*
+
+#-------------------------------------------------------------------
+
+
+#-------------------------------------------------------------------
+# prepare
+
+test prepare-1.1 {trims var} -body {
+    set parm "  my value  "
+    prepare parm
+    set parm
+} -result {my value}
+
+test prepare-1.2 {-tolower} -body {
+    set parm "My Value"
+    prepare parm -tolower
+    set parm
+} -result {my value}
+
+test prepare-1.3 {-toupper} -body {
+    set parm "My Value"
+    prepare parm -toupper
+    set parm
+} -result {MY VALUE}
+
+test prepare-1.3 {-required, success} -body {
+    set parm "My Value"
+    prepare parm -required
+} -result {}
+
+test prepare-2.1 {error, unknown option} -body {
+    set parm "My Value"
+    prepare parm -nonesuch
+} -returnCodes {
+    error
+} -result {Unknown option: "-nonesuch"}
+
+test prepare-2.2 {error, -required but empty} -body {
+    set parm ""
+    prepare parm -required
+} -returnCodes {
+    error
+} -result {Missing parm value}
+
+
+
+#-------------------------------------------------------------------
+# Cleanup
+
+cleanupTests
+
+
+
+
+
+
+
+

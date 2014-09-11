@@ -14,7 +14,7 @@
 # Package Definition
 
 # -kite-provide-start  DO NOT EDIT THIS BLOCK BY HAND
-package provide kiteutils 0.2.0
+package provide kiteutils 0.2.1a0
 # -kite-provide-end
 
 #-----------------------------------------------------------------------
@@ -49,6 +49,7 @@ source [file join $::kiteutils::library table.tcl      ]
 source [file join $::kiteutils::library template.tcl   ]
 source [file join $::kiteutils::library tclchecker.tcl ]
 source [file join $::kiteutils::library smartinterp.tcl]
+source [file join $::kiteutils::library valtools.tcl   ]
 
 source [file join $::kiteutils::library project.tcl    ]
 

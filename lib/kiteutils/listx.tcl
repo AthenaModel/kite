@@ -17,6 +17,7 @@
 
 namespace eval ::kiteutils:: {
     namespace export    \
+        got             \
         ladd            \
         ldelete         \
         lmaxlen         \
@@ -28,6 +29,17 @@ namespace eval ::kiteutils:: {
 
 #-----------------------------------------------------------------------
 # List functions
+
+# got list
+#
+# list - A list
+#
+# Returns 1 if list has at least one element, and 0 otherwise.
+
+proc ::kiteutils::got {list} {
+    return [expr {[llength $list] > 0}]
+}
+
 
 # ladd listvar value
 #

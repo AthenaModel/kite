@@ -28,6 +28,20 @@ namespace import ::tcltest::*
 source ../../lib/kiteutils/pkgModules.tcl
 namespace import ::kiteutils::*
 
+#-------------------------------------------------------------------
+# got
+
+test got-1.1 {empty list} -body {
+    got {}
+} -result {0}
+
+test got-1.2 {one item} -body {
+    got a
+} -result {1}
+
+test got-1.3 {two items} -body {
+    got [list a b]
+} -result {1}
 
 #-------------------------------------------------------------------
 # ladd
