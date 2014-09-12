@@ -88,7 +88,7 @@ tool define dist {
         }
 
         # NEXT, save the zip file.
-        set name "[project name]-[project version]-$target.zip"
+        set name [project dist zipfile $target]
 
         set fullname [project root $name]
         puts "Building distribution '$target' as\n  $fullname"

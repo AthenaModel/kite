@@ -457,6 +457,9 @@ snit::type project {
         return $info(clean-$src)
     }
 
+    #-------------------------------------------------------------------
+    # Metadata Query: Distributions
+
     # dist names
     #
     # Returns the list of "dist" target names.
@@ -464,9 +467,6 @@ snit::type project {
     typemethod {dist names} {} {
         return $info(dists)
     }
-
-    #-------------------------------------------------------------------
-    # Metadata Query: Distributions
 
     # dist patterns dist
     #
@@ -508,6 +508,17 @@ snit::type project {
 
         return $dict
     }
+
+    # dist zipfile dist
+    #
+    # dist  - A dist target name, as returned by [project dist names]
+    # 
+    # Returns the name of the distribution zipfile.
+
+    typemethod {dist zipfile} {dist} {
+        return "[project name]-[project version]-$dist.zip"       
+    }
+
 
     # GetDistApps 
     #

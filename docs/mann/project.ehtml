@@ -141,6 +141,11 @@ for the named <i dist> set.  The value is the full name of each file
 on the disk; the key is the name of the file in the distribution, 
 relative to the root directory of the distribution.<p>
 
+<defitem "project dist zipfile" {project dist zipfile <i dist>}>
+
+This command returns the name of the distribution .zip file for
+this <i dist> set.<p>
+
 </deflist dist>
 
 <defitem "project getinfo" {project getinfo}>
