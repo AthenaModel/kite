@@ -129,6 +129,13 @@ Each distribution set is defined by a list of patterns which determine
 which files are included in the .zip file.  This command returns the
 list for the named <i dist> set.<p>
 
+<defitem "project dist files" {project dist files <i dist>}>
+
+This command returns a dictionary of the files that match the patterns
+for the named <i dist> set.  The value is the full name of each file
+on the disk; the key is the name of the file in the distribution, 
+relative to the root directory of the distribution.<p>
+
 </deflist dist>
 
 <defitem "project getinfo" {project getinfo}>

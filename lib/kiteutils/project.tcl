@@ -184,7 +184,7 @@ snit::type project {
     }
 
     #-------------------------------------------------------------------
-    # Metadata Queries
+    # Metadata Queries: General
 
     # getinfo
     #
@@ -193,6 +193,23 @@ snit::type project {
 
     typemethod getinfo {} {
         return [array get info]
+    }
+
+    # intree
+    #
+    # Returns 1 if we're in a project tree, and 0 otherwise.
+
+    typemethod intree {} {
+        return [expr {$rootdir ne ""}]
+    }
+
+    # hasinfo
+    #
+    # Returns 1 if we've successfully loaded project info, and
+    # 0 otherwise.
+
+    typemethod hasinfo {} {
+        return [expr {$info(name) ne ""}]
     }
 
     # name
@@ -227,23 +244,40 @@ snit::type project {
         return $info(poc)
     }
 
-    # intree
+    # shell
     #
-    # Returns 1 if we're in a project tree, and 0 otherwise.
+    # Returns the shell initialization script.
 
-    typemethod intree {} {
-        return [expr {$rootdir ne ""}]
+    typemethod shell {} {
+        return $info(shell)
     }
 
-    # hasinfo
+    # libpath
     #
-    # Returns 1 if we've successfully loaded project info, and
-    # 0 otherwise.
+    # Returns a Tcl list of library directories associated with this 
+    # project.
 
-    typemethod hasinfo {} {
-        return [expr {$info(name) ne ""}]
+    typemethod libpath {} {
+        return [list [project root lib]]
     }
 
+    # zippath
+    #
+    # Returns the path where "kite build" puts teapot .zip packages,
+    # creating the directory if needed.
+
+    typemethod zippath {} {
+        set path [project root .kite libzips]
+        file mkdir $path
+        return $path
+    }
+
+    
+
+
+    #-------------------------------------------------------------------
+    # Metadata Query: Applications
+    
     # app names
     #
     # Returns the list of project app names, if any.
@@ -308,6 +342,9 @@ snit::type project {
         }
     }
 
+    #-------------------------------------------------------------------
+    # Metadata Query: Provided Libraries
+
     # provide names
     #
     # Returns the list of provide names.
@@ -343,6 +380,9 @@ snit::type project {
         return "package-$name-$ver-$plat.zip"
     }
 
+    #-------------------------------------------------------------------
+    # Metadata Query: Required Packages    
+
     # require names
     #
     # Returns the list of required package names.
@@ -370,6 +410,9 @@ snit::type project {
     typemethod {require islocal} {name} {
         return $info(local-$name)
     }
+
+    #-------------------------------------------------------------------
+    # Metadata Query: Source Directories
 
     # src names
     #
@@ -407,6 +450,9 @@ snit::type project {
         return $info(dists)
     }
 
+    #-------------------------------------------------------------------
+    # Metadata Query: Distributions
+
     # dist patterns dist
     #
     # dist  - A dist target name, as returned by [project dist names]
@@ -417,35 +463,124 @@ snit::type project {
         return $info(distpat-$dist)
     }
 
-    # shell
+    # dist files dist
     #
-    # Returns the shell initialization script.
+    # dist  - A dist target name, as returned by [project dist names]
+    #
+    # Returns a dictionary of files in the named distribution; the key
+    # is the relative path for the .zip file and the value is the 
+    # absolute path of the source file.
 
-    typemethod shell {} {
-        return $info(shell)
+    typemethod {dist files} {dist} {
+        # FIRST, get the files that match the dist patterns.
+        set patterns $info(distpat-$dist)
+
+        set trans(counter) 0
+
+        set dict [dict create]
+        while {[got $patterns]} {
+            set pattern [lshift patterns]
+
+            switch -exact -- $pattern {
+                %apps   { set newdict [GetDistApps]                  }
+                %libs   { set newdict [GetDistLibs]                  }
+                %get    { set newdict [GetDistURL [lshift patterns]] }
+                default { set newdict [GetDistFiles $pattern]        }
+            }
+
+            set dict [dict merge $dict $newdict]
+        }
+
+        return $dict
     }
 
-    # libpath
+    # GetDistApps 
     #
-    # Returns a Tcl list of library directories associated with this 
-    # project.
+    # Gets a dictionary of the as-built names of the project's 
+    # applications, by destination path.
 
-    typemethod libpath {} {
-        return [list [project root lib]]
+    proc GetDistApps {} {
+        set dict [dict create]
+        foreach name [project app names] {
+            set filename [project root bin [project app exefile $name]]
+            if {[file isfile $filename]} {
+                dict set dict bin/[file tail $filename] $filename
+            }
+        }
+
+        return $dict
     }
 
-    # zippath
+    # GetDistLibs 
     #
-    # Returns the path where "kite build" puts teapot .zip packages,
-    # creating the directory if needed.
+    # Gets a dictionary of the library packages by destination path.
 
-    typemethod zippath {} {
-        set path [project root .kite libzips]
-        file mkdir $path
-        return $path
+    proc GetDistLibs {} {
+        set dict [dict create]
+        set pattern "package-*-[project version]-*.zip"
+
+        foreach name [project globfiles .kite libzips $pattern] {
+            set dfile lib/[file tail $name]
+            dict set dict $dfile $name 
+        }
+
+        return $dict
     }
 
-    
+    # GetDistURL pair
+    #
+    # pair  - a dfile/URL pair.
+    #
+    # Plucks the document at the URL, and returns an fdict.
+
+    proc GetDistURL {pair} {
+        lassign $pair dfile url
+        set f [file tempfile pfile]
+        close $f
+
+        try {
+            pluck file $pfile $url
+        } trap NOTFOUND {result} {
+            throw FATAL [outdent "
+                Could not %get file \"$dfile\" from URL:
+                $url
+                => $result
+            "]
+        }
+
+        return [dict create $dfile $pfile]
+    }
+
+    # GetDistFiles pattern
+    #
+    # Gets arbitrary files given a glob pattern and returns a dictionary
+    # of file paths by destination path.
+
+    proc GetDistFiles {pattern} {
+        set dict [dict create]
+
+        foreach filename [project globfiles {*}[split $pattern /]] {
+            dict set dict [Unroot $filename] $filename
+        }
+
+        return $dict
+    } 
+
+    # Unroot filename
+    #
+    # filename  - Absolute path to a project file
+    #
+    # Removes the absolute project root.
+
+    proc Unroot {filename} {
+        set slen [string length [project root]]
+        set relfile [string replace $filename 0 $slen]
+
+        return $relfile
+    }
+
+
+
 
     #-------------------------------------------------------------------
     # Reading the information from the project file.

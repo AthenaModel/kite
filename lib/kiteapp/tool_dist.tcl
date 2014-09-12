@@ -80,121 +80,20 @@ tool define dist {
         # FIRST, create the encoder.
         set e [zipfile::encode %AUTO%]
 
-        # NEXT, get the files that match the pattern.
-        set patterns [project dist patterns $target]
-        set trans(counter) 0
+        # NEXT, populate the zip file.
         set zroot [project name]
 
-        while {[got $patterns]} {
-            set pattern [lshift patterns]
-
-            switch -exact -- $pattern {
-                %apps   { set dict [GetApps]                  }
-                %libs   { set dict [GetLibs]                  }
-                %get    { set dict [GetURL [lshift patterns]] }
-                default { set dict [GetFiles $pattern]        }
-            }
-
-            dict for {zfile dfile} $dict {
-                $e file: $zroot/$zfile 0 $dfile
-            }
+        dict for {zfile pfile} [project dist files $target] {
+            $e file: $zroot/$zfile 0 $pfile
         }
 
         # NEXT, save the zip file.
-        set name "[project name]-[project version]"
-        if {$target ne "install"} {
-            append name "-$target"
-        }
-        append name ".zip"
+        set name "[project name]-[project version]-$target.zip"
 
         set fullname [project root $name]
         puts "Building distribution '$target' as\n  $fullname"
         $e write $fullname
         rename $e ""
-    }
-
-    # GetFiles pattern
-    #
-    # Gets arbitrary files given a glob pattern and returns a dictionary
-    # of file paths by destination path.
-
-    proc GetFiles {pattern} {
-        set dict [dict create]
-
-        foreach filename [project globfiles {*}[split $pattern /]] {
-            dict set dict [zfile $filename] $filename
-        }
-
-        return $dict
-    } 
-
-    # GetApps 
-    #
-    # Gets a dictionary of the as-built names of the project's 
-    # applications, by destination path.
-
-    proc GetApps {} {
-        set dict [dict create]
-        foreach name [project app names] {
-            set filename [project root bin [project app exefile $name]]
-            if {[file isfile $filename]} {
-                dict set dict [zfile $filename] $filename
-            }
-        }
-
-        return $dict
-    }
-
-    # GetLibs 
-    #
-    # Gets a dictionary of the files to zip by destination path.
-
-    proc GetLibs {} {
-        set dict [dict create]
-        set pattern "package-*-[project version]-*.zip"
-
-        foreach name [project globfiles .kite libzips $pattern] {
-            set zfile [project name]/[file tail $name]
-            dict set dict $zfile $name 
-        }
-
-        return $dict
-    }
-
-    # GetURL pair
-    #
-    # pair  - a zfile/URL pair.
-    #
-    # Plucks the document at the URL, and returns an fdict.
-
-    proc GetURL {pair} {
-        lassign $pair zfile url
-        set dfile [project root .kite tempfile[incr trans(counter)]]
-
-        try {
-            pluck file $dfile $url
-        } trap NOTFOUND {result} {
-            throw FATAL [outdent "
-                Could not %get file \"$zfile\" from URL:
-                $url
-                => $result
-            "]
-        }
-
-        return [dict create $zfile $dfile]
-    }
-
-    # zfile filename
-    #
-    # filename  - Absolute path to a project file
-    #
-    # Removes the absolute project root.
-
-    proc zfile {filename} {
-        set slen [string length [project root]]
-        set relfile [string replace $filename 0 $slen]
-
-        return $relfile
     }
 }
 
