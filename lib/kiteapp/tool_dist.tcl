@@ -81,10 +81,8 @@ tool define dist {
         set e [zipfile::encode %AUTO%]
 
         # NEXT, populate the zip file.
-        set zroot [project name]
-
         dict for {zfile pfile} [project dist files $target] {
-            $e file: $zroot/$zfile 0 $pfile
+            $e file: $zfile 0 $pfile
         }
 
         # NEXT, save the zip file.

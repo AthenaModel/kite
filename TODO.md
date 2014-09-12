@@ -2,7 +2,8 @@
 
 ## Next
 
-* Executable names in bin should include version number and architecture.
+* Add %install target to dist; includes an installation script
+  * a list of bash commands.
 * Clean up "kite new" syntax.  
   * In particular, provide option for description.
 
