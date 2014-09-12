@@ -325,20 +325,35 @@ snit::type project {
         return [project root bin $app.tcl]
     }
 
-    # app exefile app
+    # app binfile app
     #
     # app - The application name
     #
     # Returns the app's executable file, given its app type and
-    # the platform.
+    # the platform, as built in the project bin directory.
 
-    typemethod {app exefile} {app} {
+    typemethod {app binfile} {app} {
         if {[project app apptype $app] eq "kit"} {
-            return $app.kit
+            return $app-[project version]-tcl.kit
         } elseif {[project app apptype $app] eq "exe"} {
-            return [os exefile $app-[os flavor]]
+            return [os exefile $app-[project version]-[platform::identify]]
         } else {
             error "Unknown application type"
+        }
+    }
+
+    # app installfile app
+    #
+    # app - The application name
+    #
+    # Returns the name of the application file as it is installed into 
+    # the user's ~/bin directory.
+
+    typemethod {app installfile} {app} {
+        if {[project app apptype $app] eq "kit"} {
+            return $app
+        } else {
+            return [os exefile $app]
         }
     }
 
@@ -502,7 +517,7 @@ snit::type project {
     proc GetDistApps {} {
         set dict [dict create]
         foreach name [project app names] {
-            set filename [project root bin [project app exefile $name]]
+            set filename [project root bin [project app binfile $name]]
             if {[file isfile $filename]} {
                 dict set dict bin/[file tail $filename] $filename
             }

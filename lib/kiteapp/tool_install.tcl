@@ -161,15 +161,11 @@ tool define install {
             file mkdir [file join ~ bin]
 
             # NEXT, get source and target
-            set source [project root bin [project app exefile $app]]
+            set source [project root bin [project app binfile $app]]
 
-            set target [file join ~/bin [os exefile $app]]
+            set target1 [file join ~ bin [project app binfile $app]]
+            set target2 [file join ~ bin [project app installfile $app]]
 
-            if {[project app apptype $app] eq "kit"} {
-                set target [file join ~ bin $app]
-            } elseif {[project app apptype $app] eq "exe"} {
-                set target [file join ~ bin [os exefile $app]]
-            }
 
             if {![file exists $source]} {
                 puts [outdent "
@@ -178,8 +174,11 @@ tool define install {
                 return
             }
 
-            puts "Installing $app to '$target'"
-            file copy -force -- $source $target
+            puts "Installing $app to '$target1'"
+            file copy -force -- $source $target1
+
+            puts "Installing $app to '$target2'"
+            file copy -force -- $source $target2
         } on error {result} {
             throw FATAL $result
         }

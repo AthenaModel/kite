@@ -189,7 +189,7 @@ tool define build {
     proc BuildApp {app} {
         # FIRST, get relevant data
         set main    [project app loader $app]
-        set exefile [project app exefile $app]
+        set exefile [project app binfile $app]
         set exepath [project root bin $exefile]
 
         # NEXT, do we have the main script
@@ -395,7 +395,7 @@ tool define build {
 
     proc getapps {} {
         foreach name [project app names] {
-            lappend result [project root bin [project app exefile $name]]
+            lappend result [project root bin [project app binfile $name]]
         }
 
         return $result

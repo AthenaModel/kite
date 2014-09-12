@@ -2,7 +2,7 @@
 
 ## Next
 
-* Executable names in bin should include version number.
+* Executable names in bin should include version number and architecture.
 * Clean up "kite new" syntax.  
   * In particular, provide option for description.
 

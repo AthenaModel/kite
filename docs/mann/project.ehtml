@@ -100,9 +100,14 @@ Returns 1 if the named <i app> intends to use Tk, and 0 otherwise.<p>
 Returns the name of the project's application loader script, which is 
 generally <tt><i root>/bin/<i app>.tcl</tt>.<p>
 
-<defitem "project app exefile" {project app exefile <i app>}>
+<defitem "project app binfile" {project app binfile <i app>}>
 
 Returns the name of the executable produced for <i app> on the current
+platform, as found in the project's <tt bin/> directory.<p>
+
+<defitem "project app installfile" {project app installfile <i app>}>
+
+Returns the name of the executable installed for <i app> on the current
 platform.<p>
 
 </deflist app>
