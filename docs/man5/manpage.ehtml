@@ -221,6 +221,14 @@ expands to a link to <iref defitem>.<p>
 If the item name has multiple tokens, there is no need to quote them;
 <iref iref>'s arguments are accumulated into a single item name.<p>
 
+<defitem tclsh {<lb>tclsh script<rb>}>
+
+Executes the script in a Tcl interpreter, and returns the result.  The
+precise interpreter is determined by the <tt -tclshcmd> passed to 
+<xref manpage(n) "manpage(n)'s format subcommand">.  This is used by 
+Kite to allow man pages to execute code in the context of the project's
+code base, thus allowing automatic documentation generation.<p>
+
 <defitem version {<lb>version<rb>}>
 
 Returns the project version number, as provided to 

@@ -2,6 +2,14 @@
 
 ## Next
 
+* Add a "-shellcmd" to manpage(n).  It takes a Tcl script, executes it,
+  and returns the result, executing it in the context of the project's 
+  code.
+  * Then, add a "tclsh" command that executes a script in the context
+    of the project and return the result.  We can use this to get 
+    documentation from user code.
+  * Get rid of the -libpath, as it's a bad idea.
+
 * Add %install target to dist; includes an installation script
   * a list of bash commands.
 * Clean up "kite new" syntax.  

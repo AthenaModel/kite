@@ -90,6 +90,7 @@ snit::type ::kitedocs::manpage {
     #   -section text      - Manpage Section Title
     #   -manroots dict     - ehtml(n) "manroots"
     #   -libpath           - Library path for macros
+    #   -tclshcmd          - Command to pass script to tclsh
     #
     # Formats the man pages in a man page directory.
 
@@ -102,6 +103,7 @@ snit::type ::kitedocs::manpage {
             section     "Project Man Pages"
             manroots    {: ../man%s/%n.html}
             libpath     {}
+            tclshcmd    {}
         }
 
         # NEXT, initialize the ehtml processor.
@@ -138,7 +140,6 @@ snit::type ::kitedocs::manpage {
                 -description {
                     set info(description) $val
                 }
-
                 -manroots {
                     set val [dict merge $info(manroots) $val]
                     set info(manroots) $val
@@ -148,6 +149,9 @@ snit::type ::kitedocs::manpage {
                 }
                 -libpath {
                     set info(libpath) $val
+                }
+                -tclshcmd {
+                    set info(tclshcmd) $val
                 }
                 default {
                     error "Unknown option: \"$opt\""
@@ -278,6 +282,9 @@ snit::type ::kitedocs::manpage {
 
         $ehtml smartalias /example 0 0 {} \
             [myproc /example]
+
+        $ehtml smartalias tclsh 1 1 {script} \
+            [myproc tclsh]
     }
     
 
@@ -766,6 +773,18 @@ snit::type ::kitedocs::manpage {
         }]
         </ul>
     }
+
+    #-------------------------------------------------------------------
+    # tclsh support
+
+    proc tclsh {script} {
+        if {$info(tclshcmd) eq ""} {
+            throw CONFIG "No -tclshcmd is defined; 'tclsh' is not available"
+        }
+
+        return [callwith $info(tclshcmd) $script]
+    }
+    
 }
 
 

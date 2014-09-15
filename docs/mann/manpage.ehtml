@@ -63,7 +63,7 @@ index page.<p>
 
 <defopt {-libpath <i>path</i>}>
 
-At times it is useful to load a module being documented into the 
+<b DEPRECATED!> At times it is useful to load a module being documented into the 
 macro interpreter, so that it can help to generate its own documentation.
 The module will usually need to be "package require"'d, which means the
 <tt auto_path> needs to be set up properly.  If this option's value is
@@ -81,6 +81,13 @@ Note that <xref ehtml(5) xref> will automatically map unqualified man
 page references to <i>srcdir</i> and its siblings.  If a manpage references
 "kitedocs(5)", for example, it will be linked to as 
 "../man5/kitedocs.html".<p>
+
+<defopt {-tclshcmd <i cmd>}>
+
+The <lb><xref manpage(5) tclsh><rb> macro passes its argument to this 
+command for processing,
+and displays the result.  When used by Kite, it is set to a command 
+that executes the script in the context of the project's code base.<p>
 
 </deflist options>
 
