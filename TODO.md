@@ -9,6 +9,9 @@
     of the project and return the result.  We can use this to get 
     documentation from user code.
   * Get rid of the -libpath, as it's a bad idea.
+* Define a macroset(i) interface.
+  * Then, define a kite macroset, loaded by 'kite docs', that defines
+    "withlib" and similar tools.
 
 * Add %install target to dist; includes an installation script
   * a list of bash commands.

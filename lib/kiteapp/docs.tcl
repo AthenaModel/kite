@@ -204,7 +204,6 @@ snit::type docs {
                 -version     [project version]               \
                 -description [project description]           \
                 -section     "($num) $manpageSections($num)" \
-                -libpath     [tclsh auto_path]               \
                 -tclshcmd    [list tclsh script]             \
                 -manroots {
                     tcl: http://www.tcl.tk/man/tcl8.6/TclCmd/%n.htm
