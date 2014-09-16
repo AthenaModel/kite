@@ -2,16 +2,25 @@
 
 ## Next
 
-* Add a "-shellcmd" to manpage(n).  It takes a Tcl script, executes it,
-  and returns the result, executing it in the context of the project's 
-  code.
-  * Then, add a "tclsh" command that executes a script in the context
-    of the project and return the result.  We can use this to get 
-    documentation from user code.
-  * Get rid of the -libpath, as it's a bad idea.
 * Define a macroset(i) interface.
+  * Add macro(n) to kiteutils
+  * Add ehtmlset(n) to kitedocs
+  * Make kitedoc(n) use ehtmlset(n).
+  * Make manpage(n) use ehtmlset(n).
+  * Remove ehtml(n)
+  * Rename ehtmlset(n) to ehtml(n)
+  * Add <tag>, <xtag> to ehtml(n).
+  * Move relevant macrosets to ehtml(n), for sharing.
+  * Clean-up CSS.
+  * Revise manpages:
+    * ehtml(n)
+    * macro(5)
+    * ehtml(5)
+    * kitedoc(5)
+    * manpage(5)
   * Then, define a kite macroset, loaded by 'kite docs', that defines
     "withlib" and similar tools.
+
 
 * Add %install target to dist; includes an installation script
   * a list of bash commands.
