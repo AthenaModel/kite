@@ -1,0 +1,135 @@
+<manpage macro(5) "Basic macro(n) macros">
+
+<section SYNOPSIS>
+
+<itemlist>
+
+<section DESCRIPTION>
+
+This man page defines the basic macros provided by the 
+<xref macro(n)> macro processor.<p>
+
+<subsection "Basic Syntax">
+
+The body of the input text can have any desired format.  The standard
+macro expansion brackets are "<lb>" and "<rb>"; anything between these brackets
+is evaluated as a Tcl script in the macro processor's interpreter and
+its return value inserted into the output in the macro's place.<p>
+
+<subsection "Two-Pass Expansion">
+
+<xref macro(n)> expands its input twice.  Individual macros can customize
+their behavior based on which pass it is.  A section-header macro, for
+example, might contribute to an index on the first pass and actually
+output the header on the second.  A table-of-contents macro might do
+nothing on the first pass and output the table-of-contents on the second,
+based on the indices built up during the first pass.<p>
+
+The pass number is returned by the <xref macro(n)> object's 
+<xref macro(n) pass> method, and by the <iref pass> macro.<p>
+
+<section "BASIC MACROS">
+
+<xref macro(n)> defines a small number of standard macros, as follows.
+Usually, specific macro languages based on <xref macro(n)> will define
+there own.  Note that these macros are simply Tcl commands; you can define
+your own macros as described in <xref "DEFINING MACROS">.<p>
+
+<deflist macros>
+
+
+<defitem expand "<lb>expand <i text><rb>">
+
+Performs a macro expansion on its input.  This is primarily useful for
+expanding documentation text for a module that computes its documentation
+and returns it in <xref ehtml(5)> format.<p>
+
+<defitem lb "<lb>lb<rb>">
+
+Returns the left-hand macro bracket, e.g., "<code><lb></code>".
+Formats that produce HTML will usually redefine this to product the
+appropriate HTML attribute.<p>
+
+
+<defitem pass "<lb>pass<rb>">
+
+Returns the pass number.<p>
+
+<defitem proc "<lb>proc <i name arglist body><rb>">
+
+This is simply the normal Tcl <tt proc> command.  It can be used 
+in-line to define new macros.<p>
+
+<defitem rb "<lb>rb<rb>">
+
+Returns the right-hand macro bracket, e.g., "<code><rb></code>".<p>
+
+<defitem swallow "<lb>swallow {<i>Tcl commands</i>}<rb>">
+
+This macro is mostly used when defining macros inline in a
+manpage.  It executes the <i>Tcl commands</i>, and returns nothing;
+because it returns nothing, it doesn't affect the output.<p>
+
+See <xref "DEFINING MACROS"> for an example.<p>
+
+<defitem template "<lb>template <i>name arglist</i> ?<i>initbody</i>? <i>template</i><rb>">
+
+Defines a new macro using a template.  The arguments are the same as for
+<xref template(n)>'s <xref template(n) template> command.<p>
+
+<defitem tsubst "<lb>tsubst <i>tstring</i><rb>">
+
+Substitutes variables and commands into a string.  The semantics are the
+same as for 
+<xref template(n)>'s <xref template(n) tsubst> command.<p>
+
+</deflist macros>
+
+
+<section "DEFINING MACROS">
+
+macro(5) macros have Tcl syntax; in fact, a macro can contain 
+arbitrary Tclcode.  In particular, the input can define new
+macros using the standard Tcl <tt>proc</tt> command or the
+<iref template> command.  This is sometimes done in
+conjunction with the <iref swallow> macro, to avoid including the
+output in the finished man page.<p>
+
+For example, here's the definition of a macro that returns a timestamp
+using Tcl's <tt>clock</tt> command:<p>
+
+<example>
+<lb>proc timestamp {} {
+    return [clock format [clock seconds]]
+}<rb>
+</example>
+
+When writing macros, remember that macro(n) usually makes <b>two passes</b>
+over its input, and so every macro will be executed <b>twice</b>.
+This is usually only a problem when a macro is accumulating data into
+a Tcl variable in the first pass so that it can be used during the
+second pass (e.g., to output an accumulated list, such as a table of
+contents).<p>
+
+In such a case, the macro can use <xref macro(n)>'s
+<xref macro(n) pass> method or the <iref pass> macro 
+to find out which pass it is.<p>
+
+<section AUTHOR>
+
+Will Duquette<p>
+
+<section HISTORY>
+
+Originally written for JNEM as jnem_ehtml(5); migrated to Mars in
+September 2008, and moved to Kite in July 2014.<p>
+
+
+</manpage>
+
+
+
+
+
+
+

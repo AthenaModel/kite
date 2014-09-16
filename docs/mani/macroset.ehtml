@@ -1,0 +1,65 @@
+<manpage {macroset(i)} "macro(n) Macro Set">
+
+<section SYNOPSIS>
+
+<pre>
+package require kiteutils <version>
+namespace import ::kiteutils::*
+</pre>
+
+<itemlist>
+
+<section DESCRIPTION>
+
+macroset(i) is an interface for defining macro sets for the 
+<xref macro(n)> macro processor.  A macro set is an object that
+defines one or more macros in the context of a given instance of
+<xref macro(n)> via its <iref install> method.<p>
+
+Macro sets are registered with an instance of <xref macro(n)>
+using the <xref macro(n)> <xref macro(n) register> method.<p>
+
+
+<section COMMANDS>
+
+A macroset(i) object is a command or command prefix that takes the
+following subcommands:<p>
+
+<deflist commands>
+
+<defitem install {<i macroset> install <i>macro</i>}>
+
+Installs the macro set's macros into the <xref macro(n)> instance
+called <i macro>.  The command may use any of <xref macro(n)>'s
+usual mechanisms to define macros.<p>
+
+</deflist commands>
+
+<section "SEE ALSO">
+
+<xref macro(n)>, <xref macro(5)>.
+
+<section ENVIRONMENT>
+
+macro(n) requires Tcl 8.6 or later.
+
+To use macro(n) in a Tcl script, the environment variable
+<code>TCLLIBPATH</code> must include the parent of the kitedocs(n)
+library directory.
+
+<section AUTHOR>
+
+Will Duquette<p>
+
+<section HISTORY>
+
+Original package, based on code in the JNEM jnem_man(1) tool,
+heavily revised for Kite.
+
+</manpage>
+
+
+
+
+
+
