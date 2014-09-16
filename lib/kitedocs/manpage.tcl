@@ -106,7 +106,9 @@ snit::type ::kitedocs::manpage {
 
         # NEXT, initialize the ehtml processor.
         if {$ehtml eq ""} {
-            set ehtml [ehtml ${type}::ehtmltrans]
+            set ehtml [macro ${type}::ehtmltrans]
+            $ehtml register ::kitedocs::ehtmlset
+            $ehtml reset            
         }
         
         # NEXT, validate the directories.
@@ -155,7 +157,7 @@ snit::type ::kitedocs::manpage {
         }
 
         # NEXT, save the manroots.
-        if {[catch {$ehtml manroots $info(manroots)} result]} {
+        if {[catch {::kitedocs::ehtmlset manroots $info(manroots)} result]} {
             error "Error: Invalid -manroots: \"$info(manroots)\", $result"
         }
 
@@ -176,7 +178,7 @@ snit::type ::kitedocs::manpage {
             $type DefineMacros
 
             try {
-                set output [$ehtml expandFile $infile]
+                set output [$ehtml expandfile $infile]
             } on error {result} {
                 throw SYNTAX "[file tail $infile]:\n$result"
             }
@@ -220,7 +222,7 @@ snit::type ::kitedocs::manpage {
     # Defines all macros in the context of the ehtml(5) translator
 
     typemethod DefineMacros {} {
-        $ehtml clear
+        $ehtml reset
 
         $ehtml smartalias manpage 2 2 {nameList description} \
             [myproc manpage]
@@ -306,7 +308,7 @@ snit::type ::kitedocs::manpage {
 
         if {[llength $nameList] > 1} {
             set parent [lindex $nameList 0]
-            set parentRef ", submodule of [$ehtml xref $parent]"
+            set parentRef ", submodule of [$ehtml eval [list xref $parent]]"
             set titleParentRef ", submodule of $parent"
         } else {
             set parent ""
@@ -471,10 +473,10 @@ snit::type ::kitedocs::manpage {
 
     template proc section {name} {
         set name [string toupper $name]
-        set id [$ehtml textToID $name]
+        set id [textToID $name]
         if {[$ehtml pass] == 1} {
             lappend sections $name 
-            $ehtml xrefset $name $name "#$id"
+            $ehtml eval [list xrefset $name $name "#$id"]
         }
 
         set curSection $name
@@ -490,10 +492,10 @@ snit::type ::kitedocs::manpage {
     # Begins a subsection of a major section
 
     template proc subsection {name} {
-        set id [$ehtml textToID $name]
+        set id [textToID $name]
         if {[$ehtml pass] == 1} {
             lappend subsections($curSection) $name 
-            $ehtml xrefset $name $name "#$id"
+            $ehtml eval [list xrefset $name $name "#$id"]
         }
     } {
         |<--
@@ -508,12 +510,12 @@ snit::type ::kitedocs::manpage {
         |<--
         <ul>
         [tforeach name $sections {
-            <li><a href="#[$ehtml textToID $name]">$name</a></li>
+            <li><a href="#[textToID $name]">$name</a></li>
             [tif {[info exists subsections($name)]} {
                 |<--
                 <ul>
                 [tforeach subname $subsections($name) {
-                    <li><a href="#[$ehtml textToID $subname]">$subname</a></li>
+                    <li><a href="#[textToID $subname]">$subname</a></li>
                 }]
                 </ul>
             }]
@@ -568,7 +570,7 @@ snit::type ::kitedocs::manpage {
         set itemtext($item) $text
     } {
         |<--
-        <dt><b><tt><a name="[$ehtml textToID $item]">$text</a></tt></b></dt>
+        <dt><b><tt><a name="[textToID $item]">$text</a></tt></b></dt>
         <dd>
     }
 
@@ -600,7 +602,7 @@ snit::type ::kitedocs::manpage {
         |<--
         [tforeach tag $items {
             |<--
-            <tt><a href="#[$ehtml textToID $tag]">$itemtext($tag)</a></tt><br>
+            <tt><a href="#[textToID $tag]">$itemtext($tag)</a></tt><br>
             [tif {[info exists optsfor($tag)]} {
                 |<--
                 [tforeach opt $optsfor($tag) {
@@ -626,7 +628,7 @@ snit::type ::kitedocs::manpage {
         }
 
         if {[lsearch -exact $items $tag] != -1} {
-            return "<tt><a href=\"#[$ehtml textToID $tag]\">$tag</a></tt>"
+            return "<tt><a href=\"#[textToID $tag]\">$tag</a></tt>"
         } else {
             puts stderr "Warning, iref not found: '$tag'"
             return "<tt>$tag</tt>"
@@ -753,7 +755,7 @@ snit::type ::kitedocs::manpage {
         [tforeach mod [lsort $modules] {
             |<--
             <li>
-            [$ehtml xref $mod]: $module($mod)
+            [$ehtml eval [list xref $mod]]: $module($mod)
             [tif {[info exists submodule($mod)]} {
                 |<--
                 [indexlist $submodule($mod)]
@@ -775,6 +777,18 @@ snit::type ::kitedocs::manpage {
         return [callwith $info(tclshcmd) $script]
     }
     
+    proc textToID {text} {
+        # First, trim any white space and convert to lower case
+        set text [string trim [string tolower $text]]
+        
+        # Next, substitute "_" for internal whitespace, and delete any
+        # non-alphanumeric characters (other than "_", of course)
+        regsub -all {[ ]+} $text "_" text
+        regsub -all {[^a-z0-9_/]} $text "" text
+        
+        return $text
+    }
+
 }
 
 

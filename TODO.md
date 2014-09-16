@@ -3,10 +3,10 @@
 ## Next
 
 * Define a macroset(i) interface.
-  * Add macro(n) to kiteutils
-  * Add ehtmlset(n) to kitedocs
-  * Make kitedoc(n) use ehtmlset(n).
-  * Make manpage(n) use ehtmlset(n).
+  * DONE Add macro(n) to kiteutils
+  * DONE Add ehtmlset(n) to kitedocs
+  * DONE Make kitedoc(n) use ehtmlset(n).
+  * DONE Make manpage(n) use ehtmlset(n).
   * Remove ehtml(n)
   * Rename ehtmlset(n) to ehtml(n)
   * Add <tag>, <xtag> to ehtml(n).

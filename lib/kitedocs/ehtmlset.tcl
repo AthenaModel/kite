@@ -155,7 +155,7 @@ snit::type ::kitedocs::ehtmlset {
             }
 
             if {$url eq ""} {
-                macro warn "xref: unknown xref id '$id'"
+                macro warn "xref: unknown xrefid '$id'"
                 return "[lb]xref $id[rb]"
             }
             
