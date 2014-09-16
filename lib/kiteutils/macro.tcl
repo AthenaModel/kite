@@ -103,7 +103,7 @@ snit::type ::kiteutils::macro {
         $self RegisterMacros
 
         # NEXT, register the macro sets.
-        foreach macroset $info(macroset) {
+        foreach macroset $info(macrosets) {
             callwith $macroset install $self
         }
     }
@@ -153,6 +153,10 @@ snit::type ::kiteutils::macro {
         return $info(pass)
     }
 
+    method template {name arglist initbody {template ""}} {
+        $interp eval [list template $name $arglist $initbody $template]
+    }
+
     #-------------------------------------------------------------------
     # Macro Registration
 
@@ -169,6 +173,10 @@ snit::type ::kiteutils::macro {
 
         # lb
         $interp proc lb {} { return "<"}
+
+        # macro
+        $interp smartalias macro 1 - {subcommand ?args...?} \
+            $self
 
         # pass
         $interp smartalias pass 0 0 {} \

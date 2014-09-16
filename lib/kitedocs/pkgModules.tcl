@@ -40,9 +40,10 @@ namespace eval ::kitedocs:: {
 # Note: modules are listed in order of dependencies; be careful if you
 # change the order!
 
-source [file join $::kitedocs::library ehtml.tcl  ]
-source [file join $::kitedocs::library manpage.tcl]
-source [file join $::kitedocs::library kitedoc.tcl]
+source [file join $::kitedocs::library ehtmlset.tcl ]
+source [file join $::kitedocs::library ehtml.tcl    ]
+source [file join $::kitedocs::library manpage.tcl  ]
+source [file join $::kitedocs::library kitedoc.tcl  ]
 
 
 

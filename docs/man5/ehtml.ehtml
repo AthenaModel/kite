@@ -1,4 +1,4 @@
-<manpage ehtml(5) "Extended HTML Format">
+<manpage {macro(5) ehtml(5)} "Extended HTML Format">
 
 <section SYNOPSIS>
 
@@ -6,17 +6,18 @@
 
 <section DESCRIPTION>
 
-This man page defines the ehtml(5) "Extended HTML" format,
-i.e., HTML extended with Tcl macros.  The <xref ehtml(n)> module
-translates ehtml(5) input into plain HTML.<p>
+This man page defines the ehtml(5) "Extended HTML" macro set,
+i.e., HTML extended with Tcl macros.  When <xref ehtml(n)> is registered 
+with an instance of <xref macro(n)>, the instance will translate
+ehtml(5) input into plain HTML.<p>
 
 The ehtml(5) format is the basis for more specific formats, including
-<xref kitedoc(5)> and <xref manpage(5)>, the format used to
+both <xref kitedoc(5)> and <xref manpage(5)>, the format used to
 write this man page.  The basics of the format are documented here.<p>
 
 <section "BASIC SYNTAX">
 
-The majority of the content of a ehtml(5) man page is standard HTML
+The majority of the content of a ehtml(5) document is standard HTML
 body text.  Macros are entered in double angle brackets, like so:<p>
 
 <example>
@@ -36,11 +37,8 @@ the <iref changelog> macros.<p>
 
 <section MACROS>
 
-ehtml(5) man pages may use any of the following macros; formats
-like <xref manpage(5)> will add additional macros.
-Note that these macros are simply Tcl commands; you can define
-your own macros as described in <xref "DEFINING MACROS">,
-and use them in your ehtml(5) input.<p>
+ehtml(5) input may use any of the following macros; formats
+like <xref manpage(5)> will add additional macros.<p>
 
 <deflist macros>
 
@@ -110,12 +108,6 @@ Initial draft.
 <lb>/changelog<rb>
 </example>
 
-<defitem expand "<lb>expand <i text><rb>">
-
-Performs a macro expansion on its input.  This is primarily useful for
-expanding documentation text for a module that computes its documentation
-and returns it in <xref ehtml(5)> format.<p>
-
 <defitem hrule "<lb>hrule<rb>">
 
 Produces a horizontal rule across the page.<p>
@@ -133,11 +125,6 @@ itself is displayed.<p>
 
 If the page will be linked multiple times, it might be better to
 define a cross-reference using <iref xrefset>.<p>
-
-<defitem macro "<lb>macro <i>name arglist</i> ?<i>initbody</i>? <i>template</i><rb>">
-
-Defines a new macro using a template.  The arguments are the same as for
-<xref template(n)>'s <xref template(n) template> command.<p>
 
 <defitem nbsp "<lb>nbsp <i>text</i><rb>">
 
@@ -191,14 +178,6 @@ $ emacs mydoc.ehtml
 
 Returns the right-hand macro bracket, e.g., "<code><rb></code>".<p>
 
-<defitem swallow "<lb>swallow {<i>Tcl commands</i>}<rb>">
-
-This macro is mostly used when defining macros inline in a
-manpage.  It executes the <i>Tcl commands</i>, and returns nothing;
-because it returns nothing, it doesn't affect the output.<p>
-
-See <xref "DEFINING MACROS"> for an example.<p>
-
 <defitem xref "<lb>xref <i>id</i> ?<i>anchor</i>?<rb>">
 
 The <iref xref> macro creates hyperlinks. Generally speaking,
@@ -239,37 +218,6 @@ To find something, use <lb>xref google<rb>....
 </example>
 
 </deflist macros>
-
-
-<section "DEFINING MACROS">
-
-ehtml(5) macros have Tcl syntax; in fact, a macro can contain arbitrary Tcl
-code.  In particular, the input can define new
-macros using the standard Tcl <tt>proc</tt> command or the
-<iref macro> command.  This is usually done in
-conjunction with the <iref swallow> macro, to avoid including the
-output in the finished man page.<p>
-
-For example, here's the definition of a macro that returns a timestamp
-using Tcl's <tt>clock</tt> command:<p>
-
-<example>
-<lb>swallow {
-    proc timestamp {} {
-        return [clock format [clock seconds]]
-    }
-}<rb>
-</example>
-
-When writing macros, remember that ehtml(n) usually makes <b>two passes</b>
-over its input, and so every macro will be executed <b>twice</b>.
-This is usually only a problem when a macro is accumulating data into
-a Tcl variable in the first pass so that it can be used during the
-second pass (e.g., to output an accumulated list, such as a table of
-contents).<p>
-
-In such a case, the macro can use <xref ehtml(n)>'s
-<xref ehtml(n) pass> method to find out which pass it is.<p>
 
 <section AUTHOR>
 
