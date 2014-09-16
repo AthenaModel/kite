@@ -153,8 +153,21 @@ snit::type ::kiteutils::macro {
         return $info(pass)
     }
 
+    # template name arglsit ?initbody? template
+    #
+    # Defines a template(n)-style template in the macro interpreter.
     method template {name arglist initbody {template ""}} {
         $interp eval [list template $name $arglist $initbody $template]
+    }
+
+    # warn text
+    #
+    # Used by clients to report warning conditions.
+    #
+    # TBD: Consider adding optional -warncmd.
+
+    method warn {text} {
+        puts "Warning: $text"
     }
 
     #-------------------------------------------------------------------

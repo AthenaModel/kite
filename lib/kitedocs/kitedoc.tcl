@@ -112,6 +112,9 @@ snit::type ::kitedocs::kitedoc {
         td {
             padding-left: 4px;
         }
+        tr {
+            vertical-align: baseline;
+        }
 
         /* Table Formatting Classes: "pretty" 
          * Border around the outside, even/odd striping, no internal
@@ -320,10 +323,11 @@ snit::type ::kitedocs::kitedoc {
 
         # NEXT, create the ehtml processor (if needed)
         if {$ehtml eq ""} {
-            set ehtml [ehtml ${type}::ehtmltrans]
+            set ehtml [macro ${type}::ehtmltrans]
+            $ehtml register ::kitedocs::ehtmlset
         }
 
-        if {[catch {$ehtml manroots $info(manroots)} result]} {
+        if {[catch {::kitedocs::ehtmlset manroots $info(manroots)} result]} {
             error "Error: Invalid -manroots: \"$info(manroots)\", $result"
         }
 
@@ -334,9 +338,10 @@ snit::type ::kitedocs::kitedoc {
 
             set info(fileroot) [file rootname $infile]
             set outfile $info(fileroot).html
-
+            
+            puts "Formatting $outfile"
             try {
-                set output [$ehtml expandFile $infile]
+                set output [$ehtml expandfile $infile]
             } on error {result} {
                 throw SYNTAX $result
             }
@@ -351,8 +356,6 @@ snit::type ::kitedocs::kitedoc {
             }
 
             close $f
-
-            puts "Wrote $outfile"
         }
     }
 
@@ -478,7 +481,7 @@ snit::type ::kitedocs::kitedoc {
         }
 
         # NEXT, save the cross-reference
-        $ehtml xrefset $id $doc(link-$id) "#$id"
+        $ehtml eval [list xrefset $id $doc(link-$id) "#$id"]
     }
 
     # CountPeriod id
@@ -534,7 +537,7 @@ snit::type ::kitedocs::kitedoc {
         set doc(link-$id) "Table $secnum-$tabnum"
 
         # NEXT, save the cross-reference
-        $ehtml xrefset $id $doc(link-$id) "#$id"
+        $ehtml eval [list xrefset $id $doc(link-$id) "#$id"]
     }
 
     # AddFigureId id title
@@ -570,7 +573,7 @@ snit::type ::kitedocs::kitedoc {
         set doc(link-$id) "Figure $secnum-$fignum"
 
         # NEXT, save the cross-reference
-        $ehtml xrefset $id $doc(link-$id) "#$id"
+        $ehtml eval [list xrefset $id $doc(link-$id) "#$id"]
     }
 
     # DumpAnchors
@@ -626,7 +629,7 @@ snit::type ::kitedocs::kitedoc {
     # each input file.
 
     proc ResetEhtmlProcessor {} {
-        $ehtml clear
+        $ehtml reset
 
         $ehtml smartalias banner 0 0 {} \
             [myproc banner]

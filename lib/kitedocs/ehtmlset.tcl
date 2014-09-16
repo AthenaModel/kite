@@ -155,9 +155,7 @@ snit::type ::kitedocs::ehtmlset {
             }
 
             if {$url eq ""} {
-                # TBD: This is ugly; need a mechanism for this kind
-                # of reporting.
-                puts "Warning: xref: unknown id '$id'"
+                macro warn "xref: unknown xref id '$id'"
                 return "[lb]xref $id[rb]"
             }
             
