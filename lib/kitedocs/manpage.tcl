@@ -107,7 +107,7 @@ snit::type ::kitedocs::manpage {
         # NEXT, initialize the ehtml processor.
         if {$ehtml eq ""} {
             set ehtml [macro ${type}::ehtmltrans]
-            $ehtml register ::kitedocs::ehtmlset
+            $ehtml register ::kitedocs::ehtml
             $ehtml reset            
         }
         
@@ -157,7 +157,7 @@ snit::type ::kitedocs::manpage {
         }
 
         # NEXT, save the manroots.
-        if {[catch {::kitedocs::ehtmlset manroots $info(manroots)} result]} {
+        if {[catch {::kitedocs::ehtml manroots $info(manroots)} result]} {
             error "Error: Invalid -manroots: \"$info(manroots)\", $result"
         }
 
@@ -277,6 +277,10 @@ snit::type ::kitedocs::manpage {
 
         $ehtml smartalias tclsh 1 1 {script} \
             [myproc tclsh]
+
+        $ehtml proc itag {name} {
+            return "[tt][lb][iref $name][rb][/tt]"
+        }
     }
     
 

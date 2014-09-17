@@ -324,10 +324,10 @@ snit::type ::kitedocs::kitedoc {
         # NEXT, create the ehtml processor (if needed)
         if {$ehtml eq ""} {
             set ehtml [macro ${type}::ehtmltrans]
-            $ehtml register ::kitedocs::ehtmlset
+            $ehtml register ::kitedocs::ehtml
         }
 
-        if {[catch {::kitedocs::ehtmlset manroots $info(manroots)} result]} {
+        if {[catch {::kitedocs::ehtml manroots $info(manroots)} result]} {
             error "Error: Invalid -manroots: \"$info(manroots)\", $result"
         }
 

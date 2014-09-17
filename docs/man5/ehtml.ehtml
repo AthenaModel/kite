@@ -21,18 +21,18 @@ The majority of the content of a ehtml(5) document is standard HTML
 body text.  Macros are entered in double angle brackets, like so:<p>
 
 <example>
-<lb>mymacro<rb>
+<tag mymacro>
 </example>
 
 Some macros occur in pairs; for example, change logs are created using
-the <iref changelog> macros.<p>
+the <itag changelog> macros.<p>
 
 <example>
-<lb>changelog<rb>
+<tag changelog>
     .
     .
     .
-<lb>/changelog<rb>
+<tag /changelog>
 </example>
 
 <section MACROS>
@@ -40,29 +40,47 @@ the <iref changelog> macros.<p>
 ehtml(5) input may use any of the following macros; formats
 like <xref manpage(5)> will add additional macros.<p>
 
+<subsection "HTML Equivalent Macros">
+
+The following macros are used in place of their HTML equivalents.  
+They take no arguments; any formatting is done using CSS provided by
+the document format.<p>
+
 <deflist macros>
 
-<defitem p {<lb>p<rb>...<lb>/p<rb>}>
-<defitem li {<lb>li<rb>...<lb>/li<rb>}>
-<defitem ol {<lb>ol<rb>...<lb>/ol<rb>}>
-<defitem table {<lb>table<rb>...<lb>/table<rb>}>
-<defitem tr {<lb>tr<rb>...<lb>/tr<rb>}>
-<defitem th {<lb>th<rb>...<lb>/th<rb>}>
-<defitem td {<lb>td<rb>...<lb>/td<rb>}>
-<defitem ul {<lb>ul<rb>...<lb>/ul<rb>}>
+<defitem p     {<tag p>...<tag /p>}>
+<defitem li    {<tag li>...<tag /li>}>
+<defitem ol    {<tag ol>...<tag /ol>}>
+<defitem table {<tag table>...<tag /table>}>
+<defitem tr    {<tag tr>...<tag /tr>}>
+<defitem th    {<tag th>...<tag /th>}>
+<defitem td    {<tag td>...<tag /td>}>
+<defitem ul    {<tag ul>...<tag /ul>}>
 
 These macros simply expand to their HTML equivalents.<p>
 
+<defitem img "<tag img ?attr=value...?>">
 
-<defitem b {<lb>b<rb>...<lb>/b<rb> <b or> <lb>b <i words...><rb>}>
-<defitem code {<lb>code<rb>...<lb>/code<rb> <b or> <lb>code <i words...><rb>}>
-<defitem em {<lb>em<rb>...<lb>/em<rb> <b or> <lb>em <i words...><rb>}>
-<defitem i {<lb>i<rb>...<lb>/i<rb> <b or> <lb>i <i words...><rb>}>
-<defitem pre {<lb>pre<rb>...<lb>/pre<rb> <b or> <lb>pre <i words...><rb>}>
-<defitem strong {<lb>strong<rb>...<lb>/strong<rb> <b or> <lb>strong <i words...><rb>}>
-<defitem sub {<lb>sub<rb>...<lb>/sub<rb> <b or> <lb>sub <i words...><rb>}>
-<defitem sup {<lb>sup<rb>...<lb>/sup<rb> <b or> <lb>sup <i words...><rb>}>
-<defitem tt {<lb>tt<rb>...<lb>/tt<rb> <b or> <lb>tt <i words...><rb>}>
+Returns an HTML "<tag img>" tag.  Any arguments are passed through
+as is.<p>
+
+</deflist macros>
+
+<subsection "HTML Style Macros">
+
+Macros relating to the style of displayed text.<p>
+
+<deflist macros>
+
+<defitem b      {<tag b>...<tag /b>           <b or> <tag b      {<i words...>}>}>
+<defitem code   {<tag code>...<tag /code>     <b or> <tag code   {<i words...>}>}>
+<defitem em     {<tag em>...<tag /em>         <b or> <tag em     {<i words...>}>}>
+<defitem i      {<tag i>...<tag /i>           <b or> <tag i      {<i words...>}>}>
+<defitem pre    {<tag pre>...<tag /pre>       <b or> <tag pre    {<i words...>}>}>
+<defitem strong {<tag strong>...<tag /strong> <b or> <tag strong {<i words...>}>}>
+<defitem sub    {<tag sub>...<tag /sub>       <b or> <tag sub    {<i words...>}>}>
+<defitem sup    {<tag sup>...<tag /sup>       <b or> <tag sup    {<i words...>}>}>
+<defitem tt     {<tag tt>...<tag /tt>         <b or> <tag tt     {<i words...>}>}>
 
 Called with no arguments,
 these macros simply expand to the matching HTML tags. Alternatively, 
@@ -70,28 +88,79 @@ each can be called with some number of arguments, which are returned
 wrapped in matching tags.  In other words, in ehtml(5) input the following
 items are equivalent:<p>
 
-<example><lb>i<rb>italic text<lb>/i<rb></example>
+<example><tag i>italic text<tag /i></example>
 
 vs. 
 
-<example><lb>i italic text<rb></example>
+<example><tag i {italic text}></example>
 
 The second form is easier to type.  Note that these macros do not 
 expand their arguments.<p>
 
-<defitem img "<lb>img ?attr=value...?<rb>">
+</deflist macros>
 
-Returns an HTML "<lb>img<rb>" tag.  Any arguments are passed through
-as is.<p>
+<subsection "Cross-Reference Macros">
 
-<defitem changelog "<lb>changelog<rb>...<lb>/changelog<rb>">
+The following macros are used to define references and to make
+cross-reference links.<p>
+
+<deflist macros>
+
+<defitem xref "<tag xref {<i>id</i> ?<i>anchor</i>?}>">
+
+The <itag xref> macro creates hyperlinks. Generally speaking,
+<i>id</i> identifies the page to link to; <i>anchor</i> is the
+link text.  If <i>anchor</i> isn't specified, then the <i>id</i> will
+be used as the link text.<p>
+
+When <xref ehtml(n)> is used on its own, the only xref IDs are those
+defined by <itag xrefset>.  When <xref ehtml(n)> is used by
+another tool, as by <xref manpage(n)>, there will usually be
+variety of automatically defined cross-reference IDs.  In particular,
+man pages can usually be referred to by name.<p>
+
+<defitem xrefset "<tag xrefset {<i>id anchor url</i>}>">
+
+This macro defines a cross-reference, which can be used by
+<itag xref> to create hyperlinks.  The <i>id</i> identifies the
+cross-reference to <itag xref>; it should be chosen so as not to
+conflict with other <itag xref> identifiers.  The <i>anchor</i> is
+the link text that will be used if no link text is specified in the
+<itag xref> macro.  The <i>url</i> is, of course, the URL to link to.<p>
+
+The macro returns a link to the <i>url</i> with the given <i>anchor</i>
+text, so that it can be used in a list of references for display.<p>
+
+Note that <itag xrefset> can appear anywhere in the input; it does
+not need to proceed the first <itag xref> to the <i>id</i>.<p>
+
+For example, the following macro defines "google" as a cross-reference
+ID.<p>
+
+<example>
+<tag xrefset {google "Google" "http://www.google.com"}>
+    .
+    .
+    .
+To find something, use <tag xref google>....
+</example>
+
+</deflist macros>
+
+<subsection "Change Log Macros">
+
+The following macros are used to add a change log to a document.<p>
+
+<deflist macros>
+
+<defitem changelog "<tag changelog>...<tag /changelog>">
 
 Defines a change log table.  The content between the beginning and end
-macro should consist of <iref change> entries.<p>
+macro should consist of <itag change> entries.<p>
 
-<defitem change "<lb>change <i>date status initiator</i><rb>...<lb>/change<rb>">
+<defitem change "<tag change {<i>date status initiator</i>}>...<tag /change>">
 
-Defines a single change entry within a <iref changelog>.  The change
+Defines a single change entry within a <itag changelog>.  The change
 is as of the specified <i>date</i> and was made by the
 <i>initiator</i>; the <i>status</i> can indicate whether the change is
 an addition, a deletion, or whatever the user likes.  The Extended
@@ -101,38 +170,23 @@ is used as the description of the change.<p>
 For example,
 
 <example>
-<lb>changelog<rb>
-<lb>change 10/01/2008 New whd<rb>
+<tag changelog>
+<tag change {10/01/2008 New whd}>
 Initial draft.
-<lb>/change<rb>
-<lb>/changelog<rb>
+<tag /change>
+<tag /changelog>
 </example>
 
-<defitem hrule "<lb>hrule<rb>">
+</deflist macros>
 
-Produces a horizontal rule across the page.<p>
+<subsection "Procedure Macros">
 
-<defitem lb "<lb>lb<rb>">
+The following macros are used to document procedures consisting of a 
+number of steps.<p>
 
-Returns the left-hand macro bracket, e.g., "<code><lb></code>".<p>
+<deflist macros>
 
-
-<defitem link "<lb>link <i>url</i> ?<i>anchor</i>?<rb>">
-
-Creates a link to the specified <i>url</i>, displaying the specified
-<i>anchor</i> text.  If <i>anchor</i> is omitted, the <i>url</i>
-itself is displayed.<p>
-
-If the page will be linked multiple times, it might be better to
-define a cross-reference using <iref xrefset>.<p>
-
-<defitem nbsp "<lb>nbsp <i>text</i><rb>">
-
-After trimming leading and trailing whitespace and normalizing
-internal whitespace to single blanks, <iref nbsp> replaces all
-remaining whitespace with non-breaking spaces.<p>
-
-<defitem procedure "<lb>procedure<rb>...<lb>/procedure<rb>">
+<defitem procedure "<tag procedure>...<tag /procedure>">
 
 Defines a procedure: instructions for performing a set of commands at
 a command line.  Each step consists of a description of what is to be
@@ -141,15 +195,15 @@ formatted as a table of numbered steps, with each step's description in the
 left-hand column and example in the right-hand column.<p>
 
 The content between the beginning and ending macros should consist of
-<iref step> entries.<p>
+<itag step> entries.<p>
 
-<defitem quote "<lb>quote <i>text</i><rb>">
+<defitem quote "<tag quote {<i>text</i>}>">
 
 Quotes angle brackets and ampersands in the <i>text</i> for HTML display.<p>
 
-<defitem step "<lb>step<rb> <i>description</i> <lb>/step/<rb> <i>example</i> <lb>/step<rb>">
+<defitem step "<tag step> <i>description</i> <tag /step/> <i>example</i> <tag /step>">
 
-Defines a single step within a <iref procedure>.  The
+Defines a single step within a <itag procedure>.  The
 <i>description</i> is Extended HTML text saying what is to be done,
 and the <i>example</i> is Extended HTML text giving an example of how
 to do it.<p>
@@ -157,67 +211,65 @@ to do it.<p>
 For example,
 
 <example>
-<lb>procedure<rb>
+<tag procedure>
 
-<lb>step<rb>
+<tag step>
 Edit the document.
-<lb>/step/<rb>
+<tag /step/>
 &lt;pre&gt;
 $ emacs mydoc.ehtml
 &lt;/pre&gt;
-<lb>/step<rb>
+<tag /step>
     .
     .
     .
 
-<lb>/procedure<rb>
-</example>
-
-
-<defitem rb "<lb>rb<rb>">
-
-Returns the right-hand macro bracket, e.g., "<code><rb></code>".<p>
-
-<defitem xref "<lb>xref <i>id</i> ?<i>anchor</i>?<rb>">
-
-The <iref xref> macro creates hyperlinks. Generally speaking,
-<i>id</i> identifies the page to link to; <i>anchor</i> is the
-link text.  If <i>anchor</i> isn't specified, then the <i>id</i> will
-be used as the link text.<p>
-
-When <xref ehtml(n)> is used on its own, the only xref IDs are those
-defined by <iref xrefset>.  When <xref ehtml(n)> is used by
-another tool, as by <xref manpage(n)>, there will usually be
-variety of automatically defined cross-reference IDs.  In particular,
-man pages can usually be referred to by name.<p>
-
-<defitem xrefset "<lb>xrefset <i>id anchor url</i><rb>">
-
-This macro defines a cross-reference, which can be used by
-<iref xref> to create hyperlinks.  The <i>id</i> identifies the
-cross-reference to <iref xref>; it should be chosen so as not to
-conflict with other <iref xref> identifiers.  The <i>anchor</i> is
-the link text that will be used if no link text is specified in the
-<iref xref> macro.  The <i>url</i> is, of course, the URL to link to.<p>
-
-The macro returns a link to the <i>url</i> with the given <i>anchor</i>
-text, so that it can be used in a list of references for display.<p>
-
-Note that <iref xrefset> can appear anywhere in the input; it does
-not need to proceed the first <iref xref> to the <i>id</i>.<p>
-
-For example, the following macro defines "google" as a cross-reference
-ID.<p>
-
-<example>
-<lb>xrefset google "Google" "http://www.google.com"<rb>
-    .
-    .
-    .
-To find something, use <lb>xref google<rb>....
+<tag /procedure>
 </example>
 
 </deflist macros>
+
+
+<subsection "Miscellaneous Macros">
+
+<deflist macros>
+
+<defitem hrule "<tag hrule>">
+
+Produces a horizontal rule across the page.<p>
+
+<defitem lb "<tag lb>">
+
+Returns the left-hand macro bracket, e.g., "<code><lb></code>".<p>
+
+<defitem link "<tag link {<i>url</i> ?<i>anchor</i>?}>">
+
+Creates a link to the specified <i>url</i>, displaying the specified
+<i>anchor</i> text.  If <i>anchor</i> is omitted, the <i>url</i>
+itself is displayed.<p>
+
+If the page will be linked multiple times, it might be better to
+define a cross-reference using <itag xrefset>.<p>
+
+<defitem nbsp "<tag nbsp {<i>text</i>}>">
+
+After trimming leading and trailing whitespace and normalizing
+internal whitespace to single blanks, <itag nbsp> replaces all
+remaining whitespace with non-breaking spaces.<p>
+
+<defitem rb "<tag rb>">
+
+Returns the right-hand macro bracket, e.g., "<code><rb></code>".<p>
+
+<defitem tag "<tag tag {<i arglist>}>">
+
+Formats a macro tag in angle-brackets.  If the <i arglist> is given,
+it is expanded and included in the tag.<p>
+
+</deflist macros>
+
+
+
 
 <section AUTHOR>
 

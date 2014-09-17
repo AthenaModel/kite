@@ -5,8 +5,8 @@ namespace import kiteutils::* kitedocs::*
 
 macro mp
 
-mp register ::kitedocs::ehtmlset
-::kitedocs::ehtmlset manroots {:n ./man%s/%n.html}
+mp register ::kitedocs::ehtml
+::kitedocs::ehtml manroots {:n ./man%s/%n.html}
 mp reset
 
 puts [mp expand [outdent {

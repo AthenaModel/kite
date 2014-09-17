@@ -26,7 +26,7 @@ nothing on the first pass and output the table-of-contents on the second,
 based on the indices built up during the first pass.<p>
 
 The pass number is returned by the <xref macro(n)> object's 
-<xref macro(n) pass> method, and by the <iref pass> macro.<p>
+<xref macro(n) pass> method, and by the <itag pass> macro.<p>
 
 <section "BASIC MACROS">
 
@@ -38,46 +38,46 @@ your own macros as described in <xref "DEFINING MACROS">.<p>
 <deflist macros>
 
 
-<defitem expand "<lb>expand <i text><rb>">
+<defitem expand "<tag expand {<i text>}>">
 
 Performs a macro expansion on its input.  This is primarily useful for
 expanding documentation text for a module that computes its documentation
 and returns it in <xref ehtml(5)> format.<p>
 
-<defitem lb "<lb>lb<rb>">
+<defitem lb "<tag lb>">
 
 Returns the left-hand macro bracket, e.g., "<code><lb></code>".
 Formats that produce HTML will usually redefine this to product the
 appropriate HTML attribute.<p>
 
 
-<defitem pass "<lb>pass<rb>">
+<defitem pass "<tag pass>">
 
 Returns the pass number.<p>
 
-<defitem proc "<lb>proc <i name arglist body><rb>">
+<defitem proc "<tag proc {<i name arglist body>}>">
 
 This is simply the normal Tcl <tt proc> command.  It can be used 
 in-line to define new macros.<p>
 
-<defitem rb "<lb>rb<rb>">
+<defitem rb "<tag rb>">
 
 Returns the right-hand macro bracket, e.g., "<code><rb></code>".<p>
 
-<defitem swallow "<lb>swallow {<i>Tcl commands</i>}<rb>">
+<defitem swallow "<tag swallow {<i script>}>">
 
 This macro is mostly used when defining macros inline in a
-manpage.  It executes the <i>Tcl commands</i>, and returns nothing;
+manpage.  It executes the <i script>, and returns nothing;
 because it returns nothing, it doesn't affect the output.<p>
 
 See <xref "DEFINING MACROS"> for an example.<p>
 
-<defitem template "<lb>template <i>name arglist</i> ?<i>initbody</i>? <i>template</i><rb>">
+<defitem template "<tag template {<i>name arglist</i> ?<i>initbody</i>? <i>template</i>}>">
 
 Defines a new macro using a template.  The arguments are the same as for
 <xref template(n)>'s <xref template(n) template> command.<p>
 
-<defitem tsubst "<lb>tsubst <i>tstring</i><rb>">
+<defitem tsubst "<tag tsubst {<i>tstring</i>}>">
 
 Substitutes variables and commands into a string.  The semantics are the
 same as for 
@@ -91,8 +91,8 @@ same as for
 macro(5) macros have Tcl syntax; in fact, a macro can contain 
 arbitrary Tclcode.  In particular, the input can define new
 macros using the standard Tcl <tt>proc</tt> command or the
-<iref template> command.  This is sometimes done in
-conjunction with the <iref swallow> macro, to avoid including the
+<itag template> command.  This is sometimes done in
+conjunction with the <itag swallow> macro, to avoid including the
 output in the finished man page.<p>
 
 For example, here's the definition of a macro that returns a timestamp
@@ -112,7 +112,7 @@ second pass (e.g., to output an accumulated list, such as a table of
 contents).<p>
 
 In such a case, the macro can use <xref macro(n)>'s
-<xref macro(n) pass> method or the <iref pass> macro 
+<xref macro(n) pass> method or the <itag pass> macro 
 to find out which pass it is.<p>
 
 <section AUTHOR>

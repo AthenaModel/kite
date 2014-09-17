@@ -7,17 +7,20 @@
   * DONE Add ehtmlset(n) to kitedocs
   * DONE Make kitedoc(n) use ehtmlset(n).
   * DONE Make manpage(n) use ehtmlset(n).
-  * Remove ehtml(n)
-  * Rename ehtmlset(n) to ehtml(n)
-  * Add <tag>, <xtag> to ehtml(n).
+  * DONE Remove ehtml(n)
+  * DONE Rename ehtmlset(n) to ehtml(n)
+  * DONE Add <tag> to ehtml(n)
+  * Add <itag> to manpage(n).
   * Move relevant macrosets to ehtml(n), for sharing.
   * Clean-up CSS.
   * Revise manpages:
-    * ehtml(n)
+    * DONE ehtml(n)
     * macro(5)
     * ehtml(5)
+      * Add "tag" macro
     * kitedoc(5)
     * manpage(5)
+      * Add "itag" macro
   * Then, define a kite macroset, loaded by 'kite docs', that defines
     "withlib" and similar tools.
 
