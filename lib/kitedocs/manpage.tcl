@@ -242,15 +242,6 @@ snit::type ::kitedocs::manpage {
         $ehtml smartalias contents 0 0 {} \
             [myproc contents]
 
-        $ehtml smartalias deflist 0 - {comment...} \
-            [myproc deflist]
-
-        $ehtml smartalias /deflist 0 - {comment...} \
-            [myproc /deflist]
-
-        $ehtml smartalias def 1 1 {text} \
-            [myproc def]
-
         $ehtml smartalias defitem 2 2 {item text} \
             [myproc defitem]
 
@@ -269,12 +260,7 @@ snit::type ::kitedocs::manpage {
         $ehtml smartalias indexlist 1 1 {modules} \
             [myproc indexlist]
 
-        $ehtml smartalias example 0 0 {} \
-            [myproc example]
-
-        $ehtml smartalias /example 0 0 {} \
-            [myproc /example]
-
+        # TODO: Move to new kiteapp-specific macroset.
         $ehtml smartalias tclsh 1 1 {script} \
             [myproc tclsh]
 
@@ -355,16 +341,8 @@ snit::type ::kitedocs::manpage {
         hr {
             margin-left: -5%;
         }
-        pre.box {
-            background:     #FFFDD1 ;
-            border:         1px solid blue;
-            padding-top:    2px;
-            padding-bottom: 2px;
-            padding-left:   4px;
-        }
-        span.boxlabel {
-            background:     #E3E08F ;
-        }
+
+
         table {
             margin-top:    4px;
             margin-bottom: 4px;
@@ -402,6 +380,46 @@ snit::type ::kitedocs::manpage {
             background-color: #EEEEEE;
         }
 
+        /* Examples, listings, and marks */
+        pre.example {
+            background:     #FFFDD1 ;
+            border:         1px solid blue;
+            padding-top:    2px;
+            padding-bottom: 2px;
+            padding-left:   4px;
+        }
+        pre.listing {
+            background:     #FFFDD1 ;
+            border:         1px solid blue;
+            padding-top:    4px;
+            padding-bottom: 4px;
+            padding-left:   4px;
+        }
+        span.linenum {
+            background:     #E3E08F ;
+        }
+        div.mark {
+            display: inline;
+            font-family: Verdana;
+            font-size: 75%;
+            background: black;
+            color: white;
+            border: 1px solid black;
+            border-radius: 5px;
+            padding-left: 2px;
+            padding-right: 2px;
+        }
+        div.bigmark {
+            display: inline;
+            font-family: Verdana;
+            font-size: 100%;
+            background: black;
+            color: white;
+            border: 1px solid black;
+            border-radius: 5px;
+            padding-left: 2px;
+            padding-right: 2px;
+        }
         
         [tif {$mktreeFlag} {
             |<--
@@ -527,39 +545,6 @@ snit::type ::kitedocs::manpage {
         </ul>
     }
 
-    # deflist args
-    #
-    # Begins a definition list. The args don't matter, but can be used
-    # as comments.  
-    template proc deflist {args} {
-        |<--
-        <dl>
-    }
-
-    # /deflist args
-    #
-    # Ends a definition list.   The args don't matter, but can be used
-    # as comments. 
-    template proc /deflist {args} {
-        |<--
-        </dl>
-    }
-
-    # def text
-    #
-    # text   - Topic in a deflist 
-    #
-    # An entry in a def list that doesn't create a synopsis item.
-    # The text is expanded once, and made bold.
-
-    template proc def {text} {
-        set text [$ehtml expandonce $text]
-    } {
-        |<--
-        <dt><b>$text</b></dt>
-        <dd>
-    }
-
     # defitem item text
     #
     # item     iref identifier for this item
@@ -638,63 +623,6 @@ snit::type ::kitedocs::manpage {
             return "<tt>$tag</tt>"
         }
     }
-
-    # example
-    #
-    # Begins a pre-formatted example.
-
-    proc example {} {
-        return "<pre class=\"box\">"
-    }
-
-    # /example
-    #
-    # Ends a pre-formatted example.
-
-    proc /example {} {
-        return "</pre>"
-    }
-
-    # listing ?firstline?
-    #
-    # Begins a code listing with line numbers; the first line number
-    # defaults to 1, but can be set.
-
-    proc listing {{firstline 1}} {
-        # FIRST, push the context.
-        $ehtml cpush listing
-        $ehtml cset firstline $firstline
-
-        return
-    }
-
-    # /listing
-    #
-    # Ends a code listing.
-
-    proc /listing {} {
-        # FIRST, get the first line number.
-        set firstline [$ehtml cget firstline]
-
-        # NEXT, pop the context.
-        set text [string trim [$ehtml cpop listing]]
-
-        # NEXT, number the lines!
-        set codelist [list "<pre class=\"box\">"]
-
-        set i $firstline
-        foreach line [split $text \n] {
-            set line [format "<span class=\"boxlabel\">%04d</span> %s" \
-                            $i $line]
-            lappend codelist $line
-            incr i
-        }
-
-        lappend codelist "</pre>"
-
-        return "[join $codelist \n]\n"
-    }
-
 
     #-------------------------------------------------------------------
     # Index File Template

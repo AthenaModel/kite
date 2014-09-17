@@ -174,6 +174,93 @@ snit::type ::kitedocs::ehtml {
             return "<a href=\"$url\">$anchor</a>"
         }
 
+        # NEXT, define definition list macros.
+        $macro proc deflist {args}  { return "<dl>" }
+        $macro proc /deflist {args} { return "</dl>" }
+
+        $macro template def {text} {
+            set text [expand $text]
+        } {
+            |<--
+            <dt><b>$text</b></dt>
+            <dd>
+        }
+
+        # Topic Lists
+
+        $macro template topiclist {} {
+            |<--
+            <table class="topiclist">
+        }
+
+        $macro template topic {text} {
+            |<--
+            <tr class="topic">
+            <td class="topicname">[expand $text]</td>
+            <td class="topictext">
+        }
+
+        $macro template /topic {} {
+            |<--
+            </td>
+            </tr>
+        }
+        
+        # /topiclist
+        #
+        # Terminates a topic list.
+
+        $macro template /topiclist {} {
+            |<--
+            </table>
+        }
+
+
+        # Examples, listings, and marks
+        
+        $macro proc example  {} { return "<pre class=\"example\">" }
+        $macro proc /example {} { return "</pre>" }
+
+
+        $macro proc listing {{firstline 1}} {
+            # FIRST, push the context.
+            macro cpush listing
+            macro cset firstline $firstline
+
+            return
+        }
+
+        $macro proc /listing {} {
+            # FIRST, get the first line number.
+            set firstline [macro cget firstline]
+
+            # NEXT, pop the context.
+            set text [string trim [macro cpop listing]]
+
+            # NEXT, number the lines!
+            set codelist [list "<pre class=\"listing\">"]
+
+            set i $firstline
+            foreach line [split $text \n] {
+                set line [format "<span class=\"linenum\">%04d</span> %s" \
+                                $i $line]
+                lappend codelist $line
+                incr i
+            }
+
+            lappend codelist "</pre>"
+
+            return "[join $codelist \n]\n"
+        }
+
+        $macro proc mark {symbol} { 
+            return "<div class=\"mark\">$symbol</div>" 
+        }
+
+        $macro proc bigmark {symbol} { 
+            return "<div class=\"bigmark\">$symbol</div>"
+        }
+
         # NEXT, define changelog macros
         $macro template changelog {} {
             variable changeCounter

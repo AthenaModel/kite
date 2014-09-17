@@ -84,45 +84,10 @@ their parent section.<p>
 The subsection <i>name</i> can be almost anything, but it should be
 unique within the man page.<p>
 
-<defitem deflist {<lb>deflist ?<i>comment text</i>?<rb>}>
-
-Begins a definition list, which will be terminated by
-<iref /deflist>.  In between will usually be a number of
-<iref defitem> or <iref defopt> macros with accompanying text.<p>
-
-Definition lists are frequently nested; the optional <i>comment
-text</i> can be used to relate the <iref deflist> to its
-<iref /deflist>, but has no effect on the output:
-
-<example>
-<lb>section COMMANDS<rb>
-
-<lb>deflist commands<rb>
-    .
-    .
-    .
-<lb>/deflist commands<rb>
-</example>
-
-<defitem /deflist {<lb>/deflist ?<i>comment text</i>?<rb>}>
-
-Terminates a <iref deflist>.<p>
-
-<defitem def {<lb>def <i text><rb>}>
-
-This macro begins a non-synopsis entry within a <iref deflist>.  Use
-this for definition-style lists that do not contain cross-referenced 
-items.<p>
-
-The <i>text</i> is the text to display; it may contain
-embedded style macros.<p>
-
-The <iref def> macro is followed by the text that defines the
-named item.<p>
 
 <defitem defitem {<lb>defitem <i tag text><rb>}>
 
-This macro begins an item definition within a <iref deflist>.  An
+This macro begins an item definition within a <tag deflist>.  An
 "item" is one of whatever the man page is documenting: a Tcl command
 or subcommand, a C function, a program.<p>
 
@@ -185,16 +150,6 @@ Description of the the option...
 <lb>/deflist commands<rb>
 </example>
 
-<defitem example {<lb>example<rb>}>
-<defitem /example {<lb>/example<rb>}>
-
-These macros are used to bracket pre-formatted examples.  The examples
-are displayed in a box with a different background than the rest of
-the page.<p>
-
-The many examples on this page were formatted using this pair of 
-macros.<p>
-
 <defitem itemlist {<lb>itemlist<rb>}>
 
 This macro expands to a list of the items defined in this manpage.
@@ -221,6 +176,11 @@ expands to a link to <iref defitem>.<p>
 If the item name has multiple tokens, there is no need to quote them;
 <iref iref>'s arguments are accumulated into a single item name.<p>
 
+<defitem itag {<lb>itag <i name><rb>}>
+
+This is simply an <itag iref> to macro <i name>; it creates a hyperlink
+in typewriter font with angle brackets.<p> 
+
 <defitem tclsh {<lb>tclsh script<rb>}>
 
 Executes the script in a Tcl interpreter, and returns the result.  The
@@ -233,45 +193,6 @@ code base, thus allowing automatic documentation generation.<p>
 
 Returns the project version number, as provided to 
 <xref manpage(n)>'s <xref manpage(n) format> subcommand.<p>
-
-<defitem xref {<lb>xref <i>id</i> ?<i>anchor</i>?<rb>}>
-
-The <iref xref> macro creates hyperlinks. Generally speaking,
-<i>id</i> identifies the page to link to; <i>anchor</i> is the
-link text.  If <i>anchor</i> isn't specified, then the <i>id</i> will
-be used as the link text.<p>
-
-The <i>id</i> can take a number of forms.  If it's the name of a
-section in the manpage, it links to that section; for example, the
-following <iref xref> would link back to the man page's "SYNOPSIS"
-section.
-<p>
-
-<example>
-<lb>xref SYNOPSIS<rb>
-</example>
-
-If the <i>id</i> looks like a manpage reference, like "manpage(5)",
-then it is assumed to name another Mars man page; <iref xref>
-links to it.  In this particular case, <i>anchor</i>, if present, is
-assumed to be an item within the man page.  For example,<p>
-
-<example>
-<lb>xref somelib(n)<rb>
-</example>
-
-creates a link to the somelib(n) man page, and<p>
-
-<example>
-<lb>xref somelib(n) somecommand<rb>
-</example>
-
-creates a link to the definition of "somecommand" within that man
-page; the link text will be "somecommand".<p>
-
-Finally, the <xref ehtml(5)> <xref xhtml(5) xrefset> macro can be
-used to assign ID strings to frequently used URLs; if the <i>id</i> is
-one of these ID strings.<p>
 
 <defitem mktree {<lb>mktree<rb>}>
 

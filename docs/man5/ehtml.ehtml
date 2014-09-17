@@ -147,6 +147,105 @@ To find something, use <tag xref google>....
 
 </deflist macros>
 
+<subsection "Definition List Macros">
+
+The following macros are used to add definition lists to a document.
+A definition list displays a term followed by a definition of a term;
+usually, the definition is indented beneath the term.<p>
+
+<deflist deflist>
+
+<defitem deflist {<tag deflist {?<i args>?}>...<tag /deflist {?<i args>?}>}>
+
+These tags contain a definition list.  The individual definitions are added 
+using the <itag def> macro.<p>
+
+Definition lists are frequently nested; the optional <i>args</i> can be used to relate the <itag deflist> to its <tag /deflist> but have no effect on 
+the output:
+
+<example>
+<tag section COMMANDS>
+
+<tag deflist commands>
+    .
+    .
+    .
+<tag /deflist commands>
+</example>
+
+Some document formats may define <tag def*> tags with additional semantics,
+for use in <tag deflist>s.<p>
+
+<defitem def {<tag def {<i text>}>}>
+
+This macro begins a definition within a <itag deflist>.
+The <i>text</i> is the text to display; it may contain
+embedded style macros.<p>
+
+The <iref def> macro is followed by the text that defines the
+named item.<p>
+
+</deflist deflist>
+
+<subsection "Topic List Macros">
+
+A topic list is a list in which each item consists of a brief topic
+and a longer description.  The topics are displayed in the left column
+and the descriptions in the right column.<p>
+
+<deflist topiclist>
+
+<defitem topiclist {<tag topiclist>...<tag /topiclist>}>
+
+Brackets a <itag topic> list.<p>
+
+<defitem topic {<tag topic "<i text>">...<tag /topic>}>
+
+Adds a topic to a <itag topiclist>.  The topic is displayed in two
+columns, the topic <i text> on the left and the discussion between
+the two tags on the right.  Both are vertically aligned.  The 
+<i text> is expanded.<p>
+
+</deflist topiclist>
+
+<subsection "Examples, Listings, and Marks">
+
+<deflist examples>
+
+<defitem example {<tag example>...<tag /example>}>
+
+These macros are used to bracket pre-formatted examples.  The examples
+are displayed in a box with a different background than the rest of
+the page.<p>
+
+<defitem listing {<tag listing {?<i firstline>?}>...<tag /listing>}>
+
+These macros are used to bracket pre-formatted code listings.  Line
+numbers are added, so that the surrounding text can refer to specific
+lines.  The listing is displayed in a box with a different background than 
+the rest of the page.<p>
+
+By default, the first line is numbered 1; set <i firstline> to pick 
+a different number.<p>
+
+<defitem mark {<tag mark {<i symbol>}>}>
+
+Defines a marker in an <itag example> or <itag listing>.  The marker 
+displays the <i symbol> in a small rounded box with a red background, and 
+is used to point out lines of interest for discussion in the following
+paragraphs.<p>
+
+Use <itag bigmark> to display the same marker as an <itag topic> in a 
+<itag topiclist>.<p>
+
+<defitem bigmark {<tag bigmark {<i symbol>}>}>
+
+Creates a larger version of a <itag mark>; the larger version looks 
+better as the <itag topic> in a <itag topiclist>.<p>
+
+
+</deflist examples>
+
 <subsection "Change Log Macros">
 
 The following macros are used to add a change log to a document.<p>

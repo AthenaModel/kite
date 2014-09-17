@@ -1,18 +1,5 @@
 <manpage kitedoc(5) "Mars Document Format">
 
-<swallow {
-proc tag {name {argspec ""}} {
-    if {$argspec eq ""} {
-        return "[tt][lb]$name[rb][/tt]"
-    } else {
-        return "[tt][lb]$name [expand $argspec][rb][/tt]"
-    }
-}
-proc xtag {name} {
-    return "[tt][lb][iref $name][rb][/tt]"
-}
-}>
-
 <section SYNOPSIS>
 
 <itemlist>
@@ -42,16 +29,16 @@ numbering and table-of-contents generation, your document will
 typically look like this:<p>
 
 <ul>
-  <li> The <xtag document></tt> header.
+  <li> The <itag document></tt> header.
   <li> A list of change entries.
-  <li> A table of <xtag contents>.
-  <li> Lists of <xtag figures> and <xtag tables>.
-  <li> Zero or more <xtag preface> sections.  A preface section has
+  <li> A table of <itag contents>.
+  <li> Lists of <itag figures> and <itag tables>.
+  <li> Zero or more <itag preface> sections.  A preface section has
        a title but no section number, and cannot have subsections.
   <li> Zero or more numbered sections, each of which may have zero or
        more subsections.
-  <li> Numbered sections may contain <xtag table>s and
-       <xtag figure>s.
+  <li> Numbered sections may contain <itag table>s and
+       <itag figure>s.
   <li> The <tag /document> footer.
 </ul><p>
 
@@ -125,28 +112,13 @@ the project name, version, and description, as provided to
 <xref kitedoc(n)>'s <xref kitedoc(n) format> subcommand.<p>
 
 It should rarely be necessary to use this macro directly, as it is
-included automatically by <xtag document>.<p>
-
-<defitem bigmark {<tag bigmark {<i symbol>}>}>
-
-Creates a larger version of an <xtag mark>; the larger version looks 
-better as the <xtag topic> in a <xtag topiclist>.<p>
+included automatically by <itag document>.<p>
 
 <defitem contents {<tag contents>}>
 
 This macro is replaced with a complete table of contents;
 the table of contents is automatically followed by lists of tables 
 and figures if any tables and figures were defined.<p>
-
-<defitem deflist {<tag deflist "<i args...>">...<tag /deflist>}>
-
-Brackets a definition list, as in <xref manpage(n)>.  Items to 
-define appear in bold on a line by themselves; the following 
-definition appears indented below.<p>
-
-<defitem def {<tag def "<i text>">}>
-
-Adds an item to a <xtag deflist>.  The <i text> is expanded.<p>
 
 <defitem description {<tag description>}>
 
@@ -158,12 +130,6 @@ Returns the description for the current project, as passed to
 These macros begin and end the document, and format the HTML header
 and footer, include the document's title and style sheet.<p>
 
-<defitem example {<tag example>...<tag /example>}>
-
-These macros are used to bracket pre-formatted examples.  The examples
-are displayed in a box with a different background than the rest of
-the page.<p>
-
 <defitem figure {<tag figure {<i>id title filename</i>}>}>
 
 Adds a figure to the document.  The figure is identified by
@@ -174,34 +140,15 @@ same directory as the generated HTML file, and must be a format
 recognized by the browser (e.g., GIF, PNG, or JPEG).<p>
 
 Figures will be auto-numbered, and included in the list of
-<xtag figures>.<p>
+<itag figures>.<p>
 
 <defitem figures {<tag figures>}>
 
 This macro will be replaced by a list of the figures found in the
 document.  Note that it is rarely necessary to use this macro
-explicitly, because the table of <xtag contents> will include it
+explicitly, because the table of <itag contents> will include it
 automatically if there are any figures in the document.<p>
 
-<defitem listing {<tag listing {?<i firstline>?}>...<tag /listing>}>
-
-These macros are used to bracket pre-formatted code listings.  Line
-numbers are added, so that the surrounding text can refer to specific
-lines.  The listing is displayed in a box with a different background than 
-the rest of the page.<p>
-
-By default, the first line is numbered 1; set <i firstline> to pick 
-a different number.<p>
-
-<defitem mark {<tag mark {<i symbol>}>}>
-
-Defines a marker in an <xtag example> or <xtag listing>.  The marker 
-displays the <i symbol> in a small rounded box with a red background, and 
-is used to point out lines of interest for discussion in the following
-paragraphs.<p>
-
-Use <xtag bigmark> to display the same marker as an <xtag topic> in a 
-<xtag topiclist>.<p>
 
 <defitem poc {<tag poc>}>
 
@@ -246,7 +193,7 @@ Returns the standard list of CSS styles, for inclusion in the HTML
 header.<p>
 
 It should rarely be necessary to use this macro directly, as it is
-included automatically by <xtag document>.<p>
+included automatically by <itag document>.<p>
 
 
 <defitem table {<tag table {<i>id title</i>}>...<tag /table>}>
@@ -256,13 +203,13 @@ must have the form <code>tab.<i>name</i></code>, while the title is
 arbitrary.<p>
 
 Tables will be auto-numbered, and included in the list of
-<xtag tables>.<p>
+<itag tables>.<p>
 
 <defitem textfigure {<tag textfigure {<i>id title</i>}>}>
 
 Adds a "text figure" to the document, i.e., a figure consisting of
-an <xtag example> or <xtag listing> rather than an image file.  The
-relevant <tag example> or <tag listing> should follow immediately
+an <xref ehtml(5)> <tag example> or <tag listing> rather than an image 
+file.  The relevant <tag example> or <tag listing> should follow immediately
 after the <tag textfigure> tag.<p>
 
 The figure is identified by
@@ -270,7 +217,7 @@ The figure is identified by
 the <i>title</i> will be included in the caption.<p>
 
 Text figures will be auto-numbered, and included in the list of
-<xtag figures>.<p>
+<itag figures>.<p>
 
 <defitem th {<tag th>...<tag /th>}>
 
@@ -284,60 +231,13 @@ Brackets a "pretty" table row.<p>
 
 This macro will be replaced by a list of the tables found in the
 document.  Note that it is rarely necessary to use this macro
-explicitly, because the table of <xtag contents> will include it
+explicitly, because the table of <itag contents> will include it
 automatically if there are any tables in the document.<p>
-
-<defitem topiclist {<tag topiclist>...<tag /topiclist>}>
-
-Brackets a <xtag topic> list.<p>
-
-<defitem topic {<tag topic "<i text>">...<tag /topic>}>
-
-Adds a topic to a <xtag topiclist>.  The topic is displayed in two
-columns, the topic <i text> on the left and the discussion between
-the two tags on the right.  Both are vertically aligned.  The 
-<i text> is expanded.<p>
 
 <defitem version {<tag version>}>
 
 Returns the version number for the current project, as passed to
 <xref kitedoc(n)>.<p>
-
-<defitem xref {<tag xref {<i>id</i> ?<i>anchor</i>?}>}>
-
-Creates a cross-reference link given a cross-reference <i>id</i>.
-If <i>anchor</i> is specified, it's used as the link text; otherwise,
-the default link text associated with the <i>id</i> is used.<p>
-
-The valid cross-reference IDs are as follows:<p>
-
-<ul>
-  <li> Any of the document's section, figure, or table IDs.  The
-       default link text is "Section <i>num</i>", "Figure <i>num</i>",
-       or "Table <i>num</i>".  For unnumbered sections, the default
-       link text is the section title.<p>
-
-  <li> Any man page that exists in the same documentation tree.  Man
-       page IDs look like "<i>name</i>(<i>section</i>)", e.g.,
-       "kitedoc(5)".  The HTML file for the man page is assumed to
-       have the address<p>
-
-       <i>root</i>/man<i>section</i>/<i>name</i>.html<p>
-
-       where <i>root</i> is the root of the documentation tree.
-       <i>root</i> is usually a relative path name, and defaults to
-       ".", the current working directory when <xref kitedoc(n)>
-       is executed.  It can be specified explicitly using
-       <xref kitedoc(n)>'s <code>-docroot</code> option.<p>
-
-  <li> Any ID registered using <xref ehtml(5)>'s
-       <xref ehtml(5) xrefset> macro.  For example, the
-       following macro registers a link to the Tcl linsert(n) man page:<p>
-
-<example>
-<lb>xrefset linsert(n) http://www.tcl.tk/man/tcl8.4/TclCmd/linsert.htm<rb>
-</example>
-</ul><p>
 
 </deflist>
 
