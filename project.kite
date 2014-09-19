@@ -11,7 +11,7 @@ require zipfile::encode 0.3
 require tls 1.6
 require crc32 1.3
 
-dist install {
+dist install-%platform {
     README.md
     INSTALL.md
     LICENSE

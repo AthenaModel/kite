@@ -141,6 +141,15 @@ tool define info {
 
             table puts $table -indent "  "
         }
+
+        if {[got [project dist names]]} {
+            puts ""
+            puts "Distribution Sets:"
+
+            foreach name [project dist names] {
+                puts "  $name"
+            }
+        }
     }
 }
 

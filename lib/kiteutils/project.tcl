@@ -872,9 +872,10 @@ snit::type project {
 
     proc DistCmd {name patterns} {
         # FIRST, get the name.
-        set name [string trim $name]
+        set map [list %platform [platform::identify]]
+        set name [string map $map [string trim $name]]
 
-        if {![regexp {^[a-zA-Z]\w*$} $name]} {
+        if {![regexp {^[a-zA-Z][-[:alnum:]_.]*$} $name]} {
             throw SYNTAX "Invalid distribution name \"$name\""
         }
 

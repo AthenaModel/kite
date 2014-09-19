@@ -2,8 +2,18 @@
 
 ## Next
 
+* Distributions and architectures
+  * We need a better way to tag distributions with the architecture, so that
+    we can have "-install" distributions for each architecture, but also
+    other distributions that don't include it.
+  * %apps does pull in the binaries for this platform only.
+  * We have three flavors: windows, osx, and linux.  That's really
+    32-bit windows, 64-bit osx, and 64-bit linux.  We could have five
+    architectures: win32, win64, osx, linux32, and linux64. 
+
 * ehtml(5) macro sets should use CSS for formatting, where possible.
   * Provide default CSS macro!
+* Include a dist block in the default project file.
 * macro(n) should support textutil::expander's textcmd.
   * Should manpage(n)/kitedocs(n) use it for quoting?
 * Add %install target to dist; includes an installation script

@@ -18,8 +18,8 @@ be used by other projects.<p>
 
 <ul>
   <li> <link man5/index.html "Section (5)">: File Formats
-  <li> <link mani/index.html "Section (i)">: Tcl Interfaces
   <li> <link mann/index.html "Section (n)">: Tcl Commands
+  <li> <link mani/index.html "Section (i)">: Tcl Interfaces
 </ul>
 
 </document>

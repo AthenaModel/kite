@@ -23,7 +23,11 @@ namespace eval ::kiteinfo:: {
         local-tls 0
         description {Athena/Kite Development Tool}
         provides {kiteutils kitedocs}
-        distpat-install {
+        local-crc32 0
+        reqver-zipfile::encode 0.3
+        reqver-platform 1.0
+        gui-kite 0
+        distpat-install-macosx10.8-x86_64 {
     README.md
     INSTALL.md
     LICENSE
@@ -33,10 +37,6 @@ namespace eval ::kiteinfo:: {
     docs/*.html
     docs/*/*.html
 }
-        local-crc32 0
-        reqver-zipfile::encode 0.3
-        reqver-platform 1.0
-        gui-kite 0
         reqver-textutil::expander 1.3.1
         reqver-snit 2.3
         binary-kiteutils 0
@@ -58,7 +58,7 @@ namespace eval ::kiteinfo:: {
         local-snit 0
         version 0.2.1
         reqver-crc32 1.3
-        dists install
+        dists install-macosx10.8-x86_64
     }
 
     namespace export \

@@ -190,6 +190,10 @@ The <tt kite dist> command builds distribution .zip files for the project.
 This command defines a distribution target called <i name>; the
 <i patterns> indicate the specific files to include in the .zip file.<p>
 
+The <i name> may include the token "%platform"; if so, it will be replaced
+by the return value of <tt platform::identify>.  This is appropriate for
+installation sets for projects containing stand-alone executables.<p>
+
 The value of <i patterns> is a list of patterns; each pattern is one of the
 following:<p>
 
@@ -213,10 +217,23 @@ following:<p>
 A project may define any number of distribution targets; by convention,
 the main one is called "install".<p>
 
-For example, a typical "install" distribution might look like this:<p>
+For example, a typical "install" distribution for a project delivering one or more applications as starkits might look like this:<p>
 
 <example>
 dist install {
+    README.md
+    LICENSE.md
+    docs/*.html
+    docs/*/*.html
+    %apps
+}
+</example><p>
+
+If the project delivers its applications as stand-alone executables, and also
+provides one or more libraries, it might look like this:
+
+<example>
+dist install-%platform {
     README.md
     LICENSE.md
     %get { docs/ug.docx http://www.example.com/ug.docx }
