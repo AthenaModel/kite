@@ -2,7 +2,8 @@
 
 ## Next
 
-
+* macro(n) should support textutil::expander's textcmd.
+  * Should manpage(n)/kitedocs(n) use it for quoting?
 * Add %install target to dist; includes an installation script
   * a list of bash commands.
 * Clean up "kite new" syntax.  
@@ -10,7 +11,6 @@
 
 * Test suite for table(n).
 * Cleanup:
-  * Define a notion of ehtml(n) macro sets.
   * Compare docs.tcl with tool_docs.tcl and make sure there's a clean
     division.
     * Add a call to docs.tcl indicating whether there are documents

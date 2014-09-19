@@ -1,0 +1,288 @@
+# -*-Tcl-*-
+#-----------------------------------------------------------------------
+# TITLE:
+#    ehtml.test
+#
+# PROJECT:
+#    athena-kite
+#
+# DESCRIPTION:
+#    kitedocs(n) test suite for ehtml.tcl
+#
+#-----------------------------------------------------------------------
+
+#-----------------------------------------------------------------------
+# Initialize tcltest(n)
+
+if {[lsearch [namespace children] ::tcltest] == -1} {
+    package require tcltest 2.2 
+    eval ::tcltest::configure $argv
+}
+
+# Import tcltest(n)
+namespace import ::tcltest::*
+
+ 
+#-----------------------------------------------------------------------
+# Load the package to be tested
+
+source ../../lib/kiteutils/pkgModules.tcl
+namespace import ::kiteutils::*
+
+#-------------------------------------------------------------------
+# Setup
+
+# setup
+#
+# Set up for tests
+
+proc setup {} {
+    macro trans
+    trans reset
+}
+
+# cleanup
+#
+# Cleans up after a test.
+
+proc cleanup {} {
+    trans destroy
+}
+
+# pexpand block
+#
+# block   - A block of text
+#
+# Expands macros and pretty prints the result.
+
+proc pexpand {block} {
+    set result [trans expand [outdent $block]]
+    return "\n[string trimright $result]\n"
+}
+
+# Tracking passes
+
+variable passes {}
+
+proc tracker {} {
+    variable passes
+    lappend passes [trans pass]
+}
+
+#-------------------------------------------------------------------
+# expand
+
+test expand-1.1 {no macros} -setup {
+    setup
+} -body {
+    trans expand {-hi-}
+} -cleanup {
+    cleanup
+} -result {-hi-}
+
+test expand-1.2 {custom proc as macro} -setup {
+    setup
+    trans proc hi {name} {return "Hello, $name!"}
+} -body {
+    trans expand {-<hi Fred>-}
+} -cleanup {
+    cleanup
+} -result {-Hello, Fred!-}
+
+#-------------------------------------------------------------------
+# pass
+
+test pass-1.1 {two passes} -setup {
+    setup
+    set passes [list]
+    trans alias tracker ::tracker
+} -body {
+    trans expand {<tracker>}
+    set passes
+} -cleanup {
+    cleanup
+} -result {1 2}
+
+#-------------------------------------------------------------------
+# reset
+
+test reset-1.1 {custom proc as macro} -setup {
+    setup
+    trans proc hi {name} {return "Hello, $name!"}
+    trans reset
+} -body {
+    trans expand {-<hi Fred>-}
+} -returnCodes {
+    error
+} -cleanup {
+    cleanup
+} -match glob -result {Error in macro * invalid command name "hi"}
+
+#-------------------------------------------------------------------
+# expandfile
+
+test expandfile-1.1 {expands file} -setup {
+    setup
+    makeFile "-<expr 1 + 1>-" expandfile-1.1.txt
+} -body {
+    string trim [trans expandfile expandfile-1.1.txt]
+} -cleanup {
+    cleanup
+} -result {-2-}
+    
+#-------------------------------------------------------------------
+# Macro: expand
+
+test macro_expand-1.1 {expand} -setup {
+    setup
+} -body {
+    trans expand {-<expand {<expr 1 + 1>}>-}
+} -cleanup {
+    cleanup
+} -result {-2-}
+
+#-------------------------------------------------------------------
+# Macro: lb
+
+test macro_lb-1.1 {lb} -setup {
+    setup
+} -body {
+    trans expand {-<lb>-}
+} -cleanup {
+    cleanup
+} -result {-<-}
+
+#-------------------------------------------------------------------
+# Macro: macro pass
+
+test macro_macro_pass-1.1 {pass} -setup {
+    setup
+} -body {
+    trans expand {-<macro pass>-}
+} -cleanup {
+    cleanup
+} -result {-2-}
+
+#-------------------------------------------------------------------
+# Macro: macro cpush/cpop/etc.
+
+test macro_macro_stack-1.1 {context stack} -setup {
+    setup
+    trans proc mytag {a b} {
+        macro cpush mytag
+        macro cset a $a
+        macro cset b $b
+    }
+
+    trans proc /mytag {} {
+        return "***\n[macro cpop mytag]***"
+    }
+} -body {
+    pexpand {
+        BEFORE
+        <mytag this that>
+        cname:  <macro cname>
+        cis T:  <macro cis mytag>
+        cis F:  <macro cis nonesuch>
+        parm a: <macro cget a>
+        parm b: <macro cget b>
+        </mytag>
+        AFTER
+    }
+} -cleanup {
+    cleanup
+} -result {
+BEFORE
+***
+that
+cname:  mytag
+cis T:  1
+cis F:  0
+parm a: this
+parm b: that
+***
+AFTER
+}
+
+#-------------------------------------------------------------------
+# Macro: pass
+
+test macro_pass-1.1 {pass} -setup {
+    setup
+} -body {
+    trans expand {-<pass>-}
+} -cleanup {
+    cleanup
+} -result {-2-}
+
+#-------------------------------------------------------------------
+# Macro: warn
+
+test macro_warn-1.1 {warn} -setup {
+    setup
+    trans proc whoops {} {
+        if {[pass] == 2} {
+            macro warn "Whoops!"
+        }
+    }
+
+} -body {
+    trans expand {-<whoops>-}
+} -cleanup {
+    cleanup
+} -output {Warning: Whoops!
+} -result {--}
+
+#-------------------------------------------------------------------
+# Macro: rb
+
+test macro_rb-1.1 {rb} -setup {
+    setup
+} -body {
+    trans expand {-<rb>-}
+} -cleanup {
+    cleanup
+} -result {->-}
+
+#-------------------------------------------------------------------
+# Macro: swallow
+
+test macro_swallow-1.1 {swallow} -setup {
+    setup
+} -body {
+    trans expand {-<swallow {expr {1 + 1}}>-}
+} -cleanup {
+    cleanup
+} -result {--}
+
+#-------------------------------------------------------------------
+# Macro: template
+
+test macro_template-1.1 {simple macro} -setup {
+    setup
+} -body {
+    trans expand {-<template hi {name} {Hello, $name!}><hi friend>-}
+} -cleanup {
+    cleanup
+} -result {-Hello, friend!-}
+
+test macro_template-1.2 {macro with template body} -setup {
+    setup
+} -body {
+    trans expand {-<template hi {name} {
+            set name [string toupper $name]
+        } {Hello, $name!}><hi friend>-}
+} -cleanup {
+    cleanup
+} -result {-Hello, FRIEND!-}
+
+
+
+#-------------------------------------------------------------------
+# Cleanup
+
+cleanupTests
+
+
+
+

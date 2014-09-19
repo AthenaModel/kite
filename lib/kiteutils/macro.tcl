@@ -21,6 +21,7 @@ namespace eval ::kiteutils:: {
 # macro ensemble
 
 snit::type ::kiteutils::macro {
+
     #-------------------------------------------------------------------
     # Components
 
@@ -46,6 +47,7 @@ snit::type ::kiteutils::macro {
     delegate method lb          to exp
     delegate method rb          to exp
     delegate method setbrackets to exp
+    delegate method textcmd     to exp
     delegate method where       to exp
 
     #-------------------------------------------------------------------
@@ -183,13 +185,47 @@ snit::type ::kiteutils::macro {
         $interp smartalias expand 1 1 {text} \
             [mymethod expandonce]
 
-
         # lb
         $interp proc lb {} { return "<"}
 
         # macro
-        $interp smartalias macro 1 - {subcommand ?args...?} \
-            $self
+        $interp ensemble macro
+
+        # macro cget
+        $interp smartalias "macro cget" 1 1 {varname} \
+            [mymethod cget]
+
+        # macro cis
+        $interp smartalias "macro cis" 1 1 {cname} \
+            [mymethod cis]
+
+        # macro cname
+        $interp smartalias "macro cname" 0 0 {} \
+            [mymethod cname]
+
+        # macro cpop
+        $interp smartalias "macro cpop" 1 1 {cname} \
+            [mymethod cpop]
+
+        # macro cpush
+        $interp smartalias "macro cpush" 1 1 {cname} \
+            [mymethod cpush]
+
+        # macro cset
+        $interp smartalias "macro cset" 2 2 {varname value} \
+            [mymethod cset]
+
+        # macro cvar
+        $interp smartalias "macro cvar" 1 1 {varname} \
+            [mymethod cvar]
+
+        # macro pass
+        $interp smartalias "macro pass" 0 0 {} \
+            [mymethod pass]
+
+        # macro warn
+        $interp smartalias "macro warn" 1 1 {text} \
+            [mymethod warn]
 
         # pass
         $interp smartalias pass 0 0 {} \

@@ -1,4 +1,4 @@
-project athena-kite 0.2.1a0 "Athena/Kite Development Tool"
+project athena-kite 0.2.1 "Athena/Kite Development Tool"
 poc William.H.Duquette@jpl.nasa.gov
 app kite -apptype exe
 provide kiteutils
