@@ -33,14 +33,14 @@ namespace eval ::kiteinfo:: {
     docs/*.html
     docs/*/*.html
 }
+        local-crc32 0
         reqver-zipfile::encode 0.3
         reqver-platform 1.0
         gui-kite 0
         reqver-textutil::expander 1.3.1
         reqver-snit 2.3
         binary-kiteutils 0
-        pkgversion 0.2.1
-        requires {platform snit textutil::expander zipfile::encode tls}
+        requires {platform snit textutil::expander zipfile::encode tls crc32}
         shell {
     package require kiteutils
     package require kitedocs
@@ -57,6 +57,7 @@ namespace eval ::kiteinfo:: {
         local-textutil::expander 0
         local-snit 0
         version 0.2.1
+        reqver-crc32 1.3
         dists install
     }
 
