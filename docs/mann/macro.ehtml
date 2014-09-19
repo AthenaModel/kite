@@ -59,71 +59,76 @@ subcommands:<p>
 
 <deflist instance>
 
-<defitem cget {$obj cget <i>varname</i>}>
-<defitem cis {$obj cis <i>cname</i>}>
-<defitem cname {$obj cname}>
-<defitem cpop {$obj cpop <i>cname</i>}>
-<defitem cpush {$obj cpush <i>cname</i>}>
-<defitem cset {$obj cset <i>varname value</i>}>
-<defitem cvar {$obj cvar <i>varname</i>}>
-<defitem errmode {$obj errmode}>
-<defitem lb {$obj lb}>
-<defitem rb {$obj rb}>
-<defitem setbrackets {$obj setbrackets}>
-<defitem where {$obj where}>
+<defitem cget {<i obj> cget <i>varname</i>}>
+<defitem cis {<i obj> cis <i>cname</i>}>
+<defitem cname {<i obj> cname}>
+<defitem cpop {<i obj> cpop <i>cname</i>}>
+<defitem cpush {<i obj> cpush <i>cname</i>}>
+<defitem cset {<i obj> cset <i>varname value</i>}>
+<defitem cvar {<i obj> cvar <i>varname</i>}>
+<defitem errmode {<i obj> errmode}>
+<defitem lb {<i obj> lb}>
+<defitem rb {<i obj> rb}>
+<defitem setbrackets {<i obj> setbrackets}>
+<defitem where {<i obj> where}>
 
 These commands provide access to the <xref textutil::expander(n)>;
 see that man page for details.<p>
 
-<defitem alias {$obj alias <i>srcToken</i>}>
-<defitem alias {$obj alias <i>srcToken</i> {}}>
-<defitem alias {$obj alias <i>srcCmd targetCmd</i> ?<i>arg...</i>?}>
-<defitem alias {$obj alias <i>srcCmd targetCmd</i> ?<i>arg...</i>?}>
-<defitem ensemble {$obj ensemble <i>alias</i>}>
-<defitem proc {$obj proc <i>name arglist body</i>}>
-<defitem smartalias {$obj smartalias <i>alias min max argsyn prefix</i>}>
+<defitem alias {<i obj> alias <i>srcToken</i>}>
+<defitem alias {<i obj> alias <i>srcToken</i> {}}>
+<defitem alias {<i obj> alias <i>srcCmd targetCmd</i> ?<i>arg...</i>?}>
+<defitem alias {<i obj> alias <i>srcCmd targetCmd</i> ?<i>arg...</i>?}>
+<defitem ensemble {<i obj> ensemble <i>alias</i>}>
+<defitem proc {<i obj> proc <i>name arglist body</i>}>
+<defitem smartalias {<i obj> smartalias <i>alias min max argsyn prefix</i>}>
 
 These commands are used to define commands in the macro interpreter, i.e.,
 to define new macros.  See <xref smartinterp(n)> for details.<p>
 
-<defitem reset {$obj reset}>
+<defitem reset {<i obj> reset}>
 
 Re-initializes the macro interpreter, defining any macros in registered
 macro sets.  Any other macros defined by the client
 will need to be redefined.<p>
 
-<defitem register {$obj register <i macroset>}>
+<defitem register {<i obj> register <i macroset>}>
 
 Registers a <xref macroset(i)> macro set with this macro processor.
 Its macros will be defined for use on the next <i reset>.<p>
 
-<defitem eval {$obj eval <i>script</i>}>
+<defitem eval {<i obj> eval <i>script</i>}>
 
 Evaluates the script in the context of the macro interpreter.<p>
 
-<defitem expand {$obj expand <i>text</i>}>
+<defitem expand {<i obj> expand <i>text</i>}>
 
 Expands the <i>text</i> in two passes, and returns the result of the
 expansion.   Use <iref pass> to write
 macros which are pass-sensitive.<p>
 
-<defitem expandfile {$obj expandfile <i>name</i>}>
+<defitem expandfile {<i obj> expandfile <i>name</i>}>
 
 Reads the contents of the text file called <i>name</i>, expands it in
 two passes, and returns the expansion.  Use <iref pass> to write
 macros which are pass-sensitive.<p>
 
-<defitem expandonce {$obj expandonce <i text>}>
+<defitem expandonce {<i obj> expandonce <i text>}>
 
 Does a simple single-pass expansion of the text.  This is useful in
 the implementation of macros that recursively expand one or more of
 their arguments, as it leaves the <iref pass> number unchanged.<p>
 
-<defitem pass {$obj pass}>
+<defitem pass {<i obj> pass}>
 
 Returns the expansion pass number, 1 or 2.   It's common to build up 
 indices during the first pass and generate tables of links in the 
 second.<p>
+
+<defitem warn {<i obj> warn <i text>}>
+
+Outputs the <i text> to the console as a warning.
+<b TODO:> There should be a <tt -warncmd> option to handle the warning.<p>
 
 </deflist ehtml>
 

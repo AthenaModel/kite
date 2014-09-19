@@ -1,5 +1,8 @@
 <manpage macro(5) "Basic macro(n) macros">
 
+<xrefset textutil::expander(n) textutil::expander(n) \
+        "http://tcllib.sourceforge.net/doc/expander.html">
+
 <section SYNOPSIS>
 
 <itemlist>
@@ -50,10 +53,40 @@ Returns the left-hand macro bracket, e.g., "<code><lb></code>".
 Formats that produce HTML will usually redefine this to product the
 appropriate HTML attribute.<p>
 
+<defitem macro {<tag macro {<i subcommand> ?<i args...>?}>}>
+
+This macro gives access to some of macro(n)'s advanced features.  It is
+usually used within macro definitions.<p>
+
+<deflist macrosub>
+
+<defitem "macro cget"  {<tag macro {cget <i>varname</i>}>}>
+<defitem "macro cis"   {<tag macro {cis <i>cname</i>}>}>
+<defitem "macro cname" {<tag macro {cname}>}>
+<defitem "macro cpop"  {<tag macro {cpop <i>cname</i>}>}>
+<defitem "macro cpush" {<tag macro {cpush <i>cname</i>}>}>
+<defitem "macro cset"  {<tag macro {cset <i>varname value</i>}>}>
+<defitem "macro cvar"  {<tag macro {cvar <i>varname</i>}>}>
+
+These macro's give access to 
+<xref textutil::expander(n)>'s context stack mechanism, which allows the
+definition of pairs of starting and ending tag macros that work together.<p>
+
+<defitem "macro pass" {<tag macro pass>}>
+
+Returns the pass number.<p>
+
+<defitem "macro warn" {<tag macro {warn <i>text</i>}>}>
+
+Outputs a warning to the console.<p>
+
+</deflist macrosub>
+
 
 <defitem pass "<tag pass>">
 
-Returns the pass number.<p>
+<b Deprecated:> Returns the pass number.  
+Use <itag macro pass> instead.<p>
 
 <defitem proc "<tag proc {<i name arglist body>}>">
 
@@ -112,7 +145,7 @@ second pass (e.g., to output an accumulated list, such as a table of
 contents).<p>
 
 In such a case, the macro can use <xref macro(n)>'s
-<xref macro(n) pass> method or the <itag pass> macro 
+<xref macro(n) pass> method or the <itag macro pass> macro 
 to find out which pass it is.<p>
 
 <section AUTHOR>

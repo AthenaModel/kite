@@ -279,8 +279,8 @@ snit::type ::kitedocs::manpage {
         $ehtml smartalias tclsh 1 1 {script} \
             [myproc tclsh]
 
-        $ehtml proc itag {name} {
-            return "[tt][lb][iref $name][rb][/tt]"
+        $ehtml proc itag {args} {
+            return "[tt][lb][iref {*}$args][rb][/tt]"
         }
     }
     
