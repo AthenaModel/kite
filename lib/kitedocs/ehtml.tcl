@@ -283,6 +283,7 @@ snit::type ::kitedocs::ehtml {
             macro cset date      [nbsp $date]
             macro cset status    [nbsp $status]
             macro cset initiator [nbsp $initiator]
+            return
         }
 
         $macro template /change {} {

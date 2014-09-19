@@ -63,100 +63,22 @@ proc pexpand {block} {
     return "\n[string trimright $result]\n"
 }
 
-# Tracking passes
-
-variable passes {}
-
-proc tracker {} {
-    variable passes
-    lappend passes [trans pass]
-}
-
-#-------------------------------------------------------------------
-# expand
-
-test expand-1.1 {no macros} -setup {
-    setup
-} -body {
-    trans expand {-hi-}
-} -cleanup {
-    cleanup
-} -result {-hi-}
-
-test expand-1.2 {custom proc as macro} -setup {
-    setup
-    trans proc hi {name} {return "Hello, $name!"}
-} -body {
-    trans expand {-<hi Fred>-}
-} -cleanup {
-    cleanup
-} -result {-Hello, Fred!-}
-
-#-------------------------------------------------------------------
-# pass
-
-test pass-1.1 {two passes} -setup {
-    setup
-    set passes [list]
-    trans alias tracker ::tracker
-} -body {
-    trans expand {<tracker>}
-    set passes
-} -cleanup {
-    cleanup
-} -result {1 2}
-
-#-------------------------------------------------------------------
-# clear
-
-test clear-1.1 {custom proc as macro} -setup {
-    setup
-    trans proc hi {name} {return "Hello, $name!"}
-    trans clear
-} -body {
-    trans expand {-<hi Fred>-}
-} -returnCodes {
-    error
-} -cleanup {
-    cleanup
-} -match glob -result {Error in macro * invalid command name "hi"}
-
-#-------------------------------------------------------------------
-# expandFile
-
-test expandFile-1.1 {expands file} -setup {
-    setup
-    makeFile "-<expr 1 + 1>-" expandFile-1.1.txt
-} -body {
-    string trim [trans expandFile expandFile-1.1.txt]
-} -cleanup {
-    cleanup
-} -result {-2-}
     
 #-------------------------------------------------------------------
-# textToID
+# hrule
 
-test textToID-1.1 {strips whitespace} -setup {
-    setup
-} -body {
-    trans textToID {  My, Text&string! }
-} -cleanup {
-    cleanup
-} -result {my_textstring}
-
-
-#-------------------------------------------------------------------
-# Standard Macros
-
-test macros-1.1 {hrule} -setup {
+test hrule-1.1 {hrule} -setup {
     setup
 } -body {
     trans expand {-<hrule>-}
 } -cleanup {
     cleanup
-} -result {-<p><hr></p>-}
+} -result {-<p><hr><p>-}
 
-test macros-2.1 {lb} -setup {
+#-------------------------------------------------------------------
+# lb
+
+test lb-1.1 {lb} -setup {
     setup
 } -body {
     trans expand {-<lb>-}
@@ -164,7 +86,10 @@ test macros-2.1 {lb} -setup {
     cleanup
 } -result {-&lt;-}
 
-test macros-3.1 {link} -setup {
+#-------------------------------------------------------------------
+# link
+
+test link-1.1 {link} -setup {
     setup
 } -body {
     trans expand {-<link foo.html>-}
@@ -172,7 +97,7 @@ test macros-3.1 {link} -setup {
     cleanup
 } -result {-<a href="foo.html">foo.html</a>-}
 
-test macros-3.2 {link with anchor} -setup {
+test link-1.2 {link with anchor} -setup {
     setup
 } -body {
     trans expand {-<link foo.html bar>-}
@@ -180,7 +105,10 @@ test macros-3.2 {link with anchor} -setup {
     cleanup
 } -result {-<a href="foo.html">bar</a>-}
 
-test macros-4.1 {nbsp} -setup {
+#-------------------------------------------------------------------
+# nbsp
+
+test nbsp-1.1 {nbsp} -setup {
     setup
 } -body {
     trans expand {-<nbsp "a b c">-}
@@ -188,7 +116,10 @@ test macros-4.1 {nbsp} -setup {
     cleanup
 } -result {-a&nbsp;b&nbsp;c-}
 
-test macros-5.1 {quote} -setup {
+#-------------------------------------------------------------------
+# quote
+
+test quote-1.1 {quote} -setup {
     setup
 } -body {
     trans expand {-<quote "<&>">-}
@@ -196,15 +127,10 @@ test macros-5.1 {quote} -setup {
     cleanup
 } -result {-&lt;&amp;&gt;-}
 
-test macros-6.1 {quote} -setup {
-    setup
-} -body {
-    trans expand {-<quote "<&>">-}
-} -cleanup {
-    cleanup
-} -result {-&lt;&amp;&gt;-}
+#-------------------------------------------------------------------
+# rb
 
-test macros-7.1 {rb} -setup {
+test rb-1.1 {rb} -setup {
     setup
 } -body {
     trans expand {-<rb>-}
@@ -212,7 +138,21 @@ test macros-7.1 {rb} -setup {
     cleanup
 } -result {-&gt;-}
 
-test macros-8.1 {xref/xrefset} -setup {
+#-------------------------------------------------------------------
+# textToID
+
+test textToID-1.1 {strips whitespace} -setup {
+    setup
+} -body {
+    trans expand {-<textToID "  My, Text&string! ">-}
+} -cleanup {
+    cleanup
+} -result {-my_textstring-}
+
+#-------------------------------------------------------------------
+# xref/xrefset
+
+test xref-1.1 {xref/xrefset} -setup {
     setup
 } -body {
     trans expand {-<xref foo(n)>-}
@@ -220,16 +160,16 @@ test macros-8.1 {xref/xrefset} -setup {
     cleanup
 } -result {-<a href="./mann/foo.html">foo(n)</a>-}
 
-test macros-8.2 {xref/xrefset} -setup {
+test xref-1.2 {xref/xrefset} -setup {
     setup
-    trans xrefset foo Foo! ./bar.html
+    trans eval [list xrefset foo Foo! ./bar.html]
 } -body {
     trans expand {-<xref foo>-}
 } -cleanup {
     cleanup
 } -result {-<a href="./bar.html">Foo!</a>-}
 
-test macros-8.3 {xrefset returns link} -setup {
+test xref-1.3 {xrefset returns link} -setup {
     setup
 } -body {
     trans expand {-<xrefset foo Foo! ./bar.html>-}
@@ -237,33 +177,252 @@ test macros-8.3 {xrefset returns link} -setup {
     cleanup
 } -result {-<a href="./bar.html">Foo!</a>-}
 
-test macros-9.1 {swallow} -setup {
+#-------------------------------------------------------------------
+# HTML Equivalents
+
+test html_equivalent-1.1 {expand to themselves.} -setup {
     setup
 } -body {
-    trans expand {-<swallow {expr {1 + 1}}>-}
+    pexpand {
+        <b>........</b>
+        <i>........</i>
+        <code>.....</code>
+        <tt>.......</tt>
+        <em>.......</em>
+        <strong>...</strong>
+        <sup>......</sup>
+        <sub>......</sub>
+        <pre>......</pre>
+        <ol>.......</ol>
+        <ul>.......</ul>
+        <li>.......</li>
+        <p>........</p>
+        <table>....</table>
+        <tr>.......</tr>
+        <th>.......</th>
+        <td>.......</td>
+    }
 } -cleanup {
     cleanup
-} -result {--}
+} -result {
+<b>........</b>
+<i>........</i>
+<code>.....</code>
+<tt>.......</tt>
+<em>.......</em>
+<strong>...</strong>
+<sup>......</sup>
+<sub>......</sub>
+<pre>......</pre>
+<ol>.......</ol>
+<ul>.......</ul>
+<li>.......</li>
+<p>........</p>
+<table>....</table>
+<tr>.......</tr>
+<th>.......</th>
+<td>.......</td>
+}
 
-test macros-10.1 {simple macro} -setup {
+test html_equivalent-1.2 {style macros convenience forms} -setup {
     setup
 } -body {
-    trans expand {-<macro hi {name} {Hello, $name!}><hi friend>-}
+    pexpand {
+        <b .....some text>
+        <i .....some text>
+        <code ..some text>
+        <tt ....some text>
+        <em ....some text>
+        <strong some text>
+        <sup ...some text>
+        <sub ...some text>
+        <pre ...some text>
+    }
 } -cleanup {
     cleanup
-} -result {-Hello, friend!-}
+} -result {
+<b>.....some text</b>
+<i>.....some text</i>
+<code>..some text</code>
+<tt>....some text</tt>
+<em>....some text</em>
+<strong>some text</strong>
+<sup>...some text</sup>
+<sub>...some text</sub>
+<pre>...some text</pre>
+}
 
-test macros-10.2 {macro with template body} -setup {
+test html_equivalent-1.3 {img can have args} -setup {
     setup
 } -body {
-    trans expand {-<macro hi {name} {
-            set name [string toupper $name]
-        } {Hello, $name!}><hi friend>-}
+    trans expand {-<img src="tbd">-}
 } -cleanup {
     cleanup
-} -result {-Hello, FRIEND!-}
+} -result {-<img src="tbd">-}
 
-test macros-11.1 {change log} -setup {
+
+#-------------------------------------------------------------------
+# deflist.../deflist
+
+
+test deflist-1.1 {definition list} -setup {
+    setup
+} -body {
+    pexpand {
+        <deflist>
+        <def "The Term">
+        Text describing the term.<p>
+        <def "Another Term">
+        Text describing the term.<p>
+        </deflist>
+    }
+} -cleanup {
+    cleanup
+} -result {
+<dl>
+<dt><b>The Term</b></dt>
+<dd>
+        
+Text describing the term.<p>
+<dt><b>Another Term</b></dt>
+<dd>
+        
+Text describing the term.<p>
+</dl>
+}
+
+test deflist-1.2 {def expands term} -setup {
+    setup
+} -body {
+    pexpand {<def "The <i Term>">}
+} -cleanup {
+    cleanup
+} -result {
+<dt><b>The <i>Term</i></b></dt>
+<dd>
+}
+
+#-------------------------------------------------------------------
+# topiclist.../topiclist
+
+
+test topiclist-1.1 {topic list} -setup {
+    setup
+} -body {
+    pexpand {
+        <topiclist>
+        <topic "The Term">
+        Text describing the term.
+        </topic>
+        <topic "Another Term">
+        Text describing the term.
+        </topic>
+        </topiclist>
+    }
+} -cleanup {
+    cleanup
+} -result {
+<table class="topiclist">
+        
+<tr class="topic">
+<td class="topicname">The Term</td>
+<td class="topictext">
+        
+Text describing the term.
+</td>
+</tr>
+        
+<tr class="topic">
+<td class="topicname">Another Term</td>
+<td class="topictext">
+        
+Text describing the term.
+</td>
+</tr>
+        
+</table>
+}
+
+test topiclist-1.2 {topic expands term} -setup {
+    setup
+} -body {
+    pexpand {<topic "The <i Term>">}
+} -cleanup {
+    cleanup
+} -result {
+<tr class="topic">
+<td class="topicname">The <i>Term</i></td>
+<td class="topictext">
+}
+
+#-------------------------------------------------------------------
+# example.../example
+
+test example-1.1 {example} -setup {
+    setup
+} -body {
+    pexpand {
+        <example>
+        Some text.
+        </example>
+    }
+} -cleanup {
+    cleanup
+} -result {
+<pre class="example">
+Some text.
+</pre>
+}
+
+
+#-------------------------------------------------------------------
+# listing.../listing
+
+test listing-1.1 {listing} -setup {
+    setup
+} -body {
+    pexpand {
+        <listing>
+        Some text.
+        Some more text.
+        Still more text.
+        </listing>
+    }
+} -cleanup {
+    cleanup
+} -result {
+<pre class="listing">
+<span class="linenum">0001</span> Some text.
+<span class="linenum">0002</span> Some more text.
+<span class="linenum">0003</span> Still more text.
+</pre>
+}
+
+#-------------------------------------------------------------------
+# mark/bigmark
+
+test mark-1.1 {mark} -setup {
+    setup
+} -body {
+    trans expand {-<mark A>-}
+} -cleanup {
+    cleanup
+} -result {-<div class="mark">A</div>-}
+
+test mark-1.2 {bigmark} -setup {
+    setup
+} -body {
+    trans expand {-<bigmark A>-}
+} -cleanup {
+    cleanup
+} -result {-<div class="bigmark">A</div>-}
+
+
+#-------------------------------------------------------------------
+# changelog.../changelog
+
+
+test changelog-1.1 {change log} -setup {
     setup
 } -body {
     pexpand {
@@ -283,7 +442,7 @@ test macros-11.1 {change log} -setup {
 <th align="left" width="10%">Date</th>
 <th align="left" width="10%">Initiator</th>
 </tr>
-    
+        
 <tr class="oddrow" valign=top>
 <td>New</td>
 <td>
@@ -292,11 +451,15 @@ Text describing the change.
 <td>7/9/2014</td>
 <td>will</td>
 </tr>
-    
+        
 </table><p>
 }
 
-test macros-12.1 {procedure} -setup {
+#-------------------------------------------------------------------
+# procedure.../procedure
+
+
+test procedure-1.1 {procedure} -setup {
     setup
 } -body {
     pexpand {
@@ -312,18 +475,15 @@ test macros-12.1 {procedure} -setup {
     cleanup
 } -result {
 <table border="1" cellspacing="0" cellpadding="2">
-    
+        
 <tr valign="top">
 <td><b>1.</b></td>
 <td>
-    
+        
 What to do.
 </td><td>
-    
 How to do it.
-</td>
-</tr>
-    
+</td></tr>
 </table>
 }
 

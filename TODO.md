@@ -2,6 +2,8 @@
 
 ## Next
 
+* ehtml(5) macro sets should use CSS for formatting, where possible.
+  * Provide default CSS macro!
 * macro(n) should support textutil::expander's textcmd.
   * Should manpage(n)/kitedocs(n) use it for quoting?
 * Add %install target to dist; includes an installation script
