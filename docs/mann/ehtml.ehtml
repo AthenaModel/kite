@@ -40,6 +40,11 @@ describes some standard macros<p>
 
 <deflist commands>
 
+<defitem "ehtml css" {ehtml css}>
+
+Returns default CSS styles for the macros in this macro set.  Clients
+are free to use them or not.<p>
+
 <defitem "ehtml install" {ehtml install <i>macro</i>}>
 
 Installs the <xref ehtml(5)> macros into <i macro>, an instance

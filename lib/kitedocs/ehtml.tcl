@@ -26,6 +26,114 @@ snit::type ::kitedocs::ehtml {
     pragma -hasinstances no -hastypedestroy no
 
     #-------------------------------------------------------------------
+    # Lookup Tables
+
+    # css: Standard ehtml(5) CSS
+    typevariable css {
+        A {
+            text-decoration: none;
+        }
+
+        TABLE {
+            margin-top:    4px;
+            margin-bottom: 4px;
+        }
+
+        TR {
+            vertical-align: baseline;
+        }
+
+        TH {
+            padding-left: 4px;
+        }
+
+        TD {
+            padding-left: 4px;
+        }
+
+        /* Table Formatting Classes: "pretty" 
+         * Border around the outside, even/odd striping, no internal
+         * border lines.
+         */
+        TABLE.pretty {
+            border: 1px solid black;
+            border-spacing: 0;
+        }
+
+        TABLE.pretty TR.header {
+            font-weight: bold;
+            color: white;
+            background-color: #000099;
+        }
+
+        TABLE.pretty TR.oddrow {
+            color: black;
+            background-color: white;
+        }
+
+        TABLE.pretty TR.evenrow {
+            color: black;
+            background-color: #EEEEEE;
+        }
+
+        /* Examples, listings, and marks */
+        PRE.example {
+            background:     #FFFDD1 ;
+            border:         1px solid blue;
+            padding-top:    2px;
+            padding-bottom: 2px;
+            padding-left:   4px;
+        }
+
+        PRE.listing {
+            background:     #FFFDD1 ;
+            border:         1px solid blue;
+            padding-top:    4px;
+            padding-bottom: 4px;
+            padding-left:   4px;
+        }
+
+        SPAN.linenum {
+            background:     #E3E08F ;
+        }
+
+        DIV.mark {
+            display: inline;
+            font-family: Verdana;
+            font-size: 75%;
+            background: black;
+            color: white;
+            border: 1px solid black;
+            border-radius: 5px;
+            padding-left: 2px;
+            padding-right: 2px;
+        }
+
+        DIV.bigmark {
+            display: inline;
+            font-family: Verdana;
+            font-size: 100%;
+            background: black;
+            color: white;
+            border: 1px solid black;
+            border-radius: 5px;
+            padding-left: 2px;
+            padding-right: 2px;
+        }
+
+        /* Topic Lists. */
+        TR.topic {
+            vertical-align: baseline;
+        }
+
+        TR.topicname {
+            min-width: 1.5em;
+        }
+
+    }
+    
+
+    #-------------------------------------------------------------------
     # Configuration Type Variables
 
     typevariable manroots -array {}
@@ -333,6 +441,14 @@ snit::type ::kitedocs::ehtml {
         $macro proc /step/     {} { return "</td><td>"  }
         $macro proc /step      {} { return "</td></tr>" }
         $macro proc /procedure {} { return "</table>"   }
+    }
+
+    # css
+    #
+    # Return standard ehtml(5) CSS styles.
+
+    typemethod css {} {
+        return $css
     }
 
     #-------------------------------------------------------------------

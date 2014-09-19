@@ -75,85 +75,14 @@ snit::type ::kitedocs::kitedoc {
     # Default style sheet
 
     typevariable css {
-        a {
-            text-decoration: none;
-        }
-        body {
+        BODY {
             color: black;
             background: white;
             margin-left: 1%;
             margin-right: 1%;
         }
-        table {
-            margin-top:    4px;
-            margin-bottom: 4px;
-            width:         100%;
-        }
-        th {
-            padding-left: 4px;
-        }
-        td {
-            padding-left: 4px;
-        }
-        tr {
-            vertical-align: baseline;
-        }
-
-        /* Table Formatting Classes: "pretty" 
-         * Border around the outside, even/odd striping, no internal
-         * border lines.
-         */
-        TABLE.pretty {
-            border: 1px solid black;
-            border-spacing: 0;
-        }
-
-        TABLE.pretty TR.header {
-            font-weight: bold;
-            color: white;
-            background-color: #000099;
-        }
-
-        TABLE.pretty TR.oddrow {
-            color: black;
-            background-color: white;
-        }
-
-        TABLE.pretty TR.evenrow {
-            color: black;
-            background-color: #EEEEEE;
-        }
-
-        /* Topic List formatting classes */
-        tr.topic {
-            vertical-align: baseline;
-        }
-
-        td.topicname {
-            min-width: 1.5em;
-        }
-
-        div.mark {
-            display: inline;
-            font-family: Verdana;
-            font-size: 75%;
-            background: black;
-            color: white;
-            border: 1px solid black;
-            border-radius: 5px;
-            padding-left: 2px;
-            padding-right: 2px;
-        }
-        div.bigmark {
-            display: inline;
-            font-family: Verdana;
-            font-size: 100%;
-            background: black;
-            color: white;
-            border: 1px solid black;
-            border-radius: 5px;
-            padding-left: 2px;
-            padding-right: 2px;
+        TABLE {
+            width: 100%;
         }
     }
 
@@ -1023,7 +952,7 @@ snit::type ::kitedocs::kitedoc {
     # Returns the standard CSS styles.
 
     proc standardstyle {} {
-        return $css
+        return "[kitedocs::ehtml css]\n$css"
     }
 
 }

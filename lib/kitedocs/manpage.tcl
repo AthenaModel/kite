@@ -31,6 +31,48 @@ snit::type ::kitedocs::manpage {
     pragma -hastypedestroy 0 -hasinstances 0
 
     #-------------------------------------------------------------------
+    # Look-up Tables
+
+    # manpage(5)-specific CSS.
+    typevariable css {
+        BODY {
+            color: black;
+            background: white;
+            margin-left: 6%;
+            margin-right: 6%;
+        }
+
+        H1 {
+            margin-left: -5%;
+        }
+        H2 {
+            margin-left: -5%;
+        }
+        HR {
+            margin-left: -5%;
+        }
+
+        TABLE {
+            text-align:    left;
+        }
+        
+        [tif {$mktreeFlag} {
+            |<--
+            /* mktree styles */
+            ul.mktree  li  { list-style: none; }
+            ul.mktree, ul.mktree ul, ul.mktree li { 
+                margin-left:10px; padding:0px; }
+            ul.mktree li .bullet { padding-left: 10px }
+            ul.mktree  li.liOpen   .bullet {cursor : pointer; }
+            ul.mktree  li.liClosed .bullet {cursor : pointer; }
+            ul.mktree  li.liBullet .bullet {cursor : default; }
+            ul.mktree  li.liOpen   ul {display: block; }
+            ul.mktree  li.liClosed ul {display: none; }
+        }]
+    }
+    
+
+    #-------------------------------------------------------------------
     # Type Variables
 
     # Info array: scalars
@@ -332,126 +374,15 @@ snit::type ::kitedocs::manpage {
             set module($name) $description
             lappend submodule($parent) $name
         }
+
+        set cssStyles "[::kitedocs::ehtml css]\n$css"
     } {
         |<--
         <html>
         <head>
         <title>$info(project) $info(version): $name -- $description$titleParentRef</title>
         <style type="text/css" media="screen,print">
-        a {
-            text-decoration: none;
-        }
-        body {
-            color: black;
-            background: white;
-            margin-left: 6%;
-            margin-right: 6%;
-        }
-        h1 {
-            margin-left: -5%;
-        }
-        h2 {
-            margin-left: -5%;
-        }
-        hr {
-            margin-left: -5%;
-        }
-
-
-        table {
-            margin-top:    4px;
-            margin-bottom: 4px;
-            text-align:    left;
-        }
-        tr {
-            vertical-align: baseline;
-        }
-        th {
-            padding-left: 4px;
-        }
-        td {
-            padding-left: 4px;
-        }
-
-        /* Table Formatting Classes: "pretty" 
-         * Border around the outside, even/odd striping, no internal
-         * border lines.
-         */
-        TABLE.pretty {
-            border: 1px solid black;
-            border-spacing: 0;
-        }
-
-        TABLE.pretty TR.header {
-            font-weight: bold;
-            color: white;
-            background-color: #000099;
-        }
-
-        TABLE.pretty TR.oddrow {
-            color: black;
-            background-color: white;
-        }
-
-        TABLE.pretty TR.evenrow {
-            color: black;
-            background-color: #EEEEEE;
-        }
-
-        /* Examples, listings, and marks */
-        pre.example {
-            background:     #FFFDD1 ;
-            border:         1px solid blue;
-            padding-top:    2px;
-            padding-bottom: 2px;
-            padding-left:   4px;
-        }
-        pre.listing {
-            background:     #FFFDD1 ;
-            border:         1px solid blue;
-            padding-top:    4px;
-            padding-bottom: 4px;
-            padding-left:   4px;
-        }
-        span.linenum {
-            background:     #E3E08F ;
-        }
-        div.mark {
-            display: inline;
-            font-family: Verdana;
-            font-size: 75%;
-            background: black;
-            color: white;
-            border: 1px solid black;
-            border-radius: 5px;
-            padding-left: 2px;
-            padding-right: 2px;
-        }
-        div.bigmark {
-            display: inline;
-            font-family: Verdana;
-            font-size: 100%;
-            background: black;
-            color: white;
-            border: 1px solid black;
-            border-radius: 5px;
-            padding-left: 2px;
-            padding-right: 2px;
-        }
-        
-        [tif {$mktreeFlag} {
-            |<--
-            /* mktree styles */
-            ul.mktree  li  { list-style: none; }
-            ul.mktree, ul.mktree ul, ul.mktree li { 
-                margin-left:10px; padding:0px; }
-            ul.mktree li .bullet { padding-left: 10px }
-            ul.mktree  li.liOpen   .bullet {cursor : pointer; }
-            ul.mktree  li.liClosed .bullet {cursor : pointer; }
-            ul.mktree  li.liBullet .bullet {cursor : default; }
-            ul.mktree  li.liOpen   ul {display: block; }
-            ul.mktree  li.liClosed ul {display: none; }
-        }]
+        $cssStyles
         </style>
         
         [tif {$mktreeFlag} {
