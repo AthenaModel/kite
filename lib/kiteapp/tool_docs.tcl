@@ -46,6 +46,9 @@ tool define docs {
     section numbers, table of contents, and so forth.  kitedoc(5)
     documents may be found in <root>/docs and any of its non-manpage
     subdirectories.
+
+    Both manpage(5) and kitedoc(5) documents processed using this tool
+    may make use of the project_macros(5) macro set.
 } {
     #-------------------------------------------------------------------
     # Execution 

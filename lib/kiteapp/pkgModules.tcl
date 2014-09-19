@@ -68,6 +68,7 @@ source [file join $::kiteapp::library metadata.tcl        ]
 source [file join $::kiteapp::library deps.tcl            ]
 source [file join $::kiteapp::library teapot.tcl          ]
 source [file join $::kiteapp::library docs.tcl            ]
+source [file join $::kiteapp::library project_macros.tcl  ]
 
 # Project Trees and Subtrees
 source [file join $::kiteapp::library subtree.tcl         ]

@@ -45,6 +45,9 @@ snit::type ::kitedocs::manpage {
 
     typevariable info -array {}
 
+    # macrosets -- List of registered macrosets.
+    typevariable macrosets {}
+
     # ehtml -- The ehtml translator
     typevariable ehtml ""
 
@@ -76,6 +79,20 @@ snit::type ::kitedocs::manpage {
     #-------------------------------------------------------------------
     # Public Typemethods
 
+    # register macroset
+    #
+    # macroset  - A macroset(i) macro set
+    #
+    # Registers the macro set for use in man pages.
+
+    typemethod register {macroset} {
+        ladd macrosets $macroset
+        if {$ehtml ne ""} {
+            $ehtml register $macroset
+            $ehtml reset
+        }
+    }
+
     # format srcdir destdir ?option value...?
     #
     # srcdir   - The directory containing man page files in .ehtml
@@ -89,7 +106,6 @@ snit::type ::kitedocs::manpage {
     #   -description text  - Project description
     #   -section text      - Manpage Section Title
     #   -manroots dict     - ehtml(n) "manroots"
-    #   -tclshcmd          - Command to pass script to tclsh
     #
     # Formats the man pages in a man page directory.
 
@@ -101,13 +117,15 @@ snit::type ::kitedocs::manpage {
             description "Your project description"
             section     "Project Man Pages"
             manroots    {: ../man%s/%n.html}
-            tclshcmd    {}
         }
 
         # NEXT, initialize the ehtml processor.
         if {$ehtml eq ""} {
             set ehtml [macro ${type}::ehtmltrans]
             $ehtml register ::kitedocs::ehtml
+            foreach macroset $macrosets {
+                $ehtml register $macroset
+            }
             $ehtml reset            
         }
         
@@ -146,9 +164,6 @@ snit::type ::kitedocs::manpage {
                 }
                 -section {
                     set info(section) $val
-                }
-                -tclshcmd {
-                    set info(tclshcmd) $val
                 }
                 default {
                     error "Unknown option: \"$opt\""
@@ -347,6 +362,9 @@ snit::type ::kitedocs::manpage {
             margin-top:    4px;
             margin-bottom: 4px;
             text-align:    left;
+        }
+        tr {
+            vertical-align: baseline;
         }
         th {
             padding-left: 4px;
@@ -699,16 +717,8 @@ snit::type ::kitedocs::manpage {
     }
 
     #-------------------------------------------------------------------
-    # tclsh support
+    # Helpers
 
-    proc tclsh {script} {
-        if {$info(tclshcmd) eq ""} {
-            throw CONFIG "No -tclshcmd is defined; 'tclsh' is not available"
-        }
-
-        return [callwith $info(tclshcmd) $script]
-    }
-    
     proc textToID {text} {
         # First, trim any white space and convert to lower case
         set text [string trim [string tolower $text]]

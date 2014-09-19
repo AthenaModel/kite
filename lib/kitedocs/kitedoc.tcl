@@ -176,6 +176,9 @@ snit::type ::kitedocs::kitedoc {
     
     typevariable info -array {}
 
+     # macrosets -- List of registered macrosets.
+    typevariable macrosets {}
+
     # ehtml -- The ehtml translator
     typevariable ehtml ""
 
@@ -240,6 +243,20 @@ snit::type ::kitedocs::kitedoc {
 
     #-------------------------------------------------------------------
     # Application Initializer
+
+    # register macroset
+    #
+    # macroset  - A macroset(i) macro set
+    #
+    # Registers the macro set for use in documents.
+
+    typemethod register {macroset} {
+        ladd macrosets $macroset
+        if {$ehtml ne ""} {
+            $ehtml register $macroset
+            $ehtml reset
+        }
+    }
 
     # format ?options...? files...
     #
@@ -308,6 +325,10 @@ snit::type ::kitedocs::kitedoc {
         if {$ehtml eq ""} {
             set ehtml [macro ${type}::ehtmltrans]
             $ehtml register ::kitedocs::ehtml
+            foreach macroset $macrosets {
+                $ehtml register $macroset
+            }
+            $ehtml reset            
         }
 
         if {[catch {::kitedocs::ehtml manroots $info(manroots)} result]} {
@@ -640,9 +661,6 @@ snit::type ::kitedocs::kitedoc {
 
         $ehtml smartalias preface 2 2 {id title} \
             [myproc preface]
-
-        $ehtml smartalias project 0 0 {} \
-            [myproc project]
 
         $ehtml smartalias section 2 2 {id title} \
             [myproc section]

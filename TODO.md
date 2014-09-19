@@ -2,28 +2,6 @@
 
 ## Next
 
-* Define a macroset(i) interface.
-  * DONE Add macro(n) to kiteutils
-  * DONE Add ehtmlset(n) to kitedocs
-  * DONE Make kitedoc(n) use ehtmlset(n).
-  * DONE Make manpage(n) use ehtmlset(n).
-  * DONE Remove ehtml(n)
-  * DONE Rename ehtmlset(n) to ehtml(n)
-  * DONE Add <tag> to ehtml(n)
-  * DONE Add <itag> to manpage(n).
-  * DONE Move relevant macrosets to ehtml(n), for sharing.
-  * DONE Clean-up CSS.
-  * Revise manpages:
-    * DONE ehtml(n)
-    * DONE macro(5)
-    * DONE ehtml(5)
-      * DONE Add "tag" macro
-    * DONE kitedoc(5)
-    * DONE manpage(5)
-      * DONE Add "itag" macro
-  * Then, define a kite macroset, loaded by 'kite docs', that defines
-    "withlib" and similar tools.
-
 
 * Add %install target to dist; includes an installation script
   * a list of bash commands.

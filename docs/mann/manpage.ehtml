@@ -26,6 +26,11 @@ This module provides the following commands:<p>
 
 <deflist commands>
 
+<defitem register {manpage register <i macroset>}>
+
+Registers a <xref macroset(i)> macro set with manpage(n).  The macro set
+will be available at the next and subsequent calls to <iref format>.<p>
+
 <defitem format {manpage format <i>srcdir destdir</i> ?<i>options...</i>?}>
 
 Given the name of a directory containing <xref manpage(5)> files 
@@ -72,13 +77,6 @@ Note that <xref ehtml(5) xref> will automatically map unqualified man
 page references to <i>srcdir</i> and its siblings.  If a manpage references
 "kitedocs(5)", for example, it will be linked to as 
 "../man5/kitedocs.html".<p>
-
-<defopt {-tclshcmd <i cmd>}>
-
-The <lb><xref manpage(5) tclsh><rb> macro passes its argument to this 
-command for processing,
-and displays the result.  When used by Kite, it is set to a command 
-that executes the script in the context of the project's code base.<p>
 
 </deflist options>
 

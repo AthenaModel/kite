@@ -54,6 +54,9 @@ snit::type docs {
             set docdirs [GetDocDirs]
         }
 
+        # NEXT, allow the project macros
+        kitedocs::kitedoc register ::project_macros
+
         # NEXT, process them.
         foreach dir $docdirs {
             # Skip non-directories.
@@ -170,6 +173,8 @@ snit::type docs {
             set mandirs [glob -nocomplain [project root docs man*]]
         }
 
+        kitedocs::manpage register ::project_macros
+
         foreach mandir $mandirs {
             # Skip non-manpage-directories.
             if {![file isdirectory $mandir]} {
@@ -204,7 +209,6 @@ snit::type docs {
                 -version     [project version]               \
                 -description [project description]           \
                 -section     "($num) $manpageSections($num)" \
-                -tclshcmd    [list tclsh script]             \
                 -manroots {
                     tcl: http://www.tcl.tk/man/tcl8.6/TclCmd/%n.htm
                     tk: http://www.tcl.tk/man/tcl8.6/TkCmd/%n.htm

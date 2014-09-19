@@ -1,0 +1,123 @@
+<manpage {macro(5) project_macros(5)} "Project Documentation Macros">
+
+<section SYNOPSIS>
+
+<itemlist>
+
+<section DESCRIPTION>
+
+This man page defines the project_macros(5) <xref macro(n)> macro set,
+which is provided by the <tt kite docs> command for use in both 
+<xref manpage(5)> and <xref kitedoc(5)> documents.<p>
+
+This macro set provides access to project metadata, and also to the 
+project code base.<p>
+
+<section MACROS>
+
+project_macros(5) provides the following project-specific macros.<p>
+
+<deflist macros>
+
+<defitem project {<tag project {<i subcomand> ?<i args...>?}>}>
+
+This macro gives access to project metadata.<p>
+
+<deflist project>
+
+<defitem "project name" {<tag project name>}>
+
+Returns the project's name.<p>
+
+<defitem "project version" {<tag project version>}>
+
+Returns the project's version number.<p>
+
+<defitem "project description" {<tag project description>}>
+
+Returns the project's description string.<p>
+
+<defitem "project tclsh" {<tag project {tclsh <i script>}>}>
+
+Executes the <i script> in the development Tcl shell with access
+to the project's code base, and returns the result.<p>
+
+Documents will usually want to use the <itag toproject> and 
+<itag fromproject> macros instead, however.  This macro invokes 
+the <tt tclsh> executable once each time it is called; the 
+<itag toproject> and <itag fromproject> macros accumulate their
+scripts and invoke the <tt tclsh> a single time.<p>
+
+</deflist project>
+
+<defitem toproject {<tag toproject {<i script>}>}>
+
+Executes the <i script> in the development Tcl shell in the context of the 
+project's code base, returning nothing.  The <i script> will be sent to 
+the development Tcl shell as a batch with the scripts from all other 
+<itag toproject> and <itag fromproject> macros in the same document.<p>
+
+This macro is usually used to require packages and do other setup.<p>
+
+The script may use the <xref "TO/FROM PROJECT COMMANDS">.<p>
+
+<defitem fromproject {<tag fromproject {<i script>}>}>
+
+Executes the <i script> in the development Tcl shell in the context of the 
+project's code base, returning the result.  The <i script> will be sent to 
+the development Tcl shell as a batch with the scripts from all other 
+<itag toproject> and <itag fromproject> macros in the same document.<p>
+
+This macro is usually used to call documentation generators in the 
+project code base.<p>
+
+The script may use the <xref "TO/FROM PROJECT COMMANDS">.<p>
+
+<section "TO/FROM PROJECT COMMANDS">
+
+The scripts passed to <itag toproject> and <itag fromproject> do not 
+execute in the macro interpreter, but are batched together in a single
+script and passed to the development <tt tclsh> executable.  Two special
+commands are made available to these scripts:<p>
+
+<deflist specials>
+
+<defitem get {get <i x>}>
+
+Returns its argument.  This allows a <itag fromproject> script to easily
+return an interpolated string:<p>
+
+<example>
+<tag fromproject {{get "This is a sum: [expr {1 + 1}]"}}>
+</example>
+
+<defitem version {version}>
+
+Returns the project version number, so that <tt package require> commands
+can be sure to require the correct version of the code.  
+For example, a <itag toproject> command might look like this:<p>
+
+<example>
+<tag toproject {{package require -exact mylib [version]}}>
+</example>
+
+</deflist specials>
+
+
+<section AUTHOR>
+
+Will Duquette<p>
+
+<section HISTORY>
+
+New package.<p>
+
+
+</manpage>
+
+
+
+
+
+
+

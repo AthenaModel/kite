@@ -26,6 +26,12 @@ This module provides the following commands:<p>
 
 <deflist commands>
 
+<defitem register {manpage register <i macroset>}>
+
+Registers a <xref macroset(i)> macro set with kitedoc(n).  The macro set
+will be available at the next and subsequent calls to <iref format>.<p>
+
+
 <defitem format {kitedoc format ?<i>options...</i>? <i>files...</i>}>
 
 Given a list of one or more <xref kitedoc(5)> files, this command
