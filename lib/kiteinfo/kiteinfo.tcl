@@ -27,16 +27,6 @@ namespace eval ::kiteinfo:: {
         reqver-zipfile::encode 0.3
         reqver-platform 1.0
         gui-kite 0
-        distpat-install-macosx10.8-x86_64 {
-    README.md
-    INSTALL.md
-    LICENSE
-    %apps
-    %libs
-    docs/INSTALL.md
-    docs/*.html
-    docs/*/*.html
-}
         reqver-textutil::expander 1.3.1
         reqver-snit 2.3
         binary-kiteutils 0
@@ -45,6 +35,16 @@ namespace eval ::kiteinfo:: {
     package require kiteutils
     package require kitedocs
     namespace import kiteutils::*
+}
+        distpat-install-win32-ix86 {
+    README.md
+    INSTALL.md
+    LICENSE
+    %apps
+    %libs
+    docs/INSTALL.md
+    docs/*.html
+    docs/*/*.html
 }
         name athena-kite
         poc William.H.Duquette@jpl.nasa.gov
@@ -56,9 +56,9 @@ namespace eval ::kiteinfo:: {
         apptype-kite exe
         local-textutil::expander 0
         local-snit 0
-        version 0.2.1
+        version 0.3.0
         reqver-crc32 1.3
-        dists install-macosx10.8-x86_64
+        dists install-win32-ix86
     }
 
     namespace export \
