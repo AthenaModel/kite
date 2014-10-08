@@ -39,6 +39,9 @@ proc main {argv} {
         -verbose { set ::kiteapp::verbose 1 }
     }
 
+    # NEXT, if it's verbose output the auto_path.
+    vputs "auto_path=<$::auto_path>"
+
     # NEXT, get the subcommand and see if we have a matching tool.
     # Alternatively, we might have a script file to run.
     set tool [lshift argv]

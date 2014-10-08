@@ -232,6 +232,7 @@ tool define build {
 
         try {
             vputs "Command = <$command>"
+            cd [project root]
             eval exec $command
         } on error {result} {
             throw FATAL "Error building $exefile; see $logfile:\n$result"
@@ -249,12 +250,12 @@ tool define build {
     proc TclAppCommand {app target basekit} {
         lappend command                 \
             -ignorestderr --            \
-            tclapp [project app loader $app] \
-            [project root lib * *]
+            tclapp [file join bin [file tail [project app loader $app]]] \
+            [file join lib * *]
 
         # NEXT, include library subdirectories, if any.
         if {[llength [glob -nocomplain [project root lib * * *]]] > 0} {
-            lappend command [project root lib * * *]
+            lappend command [file join lib * * *]
         }
 
         # NEXT, add the basekit, if any.
