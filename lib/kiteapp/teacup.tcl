@@ -116,7 +116,7 @@ snit::type teacup {
         return $dicts
     }
 
-    # remove name version
+    # remove name ?version?
     #
     # name    - A package name
     # version - A version number
@@ -124,8 +124,12 @@ snit::type teacup {
     # Attempts to remove the given package from the repository.
     # Throws any error.
 
-    typemethod remove {name version} {
-        Call remove $name $version
+    typemethod remove {name {version ""}} {
+        if {$version ne ""} {
+            Call remove $name $version
+        } else {
+            Call remove $name
+        }
     }
 
     # repos

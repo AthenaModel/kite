@@ -37,11 +37,11 @@ tool define env {
         puts ""
         puts "Helpers:"
 
-        table puts [plat tableof pathsto] -indent "  "
+        dictab puts [plat tableof pathsto] -indent "  "
 
         puts ""
         puts "Directories:"
-        table puts [plat tableof pathsof] -indent "  "
+        dictab puts [plat tableof pathsof] -indent "  "
     }
 }
 

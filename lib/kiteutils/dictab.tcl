@@ -1,14 +1,15 @@
 #-----------------------------------------------------------------------
 # TITLE:
-#   table.tcl
+#   dictab.tcl
 #
 # AUTHOR:
 #   Will Duquette
 #
 # DESCRIPTION:
-#   kiteutils(n): Table formatting utilities.
+#   kiteutils(n): dictab formatting utilities.
 # 
-#   A table is a list of dictionaries with identical keys.
+#   A dictab, or dictionary table, is a list of dictionaries with 
+#   identical keys.
 #
 #-----------------------------------------------------------------------
 
@@ -17,13 +18,13 @@
 
 namespace eval ::kiteutils:: {
     namespace export    \
-        table
+        dictab
 }
 
 #-----------------------------------------------------------------------
-# table ensemble.
+# dictab ensemble.
 
-snit::type ::kiteutils::table {
+snit::type ::kiteutils::dictab {
     pragma -hasinstances no -hastypedestroy no
 
     #-------------------------------------------------------------------

@@ -91,7 +91,7 @@ tool define info {
                 lappend table [list app $app tag ($tag)]
             }
 
-            table puts $table -indent "  "
+            dictab puts $table -indent "  "
         }
 
         if {[got [project provide names]]} {
@@ -110,7 +110,7 @@ tool define info {
                 lappend table [list lib ${name}(n) tag $tag]
             }
 
-            table puts $table -indent "  "
+            dictab puts $table -indent "  "
         }
 
 
@@ -139,7 +139,7 @@ tool define info {
                 lappend table [list name "$name $ver" tag $tag]
             }
 
-            table puts $table -indent "  "
+            dictab puts $table -indent "  "
         }
 
         if {[got [project dist names]]} {

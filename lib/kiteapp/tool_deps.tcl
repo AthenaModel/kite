@@ -96,7 +96,7 @@ tool define deps {
 
         puts "Required Package Status:\n"
 
-        table puts $table -indent "   "
+        dictab puts $table -indent "   "
 
         puts "\nTo retrieve out-of-date or missing dependencies, use"
         puts "\"kite deps update\".  To force an update of a particular"

@@ -120,7 +120,7 @@ tool define teapot {
     # List the packages contained in the local teapot.
 
     proc DisplayList {} {
-        table puts [teacup list --at-default] -headers 
+        dictab puts [teacup list --at-default] -headers 
     }
 }
 
