@@ -56,19 +56,16 @@ snit::type ::kitedocs::manpage {
             text-align:    left;
         }
         
-        [tif {$mktreeFlag} {
-            |<--
-            /* mktree styles */
-            ul.mktree  li  { list-style: none; }
-            ul.mktree, ul.mktree ul, ul.mktree li { 
-                margin-left:10px; padding:0px; }
-            ul.mktree li .bullet { padding-left: 10px }
-            ul.mktree  li.liOpen   .bullet {cursor : pointer; }
-            ul.mktree  li.liClosed .bullet {cursor : pointer; }
-            ul.mktree  li.liBullet .bullet {cursor : default; }
-            ul.mktree  li.liOpen   ul {display: block; }
-            ul.mktree  li.liClosed ul {display: none; }
-        }]
+        /* mktree styles */
+        ul.mktree  li  { list-style: none; }
+        ul.mktree, ul.mktree ul, ul.mktree li { 
+            margin-left:10px; padding:0px; }
+        ul.mktree li .bullet { padding-left: 10px }
+        ul.mktree  li.liOpen   .bullet {cursor : pointer; }
+        ul.mktree  li.liClosed .bullet {cursor : pointer; }
+        ul.mktree  li.liBullet .bullet {cursor : default; }
+        ul.mktree  li.liOpen   ul {display: block; }
+        ul.mktree  li.liClosed ul {display: none; }
     }
     
 
@@ -231,7 +228,6 @@ snit::type ::kitedocs::manpage {
         foreach infile $files {
             set pagename [file tail [file root $infile]]
             set outfile [file join $destdir $pagename.html]
-
             $type DefineMacros
 
             try {
@@ -317,24 +313,30 @@ snit::type ::kitedocs::manpage {
         $ehtml smartalias indexlist 1 1 {modules} \
             [myproc indexlist]
 
-        # TODO: Move to new kiteapp-specific macroset.
-        $ehtml smartalias tclsh 1 1 {script} \
-            [myproc tclsh]
-
         $ehtml proc itag {args} {
             return "[tt][lb][iref {*}$args][rb][/tt]"
         }
+
+        $ehtml smartalias mktree 1 1 {id} \
+            [myproc mktree]
+
+        $ehtml smartalias /mktree 0 0 {} \
+            [myproc /mktree]
     }
     
 
     #-------------------------------------------------------------------
     # Javascripts
     
-    # If included in man page, the mktree script is included
-    proc mktree {} {
+    # Begins a dynamic tree using the mktree script.
+    proc mktree {id} {
         set mktreeFlag 1
         
-        return
+        return "<ul class=\"mktree\" id=\"$id\">"
+    }
+
+    proc /mktree {} {
+        return "</ul>"
     }
 
     #-------------------------------------------------------------------

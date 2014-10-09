@@ -186,15 +186,21 @@ in typewriter font with angle brackets.<p>
 Returns the project version number, as provided to 
 <xref manpage(n)>'s <xref manpage(n) format> subcommand.<p>
 
-<defitem mktree {<lb>mktree<rb>}>
+<defitem mktree {<tag mktree "<i id>">...<tag /mktree>}>
 
-If included anywhere in the man page, this macro enables use of the
+This tag defines an unordered "<tag ul>" list that uses the
 "mktree" Javascript package for turning nested lists of links into
-dynamic lists that can be opened and closed.  In particular, the
+dynamic lists that can be opened and closed.  The
 Javascript code and the necessary CSS styles are included in the HTML
-output.<p>
+output automatically.<p>
 
-TBD: Add info on how to enable this for a particular tree!<p>
+The <i id> is used as the value of the "id" attribute of the 
+<tag ul> tag, which is generated like this:<p>
+
+<example>
+<tag ul {class="mktree" id="<i id>"}>
+</example>
+
 
 </deflist macros>
 
