@@ -163,6 +163,7 @@ snit::type ::kitedocs::ehtml {
         StyleMacro $macro sub
         StyleMacro $macro pre
 
+        HtmlTag $macro blockquote /blockquote
         HtmlTag $macro ol /ol
         HtmlTag $macro ul /ul
         HtmlTag $macro li /li
@@ -171,6 +172,7 @@ snit::type ::kitedocs::ehtml {
         HtmlTag $macro tr /tr
         HtmlTag $macro th /th
         HtmlTag $macro td /td
+        HtmlTag $macro br
 
         $macro proc img {attrs} { return "<img $attrs>" }
 
