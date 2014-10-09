@@ -34,10 +34,22 @@ scratch, do the following.
 
     $ ./bin/kite.tcl build all
 
-8. Install Kite.  This will copy ./bin/kite-windows.exe (or whatever) 
-   to ~/bin/kite, and install the Kite Tcl libraries into the local teapot.
+8. Install Kite.  This will copy ./bin/kite-<version>-<platform>.exe 
+   (or whatever) to ~/bin/kite, and install the Kite Tcl libraries into the 
+   local teapot.
 
     $ ./bin/kite.tcl install
+
+   NOTE: When installing a new build of Kite, always use kite.tcl to do
+   do the installation, rather than a previously installed Kite executable.
+   If you say
+
+    $ kite install                    DON'T DO THIS
+
+   then ~/bin/kite will try to overwrite itself with the new executable.
+   This is known not to work on Windows systems.
+
+   The 'kite install' form naturally works just fine for other projects.
 
 9. Use Kite normally:
 
