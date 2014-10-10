@@ -6,7 +6,7 @@
 #   Will Duquette
 #
 # DESCRIPTION:
-#   Kite: kiteapp(n), "kiteinfo" subtree writer.
+#   Kite: app_kite(n), "kiteinfo" subtree writer.
 #
 #-----------------------------------------------------------------------
 

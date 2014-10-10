@@ -6,10 +6,10 @@
 #    William H. Duquette
 #
 # DESCRIPTION:
-#   Kite: kiteapp package index.
+#   Kite: app_kite package index.
 
 # -kite-ifneeded-start  DO NOT EDIT THIS BLOCK BY HAND
-package ifneeded kiteapp 0.3.1a0 [list source [file join $dir pkgModules.tcl]]
+package ifneeded app_kite 0.4.0a0 [list source [file join $dir pkgModules.tcl]]
 # -kite-ifneeded-end
 
 

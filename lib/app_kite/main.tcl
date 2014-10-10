@@ -6,7 +6,7 @@
 #   athena-kite: Kite Build Manager for Tcl Projects
 #
 # PACKAGE:
-#   kiteapp(n): Kite Application Package
+#   app_kite(n): Kite Application Package
 #
 # AUTHOR:
 #   Will Duquette
@@ -36,7 +36,7 @@ proc main {argv} {
 
     # NEXT, get any options
     foroption opt argv {
-        -verbose { set ::kiteapp::verbose 1 }
+        -verbose { set ::app_kite::verbose 1 }
     }
 
     # NEXT, if it's verbose output the auto_path.

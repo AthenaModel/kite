@@ -6,7 +6,7 @@
 #    Will Duquette
 #
 # DESCRIPTION:
-#    kiteapp(n) Package: project_macros(5) macro set
+#    app_kite(n) Package: project_macros(5) macro set
 #
 #    This module implements a macroset(i) extension for use with
 #    macro(n).

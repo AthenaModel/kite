@@ -6,7 +6,7 @@
 #   Will Duquette
 #
 # DESCRIPTION:
-#   Kite: kiteapp(n) docs module; knows how to build documentation in 
+#   Kite: app_kite(n) docs module; knows how to build documentation in 
 #   the /docs directory. Used by buildtool and docstool.
 #
 #-----------------------------------------------------------------------

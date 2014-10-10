@@ -6,7 +6,7 @@
 #   Will Duquette
 #
 # DESCRIPTION:
-#   Kite: kiteapp(n): .zip file commands
+#   Kite: app_kite(n): .zip file commands
 #
 #-----------------------------------------------------------------------
 

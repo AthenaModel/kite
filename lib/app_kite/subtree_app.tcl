@@ -6,7 +6,7 @@
 #   Will Duquette
 #
 # DESCRIPTION:
-#   Kite: kiteapp(n), "app" subtree writer: project files
+#   Kite: app_kite(n), "app" subtree writer: project files
 #
 #-----------------------------------------------------------------------
 
@@ -23,7 +23,7 @@ namespace eval subtree:: {
 
 proc subtree::app {app} {
     treefile bin/$app.tcl [App_loader $app]
-    pkg ${app}app main
+    pkg app_$app main
 }
 
 # App_loader app
@@ -34,7 +34,7 @@ proc subtree::app {app} {
 
 codeblock subtree::App_loader {app} {
     set project [project name]
-    set package ${app}app
+    set package app_$app
 } {
     #!/bin/sh
     # -*-tcl-*-

@@ -6,7 +6,7 @@
 #   Will Duquette
 #
 # DESCRIPTION:
-#   Kite: kiteapp(n) "deps": commands for tracking and managing
+#   Kite: app_kite(n) "deps": commands for tracking and managing
 #   external dependencies, as lists in project.kite using the 
 #   "require" statement.
 #

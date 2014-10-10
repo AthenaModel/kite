@@ -75,7 +75,7 @@ A typical Kite project tree has some or all of the following parts.<p>
 <treedir +lib/>         Tcl <xref lib "Library Packages"> </treedir>
 <treedir ++(name)/>     Tcl source code for package
                         <i>name</i></treedir>
-<treedir ++(name)app/>  Tcl source code for application <i name>.
+<treedir ++app_(name)/> Tcl source code for application <i name>.
                         </treedir>
 <treedir +test/>        <xref testing "Project test suites">.  
                         <tt test/> directories are usually parallel to
@@ -107,7 +107,7 @@ The project includes stub documentation and the package's
 A project that provides an application, delivered as a standalone executable
 for the current platform.  The package includes the stub documentation,
 the application's loader script (<root "bin/<i name>.tcl">), and an 
-application implementation package called <tt><i name>app</tt>.  The 
+application implementation package called <tt>app_<i name></tt>.  The 
 package includes both <root lib/> and <root test/> directories.
 The application's loader script calls the <tt main> command, which is
 defined by the implementation package.<p>

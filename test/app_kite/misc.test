@@ -7,7 +7,7 @@
 #    Will Duquette
 #
 # DESCRIPTION:
-#    Tcltest test suite for kiteapp(n) misc.tcl
+#    Tcltest test suite for app_kite(n) misc.tcl
 #
 #-----------------------------------------------------------------------
 
@@ -26,7 +26,7 @@ namespace import ::tcltest::*
 #-----------------------------------------------------------------------
 # Load the package to be tested
 
-source ../../lib/kiteapp/pkgModules.tcl
+source ../../lib/app_kite/pkgModules.tcl
 
 #-------------------------------------------------------------------
 # Setup
@@ -48,7 +48,7 @@ proc pprint {args} {
 # Cleans up after all tests.
 
 proc cleanup {} {
-    set ::kiteapp::verbose 0
+    set ::app_kite::verbose 0
 }
 
 
@@ -62,7 +62,7 @@ test vputs-1.1 {Creates no output by default} -body {
 } -output {}
 
 test vputs-1.2 {Creates output when verbose is enabled} -setup {
-    set ::kiteapp::verbose 1
+    set ::app_kite::verbose 1
 } -body {
     vputs "some text"
 } -cleanup {
@@ -70,7 +70,7 @@ test vputs-1.2 {Creates output when verbose is enabled} -setup {
 } -output "some text\n"
 
 test vputs-1.3 {Joins multiple strings} -setup {
-    set ::kiteapp::verbose 1
+    set ::app_kite::verbose 1
 } -body {
     vputs "some text" "some more text" "even more text"
 } -cleanup {

@@ -77,6 +77,12 @@ Macros relating to the style of displayed text.<p>
 <defitem b      {<tag b>........<tag /b>      <b or> <tag b      {<i words...>}>}>
 <defitem code   {<tag code>.....<tag /code>   <b or> <tag code   {<i words...>}>}>
 <defitem em     {<tag em>.......<tag /em>     <b or> <tag em     {<i words...>}>}>
+<defitem h1     {<tag h1>.......<tag /h1>     <b or> <tag h1     {<i words...>}>}>
+<defitem h2     {<tag h2>.......<tag /h2>     <b or> <tag h2     {<i words...>}>}>
+<defitem h3     {<tag h3>.......<tag /h3>     <b or> <tag h3     {<i words...>}>}>
+<defitem h4     {<tag h4>.......<tag /h4>     <b or> <tag h4     {<i words...>}>}>
+<defitem h5     {<tag h5>.......<tag /h5>     <b or> <tag h5     {<i words...>}>}>
+<defitem h6     {<tag h6>.......<tag /h6>     <b or> <tag h6     {<i words...>}>}>
 <defitem i      {<tag i>........<tag /i>      <b or> <tag i      {<i words...>}>}>
 <defitem pre    {<tag pre>......<tag /pre>    <b or> <tag pre    {<i words...>}>}>
 <defitem strong {<tag strong>...<tag /strong> <b or> <tag strong {<i words...>}>}>

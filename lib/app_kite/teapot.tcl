@@ -6,7 +6,7 @@
 #   Will Duquette
 #
 # DESCRIPTION:
-#   Kite: kiteapp(n) teapot module.  This module manages the local teapot,
+#   Kite: app_kite(n) teapot module.  This module manages the local teapot,
 #   ensuring that Kite can easily use it to access its external dependencies.
 #
 #   This module is responsible for the local teapot as a whole; see 

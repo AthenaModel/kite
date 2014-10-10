@@ -2,6 +2,11 @@
 
 ## Next
 
+* Change application lib dir to app_$name, not ${name}app.
+  * kiteapp => app_kite
+  * Update templates
+* 'kite deps' needs to show actual versions in teapot.
+
 * Consider: add -force, -follow, and -follow-recommend as options to app,
   to be passed along to tclapp.
 * We have three flavors: windows, osx, and linux.  That's really

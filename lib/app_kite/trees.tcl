@@ -6,8 +6,8 @@
 #   Will Duquette
 #
 # DESCRIPTION:
-#   Kite: kiteapp(n) module for creating project trees.  This module
-#   uses template files from kiteapp/templates and the [generate]
+#   Kite: app_kite(n) module for creating project trees.  This module
+#   uses template files from app_kite/templates and the [generate]
 #   command to generate the trees.
 #
 #   The commands in this file build a project tree given the root
@@ -54,7 +54,7 @@ set ::khelp(app) {
     The application will have:
 
     * A loader script, e.g., bin/<appname>.tcl
-    * A Tcl package, lib/<appname>app, containing the main routine
+    * A Tcl package, lib/app_<appname>, containing the main routine
       in lib/<appname>app/main.tcl
     * Standard documentation and test files.
 
@@ -83,7 +83,7 @@ set ::khelp(appkit) {
     The application will have:
 
     * A loader script, e.g., bin/<appname>.tcl
-    * A Tcl package, lib/<appname>app, containing the main routine
+    * A Tcl package, lib/app_<appname>, containing the main routine
       in lib/<appname>app/main.tcl
     * Standard documentation and test files.
 

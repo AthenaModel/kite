@@ -33,8 +33,8 @@ tool define add {
     will add the following files:
 
         <root>/bin/fred.tcl
-        <root>/lib/fredapp/main.tcl        (plus boilerplate)
-        <root>/test/fredapp/all_tests.tcl 
+        <root>/lib/app_fred/main.tcl        (plus boilerplate)
+        <root>/test/app_fred/all_tests.tcl 
 
     Similarly,
 

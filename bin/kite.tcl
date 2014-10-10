@@ -63,9 +63,9 @@ package require Tcl 8.6
 package require kiteinfo
 
 #-----------------------------------------------------------------------
-# Next, require kiteapp; it will define the main program.
+# Next, require app_kite; it will define the main program.
 
-package require kiteapp
+package require app_kite
 
 #-----------------------------------------------------------------------
 # Run the program

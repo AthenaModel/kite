@@ -6,7 +6,7 @@
 #   Will Duquette
 #
 # DESCRIPTION:
-#   Kite: kiteapp(n), "proj" subtree writer: project files
+#   Kite: app_kite(n), "proj" subtree writer: project files
 #
 #-----------------------------------------------------------------------
 

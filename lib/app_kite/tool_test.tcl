@@ -111,7 +111,7 @@ tool define test {
         }
 
         # NEXT, get the verbosity
-        set verbose [expr {$bopt eq "-verbose" || $::kiteapp::verbose}]
+        set verbose [expr {$bopt eq "-verbose" || $::app_kite::verbose}]
 
         # NEXT, get the script to execute.
         if {$module eq ""} {

@@ -6,7 +6,7 @@
 #   Will Duquette
 #
 # DESCRIPTION:
-#   Kite: kiteapp(n) tclsh proxy.  This module provides a proxy interface
+#   Kite: app_kite(n) tclsh proxy.  This module provides a proxy interface
 #   to the tclsh executable, calling the tclsh safely and with the project's
 #   context.
 #

@@ -162,6 +162,12 @@ snit::type ::kitedocs::ehtml {
         StyleMacro $macro sup
         StyleMacro $macro sub
         StyleMacro $macro pre
+        StyleMacro $macro h1
+        StyleMacro $macro h2
+        StyleMacro $macro h3
+        StyleMacro $macro h4
+        StyleMacro $macro h5
+        StyleMacro $macro h6
 
         HtmlTag $macro blockquote /blockquote
         HtmlTag $macro ol /ol

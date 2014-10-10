@@ -6,7 +6,7 @@
 #   Will Duquette
 #
 # DESCRIPTION:
-#   Kite: kiteapp(n) teacup proxy.  This module provides a proxy interface
+#   Kite: app_kite(n) teacup proxy.  This module provides a proxy interface
 #   to the teacup executable, translating data formats and handling other
 #   low-level matters.
 #

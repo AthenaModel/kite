@@ -6,11 +6,11 @@
 #   Will Duquette
 #
 # DESCRIPTION:
-#   Kite: kiteapp(n) Miscellaneous Commands
+#   Kite: app_kite(n) Miscellaneous Commands
 #
 #-----------------------------------------------------------------------
 
-namespace eval ::kiteapp:: {
+namespace eval ::app_kite:: {
     variable verbose 0
 
 }
@@ -26,7 +26,7 @@ namespace eval ::kiteapp:: {
 # -verbose is on.
 
 proc vputs {args} {
-    if {$::kiteapp::verbose} {
+    if {$::app_kite::verbose} {
         puts [join $args]
     }
 }

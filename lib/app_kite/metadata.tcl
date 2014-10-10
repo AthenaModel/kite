@@ -6,7 +6,7 @@
 #   Will Duquette
 #
 # DESCRIPTION:
-#   Kite: kiteapp(n) metadata project transformer
+#   Kite: app_kite(n) metadata project transformer
 #
 #   This module is responsible for updating project code files to
 #   match the project metadata.
