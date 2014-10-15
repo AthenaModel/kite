@@ -3,7 +3,7 @@
 #    pkgIndex.tcl
 #
 # PROJECT:
-#    athena-kite - Athena/Kite Development Tool
+#    kite - Kite Project Automation Tool
 #
 # DESCRIPTION:
 #    kiteinfo(n) package index file
