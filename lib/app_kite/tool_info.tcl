@@ -55,7 +55,7 @@ tool define info {
 
         # NEXT, handle the option.
         switch -exact -- $opt {
-            -os      { set result [plat id]                        }
+            -os      { set result [os flavor]                      }
             -root    { set result [project root]                   }
             -tclhome { set result [plat pathof tclhome]            }
             -version { set result [project version]                }
