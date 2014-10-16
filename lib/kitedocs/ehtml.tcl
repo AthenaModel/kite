@@ -11,8 +11,6 @@
 #    This module implements a macroset(i) extension for use with
 #    macro(n).
 #
-#    TODO: Move more formatting into CSS.
-#
 #-----------------------------------------------------------------------
 
 namespace eval ::kitedocs:: {
@@ -136,7 +134,21 @@ snit::type ::kitedocs::ehtml {
     #-------------------------------------------------------------------
     # Configuration Type Variables
 
-    typevariable manroots -array {}
+    # config: configuration array
+    #
+    # docroot - While processing an input string, the relative path
+    #           to the root of the current documentation tree, i.e.,
+    #           the parent path of the local man page directories.
+    #           Assume we are in the docroot by default.
+    #
+    # doctypes - Document file types recognized by <xref>.
+
+    typevariable config -array {
+        docroot  .
+        doctypes {
+            .html .htm .txt .text .md .docx .xlsx .pptx .pdf
+        }
+    }
     
     #-------------------------------------------------------------------
     # Public Methods
@@ -149,8 +161,8 @@ snit::type ::kitedocs::ehtml {
     # transient data.
 
     typemethod install {macro} {
-        # FIRST, save the manroots
-        $macro eval [list array set ::manroots [array get manroots]]
+        # FIRST, save the config data.
+        $macro eval [list array set ::ehtml [array get config]]
 
         # NEXT, define HTML equivalents.
         StyleMacro $macro b
@@ -195,7 +207,6 @@ snit::type ::kitedocs::ehtml {
             }
         }
 
-
         $macro template link {url {anchor ""}} {
             if {$anchor eq ""} {
                 set anchor $url
@@ -236,9 +247,10 @@ snit::type ::kitedocs::ehtml {
             return [xref $id]
         }
 
+
         $macro proc xref {id {anchor ""}} {
             variable xreflinks
-            variable manroots
+            variable ehtml
 
             if {[pass] == 1} {
                 return
@@ -246,48 +258,64 @@ snit::type ::kitedocs::ehtml {
 
             set url ""
 
-            # FIRST, is it an explicit xrefset.
+            # FIRST, is it an explicit xrefset?
             if {[info exists xreflinks($id)]} {
                 set url [dict get $xreflinks($id) url]
-                set defaultAnchor [dict get $xreflinks($id) anchor]
-            } 
+
+                if {$anchor eq ""} {
+                    set anchor [dict get $xreflinks($id) anchor]
+                }
+
+                return [link $url $anchor]
+            }
+
+            # NEXT, get the root.  If the ID begins with "<project>:" 
+            # assume that "<project>" is the name of a sibling project
+            # hosted in the same directory as this project.
+            set relroot $ehtml(docroot)
+
+            if {[regexp {^([^:]+):(.*)$} $id dummy sibling id]} {
+                # Assume the xref is in a sibling project.
+                set relroot $relroot/../../$sibling/docs
+            }
 
             # NEXT, is it a man page?
-            if {$url eq "" &&
-                [regexp {^([^:]+:)?([^()]+)\(([1-9a-z]+)\)$} $id \
-                     dummy root name section]
+            if {[regexp {^([^()]+)\(([1-9a-z]+)\)$} $id \
+                     dummy name section]
             } {
-                set root [string trim $root ":"]
+                set url $relroot/man$section/$name.html
 
-                set pattern ""
+                if {$anchor ne ""} {
+                    append url "#[textToID $anchor]"
+                } else {
+                    set anchor "${name}($section)"                    
+                }
 
-                if {[info exists manroots($root:$section)]} {
-                    set pattern $manroots($root:$section)
-                } elseif {[info exists manroots($root:)]} {
-                    set pattern $manroots($root:)
-                } 
+                return [link $url $anchor]
+            }
 
-                if {$pattern ne ""} {
-                    set url [string map [list %s $section %n $name] $pattern]
+            # NEXT, does it look like a doc file?
+            set idx [string last $id .]
+
+            if {$idx != -1} {
+                set ext [string tolower [string range $id $idx end]]
+
+                if {$ext in $ehtml(doctypes)} {
+                    set idlist [split $id /]
+
+                    set url $relroot/[join $idlist /]
 
                     if {$anchor ne ""} {
-                        append url "#[textToID $anchor]"
+                        set anchor $id
                     }
 
-                    set defaultAnchor "${name}($section)"
+                    return [link $url $anchor]
                 }
             }
 
-            if {$url eq ""} {
-                macro warn "xref: unknown xrefid '$id'"
-                return "[lb]xref $id[rb]"
-            }
-            
-            if {$anchor eq ""} {
-                set anchor $defaultAnchor
-            }
-
-            return "<a href=\"$url\">$anchor</a>"
+            # NEXT, we don't know what it is.
+            macro warn "xref: unknown xrefid '$id'"
+            return "[b][tag xref $id][/b]"
         }
 
         # NEXT, define definition list macros.
@@ -460,45 +488,37 @@ snit::type ::kitedocs::ehtml {
     }
 
     #-------------------------------------------------------------------
-    # Man Page Access
-    #
-    # Man pages are accessed as "[<root>:]<name>(<section>)"
-    # If no <root> is specified, then the default root, "", is used.
-    # If no manroot command is called, then man page references are
-    # not looked up.
+    # Configuration
 
-    # manroots roots
+    # configure opt val
     #
-    # roots    A list of man page root names and URL patterns.
+    # opt - A configuration value
+    # val - Its value
     #
-    # Adds the roots to the set of manpage roots.  Each root is
-    # specified as follows:
+    # The configuration option is added to the config array, which
+    # is copied to the "ehtml" array in the macro interpreter on 
+    # reset.
     #
-    #    [<root>]:[<section>] <pattern>
+    # The key name in the config/ehtml array is the option name minus
+    # the hyphen.
     #
-    # The pattern is a URL into which the following substitutions 
-    # can be made:
+    # The following options are available:
     #
-    #    %s   The section, e.g., "n"
-    #    %n   The man page name, e.g., "ehtml".
+    # -docroot   - This is the relative path from the document file
+    #              being processed to the root of the documentation
+    #              tree.  This is used by xref.
     #
-    # If <root> is omitted, then the patternUrl is for the default root,
-    # i.e., for man page references in which no root is specified.
-    #
-    # If <section> is omitted, then the pattern is for any section.
-    #
-    # TODO: Make this an option
+    # -doctypes  - List of document file extensions recognized by
+    #              xref.
 
-    typemethod manroots {roots} {
-        foreach {spec pattern} $roots {
-            if {![string match "*:*" $spec]} {
-                error "Invalid root specification: \"$spec\""
-            }
-
-            lassign [split $spec :] root section
-
-            set manroots($root:$section) $pattern
+    typemethod configure {opt val} {
+        switch -exact -- $opt {
+            -docroot  { set config(docroot)  $val        }
+            -doctypes { set config(doctypes) $val        }
+            default   { error "Unknown option: \"$opt\"" }
         }
+
+        return
     }
 
     #-------------------------------------------------------------------

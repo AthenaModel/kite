@@ -51,47 +51,40 @@ Installs the <xref ehtml(5)> macros into <i macro>, an instance
 of <xref macro(n)>.  This is usually called by the
 <xref macro(n)> object itself.<p>
 
-<defitem "ehtml manroots" {ehtml manroots <i roots>}>
+<defitem "ehtml configure" {ehtml configure <i opt val>}>
 
-Sets the set of manpage "roots" for automatically referencing man pages.<p>
+Configures the macro set.  The following options may be set:<p>
 
-Defines a mapping from man page names to URLs, so that
-<xref ehtml(5)> text can use the <xref ehtml(5)> 
-<tag xref> macro to link to HTML man pages.<p>
+<deflist options>
+<defopt {-docroot <i relpath>}>
+Sets the relative path from the document file being processed to the
+project's <tt docs/> directory.  For <tt docs/index.ehtml>, the
+<tt -docroot> should be "."; this is the default.<p>
 
-When <tag xref> is used in this way, the <i>id</i> is the name of
-the man page in the following form:<p>
+The macro set's <xref ehtml(5) xref> macro uses this to figure
+links to man pages and other documents.<p>
 
-<pre>  ?<i>root</i>:?<i>name</i>(<i>section</i>)</pre>
+<defopt {-doctypes <i typelist>}>
+The <i typelist> should be a list of file extensions, e.g., 
+"<tt>.html .text .docx</tt>".  The 
+<xref ehtml(5) xref> macro treats any xref ID ending with
+one of these extensions as a relative document path.<p>
 
-For example, this man page is called "<code>ehtml(n)</code>".  When
-Mars is used by a client, that client's man pages might refer to this
-one as "<code>ehtml(n)</code>".<p>
-
-The <i>roots</i> argument is a list of root definitions and URL
-patterns:
-
-<pre>  <i>rootDefinition</i> <i>pattern</i> ...</pre>
-
-Each <i>rootDefinition</i> has the following form:<p>
-
-<pre>  ?<i>root</i>?:?<i>section</i>?</pre>
-
-If the <i>root</i> is omitted, then the <i>pattern</i> that follows is for
-the case when no root is specified in the <tag xref>.<p>
-
-If the <i>section</i> is given, then the <i>pattern</i> that follows
-is only for man pages in the given section.<p>
-
-The <i>pattern</i> may be an absolute or relative URL, and may contain
-the following %-conversions:<p>
+The default set includes the following: 
 
 <ul>
-  <li> <code><strong>%n</strong></code> : The bare man page name, e.g., the
-       bare name of this man page is "ehtml".<p>
+<li> <tt .html> 
+<li> <tt .htm> 
+<li> <tt .txt> 
+<li> <tt .text> 
+<li> <tt .md> 
+<li> <tt .docx> 
+<li> <tt .xlsx> 
+<li> <tt .pptx> 
+<li> <tt .pdf>
+</ul>
 
-  <li> <code><strong>%s</strong></code> : The man page section, e.g., "n".<p>
-</ul><p>
+</deflist options>
 
 </deflist commands>
 

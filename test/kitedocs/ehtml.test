@@ -38,7 +38,6 @@ namespace import ::kiteutils::*
 # Set up for tests
 
 proc setup {} {
-    ::kitedocs::ehtml manroots {: ./man%s/%n.html}
     macro trans
     trans register ::kitedocs::ehtml 
     trans reset

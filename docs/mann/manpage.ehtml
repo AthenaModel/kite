@@ -20,6 +20,12 @@ See <xref manpage(5)> for a description of man page syntax and the
 available macros.  Note that individual man pages can define their
 own macros.<p>
 
+<subsection "Cross-References">
+
+<xref manpage(n)> supports <xref ehtml(5)>'s <xref ehtml(5) xref>
+macro.  It is assumed that the man page directories are direct children
+of the project's <tt docs/> directory.<p>
+
 <section COMMANDS>
 
 This module provides the following commands:<p>
@@ -65,18 +71,6 @@ appears in the headers of the generated pages.<p>
 Specifies the section title for the collection of man pages in the
 <i>srcdir</i>.  This section title will be used in the generated
 index page.<p>
-
-<defopt {-manroots <i>roots</i>}>
-
-Specifies a the mapping from man page names to URLs to be used
-when processing cross-references in documents.  See
-<xref ehtml(n) manroots> in <xref ehtml(n)> for the syntax
-of <i>roots</i>.<p>
-
-Note that <xref ehtml(5) xref> will automatically map unqualified man 
-page references to <i>srcdir</i> and its siblings.  If a manpage references
-"kitedocs(5)", for example, it will be linked to as 
-"../man5/kitedocs.html".<p>
 
 </deflist options>
 

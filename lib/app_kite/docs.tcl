@@ -82,11 +82,6 @@ snit::type docs {
             return
         }
 
-        # NEXT, determine the manroots.
-        set manroots [GetManRoots $dir]
-
-        vputs "manroots = $manroots"
-
         # NEXT, format the files one by one
         puts "Formatting documents in $dir..."
 
@@ -96,7 +91,7 @@ snit::type docs {
                 -version     [project version]       \
                 -description [project description]   \
                 -poc         [project poc]           \
-                -manroots    $manroots               \
+                -docroot     [GetDocRoot $dir]       \
                 -anchors                             \
                 {*}$infiles
         } trap SYNTAX {result} {
@@ -122,20 +117,20 @@ snit::type docs {
         return $result
     }
 
-    # GetManRoots dir
+    # GetDocRoot dir
     #
     # dir   - A directory of kitedoc(5) files
     #
-    # Determines the appropriate relative path for this project's
-    # man pages.  The dir is either $root/docs or a subdirectory.
+    # Determines the appropriate relative path to the docs/ directory.
+    # The dir is either $root/docs or a subdirectory.
 
-    proc GetManRoots {dir} {
+    proc GetDocRoot {dir} {
         set dir [file normalize $dir]
         set docroot [project root docs]
 
         if {![string match $docroot* $dir]} {
             # Not in the docs tree.
-            return
+            return ""
         }
 
         set count 0
@@ -146,14 +141,12 @@ snit::type docs {
         }
 
         if {$count == 0} {
-            set leader "."
+            set components "."
         } else {
-            set leader [string repeat ".." $count]
+            set components [lrepeat $count ".."]
         }
 
-        set relpath [file join {*}$leader man%s/%n.html]
-
-        return [dict create : $relpath]
+        return [join $components /]
     }
 
     #-------------------------------------------------------------------
@@ -201,18 +194,13 @@ snit::type docs {
         }
 
         # NEXT, process the man pages in the directory.
-        # TODO: base manroots on required version of Tcl/Tk.
         try {
             puts "Formatting man pages in $mandir..."
             kitedocs::manpage format $mandir $mandir         \
                 -project     [project name]                  \
                 -version     [project version]               \
                 -description [project description]           \
-                -section     "($num) $manpageSections($num)" \
-                -manroots {
-                    tcl: http://www.tcl.tk/man/tcl8.6/TclCmd/%n.htm
-                    tk: http://www.tcl.tk/man/tcl8.6/TkCmd/%n.htm
-                }
+                -section     "($num) $manpageSections($num)"
         } trap SYNTAX {result} {
             throw FATAL "Syntax error in man page: $result"
         }

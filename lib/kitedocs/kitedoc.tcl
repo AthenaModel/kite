@@ -195,7 +195,7 @@ snit::type ::kitedocs::kitedoc {
     #   -version num       - Project version number
     #   -description text  - Project description
     #   -poc               - Point-of-contact e-mail address
-    #   -manroots dict     - ehtml(n) "manroots"
+    #   -docroot relpath   - Relative path to docs/
     #   -anchors           - Dump info about the anchors in 
     #                        the module.
     #
@@ -210,7 +210,7 @@ snit::type ::kitedocs::kitedoc {
             version     "?.?"
             description "???? ???? ????"
             poc         "???@???.???"
-            manroots    {}
+            docroot     {.}
             anchors     0
             fileroot    ""
         }
@@ -235,9 +235,8 @@ snit::type ::kitedocs::kitedoc {
                     set info(poc) [lshift args]
                 }
 
-                -manroots {
-                    set info(manroots) [lshift args]
-                    # TODO: Build in ":" for project's man pages.
+                -docroot {
+                    set info(docroot) [lshift args]
                 }
 
                 -anchors {
@@ -260,10 +259,7 @@ snit::type ::kitedocs::kitedoc {
             $ehtml reset            
         }
 
-        if {[catch {::kitedocs::ehtml manroots $info(manroots)} result]} {
-            error "Error: Invalid -manroots: \"$info(manroots)\", $result"
-        }
-
+        ::kitedocs::ehtml configure -docroot $info(docroot)
 
         # NEXT, the remaining arguments should be input files.
         foreach infile $args {

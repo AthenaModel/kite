@@ -121,11 +121,35 @@ The <itag xref> macro creates hyperlinks. Generally speaking,
 link text.  If <i>anchor</i> isn't specified, then the <i>id</i> will
 be used as the link text.<p>
 
-When <xref ehtml(n)> is used on its own, the only xref IDs are those
-defined by <itag xrefset>.  When <xref ehtml(n)> is used by
-another tool, as by <xref manpage(n)>, there will usually be
-variety of automatically defined cross-reference IDs.  In particular,
-man pages can usually be referred to by name.<p>
+The <itag xref> macro recognizes three kinds of page IDs, in this 
+order:<p>
+
+<ul>
+<li> IDs defined using <itag xrefset>.<p>
+
+<li> Man page references, e.g., "<i name>(<i section>)".<p>
+
+    This creates a link to 
+    <tt><i docroot>/man<i section>/<i name>.html></tt>, where
+    <i docroot> is a relative path set via the 
+    <xref ehtml(n)> <tt -docroot> configuration option.<p>
+
+<li> Document references.<p>
+
+     If the ID appears to end with a file name with
+     a typical document extension (as determined by the
+     <xref ehtml(n)> <tt -doctypes> configuration option), it is
+     treated as a path relative to <i docroot>.<p> 
+</ul>
+
+In the latter two cases, the ID may begin with "<i project>:".  In
+this case, it's assumed that "<i project>" is the name of a sibling
+Kite project; and it's further assumed that this project will usually
+be checked out into the same parent directory as the current project.
+Consequently, the man page or document reference is relative to
+the <i project>'s <tt docs/> directory, e.g., the path is preceded
+by "<tt><i docroot>/../../<i project>/docs/</tt>".<p>
+
 
 <defitem xrefset "<tag xrefset {<i>id anchor url</i>}>">
 

@@ -64,17 +64,12 @@ appears in the headers of the generated pages.<p>
 Specifies an e-mail address for the primary point-of-contact.  This
 can be included in documents using the <xref kitedoc(5) poc> macro.<p>
 
-<defopt {-manroots <i>roots</i>}>
+<defopt {-docroot <i>docroot</i>}>
 
-Specifies a the mapping from man page names to URLs to be used
-when processing cross-references in documents.  See
-<xref ehtml(n) manroots> in <xref ehtml(n)> for the syntax
-of <i>roots</i>.<p>
-
-Unlike <xref manpage(n)>, kitedoc(n) has no knowledge of where
-the files being formatted reside in relation to man pages; thus it
-is the caller's responsibility to set this option if man page 
-cross-references are desired.<p>
+Specifies the relative path from the directory in which each
+<i file> appears to the <tt docs/> directory for the project.  This
+is used by <xref ehtml(5)>'s <xref ehtml(5) xref> macro to create
+relative links to man pages and other project documents.<p>
 
 <defopt {-anchors}>
 

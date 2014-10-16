@@ -95,6 +95,15 @@ Figure and table identifiers look like <code>fig.<i>name</i></code> and
 <code>tab.<i>name</i></code>.  The prefix ensures that they won't be
 confused with section IDs.<p>
 
+<subsection "Cross-References">
+
+<xref kitedoc(n)> supports <xref ehtml(5)>'s <xref ehtml(5) xref>
+macro.  Every section, table, and figure ID is an 
+<xref ehtml(5) xref> cross-reference ID.  Documents can also link
+to the project's man pages, and to other project documents using
+a file path relative to the <xref kitedoc(n)> <tt -docroot>.  Links
+to other projects are possible as well; see <xref ehtml(5)>.<p>
+
 <section MACROS>
 
 kitedoc(5) man pages may use the following macros, as well as all

@@ -144,7 +144,6 @@ snit::type ::kitedocs::manpage {
     #   -version num       - Project version number
     #   -description text  - Project description
     #   -section text      - Manpage Section Title
-    #   -manroots dict     - ehtml(n) "manroots"
     #
     # Formats the man pages in a man page directory.
 
@@ -155,11 +154,11 @@ snit::type ::kitedocs::manpage {
             version     "0.0.0"
             description "Your project description"
             section     "Project Man Pages"
-            manroots    {: ../man%s/%n.html}
         }
 
         # NEXT, initialize the ehtml processor.
         if {$ehtml eq ""} {
+            ::kitedocs::ehtml configure -docroot ..
             set ehtml [macro ${type}::ehtmltrans]
             $ehtml register ::kitedocs::ehtml
             foreach macroset $macrosets {
@@ -197,10 +196,6 @@ snit::type ::kitedocs::manpage {
                 -description {
                     set info(description) $val
                 }
-                -manroots {
-                    set val [dict merge $info(manroots) $val]
-                    set info(manroots) $val
-                }
                 -section {
                     set info(section) $val
                 }
@@ -210,10 +205,6 @@ snit::type ::kitedocs::manpage {
             }
         }
 
-        # NEXT, save the manroots.
-        if {[catch {::kitedocs::ehtml manroots $info(manroots)} result]} {
-            error "Error: Invalid -manroots: \"$info(manroots)\", $result"
-        }
 
         # NEXT, clear all state.
         $type ClearState
