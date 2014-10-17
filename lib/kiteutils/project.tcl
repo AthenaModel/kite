@@ -50,6 +50,7 @@ snit::type project {
     #   apps           - List of project app names, or "" if none.
     #   apptype-$app   - kit or exe
     #   gui-$app       - 1 or 0
+    #   icon-$app      - Name of icon file, relative to <root>
     #
     #   provides       - List of provided library package names
     #   binary-$name   - 1 if package is binary, and 0 otherwise.
@@ -314,6 +315,15 @@ snit::type project {
         return $info(gui-$app)
     }
 
+    # app icon app
+    #
+    # app - The application name
+    #
+    # Returns the app's icon file name, or "".
+
+    typemethod {app icon} {app} {
+        return $info(icon-$app)
+    }
 
     # app loader app
     #
@@ -721,6 +731,7 @@ snit::type project {
         # NEXT, get the options
         set apptype kit
         set gui     0
+        set icon    ""
 
         foroption opt args -all {
             -apptype {
@@ -734,12 +745,16 @@ snit::type project {
             -gui {
                 set gui 1
             }
+            -icon {
+                set icon [lshift args]
+            }
         }
 
 
         lappend info(apps)          $name
         set     info(apptype-$name) $apptype
         set     info(gui-$name)     $gui
+        set     info(icon-$name)    $icon
     }
 
     # add app name ?options?

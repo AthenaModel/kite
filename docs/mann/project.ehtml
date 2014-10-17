@@ -95,6 +95,11 @@ Returns the executable type for the named <i app>, <b kit> or <b exe>.<p>
 
 Returns 1 if the named <i app> intends to use Tk, and 0 otherwise.<p>
 
+<defitem "project app icon" {project app icon <i app>}>
+
+Returns the name of the app's icon file, or "" if none.<p>
+
+
 <defitem "project app loader" {project app loader <i app>}>
 
 Returns the name of the project's application loader script, which is 

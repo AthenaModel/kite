@@ -263,6 +263,15 @@ tool define build {
                 -prefix $basekit
         }
 
+        # NEXT, add the icon, if appropriate
+        if {$basekit                ne ""    && 
+            [project app icon $app] ne ""    &&
+            [os flavor]             ne "osx"
+        } {
+            lappend command \
+                -icon [project app icon $app]
+        }
+
         # NEXT, add options
         lappend command -out $target
 

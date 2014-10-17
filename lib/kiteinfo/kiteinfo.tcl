@@ -21,6 +21,7 @@ namespace eval ::kiteinfo:: {
     array set kiteInfo {
         binary-kitedocs 0
         local-tls 0
+        icon-kite {}
         description {Kite Project Automation Tool}
         provides {kiteutils kitedocs}
         local-crc32 0

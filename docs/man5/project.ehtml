@@ -91,6 +91,13 @@ builds an OS X .app.<p>
 If present, the application will load Tk automatically; and when built
 as a standalone executable, will be built using a Tk basekit.<p>
 
+<defopt {-icon <i filename>}>
+
+Specifies the name of a <tt .ico> file to included in the finished 
+executable.  The specified <tt -icon> will be used only if the 
+<tt -apptype> is <b exe> and the platform is some flavor of Windows or
+Linux.<p>
+
 </deflist options>
 
 A project may contain any number of applications; the first listed in
