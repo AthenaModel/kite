@@ -222,8 +222,10 @@ tool define build {
         set logfile [project root .kite build_$app.log]
         file mkdir [file dirname $logfile]
 
+        writefile $logfile "$command\n\n"
+
         lappend command \
-            >&  $logfile
+            >>&  $logfile
 
         # NEXT, Build the app
 
