@@ -10,10 +10,6 @@
 #   targets: The app or appkit (if any), teapot packages, docs, and
 #   other build targets specified in project.kite.
 #
-# TODO: Move basekit-finding code to plat.tcl.
-# TODO: Generate libzips directly, using zipfile::encode.
-# TODO: tclapp.tcl tclapp proxy?
-#
 #-----------------------------------------------------------------------
 
 #-----------------------------------------------------------------------
@@ -72,6 +68,7 @@ tool define build {
         }
 
         # FIRST, check for dependencies.
+        puts "Checking external dependencies..."
         set upToDate [deps uptodate]
 
         if {$upToDate} {

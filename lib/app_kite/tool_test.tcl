@@ -80,6 +80,8 @@ tool define test {
         }
 
         puts "Running all tests..."
+        writefile [TestFile] ""
+
         foreach dir $testDirs {
             # Skip any stray files
             if {![file isdirectory $dir]} {
@@ -90,7 +92,15 @@ tool define test {
 
         puts ""
         puts "Use 'kite -verbose test' to see the full output,"
-        puts "or 'kite test <dir>' for a specific test directory."
+        puts "or view <root>/.kite/test.log."
+    }
+
+    # TestFile
+    #
+    # Returns the name of the test log file.
+
+    proc TestFile {} {
+        return [project root .kite test.log]
     }
     
     # TestTarget -brief|-verbose target module optlist
@@ -139,6 +149,7 @@ tool define test {
                 set output [tclsh show $testfile {*}$optlist]
             } else {
                 set output [tclsh call $testfile {*}$optlist]
+                appendfile [TestFile] "\n$output"
             }
         } on error {result} {
             throw FATAL "Error running tests: $result"

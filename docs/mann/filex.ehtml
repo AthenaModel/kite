@@ -17,6 +17,12 @@ filex(n) provides utilities for working with files.<p>
 
 <deflist>
 
+<defitem appendfile {appendfile <i filename content>}>
+
+Appends the <i content> to the file with the given <i filename>,
+being careful not to add any extraneous newlines.  Creates the file
+if it doesn't exist.<p>
+
 <defitem readfile {readfile <i>filename</i>}>
 
 Opens the file with name <i>filename</i>, reads its contents, closes

@@ -15,7 +15,8 @@
 
 namespace eval ::kiteutils:: {
     namespace export    \
-        readfile \
+        appendfile \
+        readfile   \
         writefile
 }
 
@@ -63,6 +64,26 @@ proc ::kiteutils::writefile {filename content {opt ""}} {
     file mkdir [file dirname $filename]
 
     set f [open $filename w]
+
+    try {
+        return [puts -nonewline $f $content]
+    } finally {
+        close $f
+    }
+}
+
+# appendfile filename content
+#
+# filename - The file name
+# content  - The content to write
+#
+# Appends the content to the file.  Throws the normal
+# open/write errors.
+
+proc ::kiteutils::appendfile {filename content} {
+    file mkdir [file dirname $filename]
+
+    set f [open $filename a]
 
     try {
         return [puts -nonewline $f $content]

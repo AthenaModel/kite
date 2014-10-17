@@ -29,6 +29,33 @@ source ../../lib/kiteutils/pkgModules.tcl
 namespace import ::kiteutils::*
 
 #-------------------------------------------------------------------
+# appendfile
+
+test appendfile-1.1 {writes new file to disk} -body {
+    set fname "appendfile-1.1.txt"
+    set a "my content"
+    appendfile $fname $a
+    set b [readfile $fname]
+
+    expr {$a eq $b}
+} -cleanup {
+    removeFile $fname
+} -result {1}
+
+test appendfile-1.2 {appends to file} -body {
+    set fname "appendfile-1.2.txt"
+    set a "my content"
+    appendfile $fname $a
+    appendfile $fname $a
+    set b [readfile $fname]
+
+    expr {$b eq "$a$a"}
+} -cleanup {
+    removeFile $fname
+} -result {1}
+
+
+#-------------------------------------------------------------------
 # readfile
 
 test readfile-1.1 {error, cannot read file} -body {
