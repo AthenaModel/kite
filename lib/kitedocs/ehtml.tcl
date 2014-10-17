@@ -139,12 +139,12 @@ snit::type ::kitedocs::ehtml {
     # docroot - While processing an input string, the relative path
     #           to the root of the current documentation tree, i.e.,
     #           the parent path of the local man page directories.
-    #           Assume we are in the docroot by default.
+    #           If docroot is "", docroot-based xrefs are disallowed.
     #
     # doctypes - Document file types recognized by <xref>.
 
     typevariable config -array {
-        docroot  .
+        docroot  ""
         doctypes {
             .html .htm .txt .text .md .docx .xlsx .pptx .pdf
         }
@@ -269,47 +269,50 @@ snit::type ::kitedocs::ehtml {
                 return [link $url $anchor]
             }
 
-            # NEXT, get the root.  If the ID begins with "<project>:" 
-            # assume that "<project>" is the name of a sibling project
-            # hosted in the same directory as this project.
-            set relroot $ehtml(docroot)
+            # NEXT, it may be a reference based on docroot.
+            if {$ehtml(docroot) ne ""} {
+                # FIRST, get the root.  If the ID begins with "<project>:" 
+                # assume that "<project>" is the name of a sibling project
+                # hosted in the same directory as this project.
+                set relroot $ehtml(docroot)
 
-            if {[regexp {^([^:]+):(.*)$} $id dummy sibling id]} {
-                # Assume the xref is in a sibling project.
-                set relroot $relroot/../../$sibling/docs
-            }
-
-            # NEXT, is it a man page?
-            if {[regexp {^([^()]+)\(([1-9a-z]+)\)$} $id \
-                     dummy name section]
-            } {
-                set url $relroot/man$section/$name.html
-
-                if {$anchor ne ""} {
-                    append url "#[textToID $anchor]"
-                } else {
-                    set anchor "${name}($section)"                    
+                if {[regexp {^([^:]+):(.*)$} $id dummy sibling id]} {
+                    # Assume the xref is in a sibling project.
+                    set relroot $relroot/../../$sibling/docs
                 }
 
-                return [link $url $anchor]
-            }
-
-            # NEXT, does it look like a doc file?
-            set idx [string last $id .]
-
-            if {$idx != -1} {
-                set ext [string tolower [string range $id $idx end]]
-
-                if {$ext in $ehtml(doctypes)} {
-                    set idlist [split $id /]
-
-                    set url $relroot/[join $idlist /]
+                # NEXT, is it a man page?
+                if {[regexp {^([^()]+)\(([1-9a-z]+)\)$} $id \
+                         dummy name section]
+                } {
+                    set url $relroot/man$section/$name.html
 
                     if {$anchor ne ""} {
-                        set anchor $id
+                        append url "#[textToID $anchor]"
+                    } else {
+                        set anchor "${name}($section)"                    
                     }
 
                     return [link $url $anchor]
+                }
+
+                # NEXT, does it look like a doc file?
+                set idx [string last $id .]
+
+                if {$idx != -1} {
+                    set ext [string tolower [string range $id $idx end]]
+
+                    if {$ext in $ehtml(doctypes)} {
+                        set idlist [split $id /]
+
+                        set url $relroot/[join $idlist /]
+
+                        if {$anchor ne ""} {
+                            set anchor $id
+                        }
+
+                        return [link $url $anchor]
+                    }
                 }
             }
 

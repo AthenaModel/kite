@@ -59,10 +59,11 @@ Configures the macro set.  The following options may be set:<p>
 <defopt {-docroot <i relpath>}>
 Sets the relative path from the document file being processed to the
 project's <tt docs/> directory.  For <tt docs/index.ehtml>, the
-<tt -docroot> should be "."; this is the default.<p>
+<tt -docroot> should be "."<p>
 
 The macro set's <xref ehtml(5) xref> macro uses this to figure
-links to man pages and other documents.<p>
+links to man pages and other documents.  If the value of the option 
+is "", then only explicit <xref ehtml(5) xrefset> IDs are allowed.<p>
 
 <defopt {-doctypes <i typelist>}>
 The <i typelist> should be a list of file extensions, e.g., 

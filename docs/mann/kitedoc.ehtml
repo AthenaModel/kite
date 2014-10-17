@@ -71,6 +71,9 @@ Specifies the relative path from the directory in which each
 is used by <xref ehtml(5)>'s <xref ehtml(5) xref> macro to create
 relative links to man pages and other project documents.<p>
 
+If this option is not set, then <xref ehtml(5) xref> will only create
+links to explicit <xref ehtml(5) xrefset> IDs.<p>
+
 <defopt {-anchors}>
 
 If this option is included, then an index of all anchors and titles

@@ -3,16 +3,6 @@
 ## Next
 
 * manroot changes
-  * Use -docroot instead.
-    * Relative path from source document to `{root}/docs` directory.
-    * `<xref myman(n)>` links to {docroot}/mann/myman.html
-    * `<xref foo.html>` links to {docroot}/foo.html
-    * `<xref bar/foo.html>` links to {docroot}/bar/foo.html
-    * `<xref myproj:myman(n)>` links to {docroot}/../myproj/docs/mann/myman.html
-    * In short, if the xref begins with "name:", the {docroot} is extended
-      by "../name/docs".
-    * And if the xref isn't an xrefset ID and isn't a manpage ref, it's
-      a URL relative to {docroot} or the named project.
     * Consider moving xref/xrefset into its own macro set; manpage(5) and
       kitedoc(5) need it, but Athena's help(5) does not.
 * 'kite deps' needs to show actual versions in teapot.
