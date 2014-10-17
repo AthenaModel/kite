@@ -36,7 +36,10 @@ namespace eval ::kiteinfo:: {
     package require kitedocs
     namespace import kiteutils::*
 }
-        distpat-install-win32-ix86 {
+        name kite
+        poc William.H.Duquette@jpl.nasa.gov
+        srcs {}
+        distpat-install-%platform {
     README.md
     INSTALL.md
     LICENSE
@@ -46,9 +49,6 @@ namespace eval ::kiteinfo:: {
     docs/*.html
     docs/*/*.html
 }
-        name kite
-        poc William.H.Duquette@jpl.nasa.gov
-        srcs {}
         apps kite
         reqver-tls 1.6
         local-zipfile::encode 0
@@ -58,7 +58,7 @@ namespace eval ::kiteinfo:: {
         local-snit 0
         version 0.4.2a0
         reqver-crc32 1.3
-        dists install-win32-ix86
+        dists install-%platform
     }
 
     namespace export \

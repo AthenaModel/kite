@@ -509,6 +509,17 @@ snit::type project {
         return $dict
     }
 
+    # dist expand dist
+    #
+    # dist  - The distribution name
+    #
+    # Returns the distribution name with %-patterns expanded.
+
+    typemethod {dist expand} {dist} {
+        set map [list %platform [platform::identify]]
+        return [string map $map [string trim $dist]]
+    }
+
     # dist zipfile dist
     #
     # dist  - A dist target name, as returned by [project dist names]
@@ -516,9 +527,9 @@ snit::type project {
     # Returns the name of the distribution zipfile.
 
     typemethod {dist zipfile} {dist} {
-        return "[project name]-[project version]-$dist.zip"       
+        set fullname [$type dist expand $dist]
+        return "[project name]-[project version]-$fullname.zip"       
     }
-
 
     # GetDistApps 
     #
@@ -872,10 +883,7 @@ snit::type project {
 
     proc DistCmd {name patterns} {
         # FIRST, get the name.
-        set map [list %platform [platform::identify]]
-        set name [string map $map [string trim $name]]
-
-        if {![regexp {^[a-zA-Z][-[:alnum:]_.]*$} $name]} {
+        if {![regexp {^[a-zA-Z][-[:alnum:]%_.]*$} $name]} {
             throw SYNTAX "Invalid distribution name \"$name\""
         }
 
