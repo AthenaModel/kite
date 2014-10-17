@@ -36,47 +36,47 @@ snit::type docs {
     #-------------------------------------------------------------------
     # kitedoc(5) Documents
 
-    # kitedocs ?dirname?
+    # kitedocs ?target?
     #
-    # dirname  - Optionally, full path to a directory containing 
-    #            kitedoc(5) files.  
+    # target  -  Optionally, full path to a directory containing 
+    #            kitedoc(5) files, or a specific kitedoc(5) file.
     #
     # Builds all kitedocs found in docs/ and its subdirectories, or
-    # just in the given subdirectory.  NOTE: Any .ehtml file found
+    # just the given target file.  NOTE: Any .ehtml file found
     # in docs or its subdirectories, other than the "man*" subdirectories,
     # is assumes to be a kitedoc(5) file.
 
-    typemethod kitedocs {{dirname ""}} {
-        # FIRST, get the directories to process.
-        if {$dirname ne ""} {
-            set docdirs [list $dirname]
-        } else {
-            set docdirs [GetDocDirs]
-        }
-
-        # NEXT, allow the project macros
+    typemethod kitedocs {{target ""}} {
+        # FIRST, allow the project macros
         kitedocs::kitedoc register ::project_macros
 
-        # NEXT, process them.
-        foreach dir $docdirs {
-            # Skip non-directories.
-            if {![file isdirectory $dir]} {
-                continue
+        # NEXT, get the files to process.
+        if {$target eq ""} {
+            foreach dir [GetDocDirs] {
+                FormatKiteDocs $dir
             }
-
-            FormatKiteDocs $dir
+        } else {
+            FormatKiteDocs $target
         }
     }
 
-    # FormatKiteDocs dir
+    # FormatKiteDocs target
     #
-    # dir - The specific directory to work in.
+    # target - A kitedoc(5) file or a directory containing them.
     # 
-    # Formats all of the kitedoc(5) files in the directory.
+    # Formats all of the kitedoc(5) files in the directory,
+    # or the named file.
 
-    proc FormatKiteDocs {dir} {
-        # FIRST, get the files to process.
-        set infiles [glob -nocomplain [file join $dir *.ehtml]]
+    proc FormatKiteDocs {target} {
+        if {[file isdirectory $target]} {
+            set dir $target
+            set infiles [glob -nocomplain [file join $dir *.ehtml]]
+        } elseif {[file isfile $target]} {
+            set dir [file dirname $target]
+            set infiles [list $target]
+        } else {
+            error "No such file or directory: \"$target\""
+        }
 
         if {[llength $infiles] == 0} {
             return

@@ -29,6 +29,11 @@ tool define docs {
 
     * A path relative to <root>, e.g., "docs" or "docs/dev", naming
       a directory that contains ".ehtml" files.
+
+    * A file name.  If the file is in docs/man*, Kite formats the man pages
+      in that directory; if elsewhere in docs/*, Kite formats the document
+      as a kitedoc(5) file.
+
     * A man page directory, e.g., "mann"
 
     Finally, if the "-clean" option is given then the chosen set of 
@@ -69,6 +74,32 @@ tool define docs {
 
         if {$target eq "-clean"} {
             $type clean
+            return
+        }
+
+        # NEXT, is the target a file?
+        if {[file isfile $target]} {
+            if {[file extension $target] ne ".ehtml"} {
+                throw FATAL "Kite cannot format [file extension $target] files."
+            }
+
+            # Is it in the docs directory?
+            set fullpath [file normalize $target]
+
+            if {![string match [project root docs *] $fullpath]} {
+                throw FATAL "Target \"$target\" is not under <root>/docs/"
+            }
+
+            # Is it a man page file?
+            set dir [file dirname $fullpath]
+
+            if {[string match [project root docs man*] $dir]} {
+                docs manpages [file tail $dir]
+                return
+            }
+
+            # It's a kitedoc(5) file.
+            docs kitedocs $fullpath
             return
         }
 
