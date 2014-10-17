@@ -153,14 +153,6 @@ test textToID-1.1 {strips whitespace} -setup {
 
 test xref-1.1 {xref/xrefset} -setup {
     setup
-} -body {
-    trans expand {-<xref foo(n)>-}
-} -cleanup {
-    cleanup
-} -result {-<a href="./mann/foo.html">foo(n)</a>-}
-
-test xref-1.2 {xref/xrefset} -setup {
-    setup
     trans eval [list xrefset foo Foo! ./bar.html]
 } -body {
     trans expand {-<xref foo>-}
@@ -168,13 +160,42 @@ test xref-1.2 {xref/xrefset} -setup {
     cleanup
 } -result {-<a href="./bar.html">Foo!</a>-}
 
-test xref-1.3 {xrefset returns link} -setup {
+test xref-1.2 {xrefset returns link} -setup {
     setup
 } -body {
     trans expand {-<xrefset foo Foo! ./bar.html>-}
 } -cleanup {
     cleanup
 } -result {-<a href="./bar.html">Foo!</a>-}
+
+test xref-1.3 {unknown xref id} -setup {
+    setup
+} -body {
+    # -docroot not set
+    trans expand {-<xref foo(n)>-}
+} -cleanup {
+    cleanup
+} -result {-<b><tt>&lt;xref foo(n)&gt;</tt></b>-}
+
+test xref-1.4 {manref when docroot set to "."} -setup {
+    setup
+    ehtml configure -docroot "."
+    trans reset
+} -body {
+    trans expand {-<xref foo(n)>-}
+} -cleanup {
+    cleanup
+} -result {-<a href="./mann/foo.html">foo(n)</a>-}
+
+test xref-1.5 {docref when docroot set to "."} -setup {
+    setup
+    ehtml configure -docroot "."
+    trans reset
+} -body {
+    trans expand {-<xref foo/bar.html "Bar!">-}
+} -cleanup {
+    cleanup
+} -result {-<a href="./foo/bar.html">Bar!</a>-}
 
 #-------------------------------------------------------------------
 # HTML Equivalents

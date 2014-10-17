@@ -297,7 +297,7 @@ snit::type ::kitedocs::ehtml {
                 }
 
                 # NEXT, does it look like a doc file?
-                set idx [string last $id .]
+                set idx [string last . $id]
 
                 if {$idx != -1} {
                     set ext [string tolower [string range $id $idx end]]
@@ -307,7 +307,7 @@ snit::type ::kitedocs::ehtml {
 
                         set url $relroot/[join $idlist /]
 
-                        if {$anchor ne ""} {
+                        if {$anchor eq ""} {
                             set anchor $id
                         }
 
