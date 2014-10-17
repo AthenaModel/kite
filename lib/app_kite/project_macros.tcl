@@ -20,6 +20,17 @@ snit::type project_macros {
     pragma -hasinstances no -hastypedestroy no
 
     #-------------------------------------------------------------------
+    # Lookup Tables
+
+    # Standard definitions for [project tclsh] and related calls.
+
+    typevariable tclshHeader {
+        proc version {} { return "%version" }
+        proc get {x} { return $x }
+    }
+    
+
+    #-------------------------------------------------------------------
     # Public Methods
 
     # install macro
@@ -41,8 +52,10 @@ snit::type project_macros {
             [list project description]
 
         $macro smartalias {project tclsh} 1 1 {script} \
-            [list tclsh script]
+            [myproc ProjectTclsh]
 
+        $macro smartalias {project expand} 1 1 {script} \
+            [myproc ProjectExpand $macro]
 
         # fromproject
 
@@ -54,11 +67,6 @@ snit::type project_macros {
                 if {![info exists withProject(counter)]} {
                     set withProject(counter) 0
                     set withProject(scripts) [list]
-                    lappend withProject(scripts) \
-                        [format {proc version {} { return "%s" }} [project version]]
-                    lappend withProject(scripts) \
-                        [list proc get {x} {return $x}]
-
                 }
 
                 set i [incr withProject(counter)]
@@ -92,5 +100,27 @@ snit::type project_macros {
             return
         }
     }    
+
+    # ProjectTclsh script
+    #
+    # script - Sends the script to the project tclsh, and returns
+    # the result.  Defines the "version" and "get" commands.
+
+    proc ProjectTclsh {script} {
+        set map [list %version [project version]]
+        set header [string map $map $tclshHeader]
+        return [tclsh script "$header\n$script"]
+    }
+
+    # ProjectExpand macro script
+    #
+    # macro  - The macro processor
+    # script - A script to send to the project tclsh.
+    #
+    # Sends the script and returns the expanded result.
+
+    proc ProjectExpand {macro script} {
+        return [$macro expandonce [ProjectTclsh $script]]
+    }
 }
 

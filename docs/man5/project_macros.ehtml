@@ -48,6 +48,12 @@ the <tt tclsh> executable once each time it is called; the
 <itag toproject> and <itag fromproject> macros accumulate their
 scripts and invoke the <tt tclsh> a single time.<p>
 
+<defitem "project expand" {<tag project {expand <i script>}>}>
+
+Executes the <i script> in the development Tcl shell with access
+to the project's code base, and then expands any macros in 
+the result, returning the expansion.<p>
+
 </deflist project>
 
 <defitem toproject {<tag toproject {<i script>}>}>
@@ -59,8 +65,6 @@ the development Tcl shell as a batch with the scripts from all other
 
 This macro is usually used to require packages and do other setup.<p>
 
-The script may use the <xref "TO/FROM PROJECT COMMANDS">.<p>
-
 <defitem fromproject {<tag fromproject {<i script>}>}>
 
 Executes the <i script> in the development Tcl shell in the context of the 
@@ -71,20 +75,16 @@ the development Tcl shell as a batch with the scripts from all other
 This macro is usually used to call documentation generators in the 
 project code base.<p>
 
-The script may use the <xref "TO/FROM PROJECT COMMANDS">.<p>
+<section "PROJECT TCL COMMANDS">
 
-<section "TO/FROM PROJECT COMMANDS">
-
-The scripts passed to <itag toproject> and <itag fromproject> do not 
-execute in the macro interpreter, but are batched together in a single
-script and passed to the development <tt tclsh> executable.  Two special
-commands are made available to these scripts:<p>
+Two special commands are made available to <itag project tclsh>,
+<itag project expand>, <itag toproject>, and <itag fromproject>:<p>
 
 <deflist specials>
 
 <defitem get {get <i x>}>
 
-Returns its argument.  This allows a <itag fromproject> script to easily
+Returns its argument.  This allows the script to easily
 return an interpolated string:<p>
 
 <example>
