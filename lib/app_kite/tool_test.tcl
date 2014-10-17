@@ -120,7 +120,15 @@ tool define test {
         set testfile [file join $testdir $module.test]
 
         if {![file isfile $testfile]} {
-            throw FATAL "Cannot find \"$module.test\"."
+            if {$module eq "all_tests"} {
+                puts [normalize "
+                    WARNING: skipping test directory \"$target\": 
+                    no \"all_tests.test\" file.
+                "]
+                return
+            } else {
+                throw FATAL "Cannot find \"$module.test\"."
+            }
         }
 
         # NEXT, Run the tests
