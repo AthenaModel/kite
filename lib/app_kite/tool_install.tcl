@@ -166,6 +166,15 @@ tool define install {
             set target1 [file join ~ bin [project app binfile $app]]
             set target2 [file join ~ bin [project app installfile $app]]
 
+            if {$app eq "kite" &&
+                [file normalize $target2] eq 
+                [file normalize [info nameofexecutable]]
+            } {
+                throw FATAL [outdent {
+                    The ~/bin/kite executable cannot overwrite itself.
+                    Use kite.tcl to install the new executable.
+                }]
+            }
 
             if {![file exists $source]} {
                 puts [outdent "
