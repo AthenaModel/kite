@@ -12,6 +12,7 @@ be used by other projects.<p>
   <li> <link BUILD.md      "Build Instructions">
   <li> <xref project(5)    "Syntax: project.kite">
   <li> <link kdg.html      "Kite Developer's Guide">
+  <li> <link release_notes.md   "Kite Release Notes">
 </ul><p>
 
 <preface man "Man Pages">
