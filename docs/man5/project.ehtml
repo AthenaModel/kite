@@ -256,7 +256,33 @@ dist install-%platform {
 The <i>script</i> will be automatically loaded in the Tcl shell produced by
 the <code>kite shell</code> command for "lib-only" projects or if 
 <code>kite shell -plain</code> is used. This allows the project to 
-customize the initial state of the shell.
+customize the initial state of the shell.<p>
+
+<defitem xfile {xfile <i path url>}>
+
+Occasionally there are files that need to be 
+available when building a project that cannot be retained in the VCS
+repository (e.g., large MS Office files).  One approach is to use the
+<tt %get> pattern in a <iref dist> set; alternatively, the external
+file can be called out on its own in the project file using the 
+<iref xfile> statement.  For example,
+
+<example>
+xfile docs/mydoc.docx http://example.com/mydoc.docx
+</example>
+
+The <i path> should be a path relative to the project root, using "/" as
+the path separator, and ending in the desired file name.  The <i url> is
+an "http" or "https" URL from which the desired file can be retrieved.<p>
+
+The <tt kite xfiles update> and <tt kite build all> commands will retrieve
+the designated file and save it in the project tree with the designated 
+name.  The <tt kite xfiles clean> and <tt kite clean> commands will 
+remove it.<p>
+
+It is generally a good idea to update the <tt .gitignores> file or 
+equivalent so that the external file won't be accidentally checked in
+to the VCS.<p>
 
 </deflist statements>
 

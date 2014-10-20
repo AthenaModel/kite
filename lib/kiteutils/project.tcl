@@ -63,6 +63,10 @@ snit::type project {
     #   build-$src     - Script to build contents of $src
     #   clean-$src     - Script to clean contents of $src
     #
+    #   xfiles         - Paths of xfile links, relative to <root>,
+    #                    using "/" as path separator.
+    #   url-$xfile     - URL associated with xfile link.
+    #
     #   dists          - Names of distribution targets.
     #   distpat-$dist  - List of path patterns for $dist.
     #
@@ -77,6 +81,7 @@ snit::type project {
         provides       {}
         requires       {}
         srcs           {}
+        xfiles         {}
         dists          {}
         shell          {}
     }
@@ -468,6 +473,27 @@ snit::type project {
     }
 
     #-------------------------------------------------------------------
+    # Metadata query: eXternal Files
+
+    # xfile paths
+    #
+    # Returns a list of the xfile path names.
+
+    typemethod {xfile paths} {} {
+        return $info(xfiles)
+    }
+
+    # xfile url path
+    #
+    # path   - Project path for an xfile
+    #
+    # Returns the URL associated with the path.
+
+    typemethod {xfile url} {path} {
+        return $info(url-$path)
+    }
+
+    #-------------------------------------------------------------------
     # Metadata Query: Distributions
 
     # dist names
@@ -648,6 +674,7 @@ snit::type project {
         $safe alias provide [myproc ProvideCmd]
         $safe alias require [myproc RequireCmd]
         $safe alias src     [myproc SrcCmd]
+        $safe alias xfile   [myproc XfileCmd]
         $safe alias dist    [myproc DistCmd]
         $safe alias shell   [myproc ShellCmd]
 
@@ -889,6 +916,29 @@ snit::type project {
         lappend info(srcs) $name
     }
 
+    # XfileCmd path url
+    #
+    # path   - The local path of the external file
+    # url    - The URL from which the external file can be retrieved.
+    #
+    # Directs Kite to grab the file at the URL and save it into the
+    # project tree at [project root $path].  This will happen at
+    # 'kite xfiles update' or 'kite build all'.
+    #
+    # The path should be a path relative to the project root, written
+    # with forward slashes, and including the local file name.
+    #
+    # The URL should be an HTTP or HTTPS URL.
+
+    proc XfileCmd {path url} {
+        # FIRST, get the name.
+        prepare path
+        prepare url
+
+        lappend info(xfiles) $path
+        set info(url-$path) $url
+    }
+
     # DistCmd name patterns
     #
     # name     - The name of the distribution target, e.g., "install".
@@ -989,6 +1039,10 @@ snit::type project {
                     lappend item -gui
                 }
 
+                if {$info(icon-$name) ne ""} {
+                    lappend item -icon $info(icon-$name)
+                }
+
                 lappend script $item
             }
         }
@@ -1036,6 +1090,13 @@ snit::type project {
                 }
 
                 lappend script $item
+            }
+        }
+
+        if {$info(xfiles) ne ""} {
+            lappend script "" "# External Files"
+            foreach path $info(xfiles) {
+                lappend script [list xfile $path $info(url-$path)]
             }
         }
 

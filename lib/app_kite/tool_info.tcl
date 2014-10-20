@@ -142,6 +142,20 @@ tool define info {
             dictab puts $table -indent "  "
         }
 
+        if {[got [project xfile paths]]} {
+            puts ""
+            puts "External Files:"
+
+            set table [list]
+
+            foreach path [project xfile paths] {
+                lappend table \
+                    [list path $path url [project xfile url $path]]
+            }
+
+            dictab puts $table -indent "  "
+        }
+
         if {[got [project dist names]]} {
             puts ""
             puts "Distribution Sets:"

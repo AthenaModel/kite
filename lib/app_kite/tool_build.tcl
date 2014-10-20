@@ -94,6 +94,11 @@ tool define build {
 
             # NEXT, build everything, halting on any error.
 
+            if {[got [project xfile paths]]} {
+                header "Retrieving External Files"
+                tool use xfiles {update all}
+            }
+
             if {[got [project src names]]} {
                 header "Compiling src directories"
                 tool use compile

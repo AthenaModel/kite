@@ -40,6 +40,7 @@ namespace eval ::kiteinfo:: {
         name kite
         poc William.H.Duquette@jpl.nasa.gov
         srcs {}
+        xfiles {}
         distpat-install-%platform {
     README.md
     INSTALL.md
@@ -57,7 +58,7 @@ namespace eval ::kiteinfo:: {
         apptype-kite exe
         local-textutil::expander 0
         local-snit 0
-        version 0.4.3a0
+        version 0.4.3
         reqver-crc32 1.3
         dists install-%platform
     }

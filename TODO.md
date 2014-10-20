@@ -2,17 +2,12 @@
 
 ## Next
 
-* Add "xfile" statement, per the xdocs.md file.  "xfile" because it doesn't
-  need to be a documentation file, necessarily.
-  * 'kite xfile' pulls in or cleans up the xfiles.
-  * 'kite build all' pulls in all xfiles.
-  * 'kite clean' calls 'kite xfile clean'.
-  * 'xfile {local path} {url}', e.g., 'xfile docs/aag.docx https://...'
-  * Alternatively, "curl", "See URL", alludes to "curl" app.
 * 'kite deps' needs to show actual versions in teapot.
 * Flesh out the test suites
 * Flesh out the KDG.
   * Use required material from the notes.
+* Consider: how to add metadata so that 'project save' updates 
+  automatically.
 
 * Consider: add -force, -follow, and -follow-recommend as options to app,
   to be passed along to tclapp.
