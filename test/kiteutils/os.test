@@ -70,6 +70,13 @@ test flavor-1.3 {linux} -setup {
 } -result {linux}
 
 #-------------------------------------------------------------------
+# flavors
+
+test flavors-1.1 {sorted list of flavors} -body {
+    os flavors
+} -result {linux osx windows}
+
+#-------------------------------------------------------------------
 # name
 
 test name-1.1 {pretty name} -setup {
@@ -106,6 +113,17 @@ test exefile-1.3 {once only} -setup {
 } -cleanup {
     cleanup
 } -result {myapp.exe}
+
+#-------------------------------------------------------------------
+# appdir
+
+test appdir-1.1 {no specific appdir} -constraints macOrUnix -body {
+    os appdir
+} -result {}
+
+test appdir-1.2 {windows} -constraints win -body {
+    expr {[os appdir] eq $::env(APPDATA)}
+} -result {1}
 
 #-------------------------------------------------------------------
 # pathfind

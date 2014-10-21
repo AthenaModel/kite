@@ -8,10 +8,13 @@
 # DESCRIPTION:
 #   kiteutils(n): OS abstraction layer.
 #
-#   Kite is concerned with Linux, OS X, and Windows, and can make most
-#   judgements based on those three flavors.  Linux is the default,
-#   as it should work (from Kite's point of view) for most Unix
-#   variants.
+#   This module is not concerned with the architectural details of the
+#   OS (e.g., 32 vs. 64 bit), but with the details of interacting with
+#   the OS, e.g., where do certain files go, file naming conventions,
+#   ways to make things happen, that change based on the OS.
+#
+#   The module defines a number of "flavors" that represent distinct
+#   OS-interaction patterns.
 #
 #-----------------------------------------------------------------------
 
@@ -66,6 +69,14 @@ snit::type ::kiteutils::os {
         }
     }
 
+    # flavors
+    #
+    # Returns the list of flavors.
+
+    typemethod flavors {} {
+        return [lsort [array names osNames]]
+    }
+
     # osname
     #
     # Returns the OS name for the platform flavor. 
@@ -88,6 +99,22 @@ snit::type ::kiteutils::os {
             return "$name.exe"
         } else {
             return $name
+        }
+    }
+
+    # appdir
+    #
+    # Returns the name of the root directory for application preference files
+    # and the like, if there's one specifically defined for the platform,
+    # and "" otherwise.  (If "", the application can assume that Un*x 
+    # standard apply, and create a "dot-file" or "dot-directory" in the
+    # user's home directory.)
+
+    typemethod appdir {} {
+        if {[$type flavor] eq "windows"} {
+            return $::env(APPDATA)
+        } else {
+            return ""
         }
     }
 
