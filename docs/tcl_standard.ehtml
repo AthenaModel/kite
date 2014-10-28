@@ -58,7 +58,7 @@ standards, with the following exceptions:<p>
 <section intro.base "Base Standard">
 
 The Kite Tcl/Tk Coding Standard has evolved over time.  Originally,
-as the JNEM coding standard, it was a collection of chnages to 
+as the JNEM coding standard, it was a collection of changes to 
 the <i><link http://www.tcl.tk/doc/styleGuide.pdf "Tcl Style Guide"></i>.
 This document was once the recognized standard for Tcl code within the
 Tcl/Tk community at large.  It was developed at Sun Microsystems at the
