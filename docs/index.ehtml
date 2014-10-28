@@ -7,12 +7,13 @@ be used by other projects.<p>
 <preface doc "Top-level Documents">
 
 <ul>
-  <li> <link ../README.md  "Project README">
-  <li> <link ../INSTALL.md "Installation Instructions">
-  <li> <link BUILD.md      "Build Instructions">
-  <li> <xref project(5)    "Syntax: project.kite">
-  <li> <link kdg.html      "Kite Developer's Guide">
-  <li> <link release_notes.md   "Kite Release Notes">
+  <li> <xref ../README.md       "Project README">
+  <li> <xref ../INSTALL.md      "Installation Instructions">
+  <li> <xref BUILD.md           "Build Instructions">
+  <li> <xref project(5)         "Syntax: project.kite">
+  <li> <xref kdg.html           "Kite Developer's Guide">
+  <li> <xref tcl_standard.html  "Tcl Coding Standard">
+  <li> <xref release_notes.md   "Kite Release Notes">
 </ul><p>
 
 <preface man "Man Pages">
