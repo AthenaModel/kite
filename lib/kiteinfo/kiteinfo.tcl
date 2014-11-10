@@ -37,7 +37,6 @@ namespace eval ::kiteinfo:: {
     package require kitedocs
     namespace import kiteutils::*
 }
-        force-kite 0
         name kite
         poc William.H.Duquette@jpl.nasa.gov
         srcs {}
@@ -52,7 +51,6 @@ namespace eval ::kiteinfo:: {
     docs/*.html
     docs/*/*.html
 }
-        exclude-kite {}
         apps kite
         reqver-tls 1.6
         local-zipfile::encode 0
@@ -60,7 +58,7 @@ namespace eval ::kiteinfo:: {
         apptype-kite exe
         local-textutil::expander 0
         local-snit 0
-        version 0.4.4a0
+        version 0.4.4
         reqver-crc32 1.3
         dists install-%platform
     }
