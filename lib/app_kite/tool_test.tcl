@@ -157,11 +157,16 @@ tool define test {
 
         # NEXT, show summary of results unless output was verbose.
         if {!$verbose} {
-            set errCount [ShowStats $target $output]
+            lassign [ShowStats $target $output] errCount failCount
 
             if {$errCount > 0} {
                 puts ""
                 throw FATAL "Test file errors: $errCount"
+            }
+
+            if {$failCount > 0} {
+                puts ""
+                throw FATAL "Test failures: $failCount"
             }
         }
     }
@@ -173,11 +178,13 @@ tool define test {
     #
     # Parses throught the test output and finds just the stats.  Returns
     # the number of Test file error blocks found; these represent runtime
-    # errors, not test failures.
+    # errors, not test failures.  Also counts the number of test failures.
+    # Returns a list {errCount failCount}.
 
     proc ShowStats {target output} {
         set inError 0
         set errCount 0
+        set failCount 0
         foreach line [split $output \n] {
             if {[string match "Test file error:*" $line]} {
                 incr errCount
@@ -193,11 +200,12 @@ tool define test {
 
             if {[regexp {Total\s+\d+\s+Passed\s+\d+\s+Skipped\s+\d+\s+Failed} $line]} {
                 set pieces [split $line :]
+                incr failCount [lindex $pieces 1 7]
                 puts "$target: [lindex $pieces 1]"
             }
         }
 
-        return $errCount
+        return [list $errCount $failCount]
     }
 }
 
