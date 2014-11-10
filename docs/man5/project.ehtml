@@ -86,6 +86,17 @@ executable, select <b exe>.<p>
 <b TODO:> On OS X, we should have an additional option, <b app>, which
 builds an OS X .app.<p>
 
+<defopt {-force}>
+
+If present, this causes '<tt kite build>' to include the 
+<tt tclapp -force> option, which causes <tt tclapp> to build the 
+requested application even if all required libraries are not available.
+This is useful as a stop-gap when building a non-GUI <b exe> application
+for a package that also delivers GUI apps and requires GUI packages; 
+in this specific case, <tt tclapp> will sometimes balk, and 
+<tt -force> prevents that.  The <tt -exclude> option is a preferable 
+solution for the long-term.<p>
+
 <defopt {-gui}>
 
 If present, the application will load Tk automatically; and when built

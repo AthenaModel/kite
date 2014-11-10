@@ -91,6 +91,11 @@ in the project file), or "" if the project doesn't include any applications.<p>
 
 Returns the executable type for the named <i app>, <b kit> or <b exe>.<p>
 
+<defitem "project app force" {project app force <i app>}>
+
+Returns 1 if the named <i app> was defined with the <tt -force> option,
+and 0 otherwise.<p>
+
 <defitem "project app gui" {project app gui <i app>}>
 
 Returns 1 if the named <i app> intends to use Tk, and 0 otherwise.<p>

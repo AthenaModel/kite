@@ -51,6 +51,7 @@ snit::type project {
     #   apptype-$app   - kit or exe
     #   gui-$app       - 1 or 0
     #   icon-$app      - Name of icon file, relative to <root>
+    #   force-$app     - Include -force when building tclapp
     #
     #   provides       - List of provided library package names
     #   binary-$name   - 1 if package is binary, and 0 otherwise.
@@ -328,6 +329,16 @@ snit::type project {
 
     typemethod {app icon} {app} {
         return $info(icon-$app)
+    }
+
+    # app icon force
+    #
+    # app - The application name
+    #
+    # Returns 1 if the -force flag was given, and 0 otherwise.
+
+    typemethod {app force} {app} {
+        return $info(force-$app)
     }
 
     # app loader app
@@ -757,6 +768,7 @@ snit::type project {
 
         # NEXT, get the options
         set apptype kit
+        set force   0
         set gui     0
         set icon    ""
 
@@ -769,6 +781,9 @@ snit::type project {
                         "Invalid -apptype: \"$apptype\""
                 }
             }
+            -force {
+                set force 1
+            }
             -gui {
                 set gui 1
             }
@@ -780,6 +795,7 @@ snit::type project {
 
         lappend info(apps)          $name
         set     info(apptype-$name) $apptype
+        set     info(force-$name)   $force
         set     info(gui-$name)     $gui
         set     info(icon-$name)    $icon
     }

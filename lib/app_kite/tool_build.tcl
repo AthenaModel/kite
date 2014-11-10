@@ -285,7 +285,12 @@ tool define build {
         }
 
         # Follow package requirements
-        lappend command -follow
+        lappend command -follow 
+
+        # Force build if -force was given to app.
+        if {[project app force $app]} {
+            lappend command -force
+        }
 
         # NEXT, add "require" dependencies
         foreach rqmt [project require names] {
