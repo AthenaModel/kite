@@ -86,6 +86,20 @@ executable, select <b exe>.<p>
 <b TODO:> On OS X, we should have an additional option, <b app>, which
 builds an OS X .app.<p>
 
+<defopt {-exclude <i packages...>}>
+
+The value, <i packages>, is a list of the names of external packages 
+that shouldn't be included in the application.<p> 
+
+When a project defines multiple applications, it might be that a given
+application requires only some of the
+external packages that are <iref require>'d in <tt project.kite>.
+By default all external packages are included in application executables,
+but included unneeded applications can make an executable bigger than
+necessary.  In addition, attempting to include Tk extensions in a 
+non-GUI application can cause <tt tclapp> to balk.  This option allows
+them to be explicitly excluded.<p>  
+
 <defopt {-force}>
 
 If present, this causes '<tt kite build>' to include the 

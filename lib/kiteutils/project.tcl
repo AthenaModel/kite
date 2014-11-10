@@ -52,6 +52,8 @@ snit::type project {
     #   gui-$app       - 1 or 0
     #   icon-$app      - Name of icon file, relative to <root>
     #   force-$app     - Include -force when building tclapp
+    #   exclude-$app   - List of names of project requires to exclude from
+    #                    this app when building executable.
     #
     #   provides       - List of provided library package names
     #   binary-$name   - 1 if package is binary, and 0 otherwise.
@@ -331,7 +333,17 @@ snit::type project {
         return $info(icon-$app)
     }
 
-    # app icon force
+    # app exclude app
+    #
+    # app - The application name
+    #
+    # Returns the -exclude list of package names for this app.
+
+    typemethod {app exclude} {app} {
+        return $info(exclude-$app)
+    }
+
+    # app force app
     #
     # app - The application name
     #
@@ -768,6 +780,7 @@ snit::type project {
 
         # NEXT, get the options
         set apptype kit
+        set exclude [list]
         set force   0
         set gui     0
         set icon    ""
@@ -779,6 +792,13 @@ snit::type project {
                 if {$apptype ni {kit exe}} {
                     throw SYNTAX \
                         "Invalid -apptype: \"$apptype\""
+                }
+            }
+            -exclude {
+                set exclude [lshift args]
+                if {![string is list $exclude]} {
+                    throw SYNTAX \
+                        "Invalid -exclude: \"$exclude\""
                 }
             }
             -force {
@@ -795,6 +815,7 @@ snit::type project {
 
         lappend info(apps)          $name
         set     info(apptype-$name) $apptype
+        set     info(exclude-$name) $exclude
         set     info(force-$name)   $force
         set     info(gui-$name)     $gui
         set     info(icon-$name)    $icon

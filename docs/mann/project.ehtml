@@ -91,6 +91,11 @@ in the project file), or "" if the project doesn't include any applications.<p>
 
 Returns the executable type for the named <i app>, <b kit> or <b exe>.<p>
 
+<defitem "project app exclude" {project app exclude <i app>}>
+
+Returns a list of the <iref project require names> that are explicitly
+excluded from this application.<p>
+
 <defitem "project app force" {project app force <i app>}>
 
 Returns 1 if the named <i app> was defined with the <tt -force> option,

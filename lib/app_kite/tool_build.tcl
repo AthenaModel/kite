@@ -294,9 +294,11 @@ tool define build {
 
         # NEXT, add "require" dependencies
         foreach rqmt [project require names] {
-            set pkgref "$rqmt [project require version $rqmt]"
-            lappend command \
-                -pkgref $pkgref
+            if {$rqmt ni [project app exclude $app]} {
+                set pkgref "$rqmt [project require version $rqmt]"
+                lappend command \
+                    -pkgref $pkgref
+            }
         }
 
         return $command
