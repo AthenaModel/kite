@@ -1,6 +1,15 @@
 Kite Release Notes
 ==================
 
+Kite 0.4.4
+----------
+
+#46: app -exclude
+#45: app -force
+#43: Tcl Coding Standard
+#39: os(n): os flavors, os appdir
+#35: kite build all: failed tests don't stop build
+
 Kite 0.4.3
 ----------
 The following changes were made in Kite 0.4.3
