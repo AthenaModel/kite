@@ -22,7 +22,10 @@ namespace eval ::kiteutils:: {
         ldelete         \
         lmaxlen         \
         lmerge          \
+        lpop            \
+        lpush           \
         lshift          \
+        ltop            \
         lzipper
 }
 
@@ -156,4 +159,42 @@ proc ::kiteutils::lzipper {alist {blist {}}} {
     }
 
     return $result
+}
+
+# lpush stackvar item
+#
+# stackvar - A variable containing a Tcl list
+# item     - A value to push onto the stack.
+#
+# Pushes the item onto the stack.
+
+proc ::kiteutils::lpush {stackvar item} {
+    upvar $stackvar stack
+    lappend stack $item
+    return $stack
+}
+
+
+# lpop stackvar
+#
+# stackvar - A variable containing a Tcl list
+#
+# Removes the top item from the stack, and returns it.
+
+proc ::kiteutils::lpop {stackvar} {
+    upvar $stackvar stack
+
+    set item [lindex $stack end]
+    set stack [lrange $stack 0 end-1]
+    return $item
+}
+
+# ltop stack
+#
+# stack - A Tcl list that represents a stack.
+#
+# Returns the top item from the stack..
+
+proc ::kiteutils::ltop {stack} {
+    lindex $stack end
 }

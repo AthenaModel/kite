@@ -45,11 +45,31 @@ variable <i>listvar</i>.  The order of the resulting list is
 arbitrary, but it will contain each unique element of <i>list</i> at
 most once (unless the list in <i>listvar</i> already had duplicates).<p>
 
+<defitem lpop {lpop <i stackvar>}>
+
+Pops and returns the top item from a stack represented as a Tcl list.  The
+top item in the stack is the item at the end of the list.  Afterwards,
+the <i stackvar> will contain the new stack.  Returns the empty string if
+the stack is empty.<p>
+
+<defitem lpush {lpush <i stackvar item>}>
+
+Pushes one new item onto the top of the stack stored in <i stackvar>.  The
+stack is represented as a Tcl list; the top of the stack is the final item
+in the list, and so this command is equivalent to <tt lappend>.  Returns
+the new stack.<p>
+
 <defitem lshift {lshift <i>listvar</i>}>
 
 Given the name of a variable containing a list, removes the first
 element from the list and returns it, updating the variable.
 Effectively it pops the first element from the list.<p>
+
+<defitem ltop {ltop <i stack>}>
+
+Returns the top item from the <i stack>, which is a stack represented as
+a Tcl list.  The top item is the final item in the list.  Returns the empty
+string if the stack is empty.<p>
 
 <defitem lzipper {lzipper <i alist> ?<i blist>?}>
 

@@ -141,6 +141,48 @@ test lmerge-1.6 {listvar names non-existent variable} -body {
 } -result {bar baz foo}
 
 #-----------------------------------------------------------------------
+# lpop
+
+test lpop-1.1 {lpop: normal list} -body {
+    set list {a b c}
+    set value [lpop list]
+    list $value $list
+} -result {c {a b}}
+
+test lpop-1.2 {lpop: list with one element} -body {
+    set list {a}
+    set value [lpop list]
+    list $value $list
+} -result {a {}}
+
+test lpop-1.3 {lpop: list with no elements} -body {
+    set list {}
+    set value [lpop list]
+    list $value $list
+} -result {{} {}}
+
+#-----------------------------------------------------------------------
+# lpush
+
+test lpush-1.1 {lpush: append item} -body {
+    set list {a b c}
+    lpush list d
+    set list
+} -result {a b c d}
+
+test lpush-1.2 {lpush: push to empty list} -body {
+    set list {}
+    lpush list a
+    set list
+} -result {a}
+
+test lpush-1.3 {returns the pushed value} -body {
+    set list {a b c}
+    lpush list d
+} -result {a b c d}
+
+
+#-----------------------------------------------------------------------
 # lshift
 
 test lshift-1.1 {lshift: normal list} -body {
@@ -160,6 +202,25 @@ test lshift-1.3 {lshift: list with no elements} -body {
     set value [lshift list]
     list $value $list
 } -result {{} {}}
+
+#-----------------------------------------------------------------------
+# ltop
+
+test ltop-1.1 {returns end of list} -body {
+    set list {a b c}
+    ltop $list
+} -result {c}
+
+test ltop-1.2 {one item} -body {
+    set list {a}
+    ltop $list
+} -result {a}
+
+test ltop-1.3 {empty list} -body {
+    set list {}
+    ltop $list
+} -result {}
+
 
 #-------------------------------------------------------------------
 # lzipper
