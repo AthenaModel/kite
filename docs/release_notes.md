@@ -1,6 +1,11 @@
 Kite Release Notes
 ==================
 
+Kite 0.4.5
+----------
+
+#50: lpush, lpop, ltop
+
 Kite 0.4.4
 ----------
 
