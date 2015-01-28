@@ -1,6 +1,11 @@
 Kite Release Notes
 ==================
 
+Kite 0.4.6
+----------
+
+#51: kite info doesn't like two digit patch level
+
 Kite 0.4.5
 ----------
 
