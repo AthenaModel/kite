@@ -1025,7 +1025,7 @@ snit::type project {
     # version number.
 
     proc Version? {ver} {
-        return [regexp {^(\d[.])*\d[.ab]\d$} $ver]
+        return [regexp {^(\d+[.])*\d+[.ab]\d+$} $ver]
     }
 
     #-------------------------------------------------------------------
