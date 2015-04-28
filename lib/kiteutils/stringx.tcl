@@ -59,7 +59,7 @@ proc ::kiteutils::outdent {block} {
     set minLen 100
 
     foreach line [split $block \n] {
-    if {[regexp {^\b*$} $line]} {
+    if {[regexp {^\s*$} $line]} {
         continue
     }
 

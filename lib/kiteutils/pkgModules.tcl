@@ -14,7 +14,7 @@
 # Package Definition
 
 # -kite-provide-start  DO NOT EDIT THIS BLOCK BY HAND
-package provide kiteutils 0.4.6
+package provide kiteutils 0.4.7
 # -kite-provide-end
 
 #-----------------------------------------------------------------------
