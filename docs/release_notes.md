@@ -1,6 +1,10 @@
 Kite Release Notes
 ==================
 
+Kite 0.4.7
+----------
+#53: stringx(x): outdent uses bad regex
+
 Kite 0.4.6
 ----------
 
