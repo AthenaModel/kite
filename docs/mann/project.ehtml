@@ -193,6 +193,19 @@ the empty list.<p>
 Returns 1 if project metadata has been successfully loaded, and 0
 otherwise.<p>
 
+<defitem "project hook" {project hook <i when tool>}>
+
+The value of <i when> must be one of <b before> or <b after>.  
+Returns the list of hook scripts defined to run either <b before> or
+<b after> the specified kite <i tool>, or "" if none.  
+See <xref project(5)> for a list of the tools for which hooks are
+defined.<p>
+
+<defitem "project hooks" {project hooks}>
+
+Returns a flat list of <i when tool> pairs for the hooks that are actually
+defined in the project file.<p> 
+
 <defitem "project intree" {project intree}>
 
 After <iref project root> has been called at least once, this command
