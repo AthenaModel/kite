@@ -283,6 +283,33 @@ the <code>kite shell</code> command for "lib-only" projects or if
 <code>kite shell -plain</code> is used. This allows the project to 
 customize the initial state of the shell.<p>
 
+<defitem before {before <i tool script>}>
+
+Defines a hook <i script> to be executed just prior to the specified
+Kite <i tool>.  The script is executed in the development <tt tclsh>
+in the project context.  Hooks can be defined for the following tools:<p>
+
+<ul>
+<li> <b add>
+<li> <b build>
+<li> <b clean>
+<li> <b compile>
+<li> <b deps>
+<li> <b dist>
+<li> <b docs>
+<li> <b install>
+<li> <b new>
+<li> <b test>
+<li> <b wrap>
+</ul><p>
+
+<defitem after {after <i tool script>}>
+
+Defines a hook <i script> to be executed just after the specified
+Kite <i tool>.  The script is executed in the development <tt tclsh>
+in the project context.  This statement defines hooks for the same tools
+as the <iref before> statement.<p>
+
 <defitem xfile {xfile <i path url>}>
 
 Occasionally there are files that need to be 

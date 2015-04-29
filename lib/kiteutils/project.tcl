@@ -30,6 +30,22 @@ snit::type project {
 
     typevariable defaultBuild "make clean all"
     typevariable defaultClean "make clean"
+
+    # Build tools
+
+    typevariable tools {
+        add
+        build
+        clean
+        compile
+        deps
+        dist
+        docs
+        install
+        new
+        test
+        wrap
+    }
     
 
     #-------------------------------------------------------------------
@@ -72,6 +88,11 @@ snit::type project {
     #
     #   dists          - Names of distribution targets.
     #   distpat-$dist  - List of path patterns for $dist.
+    #
+    #   before-$tool  - List of scripts to execute before executing the 
+    #                    build tool.
+    #   after-$tool   - List of scripts to execute after executing the 
+    #                    build tool.
     #
     # If values are "", the data has not yet been loaded.
 
@@ -676,7 +697,46 @@ snit::type project {
     }
 
 
+    #-------------------------------------------------------------------
+    # Hook Introspection
 
+    # hook when tool
+    #
+    # when   - before | after
+    # tool  - One of the build tools
+    #
+    # Returns the list of scripts that are executed before or after the
+    # given tool.  Returns the empty list if there are no hooks for
+    # the given tool.
+    typemethod hook {when tool} {
+        require {$when in {before after}} "Invalid when"
+
+        if {$tool in $tools && [info exists info($when-$tool)]} {
+            return $info($when-$tool)
+        }
+
+        return [list]
+    }
+    
+    # hooks 
+    #
+    # Returns a flat list of pairs identifying the hooks for which
+    # scripts have been defined, e.g., "before compile after docs..."
+    typemethod hooks {} {
+        set result [list]
+
+        foreach tool $tools {
+            foreach when {before after} {
+                if {[info exists info($when-$tool)] &&
+                    [llength $info($when-$tool)] > 0
+                } {
+                    lappend result $when $tool
+                }
+            }
+        }
+
+        return $result
+    }
 
     #-------------------------------------------------------------------
     # Reading the information from the project file.
@@ -700,7 +760,8 @@ snit::type project {
         $safe alias xfile   [myproc XfileCmd]
         $safe alias dist    [myproc DistCmd]
         $safe alias shell   [myproc ShellCmd]
-
+        $safe alias after   [myproc ToolHookCmd] after
+        $safe alias before  [myproc ToolHookCmd] before
 
         # NEXT, try to load the file
         try {
@@ -1006,6 +1067,22 @@ snit::type project {
         set info(shell) $script
     }
 
+    # ToolHookCmd when tool script
+    #
+    # when   - before|after
+    # tool  - One of the "tools"
+    # script - A user script
+    #
+    # Implementation of the "after" and "before" kite file commands.
+
+    proc ToolHookCmd {when tool script} {
+        if {$tool ni $tools} {
+            throw SYNTAX "Invalid tool in '$when': \"$tool\""
+        }
+        lappend info($when-$tool) $script
+    }
+
+
     # BaseName? name
     #
     # name   - A base file name, e.g., <base>.kit.
@@ -1147,6 +1224,18 @@ snit::type project {
         if {$info(shell) ne ""} {
             lappend script "" "# Shell Initialization"
             lappend script [list shell $info(shell)]
+        }
+
+        set hooks [$type hooks]
+
+        if {[llength $hooks] > 0} {
+            lappend script "" "# Tool Hooks"
+            foreach {when tool} $hooks {
+                foreach hook [$type hook $when $tool] {
+                    lappend script [list $when $tool $hook]
+                    lappend script ""                
+                }
+            }
         }
 
         lappend script ""

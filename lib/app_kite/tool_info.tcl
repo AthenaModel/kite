@@ -164,6 +164,18 @@ tool define info {
                 puts "  $name"
             }
         }
+
+        set hooks [project hooks]
+
+        if {[got $hooks]} {
+            foreach {when phase} $hooks {
+                foreach hook [project hook $when $phase] {
+                    puts ""
+                    puts "Phase Hook: $when $phase"
+                    puts $hook
+                }
+            }
+        }
     }
 }
 

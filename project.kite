@@ -1,4 +1,4 @@
-project kite 0.4.7 "Kite Project Automation Tool"
+project kite 0.4.8 "Kite Project Automation Tool"
 poc William.H.Duquette@jpl.nasa.gov
 app kite -apptype exe
 provide kiteutils
@@ -27,5 +27,3 @@ shell {
     package require kitedocs
     namespace import kiteutils::*
 }
-
-

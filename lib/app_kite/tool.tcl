@@ -146,8 +146,10 @@ snit::type tool {
             throw FATAL "Usage: [tool usage $tool]"
         }
 
-        # NEXT, execute the tool.
+        # NEXT, execute the tool, along with any hooks.
+        hook run before $tool
         $meta(ensemble-$tool) execute $argv
+        hook run after $tool
 
         puts ""
     }    

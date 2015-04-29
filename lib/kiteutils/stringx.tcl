@@ -59,17 +59,17 @@ proc ::kiteutils::outdent {block} {
     set minLen 100
 
     foreach line [split $block \n] {
-    if {[regexp {^\s*$} $line]} {
-        continue
-    }
+        if {[regexp {^\s*$} $line]} {
+            continue
+        }
 
-    regexp {^ *} $line leader
+        regexp {^ *} $line leader
 
-    set len [string length $leader]
+        set len [string length $leader]
 
-    if {$len < $minLen} {
-        set minLen $len
-    }
+        if {$len < $minLen} {
+            set minLen $len
+        }
     }
 
     # NEXT, delete that length at the beginning of each line.

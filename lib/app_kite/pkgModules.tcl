@@ -14,7 +14,7 @@
 # Package Definition
 
 # -kite-provide-start  DO NOT EDIT THIS BLOCK BY HAND
-package provide app_kite 0.4.7
+package provide app_kite 0.4.8
 # -kite-provide-end
 
 #-----------------------------------------------------------------------
@@ -25,8 +25,8 @@ package require snit 2.3
 package require platform 1.0
 package require zipfile::encode 0.3
 package require tls 1.6
-package require -exact kiteutils 0.4.7
-package require -exact kitedocs 0.4.7
+package require -exact kiteutils 0.4.8
+package require -exact kitedocs 0.4.8
 # -kite-require-end
 
 # HTTP is always present, and we always want https.
@@ -56,6 +56,7 @@ source [file join $::app_kite::library main.tcl            ]
 source [file join $::app_kite::library misc.tcl            ]
 source [file join $::app_kite::library zipper.tcl          ]
 source [file join $::app_kite::library plat.tcl            ]
+source [file join $::app_kite::library hook.tcl            ]
 
 # Proxies for Helper Applications
 source [file join $::app_kite::library tclsh.tcl           ]
@@ -98,6 +99,7 @@ source [file join $::app_kite::library tool_shell.tcl      ]
 source [file join $::app_kite::library tool_teapot.tcl     ]
 source [file join $::app_kite::library tool_test.tcl       ]
 source [file join $::app_kite::library tool_version.tcl    ]
+source [file join $::app_kite::library tool_wrap.tcl       ]
 source [file join $::app_kite::library tool_xfiles.tcl     ]
 
 
