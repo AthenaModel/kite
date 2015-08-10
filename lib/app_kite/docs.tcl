@@ -19,21 +19,6 @@ snit::type docs {
     pragma -hasinstances no -hastypedestroy no
 
     #-------------------------------------------------------------------
-    # Lookup Tables
-
-    # manpage section titles
-    #
-    # TODO: We'll need a way to handle non-standard sections
-
-    typevariable manpageSections -array {
-        1 "Executables"
-        5 "File Formats"
-        i "Tcl Interfaces"
-        n "Tcl Commands"
-    }
-
-
-    #-------------------------------------------------------------------
     # kitedoc(5) Documents
 
     # kitedocs ?target?
@@ -189,7 +174,7 @@ snit::type docs {
         # FIRST, validate the section number
         set num [SectionNum [file tail $mandir]]
         
-        if {![info exists manpageSections($num)]} {
+        if {$num ni [project mansecs]} {
             throw FATAL "Unknown man page section: \"man$num\""
         }
 
@@ -200,7 +185,7 @@ snit::type docs {
                 -project     [project name]                  \
                 -version     [project version]               \
                 -description [project description]           \
-                -section     "($num) $manpageSections($num)"
+                -section     "($num) [project mansec $num]"
         } trap SYNTAX {result} {
             throw FATAL "Syntax error in man page: $result"
         }

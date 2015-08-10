@@ -20,11 +20,14 @@ namespace eval ::kiteinfo:: {
 
     array set kiteInfo {
         binary-kitedocs 0
+        mansec-5 {File Formats}
+        mansecs {1 5 i n}
         local-tls 0
         icon-kite {}
         description {Kite Project Automation Tool}
         provides {kiteutils kitedocs}
         local-crc32 0
+        mansec-i {Tcl Interfaces}
         reqver-zipfile::encode 0.3
         reqver-platform 1.0
         gui-kite 0
@@ -39,6 +42,7 @@ namespace eval ::kiteinfo:: {
 }
         force-kite 0
         name kite
+        mansec-n {Tcl Commands}
         poc William.H.Duquette@jpl.nasa.gov
         srcs {}
         xfiles {}
@@ -58,9 +62,10 @@ namespace eval ::kiteinfo:: {
         local-zipfile::encode 0
         local-platform 0
         apptype-kite exe
+        mansec-1 Executables
         local-textutil::expander 0
         local-snit 0
-        version 0.4.8
+        version 0.4.9
         reqver-crc32 1.3
         dists install-%platform
     }

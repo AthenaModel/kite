@@ -336,6 +336,28 @@ It is generally a good idea to update the <tt .gitignores> file or
 equivalent so that the external file won't be accidentally checked in
 to the VCS.<p>
 
+<defitem mansec {mansec <i section title>}>
+
+This command adds custom man page sections to the <tt docs/> directory.
+The <i section> is the man page section, e.g., "1", "5", "n", or some
+other string.  The <i title> is the section title, e.g.,<p>
+
+<example>
+mansec type "Validation Data Types"
+</example>
+
+In this case, the related directory will be <tt docs/mantype/>.<p>
+
+This command can also be used to assign a new title to one of the 
+default man page sections, which are:
+
+<ul>
+<li> Section 1: Executables
+<li> Section 5: File Formats
+<li> Section i: Tcl Interfaces
+<li> Section n: Tcl Commands
+</ul>
+
 </deflist statements>
 
 <section AUTHOR>
