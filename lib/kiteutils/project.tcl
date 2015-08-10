@@ -31,6 +31,14 @@ snit::type project {
     typevariable defaultBuild "make clean all"
     typevariable defaultClean "make clean"
 
+    # Default man page sections
+    typevariable defaultMansecs {
+        1 "Executables"
+        5 "File Formats"
+        i "Tcl Interfaces"
+        n "Tcl Commands"
+    }
+
     # Build tools
 
     typevariable tools {
@@ -46,7 +54,6 @@ snit::type project {
         test
         wrap
     }
-    
 
     #-------------------------------------------------------------------
     # Type variables
@@ -89,10 +96,13 @@ snit::type project {
     #   dists          - Names of distribution targets.
     #   distpat-$dist  - List of path patterns for $dist.
     #
-    #   before-$tool  - List of scripts to execute before executing the 
+    #   before-$tool   - List of scripts to execute before executing the 
     #                    build tool.
-    #   after-$tool   - List of scripts to execute after executing the 
+    #   after-$tool    - List of scripts to execute after executing the 
     #                    build tool.
+    #
+    #   mansecs        - List of manpage section tags
+    #   mansec-$tag    - title of the manpage section given the tag.
     #
     # If values are "", the data has not yet been loaded.
 
@@ -108,6 +118,7 @@ snit::type project {
         xfiles         {}
         dists          {}
         shell          {}
+        mansecs        {}
     }
 
     #-------------------------------------------------------------------
@@ -739,6 +750,27 @@ snit::type project {
     }
 
     #-------------------------------------------------------------------
+    # Man Page Section Introspection
+
+    # mansec section
+    #
+    # section  - A section tag
+    #
+    # Returns the section title.
+
+    typemethod mansec {section} {
+        return $info(mansec-$section)
+    }
+
+    # mansecs
+    #
+    # Returns the list of man page section tags
+
+    typemethod mansecs {} {
+        return $info(mansecs)
+    }
+
+    #-------------------------------------------------------------------
     # Reading the information from the project file.
 
     # load
@@ -747,9 +779,14 @@ snit::type project {
     # in a project tree.
 
     typemethod load {} {
-        # FIRST, set up the safe interpreter
-        # TODO: Use a smartinterp(n), once we can claim Mars as an
-        # external dependency.
+        # FIRST, initialize defaults.
+        dict for {section title} $defaultMansecs {
+            lappend info(mansecs) $section
+            set info(mansec-$section) $title
+        }
+
+        # NEXT, set up the safe interpreter
+        # TODO: Use a smartinterp(n).
         set safe [interp create -safe]
         $safe alias project [myproc ProjectCmd]
         $safe alias poc     [myproc PocCmd]
@@ -762,6 +799,7 @@ snit::type project {
         $safe alias shell   [myproc ShellCmd]
         $safe alias after   [myproc ToolHookCmd] after
         $safe alias before  [myproc ToolHookCmd] before
+        $safe alias mansec  [myproc MansecCmd]
 
         # NEXT, try to load the file
         try {
@@ -1082,6 +1120,24 @@ snit::type project {
         lappend info($when-$tool) $script
     }
 
+    # MansecCmd section title
+    #
+    # section   - The man page section tag
+    # title     - The section's title
+    #
+    # Notes that the project has the given man page section.  Also
+    # can be used to change the title of a default section.
+
+    proc MansecCmd {section title} {
+        set section [string tolower $section]
+        if {![Mansec? $section]} {
+            throw SYNTAX "Invalid manpage section number: \"$section\""
+        }
+
+        ladd info(mansecs) $section
+        set info(mansec-$section) $title
+    }
+
 
     # BaseName? name
     #
@@ -1103,6 +1159,16 @@ snit::type project {
 
     proc Version? {ver} {
         return [regexp {^(\d+[.])*\d+[.ab]\d+$} $ver]
+    }
+
+    # Mansec? name
+    #
+    # name   - A manpage section tag.
+    #
+    # Validates the name; it may contain letters and numbers.
+
+    proc Mansec? {name} {
+        return [regexp {^[[:alnum:]]+$} $name]
     }
 
     #-------------------------------------------------------------------
@@ -1172,6 +1238,24 @@ snit::type project {
                 }
 
                 lappend script $item
+            }
+        }
+
+
+        # Man page sections: Output if new or modified
+        set mansecs {}
+        foreach sec $info(mansecs) {
+            if {![dict exists $defaultMansecs $sec] ||
+                [dict get $defaultMansecs $sec] ne $info(mansec-$sec)
+            } {
+                lappend mansecs $sec
+            }
+        }
+
+        if {[llength $mansecs] > 0} {
+            lappend script "" "# Man Page Sections"
+            foreach sec $mansecs {
+                lappend script [list mansec $sec $info(mansec-$sec)]
             }
         }
 

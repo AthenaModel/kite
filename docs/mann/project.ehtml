@@ -231,6 +231,15 @@ Returns a Tcl list of library directories associated with this project.
 This is typically used to initialize TCL_LIB_PATH prior to invoking 
 an external tclsh.<p>
 
+<defitem "project mansecs" {project mansecs}>
+
+Returns the section tags associated with the man page sections defined 
+for this project.<p>
+
+<defitem "project mansec" {project mansec <i section>}>
+
+Returns the title of the man page section with tag <i section>.<p>
+
 <defitem "project name" {project name}>
 
 Returns the project's name.<p>
