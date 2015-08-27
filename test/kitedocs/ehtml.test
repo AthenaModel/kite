@@ -367,18 +367,6 @@ Text describing the term.
 </table>
 }
 
-test topiclist-1.2 {topic expands term} -setup {
-    setup
-} -body {
-    pexpand {<topic "The <i Term>">}
-} -cleanup {
-    cleanup
-} -result {
-<tr class="evenrow" valign="baseline">
-<td>The <i>Term</i></td>
-<td>
-}
-
 #-------------------------------------------------------------------
 # example.../example
 

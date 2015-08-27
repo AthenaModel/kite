@@ -237,7 +237,7 @@ respectively.<p>
 
 Adds a topic to a <itag topiclist>.  The topic is displayed in two
 columns, the topic <i text> on the left and the discussion between
-the two tags on the right.  The topic <i text> is expanded.<p>
+the two tags on the right.<p>
 
 </deflist topiclist>
 

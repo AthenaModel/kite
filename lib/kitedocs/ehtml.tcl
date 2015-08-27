@@ -357,7 +357,7 @@ snit::type ::kitedocs::ehtml {
         } {
             |<--
             <tr class="$rowclass" valign="baseline">
-            <td>[expand $topic]</td>
+            <td>$topic</td>
             <td>
         }
 
