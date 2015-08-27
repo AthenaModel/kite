@@ -276,6 +276,53 @@ test macro_template-1.2 {macro with template body} -setup {
     cleanup
 } -result {-Hello, FRIEND!-}
 
+#-------------------------------------------------------------------
+# Macro: tforeach
+
+test macro_tforeach-1.1 {no init body} -setup {
+    setup
+} -body {
+    trans expand {-<tforeach x {a b c} {+$x+}>-}
+} -cleanup {
+    cleanup
+} -result {-+a++b++c+-}
+
+test macro_tforeach-1.1 {init body} -setup {
+    setup
+} -body {
+    trans expand {-<tforeach x {a b c} {
+        set x [string toupper $x]
+    } {+$x+}>-}
+} -cleanup {
+    cleanup
+} -result {-+A++B++C+-}
+
+#-------------------------------------------------------------------
+# Macro: tforeach
+
+test macro_tif-1.1 {true, no else body} -setup {
+    setup
+} -body {
+    trans expand {-<tif {1 == 1} {true}>-}
+} -cleanup {
+    cleanup
+} -result {-true-}
+
+test macro_tif-1.2 {false, no else body} -setup {
+    setup
+} -body {
+    trans expand {-<tif {1 == 0} {true}>-}
+} -cleanup {
+    cleanup
+} -result {--}
+
+test macro_tif-1.2 {false, else body} -setup {
+    setup
+} -body {
+    trans expand {-<tif {1 == 0} {true} else {false}>-}
+} -cleanup {
+    cleanup
+} -result {-false-}
 
 
 #-------------------------------------------------------------------
