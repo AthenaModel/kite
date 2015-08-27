@@ -221,22 +221,23 @@ named item.<p>
 
 <subsection "Topic List Macros">
 
-A topic list is a list in which each item consists of a brief topic
-and a longer description.  The topics are displayed in the left column
-and the descriptions in the right column.<p>
+A topic list is a table with two columns, one for topics and one for
+descriptions.  The column headers default to "Topic" and "Description",
+but can be changed.<p>
 
 <deflist topiclist>
 
-<defitem topiclist {<tag topiclist>...<tag /topiclist>}>
+<defitem topiclist {<tag topiclist {?h1? ?h2?}>...<tag /topiclist>}>
 
-Brackets a <itag topic> list.<p>
+Brackets a <itag topic> list.  The <i h1> and <i h2> values are the
+column header strings; they default to "Topic" and "Description" 
+respectively.<p>
 
 <defitem topic {<tag topic "<i text>">...<tag /topic>}>
 
 Adds a topic to a <itag topiclist>.  The topic is displayed in two
 columns, the topic <i text> on the left and the discussion between
-the two tags on the right.  Both are vertically aligned.  The 
-<i text> is expanded.<p>
+the two tags on the right.  The topic <i text> is expanded.<p>
 
 </deflist topiclist>
 
