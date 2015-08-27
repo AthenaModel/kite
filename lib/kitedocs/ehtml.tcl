@@ -335,16 +335,30 @@ snit::type ::kitedocs::ehtml {
 
         # Topic Lists
 
-        $macro template topiclist {} {
+        $macro template topiclist {{h1 Topic} {h2 Description}} {
+            variable itemCounter
+            set itemCounter 0
+        } {
             |<--
-            <table class="topiclist">
+            <table class="pretty">
+            <tr class="header">
+            <th align="left">$h1</th> 
+            <th align="left">$h2</th>
+            </tr>
         }
 
-        $macro template topic {text} {
+        $macro template topic {topic} {
+            variable itemCounter
+            if {[incr itemCounter] % 2 == 0} {
+                set rowclass evenrow
+            } else {
+                set rowclass oddrow
+            }
+        } {
             |<--
-            <tr class="topic">
-            <td class="topicname">[expand $text]</td>
-            <td class="topictext">
+            <tr class="$rowclass" valign="baseline">
+            <td>[expand $topic]</td>
+            <td>
         }
 
         $macro template /topic {} {
