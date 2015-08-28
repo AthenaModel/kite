@@ -110,6 +110,17 @@ See <xref "DEFINING MACROS"> for an example.<p>
 Defines a new macro using a template.  The arguments are the same as for
 <xref template(n)>'s <xref template(n) template> command.<p>
 
+<defitem tforeach "<tag tforeach {<i>vars items</i> ?<i>initbody</i>? <i>template</i>}>">
+
+Substitutes in the template for each item in a list.  The semantics are the
+same as for <xref template(n)>'s <xref template(n) tforeach> command.<p>
+
+<defitem tif "<tag tif {<i>condition thenbody</i> ?else <i>elsebody</i>?}>">
+
+Substitutes in one of two templates depending on whether a condition is
+true or false  The semantics are the
+same as for <xref template(n)>'s <xref template(n) tif> command.<p>
+
 <defitem tsubst "<tag tsubst {<i>tstring</i>}>">
 
 Substitutes variables and commands into a string.  The semantics are the

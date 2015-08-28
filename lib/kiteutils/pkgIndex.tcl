@@ -9,7 +9,7 @@
 #   Kite: kiteutils package index.
 
 # -kite-ifneeded-start  DO NOT EDIT THIS BLOCK BY HAND
-package ifneeded kiteutils 0.4.9 [list source [file join $dir pkgModules.tcl]]
+package ifneeded kiteutils 0.4.10 [list source [file join $dir pkgModules.tcl]]
 # -kite-ifneeded-end
 
 

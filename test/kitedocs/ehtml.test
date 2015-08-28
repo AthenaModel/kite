@@ -342,37 +342,29 @@ test topiclist-1.1 {topic list} -setup {
 } -cleanup {
     cleanup
 } -result {
-<table class="topiclist">
+<table class="pretty">
+<tr class="header">
+<th align="left">Topic</th> 
+<th align="left">Description</th>
+</tr>
         
-<tr class="topic">
-<td class="topicname">The Term</td>
-<td class="topictext">
+<tr class="oddrow" valign="baseline">
+<td>The Term</td>
+<td>
         
 Text describing the term.
 </td>
 </tr>
         
-<tr class="topic">
-<td class="topicname">Another Term</td>
-<td class="topictext">
+<tr class="evenrow" valign="baseline">
+<td>Another Term</td>
+<td>
         
 Text describing the term.
 </td>
 </tr>
         
 </table>
-}
-
-test topiclist-1.2 {topic expands term} -setup {
-    setup
-} -body {
-    pexpand {<topic "The <i Term>">}
-} -cleanup {
-    cleanup
-} -result {
-<tr class="topic">
-<td class="topicname">The <i>Term</i></td>
-<td class="topictext">
 }
 
 #-------------------------------------------------------------------

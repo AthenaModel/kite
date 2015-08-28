@@ -280,6 +280,50 @@ snit::type ::kiteutils::macro {
             return [uplevel 1 [list subst $tstring]]
         }
 
+        # tforeach
+        #
+        # This is just template(n)'s "tforeach" command.
+
+        $interp proc tforeach {vars items initbody {template ""}} {
+            # FIRST, have we an initbody?
+            if {"" == $template} {
+                set template $initbody
+                set initbody ""
+            }
+
+            # NEXT, define the variables.
+            foreach var $vars {
+                upvar $var $var
+            }
+
+            set results ""
+
+            foreach $vars $items {
+                if {"" != $initbody} {
+                    uplevel $initbody
+                }
+                set result [uplevel [list tsubst $template]]
+                append results $result
+            } 
+
+            return $results
+        }
+
+        # tif
+        #
+        # This is just template(n)'s "tif" command.
+
+        $interp proc tif {condition thenbody {"else" "else"} {elsebody ""}} {
+            # FIRST, evaluate the condition
+            set flag [uplevel 1 [list expr $condition]]
+
+            # NEXT, evaluate one or the other
+            if {$flag} {
+                uplevel 1 [list tsubst $thenbody]
+            } else {
+                uplevel 1 [list tsubst $elsebody]
+            }
+        }
     }
 }
 

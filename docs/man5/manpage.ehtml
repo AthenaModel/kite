@@ -1,4 +1,4 @@
-<manpage manpage(5) "Mars Man Page Format">
+<manpage manpage(5) "Kite Man Page Format">
 
 <section SYNOPSIS>
 
@@ -83,103 +83,6 @@ their parent section.<p>
 
 The subsection <i>name</i> can be almost anything, but it should be
 unique within the man page.<p>
-
-
-<defitem defitem {<lb>defitem <i tag text><rb>}>
-
-This macro begins an item definition within a <tag deflist>.  An
-"item" is one of whatever the man page is documenting: a Tcl command
-or subcommand, a C function, a program.<p>
-
-The <i>tag</i> is a short
-string which identifies the item, such as a command's name; it should
-be unique within the manpage.<p>
-
-The <i>text</i> is the text that's
-actually displayed in the man page; it usually includes more
-information, such as the command's full signature.  It may contain
-embedded style macros.<p>
-
-The <iref defitem> macro is followed by the documentation for the
-item. For example,<p>
-
-<example>
-<lb>defitem mycommand {mycommand <i>value</i> ?<i>optionalValue</i>?}<rb>
-
-This command does nothing in particular, being merely a pedagogical
-example.<lb>p<rb>;
-</example>
-
-Note that the <i>tag</i> won't necessarily be same as the first token
-in the <i>text</i>; when documenting subcommands of a Tcl object, for
-example, the object usually appears as a variable reference in the
-first spot:<p>
-
-<example>
-<lb>defitem mysubcommand {$object mysubcommand <lb>i value<rb>}<rb>
-</example>
-
-Each of the macro definitions in this section is produced by
-<iref defitem>.<p>
-
-<defitem defopt {<lb>defopt <i text><rb>}>
-
-Programs often have options; Tcl commands and objects often have
-options as well.  When <iref defopt> appears in a definition list,
-it defines an option belonging to the item defined by the immediately
-preceding <iref defitem>.  It's assumed that the option is the first
-token in <i>text</i>, which may contain embedded style macros.  
-For example,<p>
-
-<example>
-<lb>deflist commands<rb>
-    . . .
-<lb>defitem mycommand {mycommand ?<lb>i options...<rb>?}<rb>
-
-This command has the following options:&lt;p&gt;
-
-<lb>deflist mycommand options<rb>
-
-<lb>defopt {-this <lb>i value<rb>}<rb>
-
-Description of the the option...
-    . . .
-<lb>/deflist mycommand options<rb>
-. . .
-
-<lb>/deflist commands<rb>
-</example>
-
-<defitem itemlist {<lb>itemlist<rb>}>
-
-This macro expands to a list of the items defined in this manpage.
-It's usually used in the "SYNOPSIS" section of the man page, as shown
-in the <xref "MAN PAGE SKELETON">.  The list of macros in the
-<xref SYNOPSIS> section of this man page was produced by
-<iref itemlist>.<p>
-
-If an item has options defined with <iref defopt>, they will appear,
-slightly indented, just below the item in the <iref itemlist>.<p>
-
-<defitem iref {<lb>iref <i>item...</i><rb>}>
-
-The name "iref" stands for "item reference"; this macro creates a
-hyperlink to the definition of <i>item</i> in the same man page.
-For example,<p>
-
-<example>
-<lb>iref defitem<rb>
-</example>
-
-expands to a link to <iref defitem>.<p>
-
-If the item name has multiple tokens, there is no need to quote them;
-<iref iref>'s arguments are accumulated into a single item name.<p>
-
-<defitem itag {<lb>itag <i name><rb>}>
-
-This is simply an <itag iref> to macro <i name>; it creates a hyperlink
-in typewriter font with angle brackets.<p> 
 
 <defitem version {<lb>version<rb>}>
 

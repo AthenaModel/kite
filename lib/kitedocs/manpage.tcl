@@ -104,16 +104,11 @@ snit::type ::kitedocs::manpage {
 
     typevariable currentManpage         ;# Name of the current man page
 
-    typevariable items {}               ;# List of item tags, in order of 
-                                         # definition 
-    typevariable itemtext -array {}     ;# Array, item text by tag
     typevariable sections {}            ;# List of section names, in order of 
                                          # definition.
     typevariable curSection {}          ;# Current section
     typevariable subsections -array {}  ;# Array of subsection names by parent 
                                          # section.
-    typevariable optsfor -array {}      ;# Option data
-    typevariable opttext -array {}      ;# Option text
 
     #-------------------------------------------------------------------
     # Public Typemethods
@@ -246,16 +241,14 @@ snit::type ::kitedocs::manpage {
     typemethod ClearState {} {
         array unset module
         array unset submodule
-        array unset itemtext
         array unset subsections
-        array unset optsfor
-        array unset opttext
 
         set mktreeFlag 0
         set currentManpage ""
-        set items {}
         set sections {} 
         set curSection {}
+
+        $ehtml reset
     }
 
     #-------------------------------------------------------------------
@@ -286,28 +279,12 @@ snit::type ::kitedocs::manpage {
         $ehtml smartalias contents 0 0 {} \
             [myproc contents]
 
-        $ehtml smartalias defitem 2 2 {item text} \
-            [myproc defitem]
-
-        $ehtml smartalias itemlist 0 0 {} \
-            [myproc itemlist]
-
-        $ehtml smartalias iref 1 - {iref...} \
-            [myproc iref]
-
-        $ehtml smartalias defopt 1 1 {text} \
-            [myproc defopt]
-
         $ehtml smartalias indexfile 0 0 {} \
             [myproc indexfile]
 
         $ehtml smartalias indexlist 1 1 {modules} \
             [myproc indexlist]
-
-        $ehtml proc itag {args} {
-            return "[tt][lb][iref {*}$args][rb][/tt]"
-        }
-
+            
         $ehtml smartalias mktree 1 1 {id} \
             [myproc mktree]
 
@@ -487,84 +464,6 @@ snit::type ::kitedocs::manpage {
         </ul>
     }
 
-    # defitem item text
-    #
-    # item     iref identifier for this item
-    # text     Text to display
-    #
-    # Introduces an item in an item list, and provides the href 
-    # anchor.
-
-    template proc defitem {item text} {
-        lappend items $item
-        set text [$ehtml expandonce $text]
-        set itemtext($item) $text
-    } {
-        |<--
-        <dt><b><tt><a name="[textToID $item]">$text</a></tt></b></dt>
-        <dd>
-    }
-
-    # defopt text
-    #
-    # text     Text defining an option, e.g., "-foo <i>bar</i>"
-    #
-    # An item in an item list that defines an option to a command.
-
-    template proc defopt {text} {
-        set opt [lindex $text 0]
-        set lastItem [lindex $items end]
-        set id "$lastItem$opt"
-        lappend optsfor($lastItem) $opt
-        set text [$ehtml expandonce $text]
-        set opttext($id) $text
-    } {
-        |<--
-        <dt><b><tt><a name="$id">$text</a></tt></b></dt>
-        <dd>
-    }
-
-    # itemlist
-    #
-    # Produces a list of links to the defined items, for use in the
-    # synopsis section of the man page.
-
-    template proc itemlist {} {
-        |<--
-        [tforeach tag $items {
-            |<--
-            <tt><a href="#[textToID $tag]">$itemtext($tag)</a></tt><br>
-            [tif {[info exists optsfor($tag)]} {
-                |<--
-                [tforeach opt $optsfor($tag) {
-                    |<--
-                    &nbsp;&nbsp;&nbsp;&nbsp;
-                    <tt><a href="#$tag$opt">$opttext($tag$opt)</a></tt><br>
-                }]
-            }]
-        }]<p>
-    }
-
-    # iref args
-    #
-    # args    An item ID, which might be multiple tokens.
-    #
-    # Creates a link to the item in this page.
-
-    proc iref {args} {
-        set tag $args
-
-        if {[$ehtml pass] == 1} {
-            return
-        }
-
-        if {[lsearch -exact $items $tag] != -1} {
-            return "<tt><a href=\"#[textToID $tag]\">$tag</a></tt>"
-        } else {
-            puts stderr "Warning, iref not found: '$tag'"
-            return "<tt>$tag</tt>"
-        }
-    }
 
     #-------------------------------------------------------------------
     # Index File Template

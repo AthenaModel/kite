@@ -149,6 +149,33 @@ snit::type ::kitedocs::ehtml {
             .html .htm .txt .text .md .docx .xlsx .pptx .pdf
         }
     }
+
+    #-------------------------------------------------------------------
+    # Transient Data
+    #
+    # These variables are copied into the macro interpreter by 
+    # "::ehtml install", which is called on every macro(n) "reset", i.e., 
+    # initially and before processing each subsequent document.
+
+    # trans array
+    #
+    #   dlstack   -  Stack of nested deflist names.  The "end" is the
+    #                top of the stack.
+    #   itemLists -  Dictionary, lists of item names by deflist name
+    #   itemText  -  Dictionary, item display text by item name
+    #   optsFor   -  Dictionary, lists of option names by item name
+    #   optText   -  Dictionary, option text by option name
+    #   lastItem  -  The last item seen; used to relate options to
+    #                items.
+
+    typevariable trans {
+        dlstack   {}
+        itemLists {}
+        itemText  {}
+        optsFor   {}
+        optText   {}
+        lastItem  ""
+    }
     
     #-------------------------------------------------------------------
     # Public Methods
@@ -163,6 +190,7 @@ snit::type ::kitedocs::ehtml {
     typemethod install {macro} {
         # FIRST, save the config data.
         $macro eval [list array set ::ehtml [array get config]]
+        $macro eval [list array set ::trans $trans]
 
         # NEXT, define HTML equivalents.
         StyleMacro $macro b
@@ -322,8 +350,19 @@ snit::type ::kitedocs::ehtml {
         }
 
         # NEXT, define definition list macros.
-        $macro proc deflist {args}  { return "<dl>" }
-        $macro proc /deflist {args} { return "</dl>" }
+        $macro proc deflist {args}  {
+            variable trans
+            lappend trans(dlstack) $args
+
+            return "<dl>" 
+        }
+
+        $macro proc /deflist {args} {
+            variable trans
+            set trans(dlstack) [lrange $trans(dlstack) 0 end-1]
+
+            return "</dl>" 
+        }
 
         $macro template def {text} {
             set text [expand $text]
@@ -332,6 +371,100 @@ snit::type ::kitedocs::ehtml {
             <dt><b>$text</b></dt>
             <dd>
         }
+
+        $macro template defitem {item text} {
+            variable trans
+            set text [expand $text]
+            set trans(lastItem) $item
+
+            if {[macro pass] == 1} {
+                dict lappend trans(itemLists) * $item
+
+                foreach listname $trans(dlstack) {
+                    if {$listname ne ""} {
+                        dict lappend trans(itemLists) $listname $item
+                    }
+                }
+
+                dict set trans(itemText) $item $text
+            }
+        } {
+            |<--
+            <dt><b><tt><a name="[textToID $item]">$text</a></tt></b></dt>
+            <dd>      
+        }
+
+        $macro template defopt {text} {
+            variable trans
+
+            set opt [lindex $text 0]
+            set id "$trans(lastItem)$opt"
+            set text [expand $text]
+
+            if {[macro pass] == 1} {
+                dict lappend trans(optsFor) $trans(lastItem) $opt
+                dict set trans(optText) $id $text
+            }
+        } {
+            |<--
+            <dt><b><tt><a name="$id">$text</a></tt></b></dt>
+            <dd>
+        }
+
+        # iref args
+        #
+        # args    An item ID, which might be multiple tokens.
+        #
+        # Creates a link to the item in this page.
+
+        $macro proc iref {args} {
+            variable trans
+
+            set tag $args
+
+            if {[macro pass] == 1} {
+                return
+            }
+
+            if {[dict exists $trans(itemText) $tag]} {
+                return "<tt><a href=\"#[textToID $tag]\">$tag</a></tt>"
+            } else {
+                macro warn "iref not found, '$tag'"
+                return "<tt>$tag</tt>"
+            }
+        }
+
+        $macro proc itag {args} {
+            return "[tt][lb][iref {*}$args][rb][/tt]"
+        }
+
+
+        $macro template itemlist {{listname *}} {
+            variable trans
+
+            set items [list]
+
+            if {[macro pass] == 2} {
+                if {[dict exists $trans(itemLists) $listname]} {
+                    set items [dict get $trans(itemLists) $listname]
+                }
+            }
+        } {
+            |<--
+            [tforeach tag $items {
+                |<--
+                <tt><a href="#[textToID $tag]">[dict get $trans(itemText) $tag]</a></tt><br>
+                [tif {[dict exists $trans(optsFor) $tag]} {
+                    |<--
+                    [tforeach opt [dict get $trans(optsFor) $tag] {
+                        |<--
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <tt><a href="#$tag$opt">[dict get $trans(optText) $tag$opt]</a></tt><br>
+                    }]
+                }]
+            }]<p>
+        }
+
 
         # Topic Lists
 
@@ -357,7 +490,7 @@ snit::type ::kitedocs::ehtml {
         } {
             |<--
             <tr class="$rowclass" valign="baseline">
-            <td>[expand $topic]</td>
+            <td>$topic</td>
             <td>
         }
 
