@@ -190,13 +190,16 @@ usually, the definition is indented beneath the term.<p>
 <defitem deflist {<tag deflist {?<i args>?}>...<tag /deflist {?<i args>?}>}>
 
 These tags contain a definition list.  The individual definitions are added 
-using the <itag def> macro.<p>
+using the <itag def>, <itag defitem>, or <itag defopt> macros.<p>
 
-Definition lists are frequently nested; the optional <i>args</i> can be used to relate the <itag deflist> to its <tag /deflist> but have no effect on 
-the output:
+Definition lists are frequently nested; the optional <i>args</i> can be used to relate the <itag deflist> to its <tag /deflist>.  In addition, 
+<itag defitem> accumulates lists of items by the lists in which they 
+appear, for retrieval via <itag itemlist>.
 
 <example>
 <tag section COMMANDS>
+
+<tag itemlist commands>
 
 <tag deflist commands>
     .
@@ -216,6 +219,107 @@ embedded style macros.<p>
 
 The <iref def> macro is followed by the text that defines the
 named item.<p>
+
+<defitem defitem {<tag defitem {<i tag text>}>}>
+
+This macro begins an item definition within a <itag deflist>, that is,
+a definition of a code item: a Tcl command, a program, a URL, or whatever
+it might be.
+
+The <i>tag</i> is a short
+string which identifies the item, such as a command's name; it should
+be unique within the document.  It becomes the item's HTML anchor, and
+is also used with <itag iref> to reference the item from within the
+same document.<p>
+
+The <i>text</i> is the text that's
+actually displayed in the list; it usually includes more
+information, such as a command's full signature.  It may contain
+embedded style macros.<p>
+
+The <iref defitem> macro is followed by the text that defines the
+named item. For example,<p>
+
+<example>
+<lb>defitem mycommand {mycommand <lb>i value<rb> ?<lb>i optionalValue<rb>?}<rb>
+
+This command does nothing in particular, being merely a pedagogical
+example.<lb>p<rb>;
+</example>
+
+Note that the <i>tag</i> won't necessarily be same as the first token
+in the <i>text</i>; when documenting subcommands of a Tcl object, for
+example, the object usually appears as a variable reference in the
+first spot:<p>
+
+<example>
+<lb>defitem mysubcommand {$object mysubcommand <lb>i value<rb>}<rb>
+</example>
+
+Each of the macro definitions in this section is produced by
+<iref defitem>.<p>
+
+<defitem defopt {<tag defopt {<i text>}>}>
+
+Programs often have options; Tcl commands and objects often have
+options as well.  When <itag defopt> appears in a definition list,
+it defines an option belonging to the item defined by the immediately
+preceding <itag defitem>.  It's assumed that the option is the first
+token in <i>text</i>, which may contain embedded style macros.  
+For example,<p>
+
+<example>
+<lb>deflist commands<rb>
+    . . .
+<lb>defitem mycommand {mycommand ?<lb> options...<rb>?}<rb>
+
+This command has the following options:&lt;p&gt;
+
+<lb>deflist mycommand options<rb>
+
+<lb>defopt {-this <lb>i value<rb>}<rb>
+
+Description of the the option...
+    . . .
+<lb>/deflist mycommand options<rb>
+. . .
+
+<lb>/deflist commands<rb>
+</example>
+
+<defitem itemlist {<tag itemlist {?<i listname>?}>}>
+
+By default, this macro expands to a list of the items defined in this
+document. It's usually used in the "SYNOPSIS" section of 
+a <xref manpage(5)> document.  The list of macros in the
+<xref SYNOPSIS> section of this man page was produced by
+<itag itemlist>.<p>
+
+If an item has options defined with <itag defopt>, they will appear,
+slightly indented, just below the item in the <itag itemlist>.<p>
+
+If <i listname> is given, the output is confined to those items defined
+in the named <itag deflist> and any lists nested within it.
+
+<defitem iref {<tag iref {<i item...>}>}>
+
+The name "iref" stands for "item reference"; this macro creates a
+hyperlink to the definition of <i>item</i> in the same man page.
+For example,<p>
+
+<example>
+<lb>iref defitem<rb>
+</example>
+
+expands to a link to <iref defitem>.<p>
+
+If the item name has multiple tokens, there is no need to quote them;
+<itag iref>'s arguments are accumulated into a single item name.<p>
+
+<defitem itag {<tag itag {<i name>}>}>
+
+This is simply an <itag iref> to macro <i name>; it creates a hyperlink
+in typewriter font with angle brackets.<p> 
 
 </deflist deflist>
 
