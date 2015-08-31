@@ -146,7 +146,7 @@ test textToID-1.1 {strips whitespace} -setup {
     trans expand {-<textToID "  My, Text&string! ">-}
 } -cleanup {
     cleanup
-} -result {-my_textstring-}
+} -result {-My,_Text&string!-}
 
 #-------------------------------------------------------------------
 # xref/xrefset

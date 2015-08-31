@@ -253,13 +253,11 @@ snit::type ::kitedocs::ehtml {
 
 
         $macro proc textToID {text} {
-            # First, trim any white space and convert to lower case
-            set text [string trim [string tolower $text]]
+            # First, trim any white space
+            set text [string trim $text]
             
-            # Next, substitute "_" for internal whitespace, and delete any
-            # non-alphanumeric characters (other than "_", of course)
+            # Next, substitute "_" for internal whitespace
             regsub -all {[ ]+} $text "_" text
-            regsub -all {[^a-z0-9_/]} $text "" text
             
             return $text
         }
