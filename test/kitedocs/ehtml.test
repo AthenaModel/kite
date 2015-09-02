@@ -342,13 +342,13 @@ test topiclist-1.1 {topic list} -setup {
 } -cleanup {
     cleanup
 } -result {
-<table class="pretty">
-<tr class="header">
-<th align="left">Topic</th> 
-<th align="left">Description</th>
+<table class="table">
+<tr>
+<th>Topic</th> 
+<th>Description</th>
 </tr>
         
-<tr class="oddrow" valign="baseline">
+<tr class="tr-even">
 <td>The Term</td>
 <td>
         
@@ -356,7 +356,7 @@ Text describing the term.
 </td>
 </tr>
         
-<tr class="evenrow" valign="baseline">
+<tr class="tr-odd">
 <td>Another Term</td>
 <td>
         
@@ -447,15 +447,15 @@ test changelog-1.1 {change log} -setup {
 } -cleanup {
     cleanup
 } -result {
-<table class="pretty" width="100%" cellpadding="5" cellspacing="0">
-<tr class="header">
-<th align="left" width="10%">Status</th>
-<th align="left" width="70%">Nature of Change</th>
-<th align="left" width="10%">Date</th>
-<th align="left" width="10%">Initiator</th>
+<table class="table table-wide">
+<tr>
+<th>Status</th>
+<th>Nature of Change</th>
+<th>Date</th>
+<th>Initiator</th>
 </tr>
         
-<tr class="oddrow" valign=top>
+<tr class="tr-even">
 <td>New</td>
 <td>
 Text describing the change.

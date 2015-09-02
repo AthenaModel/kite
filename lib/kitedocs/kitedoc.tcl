@@ -81,9 +81,6 @@ snit::type ::kitedocs::kitedoc {
             margin-left: 1%;
             margin-right: 1%;
         }
-        TABLE {
-            width: 100%;
-        }
     }
 
 
@@ -608,12 +605,6 @@ snit::type ::kitedocs::kitedoc {
         $ehtml smartalias textfigure 2 2 {id title} \
             [myproc textfigure]
 
-        $ehtml smartalias th 0 0 {} \
-            [myproc th]
-
-        $ehtml smartalias /th 0 0 {} \
-            [myproc /th]
-
         $ehtml smartalias tr 0 0 {} \
             [myproc tr]
 
@@ -726,29 +717,24 @@ snit::type ::kitedocs::kitedoc {
         set doc(rowcounter) 0
     } {
         |<--
-        <center><table class="pretty">
+        <center><table class="table">
         <caption><b><a name="$id" href="#toc.$id">$doc(title-$id)</a><b></caption>
     }
-
-    # th ... /th
-    #
-    # Begin/end table header.
-    template proc th {} {<tr class="header">}
-    template proc /th {} {</tr>}
-
 
     # tr ... /tr
     #
     # Begin/end table row.
-    template proc tr {} {
+    proc tr {} {
         incr doc(rowcounter)
 
-        if {$doc(rowcounter) % 2 == 0} {
-            set class "evenrow"
+        if {$doc(rowcounter) == 1} {
+            return {<tr>}
+        } elseif {$doc(rowcounter) % 2 == 0} {
+            return {<tr class="tr-even">}
         } else {
-            set class "oddrow"
+            return {<tr class="tr-odd">}
         }
-    } {<tr class="$class">}
+    }
 
     template proc /tr {} {</tr>}
 
