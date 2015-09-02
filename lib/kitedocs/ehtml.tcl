@@ -49,7 +49,48 @@ snit::type ::kitedocs::ehtml {
             padding-left: 4px;
         }
 
-        /* Table Formatting Classes: "pretty" 
+        /*--------------------------------------------------
+         * Table Formatting Classes
+         */
+
+        .table {  /* Replaces "pretty" */
+            border: 1px solid black;
+            border-spacing: 0;
+            color: black;
+            background-color: white;
+        }
+
+        .table tr:first-child {  /* Replaces "header" */
+            font-weight: bold;
+            color: white;
+            background-color: #000099;    
+        }
+
+        .table tr.tr-odd {      /* Replaces "evenrow" */
+            background-color: #EEEEEE;
+        }
+
+        .table tr.tr-even { }   /* Replaces "oddrow" */
+
+        .table th {
+            padding-left: 5px;
+            text-align:   left;
+        }
+
+        .table td {
+            padding-left:   5px;
+            vertical-align: baseline;
+        }
+
+        .table-wide {
+            width: 100%;
+        }
+
+
+        /* DEPRECATED: Use the "table", "tr-odd", and "tr-even" 
+         * classes, above.
+         *
+         * Table Formatting Classes: "pretty" 
          * Border around the outside, even/odd striping, no internal
          * border lines.
          */
@@ -468,26 +509,26 @@ snit::type ::kitedocs::ehtml {
 
         $macro template topiclist {{h1 Topic} {h2 Description}} {
             variable itemCounter
-            set itemCounter 0
+            set itemCounter 1
         } {
             |<--
-            <table class="pretty">
-            <tr class="header">
-            <th align="left">$h1</th> 
-            <th align="left">$h2</th>
+            <table class="table">
+            <tr>
+            <th>$h1</th> 
+            <th>$h2</th>
             </tr>
         }
 
         $macro template topic {topic} {
             variable itemCounter
             if {[incr itemCounter] % 2 == 0} {
-                set rowclass evenrow
+                set rowclass tr-even
             } else {
-                set rowclass oddrow
+                set rowclass tr-odd
             }
         } {
             |<--
-            <tr class="$rowclass" valign="baseline">
+            <tr class="$rowclass">
             <td>$topic</td>
             <td>
         }
@@ -556,15 +597,15 @@ snit::type ::kitedocs::ehtml {
         # NEXT, define changelog macros
         $macro template changelog {} {
             variable changeCounter
-            set changeCounter 0
+            set changeCounter 1
         } {
             |<--
-            <table class="pretty" width="100%" cellpadding="5" cellspacing="0">
-            <tr class="header">
-            <th align="left" width="10%">Status</th>
-            <th align="left" width="70%">Nature of Change</th>
-            <th align="left" width="10%">Date</th>
-            <th align="left" width="10%">Initiator</th>
+            <table class="table table-wide">
+            <tr>
+            <th>Status</th>
+            <th>Nature of Change</th>
+            <th>Date</th>
+            <th>Initiator</th>
             </tr>
         }
 
@@ -582,9 +623,9 @@ snit::type ::kitedocs::ehtml {
             variable changeCounter
 
             if {[incr changeCounter] % 2 == 0} {
-                set rowclass evenrow
+                set rowclass tr-even
             } else {
-                set rowclass oddrow
+                set rowclass tr-odd
             }
 
             set date        [macro cget date]
@@ -594,7 +635,7 @@ snit::type ::kitedocs::ehtml {
             set description [macro cpop change]
         } {
             |<--
-            <tr class="$rowclass" valign=top>
+            <tr class="$rowclass">
             <td>$status</td>
             <td>$description</td>
             <td>$date</td>
