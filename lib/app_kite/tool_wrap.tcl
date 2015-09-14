@@ -186,7 +186,8 @@ tool define wrap {
         # NEXT, add the basekit, if any.
         if {$basekit ne ""} {
             lappend command \
-                -prefix $basekit
+                -prefix $basekit \
+                -architecture [platform::identify]
         }
 
         # NEXT, add the icon, if appropriate
