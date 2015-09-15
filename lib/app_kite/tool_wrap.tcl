@@ -186,8 +186,7 @@ tool define wrap {
         # NEXT, add the basekit, if any.
         if {$basekit ne ""} {
             lappend command \
-                -prefix $basekit \
-                -architecture [platform::identify]
+                -prefix $basekit
         }
 
         # NEXT, add the icon, if appropriate
@@ -278,6 +277,13 @@ tool define wrap {
 
         if {[project provide binary $lib]} {
             set plat [platform::identify]
+
+            # Ad-hockery: our platform is glibc2.5 but ActiveState's
+            # basekits are built with glibc2.3.  This is a bandaid
+            # just until we have a better solution. 
+            if {[string match "linux-glibc2.*-x86_64" $plat]} {
+                set plat "linux-glibc2.3-x86_64"
+            }
         } else {
             set plat "tcl"
         }
