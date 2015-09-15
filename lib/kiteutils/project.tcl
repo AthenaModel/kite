@@ -448,6 +448,36 @@ snit::type project {
         return $info(binary-$name)
     }
 
+    # provide platform name
+    #
+    # name - Name of the provided library
+    #
+    # Returns the platform string for the provided library.
+
+    typemethod {provide platform} {name} {
+        if {[project provide binary $name]} {
+            set plat [platform::identify]
+
+            # TBD: Ad-hockery: our platform is glibc2.5 but ActiveState's
+            # basekits are built with glibc2.3.  If we mark them as
+            # other than 2.3, Tclapp won't include them in the executable.
+            # This is a bandaid just until we have a better solution.
+            #
+            # We can do a better job of this if we can know the platform
+            # of the basekit.  Otherwise, we'll need to add a platform
+            # alias to the project.kite file: for linux-glibc2.*-x86_64
+            # use linux-glibc2.3-x86_64.
+            if {[string match "linux-glibc2.*-x86_64" $plat]} {
+                set plat "linux-glibc2.3-x86_64"
+            }            
+        } else {
+            set plat "tcl"
+        }
+
+        return $plat
+
+    }
+
     # provide zipfile name
     #
     # name - The name of the library's teapot .zip package on this
@@ -455,12 +485,7 @@ snit::type project {
 
     typemethod {provide zipfile} {name} {
         set ver [project version]
-        
-        if {[project provide binary $name]} {
-            set plat [platform::identify]
-        } else {
-            set plat "tcl"
-        }
+        set plat [project provide platform $name]
 
         return "package-$name-$ver-$plat.zip"
     }

@@ -275,18 +275,7 @@ tool define wrap {
         #
         # to the teapot.txt
 
-        if {[project provide binary $lib]} {
-            set plat [platform::identify]
-
-            # Ad-hockery: our platform is glibc2.5 but ActiveState's
-            # basekits are built with glibc2.3.  This is a bandaid
-            # just until we have a better solution. 
-            if {[string match "linux-glibc2.*-x86_64" $plat]} {
-                set plat "linux-glibc2.3-x86_64"
-            }
-        } else {
-            set plat "tcl"
-        }
+        set plat [project provide platform $lib]
 
         set contents "Package $lib [project version]\n"                         \
 
