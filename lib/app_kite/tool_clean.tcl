@@ -35,7 +35,7 @@ tool define clean {
     typemethod execute {argv} {
         tool::COMPILE clean
         tool::DOCS    clean
-        tool::BUILD   clean
+        tool::WRAP    clean
     }
 
 }
