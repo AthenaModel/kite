@@ -57,8 +57,7 @@ tool define wrap {
 
         # FIRST, check for dependencies.
         puts "Checking external dependencies..."
-        if 0 {set upToDate [deps uptodate]}
-        set upToDate 1
+        set upToDate [deps uptodate]
 
         if {$upToDate} {
             puts "All external dependencies are up to date."
