@@ -267,6 +267,22 @@ tool define wrap {
             return
         }
 
+        # NEXT, determine the platform to include in the metadata. Use the
+        # basekit platform if it differs from the machine *and* is compatible
+        set bkplat [DetermineBasekitPlatform]
+        set plat   [project provide platform $lib]
+
+        # NEXT, see if the basekit platform is different. If it is but it
+        # is not compatible don't switch the platform. 
+        # TBD: Can this situation happen?
+        if {$bkplat ne $plat} {
+            set patterns [platform::patterns $plat]
+            if {$bkplat in $patterns} {
+                set plat $bkplat
+            }
+        } 
+
+
         # NEXT, create its teapot.txt file
         #
         # TODO: Get external project requires from the lib's 
@@ -275,18 +291,6 @@ tool define wrap {
         #    Meta require {$package $version}
         #
         # to the teapot.txt
-        set bkplat [DetermineBasekitPlatform]
-        set plat   [project provide platform $lib]
-
-        # NEXT, if the basekit platform is different than the identified
-        # platform use it as long as it's compatible
-        if {$bkplat ne $plat} {
-            set patterns [platform::patterns $plat]
-            if {$bkplat in $patterns} {
-                set plat $bkplat
-            }
-        } 
-
         set contents "Package $lib [project version]\n"                         \
 
         append contents \
@@ -308,6 +312,13 @@ tool define wrap {
         }
     }
     
+    # DetermineBasekitPlatform
+    #
+    # This proc figures out which platform the basekit was built on by
+    # extracting that information from the basekit metadata using the
+    # teapot-pkg command.  The platform is a required keyword so it must
+    # be there.  The extracted platform is returned.
+
     proc DetermineBasekitPlatform {} {
         # FIRST, get the basekit metadata
         set basekit [plat pathto basekit.tcl]
@@ -318,7 +329,7 @@ tool define wrap {
             throw FATAL "Could not determine basekit metadata:\n$result"
         }
 
-        # NEXT, extract the platform from the meta-data, it is 
+        # NEXT, extract the platform from the metadata, it is 
         # a required keyword, so it better be there.
         set index [lsearch -exact $meta platform]
         incr index
