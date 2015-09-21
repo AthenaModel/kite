@@ -295,7 +295,6 @@ tool define wrap {
             "Meta included *\n"                                        \
             "Meta platform $plat\n"
 
-        if 0 {
         writefile [project root lib $lib teapot.txt] $contents
 
         # NEXT, save the package file.
@@ -306,7 +305,6 @@ tool define wrap {
             zipper folder $libdir $zipfile -recurse
         } on error {result} {
             throw FATAL "Error wrapping lib $lib; see $logfile:\n$result"
-        }
         }
     }
     
