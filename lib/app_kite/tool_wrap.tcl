@@ -273,14 +273,12 @@ tool define wrap {
 
         # NEXT, see if the basekit platform is different. If it is but it
         # is not compatible don't switch the platform. 
-        # TBD: Can this situation happen?
         if {$bkplat ne $plat} {
             set patterns [platform::patterns $plat]
             if {$bkplat in $patterns} {
                 set plat $bkplat
             }
         } 
-
 
         # NEXT, create its teapot.txt file
         #
@@ -331,8 +329,7 @@ tool define wrap {
         # NEXT, extract the platform from the metadata, it is 
         # a required keyword, so it better be there.
         set index [lsearch -exact $meta platform]
-        incr index
-        return [lindex $meta $index]
+        return [lindex $meta $index+1]
     }
 
     #-------------------------------------------------------------------
