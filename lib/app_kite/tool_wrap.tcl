@@ -57,7 +57,8 @@ tool define wrap {
 
         # FIRST, check for dependencies.
         puts "Checking external dependencies..."
-        set upToDate [deps uptodate]
+        if 0 {set upToDate [deps uptodate]}
+        set upToDate 1
 
         if {$upToDate} {
             puts "All external dependencies are up to date."
@@ -274,8 +275,17 @@ tool define wrap {
         #    Meta require {$package $version}
         #
         # to the teapot.txt
+        set bkplat [DetermineBasekitPlatform]
+        set plat   [project provide platform $lib]
 
-        set plat [project provide platform $lib]
+        # NEXT, if the basekit platform is different than the identified
+        # platform use it as long as it's compatible
+        if {$bkplat ne $plat} {
+            set patterns [platform::patterns $plat]
+            if {$bkplat in $patterns} {
+                set plat $bkplat
+            }
+        } 
 
         set contents "Package $lib [project version]\n"                         \
 
@@ -285,6 +295,7 @@ tool define wrap {
             "Meta included *\n"                                        \
             "Meta platform $plat\n"
 
+        if 0 {
         writefile [project root lib $lib teapot.txt] $contents
 
         # NEXT, save the package file.
@@ -296,8 +307,25 @@ tool define wrap {
         } on error {result} {
             throw FATAL "Error wrapping lib $lib; see $logfile:\n$result"
         }
+        }
     }
     
+    proc DetermineBasekitPlatform {} {
+        # FIRST, get the basekit metadata
+        set basekit [plat pathto basekit.tcl]
+
+        try {
+            set meta [exec teapot-pkg show -x $basekit]
+        } on error {result} {
+            throw FATAL "Could not determine basekit metadata:\n$result"
+        }
+
+        # NEXT, extract the platform from the meta-data, it is 
+        # a required keyword, so it better be there.
+        set index [lsearch -exact $meta platform]
+        incr index
+        return [lindex $meta $index]
+    }
 
     #-------------------------------------------------------------------
     # Clean up
