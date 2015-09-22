@@ -6,6 +6,9 @@
   * Add line number info to `htmltrans parse`, so that we can give better
     error messages.
   * ehtml(n):
+    * Revise kitedoc(n) to use `htmltrans parse`.
+    * Need to move formatting from HTML to CSS.  E.g., emit "class=" attributes
+      instead of `<tt>` and `<b>` tags.
     * Consecutive `defitem` macros with no description get an empty 
       "<dd> </dd>" that causes a blank line.  The "<dd>" is emitted 
       automatically, and the "</dd>" is added by `htmltrans para`.
@@ -37,8 +40,6 @@
         command name, and hence the same link, and we save only one link
         text.  So the same link text appears twice in the synopsis.
       * Should I be looking for a better syntax to handle this use case?
-    * Need to move formatting from HTML to CSS.  E.g., emit "class=" attributes
-      instead of `<tt>` and `<b>` tags.
 
 ## Old Notes
 
