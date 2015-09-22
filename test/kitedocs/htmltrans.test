@@ -1,0 +1,608 @@
+# -*-Tcl-*-
+#-----------------------------------------------------------------------
+# TITLE:
+#    htmltrans.test
+#
+# PROJECT:
+#    athena-kite
+#
+# DESCRIPTION:
+#    kitedocs(n) test suite for htmltrans.tcl
+#
+#-----------------------------------------------------------------------
+
+#-----------------------------------------------------------------------
+# Initialize tcltest(n)
+
+if {[lsearch [namespace children] ::tcltest] == -1} {
+    package require tcltest 2.2 
+    eval ::tcltest::configure $argv
+}
+
+# Import tcltest(n)
+namespace import ::tcltest::*
+
+ 
+#-----------------------------------------------------------------------
+# Load the package to be tested
+
+source ../../lib/kitedocs/pkgModules.tcl
+namespace import ::kitedocs::*
+namespace import ::kiteutils::*
+
+#-------------------------------------------------------------------
+# Setup
+
+proc ParseCmd {full tag slash attrs text} {
+    variable buffer
+
+    set text [string map [list \n \\n] $text]
+
+    if {[string length $text] > 40} {
+        set start [string range $text 0 2]
+        set end [string range $text end-2 end]
+        set text "$start...$end"
+    }
+
+    append buffer "$full $tag $slash ($attrs) ($text)\n"
+}
+
+proc pparse {html} {
+    variable buffer
+    set buffer ""
+    htmltrans parse $html ::ParseCmd
+    return [pprint $buffer]
+}
+
+proc pdo {op html} {
+    return [pprint [htmltrans $op [outdent $html]]]
+}
+
+
+# pprint block
+#
+# block   - A block of text
+#
+# Pretty prints the block.
+
+proc pprint {block} {
+    return "\n[string trimright $block]\n"
+}
+
+proc codecatch {code args} {
+    try {
+        uplevel 1 $args
+    } trap $code {result} {
+        return $result
+    }
+
+    error "Error not thrown: \"$code\""
+}
+
+    
+#-------------------------------------------------------------------
+# parse
+
+# Tests 1.* show proper operation for reasonable HTML input.
+# Tests 2.* highlight acceptable diversions from standard HTML. 
+
+test parse-1.1 {plain text, one line} -body {
+    pparse {A single line of text.}
+} -result {
+ hmstart 0 () (A single line of text.)
+ hmstart 1 () ()
+}
+
+test parse-1.2 {plain text, several lines} -body {
+    pparse {
+        Several lines of text.
+    }
+} -result {
+ hmstart 0 () (\n        Several lines of text.\n    )
+ hmstart 1 () ()
+}
+
+test parse-1.3 {a simple document, no attrs} -body {
+    pparse {
+        <html><body>
+        <p>The <i>first</i> line of text.</p>
+
+        <p>The <b>second</b> line of text.</p>
+        </body></html>
+    }
+} -result {
+ hmstart 0 () (\n        )
+<html> html 0 () ()
+<body> body 0 () (\n        )
+<p> p 0 () (The )
+<i> i 0 () (first)
+</i> i 1 () ( line of text.)
+</p> p 1 () (\n\n        )
+<p> p 0 () (The )
+<b> b 0 () (second)
+</b> b 1 () ( line of text.)
+</p> p 1 () (\n        )
+</body> body 1 () ()
+</html> html 1 () (\n    )
+ hmstart 1 () ()
+}
+
+test parse-1.4 {tags with attrs} -body {
+    pparse {
+        <p class="dummy">The <i>first</i> line of text.</p>
+
+        <p>The <span class="bold">second</span> line of text.</p>
+    }
+} -result {
+ hmstart 0 () (\n        )
+<p class="dummy"> p 0 (class="dummy") (The )
+<i> i 0 () (first)
+</i> i 1 () ( line of text.)
+</p> p 1 () (\n\n        )
+<p> p 0 () (The )
+<span class="bold"> span 0 (class="bold") (second)
+</span> span 1 () ( line of text.)
+</p> p 1 () (\n    )
+ hmstart 1 () ()
+}
+
+test parse-1.5 {!DOCTYPE} -body {
+    pparse {
+        <!DOCTYPE html plus stuff>
+        <html><head>
+        Some text.
+        </head></html>
+    }
+} -result {
+ hmstart 0 () (\n        )
+<!DOCTYPE html plus stuff> !DOCTYPE 0 (html plus stuff) (\n        )
+<html> html 0 () ()
+<head> head 0 () (\n        Some text.\n        )
+</head> head 1 () ()
+</html> html 1 () (\n    )
+ hmstart 1 () ()
+}
+
+test parse-1.6 {comments} -body {
+    pparse {
+        Some <b>text</b>. <!--Embedded comment-->
+        Some <!-- Another comment --> <b>more text</b>.
+    }
+} -result {
+ hmstart 0 () (\n        Some )
+<b> b 0 () (text)
+</b> b 1 () (. )
+<!--Embedded comment--> !-- 0 (Embedded comment) (\n        Some )
+<!-- Another comment --> !-- 0 ( Another comment ) ( )
+<b> b 0 () (more text)
+</b> b 1 () (.\n    )
+ hmstart 1 () ()
+}
+
+test parse-2.1 {any tags are acceptable} -body {
+    pparse {
+        A <foo>single</foo> line of <@@@>text</&&&>.
+    }
+} -result {
+ hmstart 0 () (\n        A )
+<foo> foo 0 () (single)
+</foo> foo 1 () ( line of )
+<@@@> @@@ 0 () (text)
+</&&&> &&& 1 () (.\n    )
+ hmstart 1 () ()
+}
+
+test parse-2.2 {structure is not checked} -body {
+    pparse {
+        </html>A </foo>single<foo> line of text<html>
+    }
+} -result {
+ hmstart 0 () (\n        )
+</html> html 1 () (A )
+</foo> foo 1 () (single)
+<foo> foo 0 () ( line of text)
+<html> html 0 () (\n    )
+ hmstart 1 () ()
+}
+
+test parse-2.3 {attribute syntax is not checked} -body {
+    pparse {
+        <foo this+that, those[]>
+    }
+} -result {
+ hmstart 0 () (\n        )
+<foo this+that, those[]> foo 0 (this+that, those[]) (\n    )
+ hmstart 1 () ()
+}
+
+test parse-2.4 {end tag attributes are retained} -body {
+    pparse {
+        </foo this="bogus">
+    }
+} -result {
+ hmstart 0 () (\n        )
+</foo this="bogus"> foo 1 (this="bogus") (\n    )
+ hmstart 1 () ()
+}
+
+test parse-2.5 {removes whitespace between tag and attrs} -body {
+    pparse {
+        <foo     this  >
+    }
+} -result {
+ hmstart 0 () (\n        )
+<foo this  > foo 0 (this  ) (\n    )
+ hmstart 1 () ()
+}
+
+#-------------------------------------------------------------------
+# fix
+
+# Tests 1.* cover normal behavior
+# Tests 2.* cover detected errors
+
+test fix-1.1 {Leaves properly closed code alone} -body {
+    pdo fix {
+        <foo>
+        Some <bar>text</bar>.
+        </foo>
+    }
+} -result {
+<foo>
+Some <bar>text</bar>.
+</foo>
+}
+
+test fix-1.2 {Closes open tags} -body {
+    pdo fix {
+        <foo>
+        Some <b><i>text.
+        </foo>
+    }
+} -result {
+<foo>
+Some <b><i>text.
+</i></b></foo>
+}
+
+test fix-1.3 {Closes final tag} -body {
+    pdo fix {
+        <foo>
+        Some text.
+    }
+} -result {
+<foo>
+Some text.</foo>
+}
+
+test fix-1.4 {Doesn't close known singles} -body {
+    pdo fix {
+        <foo>
+        Line 1<br>
+        Line 2<br>
+        Line 3
+        </foo>
+    }
+} -result {
+<foo>
+Line 1<br>
+Line 2<br>
+Line 3
+</foo>
+}
+
+test fix-1.5 {Closes sibling <li> in <ol>} -body {
+    pdo fix {
+        <ol>
+        <li>Item 1
+        <li>Item 2
+        <li>Item 3
+        </ol>
+    }
+} -result {
+<ol>
+<li>Item 1
+</li><li>Item 2
+</li><li>Item 3
+</li></ol>
+}
+
+test fix-1.6 {Closes sibling <li> in <ul>} -body {
+    pdo fix {
+        <ul>
+        <li>Item 1
+        <li>Item 2
+        <li>Item 3
+        </ul>
+    }
+} -result {
+<ul>
+<li>Item 1
+</li><li>Item 2
+</li><li>Item 3
+</li></ul>
+}
+
+test fix-1.7 {Closes sibling <dd>, <dt> in <dl>} -body {
+    pdo fix {
+        <dl>
+        <dt>Topic 1
+        <dd>Item 1
+        <dt>Topic 2
+        <dd>Item 2
+        </dl>
+    }
+} -result {
+<dl>
+<dt>Topic 1
+</dt><dd>Item 1
+</dd><dt>Topic 2
+</dt><dd>Item 2
+</dd></dl>
+}
+
+test fix-1.8 {Closes sibling <tr> in <table>} -body {
+    pdo fix {
+        <table>
+        <tr>Row 1
+        <tr>Row 2
+        <tr>Row 3
+        </table>
+    }
+} -result {
+<table>
+<tr>Row 1
+</tr><tr>Row 2
+</tr><tr>Row 3
+</tr></table>
+}
+
+test fix-1.9 {Closes sibling <tr> in <thead>} -body {
+    pdo fix {
+        <thead>
+        <tr>Row 1
+        <tr>Row 2
+        <tr>Row 3
+        </thead>
+    }
+} -result {
+<thead>
+<tr>Row 1
+</tr><tr>Row 2
+</tr><tr>Row 3
+</tr></thead>
+}
+
+test fix-1.10 {Closes sibling <tr> in <thead>} -body {
+    pdo fix {
+        <thead>
+        <tr>Row 1
+        <tr>Row 2
+        <tr>Row 3
+        </thead>
+    }
+} -result {
+<thead>
+<tr>Row 1
+</tr><tr>Row 2
+</tr><tr>Row 3
+</tr></thead>
+}
+
+test fix-1.11 {Closes sibling <tr> in <tfoot>} -body {
+    pdo fix {
+        <tfoot>
+        <tr>Row 1
+        <tr>Row 2
+        <tr>Row 3
+        </tfoot>
+    }
+} -result {
+<tfoot>
+<tr>Row 1
+</tr><tr>Row 2
+</tr><tr>Row 3
+</tr></tfoot>
+}
+
+test fix-1.12 {Closes sibling <tr> in <tbody>} -body {
+    pdo fix {
+        <tbody>
+        <tr>Row 1
+        <tr>Row 2
+        <tr>Row 3
+        </tbody>
+    }
+} -result {
+<tbody>
+<tr>Row 1
+</tr><tr>Row 2
+</tr><tr>Row 3
+</tr></tbody>
+}
+
+test fix-1.13 {Closes sibling <th>, <td> in <tr>} -body {
+    pdo fix {
+        <table>
+        <tr>
+        <th>Col 1
+        <td>Col 2
+        <th>Col 3
+        <td>Col 4
+        </tr>
+        </table>
+    }
+} -result {
+<table>
+<tr>
+<th>Col 1
+</th><td>Col 2
+</td><th>Col 3
+</th><td>Col 4
+</td></tr>
+</table>
+}
+
+test fix-2.1 {Closing tag with no opening tag 1} -body {
+    codecatch {SYNTAX UNOPENED} pdo fix {</foo>}
+} -result {Closing tag with no opening tag: </foo>}
+
+test fix-2.2 {<li> outside list} -body {
+    codecatch {SYNTAX MISPLACED} pdo fix {<li>}
+} -result {Item tag with no container: <li>}
+
+test fix-2.3 {<dt> outside list} -body {
+    codecatch {SYNTAX MISPLACED} pdo fix {<dt>}
+} -result {Item tag with no container: <dt>}
+
+test fix-2.4 {<dd> outside list} -body {
+    codecatch {SYNTAX MISPLACED} pdo fix {<dd>}
+} -result {Item tag with no container: <dd>}
+
+test fix-2.5 {<tr> outside table} -body {
+    codecatch {SYNTAX MISPLACED} pdo fix {<tr>}
+} -result {Item tag with no container: <tr>}
+
+test fix-2.6 {<th> outside table row} -body {
+    codecatch {SYNTAX MISPLACED} pdo fix {<th>}
+} -result {Item tag with no container: <th>}
+
+test fix-2.7 {<td> outside table row} -body {
+    codecatch {SYNTAX MISPLACED} pdo fix {<td>}
+} -result {Item tag with no container: <td>}
+
+#-------------------------------------------------------------------
+# para
+
+# Tests 1.* cover normal behavior
+# Tests 2.* cover detected errors
+
+test para-1.1 {Leaves normal blocks alone} -body {
+    pdo para {
+        <h1>A header</h1>
+
+        <h2>Another header</h2>
+    }
+} -result {
+<h1>A header</h1>
+
+<h2>Another header</h2>
+}
+
+test para-1.2 {Leaves text in opaque elements alone} -body {
+    pdo para {
+        <style>
+        Foo
+
+        Bar
+
+        Baz
+        </style>
+    }
+} -result {
+<style>
+Foo
+
+Bar
+
+Baz
+</style>
+}
+
+test para-1.3 {Encloses sequential paragraphs} -body {
+    pdo para {
+
+        This is 
+        paragraph one.
+
+        This is paragraph two.
+
+        This is paragraph three.
+    }
+} -result {
+
+<p>This is 
+paragraph one.</p>
+
+<p>This is paragraph two.</p>
+
+<p>This is paragraph three.</p>
+}
+
+test para-1.4 {structural and block tags break paragraphs} -body {
+    pdo para {
+        This is 
+        paragraph one.
+
+        <div>
+        A block.
+        <ul><li>An item</li></ul>
+        </div>
+
+        This is paragraph two.
+    }
+} -result {
+
+<p>This is 
+paragraph one.
+
+</p>
+
+<div>
+<p>A block.
+</p>
+
+<ul><li>An item</li></ul>
+</div>
+<p>This is paragraph two.</p>
+}
+
+test para-1.5 {textblock tag with implicit paragraph} -body {
+    pdo para {
+        <ul>
+        <li>This is an implicit paragraph.</li>
+        </ul>
+    }
+} -result {
+<ul>
+<li>This is an implicit paragraph.</li>
+</ul>
+}
+
+test para-1.6 {textblock tag with multiple paragraphs} -body {
+    pdo para {
+        <ul>
+        <li>This is an explicit paragraph.
+
+        This is another paragraph</li>
+        </ul>
+    }
+} -result {
+<ul>
+<li><p>This is an explicit paragraph.</p>
+
+<p>This is another paragraph</p>
+</li>
+</ul>
+}
+
+test para-2.1 {Unknown tag} -body {
+    codecatch {SYNTAX UNKNOWN} pdo para {<foo>}
+} -result {Unknown HTML tag: "<foo>"}
+
+test para-2.2 {Prose tag in structural context} -body {
+    codecatch {SYNTAX MISPLACED} pdo para {<ul><b>text</b></ul>}
+} -result {Prose tag in structural context: <b> in <ul>}
+
+test para-2.3 {Non-prose tag in text-only context} -body {
+    codecatch {SYNTAX MISPLACED} pdo para {<h1><ul><li>text</li></ul></h1>}
+} -result {Non-prose tag in text-only context: <ul> in <h1>}
+
+#-------------------------------------------------------------------
+# Cleanup
+
+cleanupTests
+
+
+
+

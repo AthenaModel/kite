@@ -180,14 +180,15 @@ snit::type ::kitedocs::htmltrans {
             [list "\{" "&#123;" "\}" "&#125;" "\\" "&#92;"] $html]
 
         # NEXT, Convert tags to commands.
-        set sub "\}\n${type}::TagCmd {\\2} {\\1} {\\3} \{"
+        set t [myproc TagCmd]
+        set sub "\}\n${t} {\\2} {\\1} {\\3} \{"
         regsub -all -- {<()(!DOCTYPE)\s*([^>]*)>} $html $sub html
         regsub -all -- {<()(!--)(.*?)-->} $html $sub html
         regsub -all -- {<(/?)([^\s>]+)\s*([^>]*)>} $html $sub html
 
 
-        set start "${type}::TagCmd {hmstart} {} {} \{"
-        set end   "\}\n${type}::TagCmd {hmstart} {/} {} {}"
+        set start "${t} {hmstart} {} {} \{"
+        set end   "\}\n${t} {hmstart} {/} {} {}"
 
         return "$start$html$end"
     }
@@ -253,7 +254,7 @@ snit::type ::kitedocs::htmltrans {
         set trans(output)  ""
         set trans(stack) {}
 
-        $type parse $html -command [myproc Fixer]
+        $type parse $html [myproc Fixer]
 
         return $trans(output)
     }
@@ -272,12 +273,7 @@ snit::type ::kitedocs::htmltrans {
     proc Fixer {full tag slash attrs text} {
         # FIRST, Handle closing tags.
         if {$slash} {
-            # FIRST, ignore /hmstart.
-            if {$tag eq "hmstart"} {
-                return
-            }
-
-            # NEXT, close tags back to the matching open tag.
+            # FIRST, close tags back to the matching open tag.
             # If there is none, throw an error.
             set last [lpop trans(stack)]
             
@@ -290,8 +286,12 @@ snit::type ::kitedocs::htmltrans {
                 set last [lpop trans(stack)]
             }
 
-            Emit "$full"
-            Emit "$text"
+            # NEXT, don't emit /hmstart.
+            if {$tag ne "hmstart"} {
+                Emit "$full"
+                Emit "$text"
+            }
+
             return
         }
 
@@ -356,7 +356,7 @@ snit::type ::kitedocs::htmltrans {
         set trans(stack)     [list]
 
         dbg "===Start====================================="
-        $type parse $html -command [myproc Paragrapher]
+        $type parse $html [myproc Paragrapher]
 
         dbg "===End======================================="
         return $trans(output)
@@ -385,7 +385,7 @@ snit::type ::kitedocs::htmltrans {
         } elseif {$tag in {"!DOCTYPE" "!--"}} {
             CEmit $full
         } elseif {![isknown $tag]} {
-            throw {SYNTAX UNKNOWN} "Unknown HTML tag: \"$tag\""
+            throw {SYNTAX UNKNOWN} "Unknown HTML tag: \"$full\""
         } else {
             ParaTag $full $tag $slash $attrs
         }
@@ -480,7 +480,7 @@ snit::type ::kitedocs::htmltrans {
                 # else to do.
 
                 if {[isprose $tag]} {
-                    throw SYNTAX 
+                    throw {SYNTAX MISPLACED} \
                         "Prose tag in structural context: $full in <[Start]>"
                 }
 
@@ -507,7 +507,7 @@ snit::type ::kitedocs::htmltrans {
                     return
                 }
 
-                throw SYNTAX \
+                throw {SYNTAX MISPLACED} \
                     "Non-prose tag in text-only context: $full in <[Start]>"
                 return
             }
