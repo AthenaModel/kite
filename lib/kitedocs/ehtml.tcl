@@ -69,6 +69,10 @@ snit::type ::kitedocs::ehtml {
             margin-top: 0; 
         }
         
+        ul.itemlist {
+            padding-left: 0;
+            list-style-type: none;
+        }
 
         /*--------------------------------------------------
          * Table Formatting Classes
@@ -531,29 +535,29 @@ snit::type ::kitedocs::ehtml {
 
             # TBD: Should probably be a <ul> with a special class
             # to eliminate the bullet and the indent.
-            set out "<p>\n"
+            set out "<ul class=\"itemlist\">\n"
 
             foreach tag $items {
                 set id [textToID $tag]
                 append out \
-                    "<tt><a href=\"#$id\">" \
+                    "<li><tt><a href=\"#$id\">" \
                     [dict get $trans(itemText) $tag] \
-                    "</a></tt><br>\n"
+                    "</a></tt></li>\n"
 
                 if {![dict exists $trans(optsFor) $tag]} {
                     continue
                 }
-                
+
                 foreach opt [dict get $trans(optsFor) $tag] {
                     append out \
-                        "&nbsp;&nbsp;&nbsp;&nbsp;" \
+                        "<li>&nbsp;&nbsp;&nbsp;&nbsp;" \
                         "<tt><a href=\"#$tag$opt\">" \
                         [dict get $trans(optText) $tag$opt] \
-                        "</a></tt><br>\n"
+                        "</a></tt></li>\n"
                 }
             }
 
-            append out "</p>"
+            append out "</ul>\n"
 
             return $out
         }
