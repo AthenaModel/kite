@@ -127,17 +127,24 @@ tool define test {
         if {$module eq ""} {
             set module "all_tests"
         }
-        set testfile [file join $testdir $module.test]
+
+        # NEXT if module is specified and does not have ".test" extension, 
+        # add it.
+        if {[file extension $module] ne ".test"} {
+            set module $module.test
+        }
+
+        set testfile [file join $testdir $module]
 
         if {![file isfile $testfile]} {
-            if {$module eq "all_tests"} {
+            if {$module eq "all_tests.test"} {
                 puts [normalize "
                     WARNING: skipping test directory \"$target\": 
                     no \"all_tests.test\" file.
                 "]
                 return
             } else {
-                throw FATAL "Cannot find \"$module.test\"."
+                throw FATAL "Cannot find \"$module\"."
             }
         }
 
