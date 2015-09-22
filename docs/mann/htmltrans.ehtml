@@ -1,0 +1,184 @@
+<manpage {kitedocs(n) htmltrans(n)} "HTML Transformation Tool">
+
+<section SYNOPSIS>
+
+<pre>
+package require kitedocs <version>
+namespace import ::kitedocs::*
+</pre>
+
+<itemlist>
+
+<section DESCRIPTION>
+
+htmltrans(n) is a tool for parsing and transforming HTML text.  The intent 
+of this toolkit is to allow Kite's documentation tools to produce reasonably
+correct HTML from more relaxed input.  In particular, htmltrans(n) can 
+properly close HTML tags and infer paragraph breaks from blank lines in
+the appropriate context.<p>
+
+<subsection "The Parser">
+
+htmltrans(n)'s parser is extremely simple and forgiving; it will break
+anything that is remotely HTML-like up into tags and text.  It understands
+four kinds of things in the input:<p>
+
+<deflist things>
+<def {HTML-like Tags}>
+
+An HTML-like tag is a string consisting of:
+
+<ul>
+<li> A left angle bracket: "<b &lt;>"
+<li> Optionally, a slash character: "<b />"
+<li> The tag name: one or more non-whitespace characters other than "<b &gt;>"
+<li> Optionally, one or more whitespace characters
+<li> Optionally, the attribute data: <i any> mix of
+     characters other than "<b &gt;>"
+<li> A right angle bracket: "<b &gt;>"
+</ul>
+
+The parser does not validate tag names.<p>
+
+<def {HTML Comments}>
+
+An HTML comment is a string consisting of:
+
+<ul>
+<li> A comment-beginning token: "<b &lt!-->"
+<li> The comment text: any text not including the comment-ending token, "<b --&gt;>"
+<li> A comment-ending token: "<b --&gt;>"
+</ul>
+
+<def {!DOCTYPE Declarations}>
+Document-type declarations are handled just like regular HTML tags.
+
+<def {Document text}>
+
+Any text not forming part of one of the above elements is considered to
+be document text.
+
+</deflist things>
+
+The basic philosophy of the parser is that the input consists of HTML tags
+and the text in-between them.  Therefore, it breaks the input up into a
+list of individual tags with the text immediately following each, and 
+calls the user's command once for each.
+
+Because there can be text before
+the first tag, parsing begins with a pseudo-tag, <tag hmstart>, which is
+injected at the beginning of the input; any text before the first
+actual tag is associated with <tag hmstart>.  Similarly, parsing ends with
+the closing pseudo-tag <tag /hmstart>, which is injected at the end 
+of the input.
+
+
+<section COMMANDS>
+
+htmltrans(n) provides the following commands:<p>
+
+<deflist commands>
+
+<defitem {htmltrans fix} {htmltrans fix <i html>}>
+
+This command does basic lint checking and closes HTML elements for which
+the closing tag was omitted.  On success, it returns the modified HTML;
+on error, it throws <b SYNTAX> with an appropriate error message.
+In particular,<p>
+
+<ul>
+<li> HTML tags known not to take a closing tag are simply passed through.
+<li> When a closing tag is seen, open elements are closed until the
+     tag's opening tag is found.
+<li> List item and list-item-like tags (e.g., <tag li>, <tag dt>,
+     <tag dd>, <tag tr>, <tag th>, and <tag th>)
+     will automatically close open siblings.
+<li> The input's <tag !DOCTYPE> and HTML comments (if any) are preserved.
+</ul> 
+
+This command is extremely forgiving; it insists that end tags have 
+start tags and that the list item tags listed above appear in the 
+proper container elements.  It does not otherwise validate the tag names 
+or the attribute syntax, and it works equally well on full HTML pages
+and short snippets.<p>
+
+<defitem {htmltrans para} {htmltrans para <i html>}>
+
+This command adds paragraph tags (<tag p>...<tag /p>) to the input
+based on blank lines and the structure of the document, and returns
+the result.  This allows documentation to be written in a more natural 
+and less verbose style; the <tag p>...<tag /p> tags can generally be
+omitted by the author, and have them inserted automatically.<p>
+
+The input must consist of properly closed elements with valid HTML tag 
+names; tag names are supported for all standard versions of HTML 
+(not XHTML) up through HTML5.  However, it can be used with both 
+full pages and snippets.<p>
+
+In particular:<p>
+
+<ul>
+<li> In block contexts, e.g., in <tag body>, <tag div>, and so forth,
+     all blocks of text that aren't otherwise enclosed will be enclosed in
+     <tag p>...<tag /p> tags.  Blank lines terminate paragraphs.
+
+<li> In contexts like <tag li>...<tag /li>, where the input might be a 
+     single paragraph simply enclosed in the tags, the <tag p>...<tag /p>
+     tags are inserted only if the block contains multiple paragraphs or
+     other complex entities.
+</ul>
+
+Details of the algorithm can be found in the file <tt htmltrans.md> in 
+the source code.<p>
+
+<defitem {htmltrans parse} {htmltrans parse <i html command>}>
+
+This command parses the <i html> input, calling the <i command> for
+each tag and the text immediately following it.  The command is a 
+prefix to which five additional arguments will be added:<p>
+
+<ul>
+<li> The complete tag, with attributes and angle brackets.
+
+<li> The tag name, minus any slash.  This will be "!DOCTYPE" for the
+     <tag !DOCTYPE> directive, and "!--" for comments.
+
+<li> A boolean flag, 1 if the tag is a closing tag and 0 otherwise.
+
+<li> The unparsed attribute text.  The tag is broken up into a name,
+     some whitespace, and then the attribute text which runs up to the
+     closing "&gt;".
+
+<li> The text immediately following the tag's closing angle bracket, up 
+     until the opening angle bracket of the next tag.
+</ul>
+
+The command is called for pseudotag "hmstart" before the beginning
+of the real input and for "/hmstart" after; this allows the 
+command to do special things at the beginning and end of the input.<p>
+
+In addition to normal tags, the command also handles the 
+<tag !DOCTYPE> directive and HTML comments; in the latter case,
+the "attrs" argument will contain the comment text.<p>
+
+Returns the empty string; it is up to the command to save 
+the text for later use.<p>
+
+</deflist commands>
+
+<section AUTHOR>
+
+Will Duquette<p>
+
+<section HISTORY>
+
+Original package; the parser mechanism was inspired by the Tcllib module
+htmlparse(n).<p>
+
+</manpage>
+
+
+
+
+
+
