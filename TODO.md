@@ -13,9 +13,32 @@
         the "</dd>" should really be included by ehtml(n).
       * Can we use the expander stack to handle this, and only include
         the description if there is one?
+        * Yes, but it's trickier than it looks.
+          * If a macro pushes an expander context, it pushes it for the
+            macro's entire result...which is a problem, because we want
+            to emit the `<dt>...</dt>`, and then push an empty context.
+          * On `<def*>`:
+            * Clear the result.
+            * If the current context is "def*", retrieve the "dt" var and
+              pop the text.
+              * Set the result to the "dt" var's value.  If the text isn't
+                whitespace or empty, add it in `<dd>...</dd>` to the result. 
+            * Push a context called "def*".  
+            * Stash the `<dt>...</dt>` as a context var "dt"
+            * Return the result.
+          * On `</deflist>`, if the current context is "def*", handle 
+            the previous item as above.
       * Otherwise, we really need to let the macro indicate that there's
         no item following; it shouldn't be up to htmltrans(n) to unilaterally
         remove the empty item.
+        * defitem-, def-, defopt-?
+      * Related problem: sometimes we have two syntaxes for a single command,
+        and use a pair of defitems to cover it.  But they have the same 
+        command name, and hence the same link, and we save only one link
+        text.  So the same link text appears twice in the synopsis.
+      * Should I be looking for a better syntax to handle this use case?
+    * Need to move formatting from HTML to CSS.  E.g., emit "class=" attributes
+      instead of `<tt>` and `<b>` tags.
 
 ## Old Notes
 
