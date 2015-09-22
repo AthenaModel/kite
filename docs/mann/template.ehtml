@@ -14,16 +14,16 @@ namespace import ::kiteutils::*
 The template(n) package contains a number of routines for the creation
 and use of text templates.  A template is a Tcl command that, given
 zero or more arguments, returns text based on the arguments and a
-template string which references the arguments.<p>
+template string which references the arguments.
 
 In addition, template(n) defines a Snit macro allowing Snit
 methods, typemethods, and procs to be templates, simply by
 prefixing the method, typemethod, or proc with the word
-"template".<p>
+"template".
 
 <section COMMANDS>
 
-template(n) provides the following commands:<p>
+template(n) provides the following commands:
 
 <deflist>
 
@@ -32,7 +32,7 @@ template(n) provides the following commands:<p>
 By default, substitutes variables, commands, and backslashes into
 <i>tstring</i> in the caller's context, returning the result, just as the
 standard Tcl command <code>subst</code> does.  If the first
-non-whitespace token in <i>tstring</i> is<p>
+non-whitespace token in <i>tstring</i> is
 
 <pre>
 |<lb>--
@@ -42,7 +42,7 @@ then the position of the "|" character defines the left margin.  All
 whitespace in <i>tstring</i> to the left of the "|" is deleted before the
 template is expanded.  In addition, the line on which the token
 appears is also deleted, along with all whitespace before it.  For
-example,<p>
+example,
 
 <pre>
 set name "Joe"
@@ -51,13 +51,13 @@ puts [tsubst {
              $name}]
 </pre>
 
-will output the string<p>
+will output the string
 
 <pre>
 "....Joe"
 </pre>
 
-(where the "." characters denote blanks).<p>
+(where the "." characters denote blanks).
 
 <defitem template {template <i>name arglist ?initbody? template</i>}>
 
@@ -66,23 +66,23 @@ the name and argument list of the new command, just as when using
 <code>proc</code>.  If specified, <i>initbody</i> is a body of Tcl
 code which will be executed before the <i>template</i> is expanded;
 it's usually used to define local variables which will then appear in
-the <i>template</i> string.<p>
+the <i>template</i> string.
 
 Finally, <i>template</i> is a text template string which may contain
-embedded variables and commands.  For example,<p>
+embedded variables and commands.  For example,
 
 <pre>
 template greeting {first last} {Hi, $first $last!}
 </pre>
 
 This statement defines a new Tcl command, <code>greeting</code>, that
-takes two arguments, <i>first</i> and <i>last</i>.  Then,<p>
+takes two arguments, <i>first</i> and <i>last</i>.  Then,
 
 <pre>
 puts [greeting John Doe]
 </pre>
 
-will write<p>
+will write
 
 <pre>
 Hi, John Doe!
@@ -90,7 +90,7 @@ Hi, John Doe!
 
 to standard output.  The template string might also contain commands.
 Suppose the <code>pget</code> command returns information about a
-person from a data base given a record ID:<p>
+person from a data base given a record ID:
 
 <pre>
 template greeting {id} {Hi, [pget $id first] [pget $id last]!}
@@ -98,7 +98,7 @@ template greeting {id} {Hi, [pget $id first] [pget $id last]!}
 
 If desired, the <i>initbody</i> can be used to precompute values for 
 substitution into the template.  For example, the following 
-template definition does the same thing as the previous one:<p>
+template definition does the same thing as the previous one:
 
 <pre>
 template greeting {id} {
@@ -108,7 +108,7 @@ template greeting {id} {
 </pre>
 
 Any literal "$", "[", or "]" characters in the <i>template</i> string
-must be escaped with a "\":<p>
+must be escaped with a "\":
 
 <pre>
 template showprice {price} {This wonderful widget costs \$$price!}
@@ -116,10 +116,10 @@ template showprice {price} {This wonderful widget costs \$$price!}
 
 The <i>template</i> string may reference template arguments, local
 variables defined in the <i>initbody</i>, and global variables provided
-that they are declared in the <i>initbody</i> or are fully qualified.<p>
+that they are declared in the <i>initbody</i> or are fully qualified.
 
 The <i>template</i> string is processed by <iref tsubst>, so it
-may contain the "<tt>|<lb>--</tt>" indent marker.<p>
+may contain the "<tt>|<lb>--</tt>" indent marker.
 
 <defitem tforeach {tforeach <i>vars items ?initbody? template</i>}>
 
@@ -131,10 +131,10 @@ expansions are returned.  <i>vars</i> is a list of one or more
 variable names and <i>items</i> is a list of items, as for
 <code>foreach</code>.  If provided, <i>initbody</i> contains Tcl code
 which is called before each substitution; it is usually used to
-initialize variables used in the template.<p>
+initialize variables used in the template.
 
 For example, suppose that <code>aget</code> returns information about an
-assembly given its ID:<p>
+assembly given its ID:
 
 <pre>
 template assembly {id} {
@@ -144,7 +144,7 @@ template assembly {id} {
 </pre>
 
 The <iref tforeach> command is used to format a line for each
-component.<p>
+component.
 
 <defitem tif {tif <i>condition thenbody</i> ?else <i>elsebody</i>?}>
 
@@ -155,20 +155,20 @@ definitions.  <i>condition</i> is a logical expression, as for the
 present) are template strings.  If <i>condition</i> is true, the
 <i>thenbody</i> is expanded and returned using
 <iref tsubst>;
-otherwise, the <i>elsebody</i> (if present) is expanded and returned.<p>
+otherwise, the <i>elsebody</i> (if present) is expanded and returned.
 
 <defitem swallow {swallow <i>body</i>}>
 
 In Tcl, most commands return a value.  Sometimes in a template
 definition it's desirable to call a command for its side-effects,
 rather than its return value, which should be ignored.  For example, 
-the Tcl command<p>
+the Tcl command
 
 <pre>
 set a 5
 </pre>
 
-will ordinarily return "5".  On the other hand,<p>
+will ordinarily return "5".  On the other hand,
 
 <pre>
 swallow {set a 5}
@@ -177,7 +177,7 @@ swallow {set a 5}
 has the same effect of assigning 5 to the variable <code>a</code>, but
 it always returns the empty string.
 
-<code>swallow</code>'s body may contain any number of Tcl commands.<p>
+<code>swallow</code>'s body may contain any number of Tcl commands.
 
 </deflist>
 
@@ -191,7 +191,7 @@ library directory.
 
 <section AUTHOR>
 
-Will Duquette<p>
+Will Duquette
 
 <section HISTORY>
 

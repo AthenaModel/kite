@@ -15,10 +15,10 @@ os(n) provides an OS abstraction layer for Kite and other projects.
 The layer is not concerned with the architectural details of the
 OS (e.g., 32 vs. 64 bit), but with the details of interacting with
 the OS, e.g., file locations, file naming conventions, and
-ways to make things happen.<p>
+ways to make things happen.
 
 In particular, os(n) defines a number of "flavors" that represent distinct
-OS-interaction patterns: <b linux>, <b osx>, and <b windows>.<p>
+OS-interaction patterns: <b linux>, <b osx>, and <b windows>.
 
 
 <section COMMANDS>
@@ -29,47 +29,47 @@ OS-interaction patterns: <b linux>, <b osx>, and <b windows>.<p>
 
 Returns the name of an OS-specific root directory for creating application 
 data directories (e.g., for preference files), or "" if there is no 
-specific place.<p>
+specific place.
 
 How to use this information is up to the application's developer.   On
 Windows, for example, it's customary to create an organization
 subdirectory, and then within that the application's own data subdirectory.
 On Linux, it's customary to simply create an application-specific "dot
-file" or  "dot directory" in the user's home directory.<p>
+file" or  "dot directory" in the user's home directory.
 
 <defitem "os exefile" {os exefile <i name>}>
 
-Adds ".exe" to the name of an executable file on those platforms that require it.<p>
+Adds ".exe" to the name of an executable file on those platforms that require it.
 
 <defitem "os flavor" {os flavor}>
 
 Returns the "flavor" of the operating system, one of
 <b linux>, <b osx>, or <b windows>, which is specific enough for most of
 Kite's needs.  (To find the actual architecture, use 
-<b>platform::identify</b> in the standard platform(n) package.)<p>
+<b>platform::identify</b> in the standard platform(n) package.)
 
 <defitem "os flavors" {os flavors}>
 
-Returns a list of the flavors recognized by os(n).<p>
+Returns a list of the flavors recognized by os(n).
 
 <defitem "os name" {os name}>
 
-Returns a prettier version of the flavor, e.g., "Windows".<p>
+Returns a prettier version of the flavor, e.g., "Windows".
 
 <defitem "os pathfind" {os pathfind <i name>}>
 
 Looks for the named executable on the user's <b PATH>, returning
-the normalized path on success and "" on failure.<p>
+the normalized path on success and "" on failure.
 
 </deflist>
 
 <section ENVIRONMENT>
 
-Requires Tcl 8.6 or later.<p>
+Requires Tcl 8.6 or later.
 
 <section AUTHOR>
 
-Will Duquette<p>
+Will Duquette
 
 </manpage>
 

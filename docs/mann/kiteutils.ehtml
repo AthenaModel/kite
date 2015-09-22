@@ -12,22 +12,22 @@ namespace import ::kiteutils::*
 <section DESCRIPTION>
 
 kiteutils(n) is a package of low-level infrastructure code of various
-kinds, for use by Kite and other projects.<p>
+kinds, for use by Kite and other projects.
 
 
 <section ENVIRONMENT>
 
-Requires Tcl 8.6 or later.<p>
+Requires Tcl 8.6 or later.
 
 <section AUTHORS>
 
-Will Duquette<p>
+Will Duquette
 
 <section HISTORY>
 
 Portions of this package were originally written for JNEM as util(n),
 then migrated to Mars in September 2008 as marsutil(n), and then
-on to Kite in July 2014.<p>
+on to Kite in July 2014.
 
 </manpage>
 

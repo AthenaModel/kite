@@ -11,7 +11,7 @@ namespace import ::kiteutils::*
 
 <section DESCRIPTION>
 
-listx(n) contains a set of list-manipulation commands.<p>
+listx(n) contains a set of list-manipulation commands.
 
 <section COMMANDS>
 
@@ -20,76 +20,76 @@ listx(n) contains a set of list-manipulation commands.<p>
 <defitem got {got <i>list</i>}>
 
 Returns 1 if the <i>list</i> has at least one element, and 0 if it is
-empty.<p>
+empty.
 
 <defitem ladd {ladd <i>listvar value</i>}>
 
 Appends <i>value</i> to the list stored in <i>listvar</i>, only if it
 isn't already there.  Updates <i>listvar</i> accordingly, and
-returns the (possibly updated) list.<p>
+returns the (possibly updated) list.
 
 <defitem ldelete {ldelete <i>listvar value</i>}>
 
 Removes <i>value</i> from the list stored in <i>listvar</i> if it
 is there.  Updates <i>listvar</i> accordingly, and
-returns the (possibly updated) list.<p>
+returns the (possibly updated) list.
 
 <defitem lmaxlen {lmaxlen <i>list</i>}>
 
-Returns the length of the longest string in the <i>list</i>.<p>
+Returns the length of the longest string in the <i>list</i>.
 
 <defitem lmerge {lmerge <i>listvar list</i>}>
 
 Merges the elements of <i>list</i> into the list contained in
 variable <i>listvar</i>.  The order of the resulting list is
 arbitrary, but it will contain each unique element of <i>list</i> at
-most once (unless the list in <i>listvar</i> already had duplicates).<p>
+most once (unless the list in <i>listvar</i> already had duplicates).
 
 <defitem lpop {lpop <i stackvar>}>
 
 Pops and returns the top item from a stack represented as a Tcl list.  The
 top item in the stack is the item at the end of the list.  Afterwards,
 the <i stackvar> will contain the new stack.  Returns the empty string if
-the stack is empty.<p>
+the stack is empty.
 
 <defitem lpush {lpush <i stackvar item>}>
 
 Pushes one new item onto the top of the stack stored in <i stackvar>.  The
 stack is represented as a Tcl list; the top of the stack is the final item
 in the list, and so this command is equivalent to <tt lappend>.  Returns
-the new stack.<p>
+the new stack.
 
 <defitem lshift {lshift <i>listvar</i>}>
 
 Given the name of a variable containing a list, removes the first
 element from the list and returns it, updating the variable.
-Effectively it pops the first element from the list.<p>
+Effectively it pops the first element from the list.
 
 <defitem ltop {ltop <i stack>}>
 
 Returns the top item from the <i stack>, which is a stack represented as
 a Tcl list.  The top item is the final item in the list.  Returns the empty
-string if the stack is empty.<p>
+string if the stack is empty.
 
 <defitem lzipper {lzipper <i alist> ?<i blist>?}>
 
 Returns a list formed by interleaving the elements of the two lists
 <i alist> and <i blist>.  If one list is longer than the other, it is 
 padded with empty items; and if <i blist> is omitted, it's assumed to
-be empty.<p>
+be empty.
 
 Note that calling <iref lzipper> with one argument is a good way to
-create a dictionary with given keys and empty values.<p> 
+create a dictionary with given keys and empty values. 
 
 </deflist>
 
 <section ENVIRONMENT>
 
-Requires Tcl 8.6 or later.<p>
+Requires Tcl 8.6 or later.
 
 <section AUTHORS>
 
-Will Duquette<p>
+Will Duquette
 
 </manpage>
 

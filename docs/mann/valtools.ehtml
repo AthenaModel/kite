@@ -11,7 +11,7 @@ namespace import ::kiteutils::*
 
 <section DESCRIPTION>
 
-valtools(n) contains commands to aid in the validation of user input.<p>
+valtools(n) contains commands to aid in the validation of user input.
 
 <section COMMANDS>
 
@@ -22,20 +22,20 @@ valtools(n) contains commands to aid in the validation of user input.<p>
 Prepares the content of variable <i varname> for further validation.
 First, the content is trimmed of leading and trailing whitespace.  Then,
 the options are applied in order.  Some options transform the value; others
-can begin to validate it.  The latter throw <b INVALID> on error.<p>
+can begin to validate it.  The latter throw <b INVALID> on error.
 
-The options are as follows:<p>
+The options are as follows:
 
 <deflist options>
 
 <defopt {-tolower}>
-The variable's value is converted to lower case.<p>
+The variable's value is converted to lower case.
 
 <defopt {-toupper}>
-The variable's value is converted to upper case.<p>
+The variable's value is converted to upper case.
 
 <defopt {-required}>
-Throws <b INVALID> if the value is the empty string.<p>
+Throws <b INVALID> if the value is the empty string.
 
 </deflist options>
 
@@ -43,11 +43,11 @@ Throws <b INVALID> if the value is the empty string.<p>
 
 <section ENVIRONMENT>
 
-Requires Tcl 8.6 or later.<p>
+Requires Tcl 8.6 or later.
 
 <section AUTHORS>
 
-Will Duquette<p>
+Will Duquette
 
 </manpage>
 

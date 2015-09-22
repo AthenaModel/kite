@@ -406,7 +406,10 @@ snit::type ::kitedocs::htmltrans {
                 # the start tag.  The context has been closed, so
                 # pop it off the stack.
                 if {$slash} {
-                    assert {$tag eq [Start]}
+                    if {$tag ne [Start]} {
+                        throw {SYNTAX MISPLACED} \
+                            "Unclosed <[Start]> in $full"
+                    }
                     CPop
                     return
                 }

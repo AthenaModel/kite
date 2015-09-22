@@ -11,25 +11,25 @@ documents.  It is an "Extended HTML" format, i.e., it extends HTML
 with embedded macros.  It is similar to <xref manpage(5)>, but is
 used for arbitrary documents, with section number, tables of contents,
 and so forth. The basic syntax and capabilities of
-Extended HTML are defined in the <xref ehtml(5)> man page.<p>
+Extended HTML are defined in the <xref ehtml(5)> man page.
 
 <xref kitedoc(n)> translates kitedoc(5) files into standard HTML
-files.<p>
+files.
 
 kitedoc(5) documents can contain automatically numbered and linked
 tables, figures, and sections; sections can be nested arbitrarily
 deeply, and the table of contents and lists of figures and tables can
-be generated automatically.<p>
+be generated automatically.
 
 <section "DOCUMENT STRUCTURE">
 
 kitedoc(5) can be used to write any kind of document that can be
 represented in HTML.  If you wish to use kitedoc(5)'s automatic
 numbering and table-of-contents generation, your document will
-typically look like this:<p>
+typically look like this:
 
 <ul>
-  <li> The <itag document></tt> header.
+  <li> The <itag document> header.
   <li> A list of change entries.
   <li> A table of <itag contents>.
   <li> Lists of <itag figures> and <itag tables>.
@@ -40,10 +40,10 @@ typically look like this:<p>
   <li> Numbered sections may contain <itag table>s and
        <itag figure>s.
   <li> The <tag /document> footer.
-</ul><p>
+</ul>
 
 All of these features are optional; in particular, there's no need to
-have a list of figures or tables unless you have figures or tables.<p>
+have a list of figures or tables unless you have figures or tables.
 
 <section "IDENTIFIERS">
 
@@ -55,27 +55,27 @@ table has a unique identifier.
 kitedoc(5) allows you to define automatically-numbered sections and
 subsections.  Each section and subsection has an ID that uniquely
 identifies it; the ID also indicates how the section relates to its
-neighbors.<p>
+neighbors.
 
 The ID for a top-level section (e.g., Section 1, Section 2, etc.) must
-be a single word containing no whitespace or punctuation.<p>
+be a single word containing no whitespace or punctuation.
 
 The ID for a subsection is "<i>parentId</i>.<i>name</i>" where
 <i>parentId</i> is the parent's ID and <i>name</i> is a single word
-containing no whitespace or punctuation.<p>
+containing no whitespace or punctuation.
 
 For example, a document might have an introductory section which contains
 two subsections: nomenclature to be used in the document, and a list
 of references.  In the final document, we wish these sections to be
-numbered and titled as follows:<p>
+numbered and titled as follows:
 
 <ul>
   <li> 1. Introduction</li>
   <li> 1.1 Conventions used in this document</li>
   <li> 1.2 References</li>
-</ul><p>
+</ul>
 
-In the kitedoc(5) input, the section headers are written as follows:<p>
+In the kitedoc(5) input, the section headers are written as follows:
 
 <example>
 <tag section {intro "Introduction"}>
@@ -87,13 +87,13 @@ In essence, each component of the numeric section number is replaced
 by a short word. You may nest sections six levels deep, but
 the normal constraints apply; for example, you can't add a section two
 levels below its parent, and the order of sections in the input needs
-to match the numeric order in the output.<p>
+to match the numeric order in the output.
 
 <subsection "Figure and Table Identifiers">
 
 Figure and table identifiers look like <code>fig.<i>name</i></code> and
 <code>tab.<i>name</i></code>.  The prefix ensures that they won't be
-confused with section IDs.<p>
+confused with section IDs.
 
 <subsection "Cross-References">
 
@@ -102,7 +102,7 @@ macro.  Every section, table, and figure ID is an
 <xref ehtml(5) xref> cross-reference ID.  Documents can also link
 to the project's man pages, and to other project documents using
 a file path relative to the <xref kitedoc(n)> <tt -docroot>.  Links
-to other projects are possible as well; see <xref ehtml(5)>.<p>
+to other projects are possible as well; see <xref ehtml(5)>.
 
 <section MACROS>
 
@@ -110,7 +110,7 @@ kitedoc(5) man pages may use the following macros, as well as all
 commands defined in the <xref ehtml(5)> man page.  Note
 that these macros are simply Tcl commands;  you can define
 your own macros, as described in <xref ehtml(5)>,
-and use them in your documents.<p>
+and use them in your documents.
 
 <deflist macros>
 
@@ -118,26 +118,26 @@ and use them in your documents.<p>
 
 Returns the banner for the top of the page.  The banner consists of
 the project name, version, and description, as provided to 
-<xref kitedoc(n)>'s <xref kitedoc(n) format> subcommand.<p>
+<xref kitedoc(n)>'s <xref kitedoc(n) format> subcommand.
 
 It should rarely be necessary to use this macro directly, as it is
-included automatically by <itag document>.<p>
+included automatically by <itag document>.
 
 <defitem contents {<tag contents>}>
 
 This macro is replaced with a complete table of contents;
 the table of contents is automatically followed by lists of tables 
-and figures if any tables and figures were defined.<p>
+and figures if any tables and figures were defined.
 
 <defitem description {<tag description>}>
 
 Returns the description for the current project, as passed to
-<xref kitedoc(n)>.<p>
+<xref kitedoc(n)>.
 
 <defitem document {<tag document "<i title>">...<tag /document>}>
 
 These macros begin and end the document, and format the HTML header
-and footer, include the document's title and style sheet.<p>
+and footer, include the document's title and style sheet.
 
 <defitem figure {<tag figure {<i>id title filename</i>}>}>
 
@@ -146,118 +146,118 @@ Adds a figure to the document.  The figure is identified by
 the <i>title</i> will be included in the caption.  The figure itself
 is an image file called <i>filename</i>; the file must reside in the
 same directory as the generated HTML file, and must be a format
-recognized by the browser (e.g., GIF, PNG, or JPEG).<p>
+recognized by the browser (e.g., GIF, PNG, or JPEG).
 
 Figures will be auto-numbered, and included in the list of
-<itag figures>.<p>
+<itag figures>.
 
 <defitem figures {<tag figures>}>
 
 This macro will be replaced by a list of the figures found in the
 document.  Note that it is rarely necessary to use this macro
 explicitly, because the table of <itag contents> will include it
-automatically if there are any figures in the document.<p>
+automatically if there are any figures in the document.
 
 
 <defitem poc {<tag poc>}>
 
 Returns the <xref kitedoc(n)> point-of-contact e-mail address
-as a "mailto" link.<p>
+as a "mailto" link.
 
 <defitem preface {<tag preface {<i>id title</i>}>}>
 
 Adds an unnumbered section header to the document; it is uniquely
-identifed by <i>id</i>, and has the specified <i>title</i>:<p>
+identifed by <i>id</i>, and has the specified <i>title</i>:
 
 <example>
 <tag preface {foreword "Author's Foreword"}>
 </example>
 
 Unnumbered sections may not have subsections; hence, the <i>id</i> may
-not contain any periods.<p>
+not contain any periods.
 
 Unnumbered sections may appear anywhere in the document, but really
-shouldn't be used anyway but the beginning or the end.<p>
+shouldn't be used anyway but the beginning or the end.
 
 <defitem project {<tag project>}>
 
 Returns the short name for the current project, as passed to
-<xref kitedoc(n)>.<p>
+<xref kitedoc(n)>.
 
 <defitem section {<tag section {<i>id title</i>}>}>
 
 Adds a numbered section header to the document; the section has the
 specified <i>id</i> and <i>title</i>.  See
 <xref "Section Identifiers"> for a discussion of how to choose
-the <i>id</i>.<p>
+the <i>id</i>.
 
 <defitem sectioncontents {<tag sectioncontents {<i>id</i>}>}>
 
 Returns a table of contents for section <i>id</i>, that is, a list of
-its subsections, with links.<p>
+its subsections, with links.
 
 <defitem standardstyle {<tag standardstyle>}>
 
 Returns the standard list of CSS styles, for inclusion in the HTML 
-header.<p>
+header.
 
 It should rarely be necessary to use this macro directly, as it is
-included automatically by <itag document>.<p>
+included automatically by <itag document>.
 
 
 <defitem table {<tag table {<i>id title</i>}>...<tag /table>}>
 
 Contains and captions a table object.  The table <i>id</i>
 must have the form <code>tab.<i>name</i></code>, while the title is
-arbitrary.<p>
+arbitrary.
 
 Tables will be auto-numbered, and included in the list of
-<itag tables>.<p>
+<itag tables>.
 
 <defitem textfigure {<tag textfigure {<i>id title</i>}>}>
 
 Adds a "text figure" to the document, i.e., a figure consisting of
 an <xref ehtml(5)> <tag example> or <tag listing> rather than an image 
 file.  The relevant <tag example> or <tag listing> should follow immediately
-after the <tag textfigure> tag.<p>
+after the <tag textfigure> tag.
 
 The figure is identified by
 <i>id</i>, which must have the form <code>fig.<i>name</i></code>;
-the <i>title</i> will be included in the caption.<p>
+the <i>title</i> will be included in the caption.
 
 Text figures will be auto-numbered, and included in the list of
-<itag figures>.<p>
+<itag figures>.
 
 <defitem th {<tag th>...<tag /th>}>
 
-Brackets a "pretty" table header.<p>
+Brackets a "pretty" table header.
 
 <defitem td {<tag td>...<tag /td>}>
 
-Brackets a "pretty" table row.<p>
+Brackets a "pretty" table row.
 
 <defitem tables {<tag tables>}>
 
 This macro will be replaced by a list of the tables found in the
 document.  Note that it is rarely necessary to use this macro
 explicitly, because the table of <itag contents> will include it
-automatically if there are any tables in the document.<p>
+automatically if there are any tables in the document.
 
 <defitem version {<tag version>}>
 
 Returns the version number for the current project, as passed to
-<xref kitedoc(n)>.<p>
+<xref kitedoc(n)>.
 
 </deflist>
 
 <section AUTHOR>
 
-Will Duquette<p>
+Will Duquette
 
 <section HISTORY>
 
 Originally written for JNEM as jnem_doc(5); migrated to Mars in
-September 2008, and moved to Kite in July 2014.<p>
+September 2008, and moved to Kite in July 2014.
 
 </manpage>
 

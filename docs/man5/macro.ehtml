@@ -10,14 +10,14 @@
 <section DESCRIPTION>
 
 This man page defines the basic macros provided by the 
-<xref macro(n)> macro processor.<p>
+<xref macro(n)> macro processor.
 
 <subsection "Basic Syntax">
 
 The body of the input text can have any desired format.  The standard
 macro expansion brackets are "<lb>" and "<rb>"; anything between these brackets
 is evaluated as a Tcl script in the macro processor's interpreter and
-its return value inserted into the output in the macro's place.<p>
+its return value inserted into the output in the macro's place.
 
 <subsection "Two-Pass Expansion">
 
@@ -26,17 +26,17 @@ their behavior based on which pass it is.  A section-header macro, for
 example, might contribute to an index on the first pass and actually
 output the header on the second.  A table-of-contents macro might do
 nothing on the first pass and output the table-of-contents on the second,
-based on the indices built up during the first pass.<p>
+based on the indices built up during the first pass.
 
 The pass number is returned by the <xref macro(n)> object's 
-<xref macro(n) pass> method, and by the <itag pass> macro.<p>
+<xref macro(n) pass> method, and by the <itag pass> macro.
 
 <section "BASIC MACROS">
 
 <xref macro(n)> defines a small number of standard macros, as follows.
 Usually, specific macro languages based on <xref macro(n)> will define
 there own.  Note that these macros are simply Tcl commands; you can define
-your own macros as described in <xref "DEFINING MACROS">.<p>
+your own macros as described in <xref "DEFINING MACROS">.
 
 <deflist macros>
 
@@ -45,18 +45,18 @@ your own macros as described in <xref "DEFINING MACROS">.<p>
 
 Performs a macro expansion on its input.  This is primarily useful for
 expanding documentation text for a module that computes its documentation
-and returns it in <xref ehtml(5)> format.<p>
+and returns it in <xref ehtml(5)> format.
 
 <defitem lb "<tag lb>">
 
 Returns the left-hand macro bracket, e.g., "<code><lb></code>".
 Formats that produce HTML will usually redefine this to product the
-appropriate HTML attribute.<p>
+appropriate HTML attribute.
 
 <defitem macro {<tag macro {<i subcommand> ?<i args...>?}>}>
 
 This macro gives access to some of macro(n)'s advanced features.  It is
-usually used within macro definitions.<p>
+usually used within macro definitions.
 
 <deflist macrosub>
 
@@ -70,15 +70,15 @@ usually used within macro definitions.<p>
 
 These macro's give access to 
 <xref textutil::expander(n)>'s context stack mechanism, which allows the
-definition of pairs of starting and ending tag macros that work together.<p>
+definition of pairs of starting and ending tag macros that work together.
 
 <defitem "macro pass" {<tag macro pass>}>
 
-Returns the pass number.<p>
+Returns the pass number.
 
 <defitem "macro warn" {<tag macro {warn <i>text</i>}>}>
 
-Outputs a warning to the console.<p>
+Outputs a warning to the console.
 
 </deflist macrosub>
 
@@ -86,46 +86,46 @@ Outputs a warning to the console.<p>
 <defitem pass "<tag pass>">
 
 <b Deprecated:> Returns the pass number.  
-Use <itag macro pass> instead.<p>
+Use <itag macro pass> instead.
 
 <defitem proc "<tag proc {<i name arglist body>}>">
 
 This is simply the normal Tcl <tt proc> command.  It can be used 
-in-line to define new macros.<p>
+in-line to define new macros.
 
 <defitem rb "<tag rb>">
 
-Returns the right-hand macro bracket, e.g., "<code><rb></code>".<p>
+Returns the right-hand macro bracket, e.g., "<code><rb></code>".
 
 <defitem swallow "<tag swallow {<i script>}>">
 
 This macro is mostly used when defining macros inline in a
 manpage.  It executes the <i script>, and returns nothing;
-because it returns nothing, it doesn't affect the output.<p>
+because it returns nothing, it doesn't affect the output.
 
-See <xref "DEFINING MACROS"> for an example.<p>
+See <xref "DEFINING MACROS"> for an example.
 
 <defitem template "<tag template {<i>name arglist</i> ?<i>initbody</i>? <i>template</i>}>">
 
 Defines a new macro using a template.  The arguments are the same as for
-<xref template(n)>'s <xref template(n) template> command.<p>
+<xref template(n)>'s <xref template(n) template> command.
 
 <defitem tforeach "<tag tforeach {<i>vars items</i> ?<i>initbody</i>? <i>template</i>}>">
 
 Substitutes in the template for each item in a list.  The semantics are the
-same as for <xref template(n)>'s <xref template(n) tforeach> command.<p>
+same as for <xref template(n)>'s <xref template(n) tforeach> command.
 
 <defitem tif "<tag tif {<i>condition thenbody</i> ?else <i>elsebody</i>?}>">
 
 Substitutes in one of two templates depending on whether a condition is
 true or false  The semantics are the
-same as for <xref template(n)>'s <xref template(n) tif> command.<p>
+same as for <xref template(n)>'s <xref template(n) tif> command.
 
 <defitem tsubst "<tag tsubst {<i>tstring</i>}>">
 
 Substitutes variables and commands into a string.  The semantics are the
 same as for 
-<xref template(n)>'s <xref template(n) tsubst> command.<p>
+<xref template(n)>'s <xref template(n) tsubst> command.
 
 </deflist macros>
 
@@ -137,10 +137,10 @@ arbitrary Tclcode.  In particular, the input can define new
 macros using the standard Tcl <tt>proc</tt> command or the
 <itag template> command.  This is sometimes done in
 conjunction with the <itag swallow> macro, to avoid including the
-output in the finished man page.<p>
+output in the finished man page.
 
 For example, here's the definition of a macro that returns a timestamp
-using Tcl's <tt>clock</tt> command:<p>
+using Tcl's <tt>clock</tt> command:
 
 <example>
 <lb>proc timestamp {} {
@@ -153,20 +153,20 @@ over its input, and so every macro will be executed <b>twice</b>.
 This is usually only a problem when a macro is accumulating data into
 a Tcl variable in the first pass so that it can be used during the
 second pass (e.g., to output an accumulated list, such as a table of
-contents).<p>
+contents).
 
 In such a case, the macro can use <xref macro(n)>'s
 <xref macro(n) pass> method or the <itag macro pass> macro 
-to find out which pass it is.<p>
+to find out which pass it is.
 
 <section AUTHOR>
 
-Will Duquette<p>
+Will Duquette
 
 <section HISTORY>
 
 Originally written for JNEM as jnem_ehtml(5); migrated to Mars in
-September 2008, and moved to Kite in July 2014.<p>
+September 2008, and moved to Kite in July 2014.
 
 
 </manpage>

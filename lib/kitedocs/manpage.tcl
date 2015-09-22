@@ -218,6 +218,8 @@ snit::type ::kitedocs::manpage {
 
             try {
                 set output [$ehtml expandfile $infile]
+                set output [htmltrans fix $output]
+                set output [htmltrans para $output]
             } on error {result} {
                 throw SYNTAX "[file tail $infile]:\n$result"
             }

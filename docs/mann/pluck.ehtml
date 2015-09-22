@@ -11,13 +11,13 @@ namespace import ::kiteutils::*
 
 <section DESCRIPTION>
 
-pluck(n) contains commands to retrieve resources from HTTP servers.<p>
+pluck(n) contains commands to retrieve resources from HTTP servers.
 
 <subsection "HTTPS URLs">
 
 To retrieve files from "https://" URLs, follow the instructions on the
 <link http://www.tcl.tk/man/tcl8.6/TclCmd/http.htm http(n)> man page.
-In particular:<p>
+In particular:
 
 <ul>
 <li> Require the "tls" package in <tt project.kite>
@@ -35,21 +35,21 @@ In particular:<p>
 <defitem "pluck file" {pluck file <i fname url>}>
 
 Attempts to retrieve the document at the <i url> and save it to disk
-as <i fname>, throwing <b NOTFOUND> on error.<p>
+as <i fname>, throwing <b NOTFOUND> on error.
 
 The <i url> may be any "http://" URL accessible from the user's host.
 If the tls(n) package is loaded and registered with the http(n) package,
-then "https://" URLs can be used as well.<p>
+then "https://" URLs can be used as well.
 
 </deflist commands>
 
 <section ENVIRONMENT>
 
-Requires Tcl 8.6 or later.<p>
+Requires Tcl 8.6 or later.
 
 <section AUTHORS>
 
-Will Duquette<p>
+Will Duquette
 
 </manpage>
 

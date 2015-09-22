@@ -49,6 +49,27 @@ snit::type ::kitedocs::ehtml {
             padding-left: 4px;
         }
 
+        dd { 
+            margin-bottom: 1em; 
+        }
+
+        ol.olp > li {
+            margin-bottom: 1em;
+        }
+
+        ul.ulp > li {
+            margin-bottom: 1em;
+        }
+
+        dt {
+            margin-bottom: 0;
+        }
+
+        dd > p:first-child { 
+            margin-top: 0; 
+        }
+        
+
         /*--------------------------------------------------
          * Table Formatting Classes
          */
@@ -388,6 +409,23 @@ snit::type ::kitedocs::ehtml {
             return "[b][tag xref $id][/b]"
         }
 
+        # NEXT, ulp/olp macros
+        $macro proc ulp {} {
+            return "<ul class=\"ulp\">"
+        }
+
+        $macro proc /ulp {} {
+            return "</ul>"
+        }
+
+        $macro proc olp {} {
+            return "<ol class=\"olp\">"
+        }
+
+        $macro proc /olp {} {
+            return "</ol>"
+        }
+
         # NEXT, define definition list macros.
         $macro proc deflist {args}  {
             variable trans
@@ -478,32 +516,47 @@ snit::type ::kitedocs::ehtml {
         }
 
 
-        $macro template itemlist {{listname *}} {
+        $macro proc itemlist {{listname *}} {
             variable trans
+
+            if {[macro pass] == 1} {
+                return
+            }
 
             set items [list]
 
-            if {[macro pass] == 2} {
-                if {[dict exists $trans(itemLists) $listname]} {
-                    set items [dict get $trans(itemLists) $listname]
+            if {[dict exists $trans(itemLists) $listname]} {
+                set items [dict get $trans(itemLists) $listname]
+            }
+
+            # TBD: Should probably be a <ul> with a special class
+            # to eliminate the bullet and the indent.
+            set out "<p>\n"
+
+            foreach tag $items {
+                set id [textToID $tag]
+                append out \
+                    "<tt><a href=\"#$id\">" \
+                    [dict get $trans(itemText) $tag] \
+                    "</a></tt><br>\n"
+
+                if {![dict exists $trans(optsFor) $tag]} {
+                    continue
+                }
+                
+                foreach opt [dict get $trans(optsFor) $tag] {
+                    append out \
+                        "&nbsp;&nbsp;&nbsp;&nbsp;" \
+                        "<tt><a href=\"#$tag$opt\">" \
+                        [dict get $trans(optText) $tag$opt] \
+                        "</a></tt><br>\n"
                 }
             }
-        } {
-            |<--
-            [tforeach tag $items {
-                |<--
-                <tt><a href="#[textToID $tag]">[dict get $trans(itemText) $tag]</a></tt><br>
-                [tif {[dict exists $trans(optsFor) $tag]} {
-                    |<--
-                    [tforeach opt [dict get $trans(optsFor) $tag] {
-                        |<--
-                        &nbsp;&nbsp;&nbsp;&nbsp;
-                        <tt><a href="#$tag$opt">[dict get $trans(optText) $tag$opt]</a></tt><br>
-                    }]
-                }]
-            }]<p>
-        }
 
+            append out "</p>"
+
+            return $out
+        }
 
         # Topic Lists
 

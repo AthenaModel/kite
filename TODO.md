@@ -2,6 +2,14 @@
 
 ## Next
 
+* htmltrans/manpage(n)
+  * ehtml(5):
+    * consecutive `defitem` macros with no description get an empty 
+      "<dd> </dd>" that causes a blank line.  We shouldn't emit it in
+      that case.
+
+## Old Notes
+
 * 'kite deps' needs to show actual versions in teapot.
 * Flesh out the test suites
 * Flesh out the KDG.

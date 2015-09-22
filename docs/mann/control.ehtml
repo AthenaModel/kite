@@ -12,7 +12,7 @@ namespace import ::kiteutils::*
 <section DESCRIPTION>
 
 control(n) contains commands the modify the flow of control in some 
-way.<p>
+way.
 
 <section COMMANDS>
 
@@ -21,17 +21,17 @@ way.<p>
 <defitem assert {assert <i>expression</i>}>
 
 <iref assert> tests an invariant Boolean <i>expression</i>.  If the
-expression is false, <iref assert> throws the following error:<p>
+expression is false, <iref assert> throws the following error:
 
-<tt>Assertion failed: <i>expression</i></tt><p>
+<tt>Assertion failed: <i>expression</i></tt>
 
-The Tcl <code>errorCode</code> variable will be set to "ASSERT".<p>
+The Tcl <code>errorCode</code> variable will be set to "ASSERT".
 
 <defitem bgcatch {bgcatch <i>script</i>}>
 
 Executes an arbitrary Tcl <i>script</i> in the caller's context.  If
 the script throws an error, the error is handled by
-<code>bgerror</code>.  <iref bgcatch> never returns a value.<p>
+<code>bgerror</code>.  <iref bgcatch> never returns a value.
 
 
 <defitem callwith {callwith <i>prefix</i> ?<i>args...</i>?}>
@@ -39,7 +39,7 @@ the script throws an error, the error is handled by
 Calls a command <i>prefix</i> with zero or more additional arguments
 in the global scope.  This is to be used when calling callback
 commands.  If <i>prefix</i> is the empty list, then <iref callwith>
-does and returns nothing.<p>
+does and returns nothing.
 
 <defitem foroption {foroption <i optvar argvar> ?-all? <i body>}>
 
@@ -47,25 +47,25 @@ The <iref foroption> command is a tool for looping over options and values
 from an argument list.  Here, <i argvar> is the name of the variable
 containing the argument list, and <i optvar> is the name of a variable
 to receive the successive option names.  The <i body> is a set of 
-Tcl <tt switch> cases, one for each valid option.<p>
+Tcl <tt switch> cases, one for each valid option.
 
 The options are extracted from the argument list using 
 <xref listx(n) lshift>.  When an option takes a value, the relevant 
-switch case can extract its value from the list in the same way.<p>
+switch case can extract its value from the list in the same way.
 
 It's an <b INVALID> error if <iref foroption> reads an option without
-a matching case.<p>  
+a matching case.  
 
 By default, <iref foroption> keeps reading options until it reaches
 the end of the argument list, or finds a list item that begins with 
 something other than "-".  In this case, the <i argvar> will contain
-the non-option arguments when <iref foroption> returns.<p>
+the non-option arguments when <iref foroption> returns.
 
 If the <b -all> option is included, 
 <iref foroption> throws an <b INVALID> error if finds an argument
-that isn't an option or an option value.<p>
+that isn't an option or an option value.
 
-For example,<p>
+For example,
 
 <example>
 proc myproc {args} {
@@ -89,17 +89,17 @@ proc myproc {args} {
 <defitem require {require <i>expression message</i>}>
 
 This is identical to <iref assert> except that error message is the
-specified <i>message</i>.<p>
+specified <i>message</i>.
 
 </deflist>
 
 <section ENVIRONMENT>
 
-Requires Tcl 8.6 or later.<p>
+Requires Tcl 8.6 or later.
 
 <section AUTHOR>
 
-Will Duquette<p>
+Will Duquette
 
 </manpage>
 

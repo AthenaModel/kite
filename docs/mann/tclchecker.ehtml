@@ -14,7 +14,7 @@ namespace import ::kiteutils::tclchecker
 tclchecker(n) defines a syntax checker for simple Tcl scripts of the
 kind run in a <xref tclchecker(n)> interpreter.  In addition, it 
 provides tools for breaking Tcl scripts into pieces, while tracking
-line numbers: individual commands, and individual words in a command.<p>
+line numbers: individual commands, and individual words in a command.
 
 <section COMMANDS>
 
@@ -29,43 +29,43 @@ and returns a flat list of line numbers and error messages.
 If <i>firstline</i> is given,
 it is taken to be the line number of the first line of the script; it
 defaults to 1.  Note that the result is <i>not</i> a dictionary; the same
-line number can appear multiple times.<p>
+line number can appear multiple times.
 
 <defitem cmdsplit {tclchecker cmdsplit <i>cmd</i> ?<i>num</i>?}>
 
 Splits a single Tcl command (as returned by <iref scriptsplit>) into 
 individual words, returning a list of two items: a list of words, and
 a list of starting line numbers for each word.  Thus, this command is
-usually used like this:<p>
+usually used like this:
 
 <pre>
 lassign [tclchecker cmdsplit $command] words nums
 </pre>
 
 If <i>num</i> is given, it's the starting line number for the command
-as a whole.<p>
+as a whole.
 
 <defitem getembedded {tclchecker getembedded <i>string</i>}>
 
 Returns a list of the interpolated commands embedded in a string.  
-<b>textutil::expander</b> does the heavy lifting.<p>
+<b>textutil::expander</b> does the heavy lifting.
 
 <defitem scriptsplit {tclchecker scriptsplit <i>script</i> ?<i>firstline</i>?}>
 
 This command splits a script into individual commands, returning
 a dictionary of commands by initial line number.  The caller can
 process the commands in sequence by iterating over the keys in 
-the dictionary.<p>
+the dictionary.
 
 If <i>firstline</i> is given, it is used as the line number of the
-first line in the script.  It defaults to 1.<p>
+first line in the script.  It defaults to 1.
 
-Multiple commands on a single line are treated as one command.<p>
+Multiple commands on a single line are treated as one command.
 
-This command does not recurse into control structure or proc bodies.<p>
+This command does not recurse into control structure or proc bodies.
 
 If the script cannot be split into commands because of an unterminated
-string, this command throws an error with error code <b>UNTERMINATED</b>.<p>
+string, this command throws an error with error code <b>UNTERMINATED</b>.
 
 </deflist instance>
 
@@ -78,7 +78,7 @@ To use this package in a Tcl script, the environment variable
 
 <section AUTHOR>
 
-Will Duquette<p>
+Will Duquette
 
 <section HISTORY>
 

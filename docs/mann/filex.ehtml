@@ -11,7 +11,7 @@ namespace import ::kiteutils::*
 
 <section DESCRIPTION>
 
-filex(n) provides utilities for working with files.<p>
+filex(n) provides utilities for working with files.
 
 <section COMMANDS>
 
@@ -21,30 +21,30 @@ filex(n) provides utilities for working with files.<p>
 
 Appends the <i content> to the file with the given <i filename>,
 being careful not to add any extraneous newlines.  Creates the file
-if it doesn't exist.<p>
+if it doesn't exist.
 
 <defitem readfile {readfile <i>filename</i>}>
 
 Opens the file with name <i>filename</i>, reads its contents, closes
 the file, and returns the contents.  Throws all of the open and read
-errors.  The file will be closed automatically on read errors.<p>
+errors.  The file will be closed automatically on read errors.
 
 <defitem writefile {writefile <i filename content> ?-ifchanged?}>
 
 Writes the <i content> to the file with the given <i filename>,
 being careful not to add any extraneous newlines.  If the 
 <b -ifchanged> flag is include, then the <i content> will be
-written only if it differs from the file's existing content.<p>
+written only if it differs from the file's existing content.
 
 </deflist>
 
 <section ENVIRONMENT>
 
-Requires Tcl 8.6 or later.<p>
+Requires Tcl 8.6 or later.
 
 <section AUTHOR>
 
-Will Duquette<p>
+Will Duquette
 
 </manpage>
 
