@@ -19,14 +19,14 @@ To retrieve files from "https://" URLs, follow the instructions on the
 <link http://www.tcl.tk/man/tcl8.6/TclCmd/http.htm http(n)> man page.
 In particular:
 
-<ul>
+<ulp>
 <li> Require the "tls" package in <tt project.kite>
 <li> <tt package require tls> in the application's <tt pkgModules.tcl>
 <li> In the main body of the application, <tt package require http>, and
       then:
 
       <pre>::http::register https 443 ::tls::socket</pre>
-</ul>
+</ulp>
 
 <section COMMANDS>
 

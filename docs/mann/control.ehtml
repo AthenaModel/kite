@@ -23,7 +23,7 @@ way.
 <iref assert> tests an invariant Boolean <i>expression</i>.  If the
 expression is false, <iref assert> throws the following error:
 
-<tt>Assertion failed: <i>expression</i></tt>
+<pre>Assertion failed: <i>expression</i></pre>
 
 The Tcl <code>errorCode</code> variable will be set to "ASSERT".
 

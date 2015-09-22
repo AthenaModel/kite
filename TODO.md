@@ -3,10 +3,19 @@
 ## Next
 
 * htmltrans/manpage(n)
-  * ehtml(5):
-    * consecutive `defitem` macros with no description get an empty 
-      "<dd> </dd>" that causes a blank line.  We shouldn't emit it in
-      that case.
+  * Add line number info to `htmltrans parse`, so that we can give better
+    error messages.
+  * ehtml(n):
+    * Consecutive `defitem` macros with no description get an empty 
+      "<dd> </dd>" that causes a blank line.  The "<dd>" is emitted 
+      automatically, and the "</dd>" is added by `htmltrans para`.
+      * Ideally, there shouldn't be any "<dd> </dd>"; and also,
+        the "</dd>" should really be included by ehtml(n).
+      * Can we use the expander stack to handle this, and only include
+        the description if there is one?
+      * Otherwise, we really need to let the macro indicate that there's
+        no item following; it shouldn't be up to htmltrans(n) to unilaterally
+        remove the empty item.
 
 ## Old Notes
 

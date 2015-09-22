@@ -24,7 +24,7 @@ the handling of standard error messages, i.e., the messages Tcl
 generates when a command has the wrong number of arguments.
 In particular,
 
-<ul>
+<ulp>
   <li> The error messages reference the command in the master
        interpreter, not its alias in the slave.  As these often are
        very different, much confusion results.
@@ -32,7 +32,7 @@ In particular,
   <li> The argument syntax Tcl generates automatically for procs
        with variable length argument lists is almost never what you
        want a user to see.
-</ul>
+</ulp>
 
 smartinterp(n) extends the standard <b>interp</b> with a range of
 subcommands for defining commands within the interpreter, and in

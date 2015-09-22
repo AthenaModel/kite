@@ -281,17 +281,6 @@ Returns the platform string to use when wrapping the library.  For pure-Tcl
 packages, this is "<tt tcl>"; for binary packages it is generally the 
 <tt platform::identify> string.
 
-<b WARNING:> There's an issue on Linux.  As of 15 September 2015, ActiveState's
-64-bit Linux basekits are built for <tt linux-glibc2.3-x86_64>.  The TDK
-program <tt tclapp> will not include binary packages compiled on a later
-version of Linux in a wrapped application.  The Athena project is currently
-using RHEL 5, which uses <tt linux-glibc2.5-x86_64>.  According to our
-sources at ActiveState, the simplest thing to do is to wrap our binary
-packages with the platform string <tt linux-glibc2.3-x86_64>; the result
-should work on Linux versions with glibc2.5 or later.  This is an ugly hack,
-and we're working to identify a better solution.  In the meantime, it lets
-us move forward.  The hack is contained in this routine.
-
 <defitem "project provide zipfile" {project provide zipfile <i lib>}>
 
 Provides the base name of the teapot .zip file Kite produces when building
