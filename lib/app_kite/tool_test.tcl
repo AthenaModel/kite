@@ -108,8 +108,8 @@ tool define test {
     # exists.  Throws an error for a non-existent test module.
 
     proc FindTarget {module} {
-        # NEXT, if there's two args, the first is the target, it'll get 
-        # error checked later
+        # FIRST, use the module to determine the target.  If the test file
+        # does not exist, an error is thrown.
         set filepath [file normalize [file join [pwd] $module]]
 
         if {![file isfile $filepath]} {
