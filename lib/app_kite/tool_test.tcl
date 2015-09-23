@@ -22,7 +22,8 @@ tool define test {
     test suite consists of a number of "targets", each of which has a
     its own test subdirectory "<root>/test/<target>".  Kite assumes that 
     the target has a top-level tcltest(n) test script called 
-    <root>/test/<target>/all_tests.test.
+    <root>/test/<target>/all_tests.test.   Individual test modules within
+    a target can be executed without specifying the target.
 
     kite test
         Executes tests for all targets, and summarizes the results.
@@ -31,16 +32,22 @@ tool define test {
     kite test <target> ?<option>...?
         Executes all tests for the named target; i.e., all tests in
         <root>/test/<target>.  Any options are passed along to tcltest(n).
+    
+    kite test <module>.test ?<option>...?
+        Executes the tests found in the named test module in the current
+        directory.
 
-    kite test <target> <module> ?<option>...?
+    kite test <target> <module>.test ?<option>...?
         Executes all tests for the given module within the given target,
-        i.e., <root>/test/<target>/<module>.test.  Any options are passed
-        along to tcltest(n).
+        i.e., <root>/test/<target>/<module>.test.  The .test extension may
+        be left off the module name.  Any options are passed along to 
+        tcltest(n).
 
     For example,
 
     $ kite test                           - Runs all tests.
     $ kite test mylib                     - Runs tests for mylib(n)
+    $ kite test mymodule.test             - Runs mymodule.test in current dir
     $ kite test mylib mymodule            - Runs mylib/mymodule.test
     $ kite test mylib -match mytest-1.*   - Runs tests matching a pattern
 } {
@@ -54,24 +61,20 @@ tool define test {
     typemethod execute {argv} {
         set target ""
         set module ""
-        set arglist [list]
-        set opts    [list]
 
-        # FIRST, separate args from options
-        foreach arg $argv {
-            if {[string match "-*" $arg]} {
-                lappend opts $arg
-            } else {
-                lappend arglist $arg
+        if {![string match "-*" [lindex $argv 0]]} {
+            set target [lshift argv]
+
+            if {[file extension $target] eq ".test"} {
+                set module $target
+                set target [FindTarget $module] 
+            } elseif {![string match "-*" [lindex $argv 0]]} {
+                set module [lshift argv]
             }
         }
 
-        # NEXT, extract target and module from arglist
-        set target [GetTarget $arglist]
-        set module [GetModule $arglist]
-
         if {$target ne ""} {
-            TestTarget -verbose $target $module $opts 
+            TestTarget -verbose $target $module $argv 
             return
         } 
 
@@ -89,7 +92,7 @@ tool define test {
             if {![file isdirectory $dir]} {
                 continue
             }
-            TestTarget -brief [file tail $dir] "" $opts 
+            TestTarget -brief [file tail $dir] "" $argv 
         }
 
         puts ""
@@ -97,98 +100,23 @@ tool define test {
         puts "or view <root>/.kite/test.log."
     }
 
-    # GetTarget arglist
+    # FindTarget module
     #
-    # arglist   - a list of target/module, possibly
+    # module  - a ".test" module 
     #
-    # This proc attempts to determine the target for the tests from the
-    # contents of the arguments.  There are three possiblities:
-    #
-    #    * Empty list   - return empty string
-    #    * One element  - if it's a test module, figure out target from it 
-    #    * Two elements - the first element is the requested target 
-    #
-    # There is no error checking, that is done later downstream by the 
-    # routine that attempts to actually perform the test. 
+    # Returns a test module's parent directory, provided that the test module
+    # exists.  Throws an error for a non-existent test module.
 
-    proc GetTarget {arglist} {
-        # FIRST, if nothing specified nothing to return
-        if {[llength $arglist] == 0} {
-            return ""
-        }
-
+    proc FindTarget {module} {
         # NEXT, if there's two args, the first is the target, it'll get 
         # error checked later
-        if {[llength $arglist] == 2} {
-            return [lindex $arglist 0]
+        set filepath [file normalize [file join [pwd] $module]]
+
+        if {![file isfile $filepath]} {
+            throw FATAL "Could not find valid test target for module: \"$module\""
         }
 
-        # NEXT, see if the arg is test target or test module
-        set name [lindex $arglist 0]
-
-        set testdir [project root test $name]
-        if {[file isdirectory $testdir]} {
-            return $name
-        }
-
-        # NEXT, if it is a test file determine the target from it's location
-        if {[file extension $name] ne ".test"} {
-            set name $name.test
-        }
-
-        # NEXT, go through test dirs in the project looking for the file
-        set testDirs [glob -nocomplain [project root test *]]
-
-        foreach dir $testDirs {
-            # Skip any stray files
-            if {![file isdirectory $dir]} {
-                continue
-            }
-
-            if {[file isfile [file join $dir $name]]} {
-                return [file tail $dir] 
-            } 
-        }
-
-        # NEXT, could not find any targets for specified module 
-        throw FATAL "Could not find valid test target for module: \"$name\""
-    }
-
-    # GetModule  arglist
-    #
-    # arglist   A list of target/module possibly
-    #
-    # This proc extracts the requested test module from a list of arguments.
-    # There are three possiblities:
-    #
-    #    * Empty list   - return empty string
-    #    * One element  - if it is a file that exists with ".test" as the
-    #                     extention, it is the module
-    #    * Two elements - it is the second element
-
-    proc GetModule {arglist} {
-        # FIRST, if nothing specified nothing to return
-        if {[llength $arglist] == 0} {
-            return ""
-        }
-
-        # NEXT, if there's two args the second is the module 
-        if {[llength $arglist] == 2} {
-            return [lindex $arglist 1]
-        }
-
-        # NEXT, the first arg may be a test module 
-        set module [lindex $arglist 0]
-
-        if {[file extension $module] ne ".test"} {
-            set module $module.test
-        }
-
-        if {[file isfile [file join [pwd] $module]]} {
-            return [lindex $arglist 0]
-        }
-
-        return ""
+        return [file tail [pwd]]
     }
 
     # TestFile
