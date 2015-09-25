@@ -268,6 +268,8 @@ snit::type ::kitedocs::kitedoc {
             puts "Formatting $outfile"
             try {
                 set output [$ehtml expandfile $infile]
+                set output [htmltrans fix $output]
+                set output [htmltrans para $output]
             } on error {result} {
                 throw SYNTAX $result
             }
@@ -744,7 +746,7 @@ snit::type ::kitedocs::kitedoc {
 
     template proc /table {} {
         |<--
-        </table></center><p>
+        </table></center>
     }
 
     #-------------------------------------------------------------------
@@ -764,8 +766,8 @@ snit::type ::kitedocs::kitedoc {
             return
         }
     } {
-        <p><a name="$id" href="#toc.$id"><center><img src="./$filename"><br/>
-        <b>$doc(title-$id)</b></center></a></p>
+        <center><a name="$id" href="#toc.$id"><img src="./$filename"></a><br>
+        <b>$doc(title-$id)</b></center>
     }
 
     # textfigure id title
@@ -782,8 +784,8 @@ snit::type ::kitedocs::kitedoc {
             return
         }
     } {
-        <p><a name="$id" href="#toc.$id"><center>
-        <b>$doc(title-$id)</b></center></a>
+        <center><a name="$id" href="#toc.$id">
+        <b>$doc(title-$id)</b></center>
     }
 
     #-------------------------------------------------------------------

@@ -3,6 +3,9 @@
 ## Next
 
 * Update kitedoc(5) to use htmltran(n)
+  * Handling of marks; can't use "<div>" in text-only context per 
+    the paragrapher.
+    * Should "<pre>" be opaque? Probably.
 * Consider making `<itemlist>` use nested lists with `mktree`.
 
 ## Old Notes

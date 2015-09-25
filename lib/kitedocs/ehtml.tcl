@@ -49,8 +49,9 @@ snit::type ::kitedocs::ehtml {
             padding-left: 4px;
         }
 
-        dd { 
-            margin-bottom: 1em; 
+        hr.hrule {
+            margin-top: 1em;
+            margin-bottom: 1em;
         }
 
         ol.olp > li {
@@ -65,6 +66,10 @@ snit::type ::kitedocs::ehtml {
             margin-bottom: 0;
         }
 
+        dd { 
+            margin-bottom: 1em; 
+        }
+
         dd > p:first-child { 
             margin-top: 0; 
         }
@@ -72,6 +77,11 @@ snit::type ::kitedocs::ehtml {
         ul.itemlist {
             padding-left: 0;
             list-style-type: none;
+        }
+
+        .topiclist {
+            margin-top: 1em;
+            margin-bottom: 1em;
         }
 
         /*--------------------------------------------------
@@ -292,7 +302,7 @@ snit::type ::kitedocs::ehtml {
         $macro proc img {attrs} { return "<img $attrs>" }
 
         # NEXT, define basic macros.
-        $macro proc hrule {} { return "<p><hr><p>" }
+        $macro proc hrule {} { return "<hr class=\"hrule\">" }
         $macro proc lb    {} { return "&lt;"       }
         $macro proc rb    {} { return "&gt;"       }
 
@@ -669,7 +679,7 @@ snit::type ::kitedocs::ehtml {
             set itemCounter 1
         } {
             |<--
-            <table class="table">
+            <table class="table topiclist">
             <tr>
             <th>$h1</th> 
             <th>$h2</th>
@@ -766,7 +776,7 @@ snit::type ::kitedocs::ehtml {
             </tr>
         }
 
-        $macro proc /changelog {} { return "</table><p>" }
+        $macro proc /changelog {} { return "</table>" }
 
         $macro proc change {date status initiator} {
             macro cpush change

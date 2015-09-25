@@ -77,14 +77,14 @@ snit::type ::kitedocs::htmltrans {
 
     typevariable bycontext -array {
         BLOCK {
-            article aside body details dialog div figure footer form frame
+            article aside body details dialog figure footer form frame
             main noframes noscript section
         }
 
         OPAQUE {
             applet audio area base basefont button canvas col colgroup
             datalist embed head hr iframe img input keygen link map menu
-            menuitem meta object optgroup option output param progress
+            menuitem meta object optgroup option output param pre progress
             rp rt ruby script select source style textarea title track
             video
         }
@@ -105,12 +105,12 @@ snit::type ::kitedocs::htmltrans {
         }
 
         TEXTONLY {
-            caption dt figcaption h1 h2 h3 h4 h5 h6 label legend pre
+            caption dt figcaption h1 h2 h3 h4 h5 h6 label legend
             summary
         }
 
         TEXTBLOCK {
-            blockquote center dd li td th
+            blockquote center dd div li td th
         }
     }
 

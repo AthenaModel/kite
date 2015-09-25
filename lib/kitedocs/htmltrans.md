@@ -42,6 +42,7 @@ tags define an OPAQUE context.
 * option/
 * output/
 * param
+* pre/
 * progress/
 * rp/
 * rt/
@@ -95,7 +96,6 @@ meaning.  The following tags introduce TEXTONLY context:
 * h6/
 * label/
 * legend/
-* pre/
 * summary/
 
 
@@ -118,7 +118,8 @@ In BLOCK context we accept any tag, and text blocks.  The tags
 introduce the contexts they introduce.  Non-whitespace text blocks 
 cause the insertion of a `p` tag and a transition to PARAGRAPH context.
 
-The following tags introduce the BLOCK context
+The following tags introduce the BLOCK context (possibly, some should
+be TEXTBLOCK context):
 
 * Beginning of input
 * article/
@@ -126,7 +127,6 @@ The following tags introduce the BLOCK context
 * body/
 * details/
 * dialog/
-* div/
 * figure/
 * footer/
 * form/
@@ -149,6 +149,7 @@ The following tags introduce the TEXTBLOCK context:
 * blockquote/
 * center/
 * dd/
+* div/
 * li/
 * td/
 * th/
