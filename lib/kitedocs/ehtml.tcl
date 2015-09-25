@@ -26,187 +26,9 @@ snit::type ::kitedocs::ehtml {
     #-------------------------------------------------------------------
     # Lookup Tables
 
-    # css: Standard ehtml(5) CSS
-    typevariable css {
-        A {
-            text-decoration: none;
-        }
-
-        TABLE {
-            margin-top:    4px;
-            margin-bottom: 4px;
-        }
-
-        TR {
-            vertical-align: baseline;
-        }
-
-        TH {
-            padding-left: 4px;
-        }
-
-        TD {
-            padding-left: 4px;
-        }
-
-        hr.hrule {
-            margin-top: 1em;
-            margin-bottom: 1em;
-        }
-
-        ol.olp > li {
-            margin-bottom: 1em;
-        }
-
-        ul.ulp > li {
-            margin-bottom: 1em;
-        }
-
-        dt {
-            margin-bottom: 0;
-        }
-
-        dd { 
-            margin-bottom: 1em; 
-        }
-
-        dd > p:first-child { 
-            margin-top: 0; 
-        }
-        
-        ul.itemlist {
-            padding-left: 0;
-            list-style-type: none;
-        }
-
-        .topiclist {
-            margin-top: 1em;
-            margin-bottom: 1em;
-        }
-
-        /*--------------------------------------------------
-         * Table Formatting Classes
-         */
-
-        .table {  /* Replaces "pretty" */
-            border: 1px solid black;
-            border-spacing: 0;
-            color: black;
-            background-color: white;
-        }
-
-        .table tr:first-child {  /* Replaces "header" */
-            font-weight: bold;
-            color: white;
-            background-color: #000099;    
-        }
-
-        .table tr.tr-odd {      /* Replaces "evenrow" */
-            background-color: #EEEEEE;
-        }
-
-        .table tr.tr-even { }   /* Replaces "oddrow" */
-
-        .table th {
-            padding-left: 5px;
-            text-align:   left;
-        }
-
-        .table td {
-            padding-left:   5px;
-            vertical-align: baseline;
-        }
-
-        .table-wide {
-            width: 100%;
-        }
-
-
-        /* DEPRECATED: Use the "table", "tr-odd", and "tr-even" 
-         * classes, above.
-         *
-         * Table Formatting Classes: "pretty" 
-         * Border around the outside, even/odd striping, no internal
-         * border lines.
-         */
-        TABLE.pretty {
-            border: 1px solid black;
-            border-spacing: 0;
-        }
-
-        TABLE.pretty TR.header {
-            font-weight: bold;
-            color: white;
-            background-color: #000099;
-        }
-
-        TABLE.pretty TR.oddrow {
-            color: black;
-            background-color: white;
-        }
-
-        TABLE.pretty TR.evenrow {
-            color: black;
-            background-color: #EEEEEE;
-        }
-
-        /* Examples, listings, and marks */
-        PRE.example {
-            background:     #FFFDD1 ;
-            border:         1px solid blue;
-            padding-top:    2px;
-            padding-bottom: 2px;
-            padding-left:   4px;
-        }
-
-        PRE.listing {
-            background:     #FFFDD1 ;
-            border:         1px solid blue;
-            padding-top:    4px;
-            padding-bottom: 4px;
-            padding-left:   4px;
-        }
-
-        SPAN.linenum {
-            background:     #E3E08F ;
-        }
-
-        DIV.mark {
-            display: inline;
-            font-family: Verdana;
-            font-size: 75%;
-            background: black;
-            color: white;
-            border: 1px solid black;
-            border-radius: 5px;
-            padding-left: 2px;
-            padding-right: 2px;
-        }
-
-        DIV.bigmark {
-            display: inline;
-            font-family: Verdana;
-            font-size: 100%;
-            background: black;
-            color: white;
-            border: 1px solid black;
-            border-radius: 5px;
-            padding-left: 2px;
-            padding-right: 2px;
-        }
-
-        /* Topic Lists. */
-        TR.topic {
-            vertical-align: baseline;
-        }
-
-        TR.topicname {
-            min-width: 1.5em;
-        }
-
-    }
+    # css: Standard ehtml(5) CSS; read from disk on first install.
+    typevariable css {}
     
-
     #-------------------------------------------------------------------
     # Configuration Type Variables
 
@@ -264,7 +86,13 @@ snit::type ::kitedocs::ehtml {
     # transient data.
 
     typemethod install {macro} {
-        # FIRST, save the config data.
+        # FIRST, load the CSS from disk.
+        if {$css eq ""} {
+            set cssfile [file join $::kitedocs::library ehtml.css]
+            set css [readfile $cssfile]
+        }
+
+        # NEXT, save the config data.
         $macro eval {
             namespace eval ::ehtml:: {}
         }

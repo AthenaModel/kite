@@ -148,8 +148,8 @@ proc myproc {x} {
 }
 </example>
 
-  <li> Continuation lines should be indented four spaces relative to the
-       first line in the command.
+Continuation lines should be indented four spaces relative to the
+first line in the command.
 
 <example>
 label .mylabel \
