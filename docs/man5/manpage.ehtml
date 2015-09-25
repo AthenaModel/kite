@@ -16,6 +16,20 @@ to the basic format, as an aid to writing man pages.
 The <xref manpage(n)> module translates man pages in
 manpage(5) format into HTML.
 
+<subsection "Automatic Transformations">
+
+The <xref manpage(n)> processor uses <xref htmltrans(n)> to transform
+the output of the macro processor.  In particular, it supports:
+
+<ul>
+<li> Automated closure of <tag li> and similar tags.
+
+<li> Automatic paragraph detection and insertion of
+     <tag p>...<tag /p> tags.  Essentially, blank lines in prose force a
+     paragraph break.  There is no need to insert the paragraph
+     tags by hand.
+</ul>
+
 <section MACROS>
 
 manpage(5) man pages may use any of the following macros, as well
@@ -117,17 +131,17 @@ documenting.  That said, here's a fairly typical skeleton:
 
 <lb>section SYNOPSIS<rb>
 
-Put how to load this library here.  Then, put the itemlist:&lt;p&gt;
+Put how to load this library here.  Then, put the itemlist:
 
 <lb>itemlist<rb>
 
 <lb>section DESCRIPTION<rb>
 
-A general description of the package.&lt;p&gt;
+A general description of the package.
 
 <lb>section COMMANDS<rb>
 
-If this were a C library, this might be "FUNCTIONS" instead.&lt;p&gt;
+If this were a C library, this might be "FUNCTIONS" instead.
 
 <lb>deflist commands<rb>
      .
@@ -138,16 +152,16 @@ If this were a C library, this might be "FUNCTIONS" instead.&lt;p&gt;
 <lb>section EXAMPLES<rb>
 
 Put examples here, assuming they didn't fit better under one of the
-items listed above.&lt;p&gt;
+items listed above.
 
 <lb>section AUTHOR<rb>
 
-Your name.&lt;p&gt;
+Your name.
 
 <lb>section HISTORY<rb>
 
 Any relevant historical information, like "This package was developed
-as a replacement for <lb>xref soandsolib(n)<rb>...."&lt;p&gt;
+as a replacement for <lb>xref soandsolib(n)<rb>...."
 
 <lb>/manpage<rb>
 </example>

@@ -2,6 +2,8 @@
 
 ## Next
 
+* Update kitedoc(5) to use htmltran(n)
+* Consider making `<itemlist>` use nested lists with `mktree`.
 
 ## Old Notes
 

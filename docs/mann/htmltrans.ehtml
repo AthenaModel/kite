@@ -140,8 +140,8 @@ prefix to which five additional arguments will be added:
 <ulp>
 <li> The complete tag, with attributes and angle brackets.
 
-<li> The tag name, minus any slash.  This will be "!DOCTYPE" for the
-     <tag !DOCTYPE> directive, and "!--" for comments.
+<li> The tag name, minus any slash.  This will be "<tt !DOCTYPE>" for the
+     <tag !DOCTYPE> directive, and "<tt !-->" for comments.
 
 <li> A boolean flag, 1 if the tag is a closing tag and 0 otherwise.
 
@@ -153,13 +153,14 @@ prefix to which five additional arguments will be added:
      until the opening angle bracket of the next tag.
 </ulp>
 
-The command is called for pseudotag "hmstart" before the beginning
-of the real input and for "/hmstart" after; this allows the 
-command to do special things at the beginning and end of the input.
+The command is called for pseudotag <tag hmstart> before the beginning
+of the real input and for <tag /hmstart> after; this allows the 
+command to do special things at the beginning and end of the input, and
+also to capture any text that occurs prior to the first tag in the input.
 
 In addition to normal tags, the command also handles the 
 <tag !DOCTYPE> directive and HTML comments; in the latter case,
-the "attrs" argument will contain the comment text.
+the <i attrs> argument will contain the comment text.
 
 Returns the empty string; it is up to the command to save 
 the text for later use.

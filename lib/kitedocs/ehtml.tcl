@@ -255,6 +255,9 @@ snit::type ::kitedocs::ehtml {
 
     typemethod install {macro} {
         # FIRST, save the config data.
+        $macro eval {
+            namespace eval ::ehtml:: {}
+        }
         $macro eval [list array set ::ehtml [array get config]]
         $macro eval [list array set ::trans $trans]
 
@@ -431,10 +434,15 @@ snit::type ::kitedocs::ehtml {
         }
 
         # NEXT, define definition list macros.
+    if 0 {    
+        # TBD: Can trans(dlstack) be replaced by the expander
+        # context stack?
+
         $macro proc deflist {args}  {
             variable trans
             lappend trans(dlstack) $args
 
+            macro cpush deflist
             return "<dl>" 
         }
 
@@ -442,18 +450,23 @@ snit::type ::kitedocs::ehtml {
             variable trans
             set trans(dlstack) [lrange $trans(dlstack) 0 end-1]
 
-            return "</dl>" 
+            if {[macro cis def]} {
+                set deftext [macro cpop def]
+
+            } else {
+                set deftext ""
+            }
+
+            return "$deftext[macro cpop deflist]</dl>" 
         }
 
-        $macro template def {text} {
+        $macro proc def {text} {
             set text [expand $text]
-        } {
-            |<--
-            <dt><b>$text</b></dt>
-            <dd>
+
+            return "<dt><b>$text</b></dt><dd>"
         }
 
-        $macro template defitem {item text} {
+        $macro proc defitem {item text} {
             variable trans
             set text [expand $text]
             set trans(lastItem) $item
@@ -468,14 +481,14 @@ snit::type ::kitedocs::ehtml {
                 }
 
                 dict set trans(itemText) $item $text
+                return
             }
-        } {
-            |<--
-            <dt><b><tt><a name="[textToID $item]">$text</a></tt></b></dt>
-            <dd>      
+
+            set id [textToID $item]
+            return "<dt><b><tt><a name=\"$id\">$text</a></tt></b></dt><dd>"
         }
 
-        $macro template defopt {text} {
+        $macro proc defopt {text} {
             variable trans
 
             set opt [lindex $text 0]
@@ -486,11 +499,98 @@ snit::type ::kitedocs::ehtml {
                 dict lappend trans(optsFor) $trans(lastItem) $opt
                 dict set trans(optText) $id $text
             }
-        } {
-            |<--
-            <dt><b><tt><a name="$id">$text</a></tt></b></dt>
-            <dd>
+
+            return "<dt><b><tt><a name=\"$id\">$text</a></tt></b></dt><dd>"
+        }        
+    } else {
+        # TBD: Can trans(dlstack) be replaced by the expander
+        # context stack?
+
+        $macro proc deflist {args}  {
+            variable trans
+            lappend trans(dlstack) $args
+
+            macro cpush deflist
+            return "<dl>" 
         }
+
+        $macro proc /deflist {args} {
+            variable trans
+            set trans(dlstack) [lrange $trans(dlstack) 0 end-1]
+
+            set close [ehtml::DefClose]
+            return "[macro cpop deflist]$close</dl>" 
+        }
+
+        $macro proc def {text} {
+            set text [expand $text]
+
+            set close [ehtml::DefClose]
+            macro cpush def
+
+            return "$close<dt><b>$text</b></dt><dd>"
+        }
+
+        $macro proc defitem {item text} {
+            variable trans
+            set text [expand $text]
+            set trans(lastItem) $item
+
+            if {[macro pass] == 1} {
+                dict lappend trans(itemLists) * $item
+
+                foreach listname $trans(dlstack) {
+                    if {$listname ne ""} {
+                        dict lappend trans(itemLists) $listname $item
+                    }
+                }
+
+                dict set trans(itemText) $item $text
+                return
+            }
+
+            set id [textToID $item]
+            set close [ehtml::DefClose]
+            macro cpush def
+            return "$close<dt><b><tt><a name=\"$id\">$text</a></tt></b></dt><dd>"
+        }
+
+        $macro proc defopt {text} {
+            variable trans
+
+            set opt [lindex $text 0]
+            set id "$trans(lastItem)$opt"
+            set text [expand $text]
+
+            if {[macro pass] == 1} {
+                dict lappend trans(optsFor) $trans(lastItem) $opt
+                dict set trans(optText) $id $text
+            }
+
+            set close [ehtml::DefClose]
+            macro cpush def
+            return "$close<dt><b><tt><a name=\"$id\">$text</a></tt></b></dt><dd>"
+        }    
+
+        # Close an open definition
+        $macro proc ehtml::DefClose {} {
+            if {[macro cis def]} {
+                set text [macro cpop def]
+                if {[regexp {<dd>\s*$} $text]} {
+                    regsub {<dd>\s*$} $text "\n" text
+                } else {
+                    append text "</dd>\n"
+                }
+            } else {
+                set text ""
+            }
+
+            return $text
+        }    
+    }
+
+
+
 
         # iref args
         #
