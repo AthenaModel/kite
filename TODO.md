@@ -4,21 +4,6 @@
 
 * Consider making `<itemlist>` use nested lists with `mktree`.
 
-* Move formatting from HTML to CSS.
-  * Emit "class=" attributes instead of `<tt>` and `<b>` tags in macros.
-  * Consider using semantic markup (e.g., `<var>`) instead of typographic
-    markup, where appropriate.
-
-* `<tt>` is commonly used in our documentation, but it's not a valid
-  tag in HTML5.  Consider how to translate it.
-  * Replace with a brief custom tag, or retain `<tt>` as the macro.
-  * Expand to:
-    * `<code>`: but looks bad with Bootstrap
-    * `<samp>`: looks fine with Bootstrap, just like `<tt>` by itself
-    * `<span>` with class: probably safest, but ugly if you have to
-      look at the output.
-      * CSS: `font-family: monospace;`
-
 ## Old Notes
 
 * 'kite deps' needs to show actual versions in teapot.

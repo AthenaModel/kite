@@ -11,6 +11,9 @@
 #    This module implements a macroset(i) extension for use with
 #    macro(n).
 #
+# TO BE DONE:
+#    * Use CSS instead of style tags.
+#
 #-----------------------------------------------------------------------
 
 namespace eval ::kitedocs:: {
@@ -103,7 +106,6 @@ snit::type ::kitedocs::ehtml {
         StyleMacro $macro b
         StyleMacro $macro i
         StyleMacro $macro code
-        StyleMacro $macro tt
         StyleMacro $macro em
         StyleMacro $macro strong
         StyleMacro $macro sup
@@ -129,6 +131,21 @@ snit::type ::kitedocs::ehtml {
 
         $macro proc img {attrs} { return "<img $attrs>" }
 
+        # <tt> tag is obsolete in HTML 5.
+        $macro proc tt {args} {
+            set out "<span class=\"tt\">"
+
+            if {[llength $args] >= 1} {
+                append out "$args</span>"
+            }
+
+            return $out
+        }
+
+        $macro proc /tt {} {
+            return "</span>"
+        }
+
         # NEXT, define basic macros.
         $macro proc hrule {} { return "<hr class=\"hrule\">" }
         $macro proc lb    {} { return "&lt;"       }
@@ -136,9 +153,9 @@ snit::type ::kitedocs::ehtml {
 
         $macro proc tag {name {arglist ""}} {
             if {$arglist ne ""} {
-                return "[tt][lb]$name [expand $arglist][rb][/tt]"
+                return "[code][lb]$name [expand $arglist][rb][/code]"
             } else {
-                return "[tt][lb]$name[rb][/tt]"
+                return "[code][lb]$name[rb][/code]"
             }
         }
 
@@ -272,75 +289,6 @@ snit::type ::kitedocs::ehtml {
         }
 
         # NEXT, define definition list macros.
-    if 0 {    
-        # TBD: Can trans(dlstack) be replaced by the expander
-        # context stack?
-
-        $macro proc deflist {args}  {
-            variable trans
-            lappend trans(dlstack) $args
-
-            macro cpush deflist
-            return "<dl>" 
-        }
-
-        $macro proc /deflist {args} {
-            variable trans
-            set trans(dlstack) [lrange $trans(dlstack) 0 end-1]
-
-            if {[macro cis def]} {
-                set deftext [macro cpop def]
-
-            } else {
-                set deftext ""
-            }
-
-            return "$deftext[macro cpop deflist]</dl>" 
-        }
-
-        $macro proc def {text} {
-            set text [expand $text]
-
-            return "<dt><b>$text</b></dt><dd>"
-        }
-
-        $macro proc defitem {item text} {
-            variable trans
-            set text [expand $text]
-            set trans(lastItem) $item
-
-            if {[macro pass] == 1} {
-                dict lappend trans(itemLists) * $item
-
-                foreach listname $trans(dlstack) {
-                    if {$listname ne ""} {
-                        dict lappend trans(itemLists) $listname $item
-                    }
-                }
-
-                dict set trans(itemText) $item $text
-                return
-            }
-
-            set id [textToID $item]
-            return "<dt><b><tt><a name=\"$id\">$text</a></tt></b></dt><dd>"
-        }
-
-        $macro proc defopt {text} {
-            variable trans
-
-            set opt [lindex $text 0]
-            set id "$trans(lastItem)$opt"
-            set text [expand $text]
-
-            if {[macro pass] == 1} {
-                dict lappend trans(optsFor) $trans(lastItem) $opt
-                dict set trans(optText) $id $text
-            }
-
-            return "<dt><b><tt><a name=\"$id\">$text</a></tt></b></dt><dd>"
-        }        
-    } else {
         # TBD: Can trans(dlstack) be replaced by the expander
         # context stack?
 
@@ -366,7 +314,7 @@ snit::type ::kitedocs::ehtml {
             set close [ehtml::DefClose]
             macro cpush def
 
-            return "$close<dt><b>$text</b></dt><dd>"
+            return "$close<dt class=\"def\">$text</dt><dd>"
         }
 
         $macro proc defitem {item text} {
@@ -390,7 +338,7 @@ snit::type ::kitedocs::ehtml {
             set id [textToID $item]
             set close [ehtml::DefClose]
             macro cpush def
-            return "$close<dt><b><tt><a name=\"$id\">$text</a></tt></b></dt><dd>"
+            return "$close<dt class=\"defitem\"><a name=\"$id\">$text</a></dt><dd>"
         }
 
         $macro proc defopt {text} {
@@ -407,7 +355,7 @@ snit::type ::kitedocs::ehtml {
 
             set close [ehtml::DefClose]
             macro cpush def
-            return "$close<dt><b><tt><a name=\"$id\">$text</a></tt></b></dt><dd>"
+            return "$close<dt class=\"defopt\"><a name=\"$id\">$text</a></dt><dd>"
         }    
 
         # Close an open definition
@@ -425,10 +373,6 @@ snit::type ::kitedocs::ehtml {
 
             return $text
         }    
-    }
-
-
-
 
         # iref args
         #
@@ -446,15 +390,32 @@ snit::type ::kitedocs::ehtml {
             }
 
             if {[dict exists $trans(itemText) $tag]} {
-                return "<tt><a href=\"#[textToID $tag]\">$tag</a></tt>"
+                set href "#[textToID $tag]"
             } else {
                 macro warn "iref not found, '$tag'"
-                return "<tt>$tag</tt>"
+                set href ""
             }
+
+            return "<a class=\"iref\" href=\"$href\">$tag</a>"
         }
 
         $macro proc itag {args} {
-            return "[tt][lb][iref {*}$args][rb][/tt]"
+            variable trans
+
+            set tag $args
+
+            if {[macro pass] == 1} {
+                return
+            }
+
+            if {[dict exists $trans(itemText) $tag]} {
+                set href "#[textToID $tag]"
+            } else {
+                macro warn "iref not found, '$tag'"
+                set href ""
+            }
+
+            return "<a class=\"iref\" href=\"$href\">[lb]$tag[rb]</a>"
         }
 
 
@@ -471,16 +432,14 @@ snit::type ::kitedocs::ehtml {
                 set items [dict get $trans(itemLists) $listname]
             }
 
-            # TBD: Should probably be a <ul> with a special class
-            # to eliminate the bullet and the indent.
             set out "<ul class=\"itemlist\">\n"
 
             foreach tag $items {
                 set id [textToID $tag]
                 append out \
-                    "<li><tt><a href=\"#$id\">" \
+                    "<li><a class=\"iref\" href=\"#$id\">" \
                     [dict get $trans(itemText) $tag] \
-                    "</a></tt></li>\n"
+                    "</a></li>\n"
 
                 if {![dict exists $trans(optsFor) $tag]} {
                     continue
@@ -489,9 +448,9 @@ snit::type ::kitedocs::ehtml {
                 foreach opt [dict get $trans(optsFor) $tag] {
                     append out \
                         "<li>&nbsp;&nbsp;&nbsp;&nbsp;" \
-                        "<tt><a href=\"#$tag$opt\">" \
+                        "<a class=\"iref\" href=\"#$tag$opt\">" \
                         [dict get $trans(optText) $tag$opt] \
-                        "</a></tt></li>\n"
+                        "</a></li>\n"
                 }
             }
 

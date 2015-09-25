@@ -39,6 +39,23 @@ div.bigmark {
     padding-right: 2px;
 }
 
+/* def, defitem, defopt */
+
+dt.def {
+    font-weight: bold;
+}
+
+dt.defitem {
+    font-weight: bold;
+    font-family: monospace;
+}
+
+dt.defopt {
+    font-weight: bold;
+    font-family: monospace;
+}
+
+
 /* example/ */
 pre.example {
     background:     #FFFDD1 ;
@@ -53,6 +70,11 @@ pre.example {
 hr.hrule {
     margin-top: 1em;
     margin-bottom: 1em;
+}
+
+/* iref */
+a.iref {
+    font-family: monospace;
 }
 
 /* itemlist */                
@@ -102,6 +124,12 @@ tr.topicname {
     min-width: 1.5em;
 }
 
+/* tt/ */
+
+.tt {
+    font-family: monospace;
+}
+
 
 
 /* olp/ */
@@ -126,6 +154,17 @@ table {
     vertical-align: baseline;
 }
 
+th {
+    padding-left: 5px;
+    text-align:   left;
+}
+
+td {
+    padding-left:   5px;
+    vertical-align: baseline;
+}
+
+
 /* "table" class: standard table formatting. */
 .table {
     border:           1px solid black;
@@ -145,16 +184,6 @@ table {
 }
 
 .table tr.tr-even { }
-
-.table th {
-    padding-left: 5px;
-    text-align:   left;
-}
-
-.table td {
-    padding-left:   5px;
-    vertical-align: baseline;
-}
 
 .table-wide {
     width: 100%;
