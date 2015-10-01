@@ -9,23 +9,23 @@
 This man page defines the ehtml(5) "Extended HTML" macro set,
 i.e., HTML extended with Tcl macros.  When <xref ehtml(n)> is registered 
 with an instance of <xref macro(n)>, the instance will translate
-ehtml(5) input into plain HTML.<p>
+ehtml(5) input into plain HTML.
 
 The ehtml(5) format is the basis for more specific formats, including
 both <xref kitedoc(5)> and <xref manpage(5)>, the format used to
-write this man page.  The basics of the format are documented here.<p>
+write this man page.  The basics of the format are documented here.
 
 <section "BASIC SYNTAX">
 
 The majority of the content of a ehtml(5) document is standard HTML
-body text.  Macros are entered in double angle brackets, like so:<p>
+body text.  Macros are entered in double angle brackets, like so:
 
 <example>
 <tag mymacro>
 </example>
 
 Some macros occur in pairs; for example, change logs are created using
-the <itag changelog> macros.<p>
+the <itag changelog> macros.
 
 <example>
 <tag changelog>
@@ -38,13 +38,39 @@ the <itag changelog> macros.<p>
 <section MACROS>
 
 ehtml(5) input may use any of the following macros; formats
-like <xref manpage(5)> will add additional macros.<p>
+like <xref manpage(5)> will add additional macros.
+
+<subsection "Control Macros">
+
+The following macros are used to control processing by the 
+<xref kitedocs(n)> document processors.
+
+<deflist control>
+
+<defitem nopara {<tag nopara>...<tag /nopara>}>
+
+These tags are for use with ehtml(5) processors that use 
+<xref htmltrans(n)>'s automatic paragraph detection filter
+(e.g., <xref manpage(n)> and <xref kitedoc(n)>).
+
+The tags disable automatic paragraph detection
+for the content they contain.  The content is treated like any
+other "opaque" content (e.g., the HTML <tag head> element); structure
+and tag names are checked, but no paragraph tags are inserted.
+
+The <tag nopara> and <tag /nopara> tags themselves are stripped during
+processing by <xref htmltrans(n)>.
+
+If used with other ehtml(5) processors, the tags will be accepted
+but will simply pass through into the output.
+
+</deflist control>
 
 <subsection "HTML Equivalent Macros">
 
 The following macros are used in place of their HTML equivalents.  
 They take no arguments; any formatting is done using CSS provided by
-the document format.<p>
+the document format.
 
 <deflist macros>
 
@@ -59,18 +85,18 @@ the document format.<p>
 <defitem ul         {<tag ul>...........<tag /ul>}>
 <defitem br         {<tag br>}>
 
-These macros simply expand to their HTML equivalents.<p>
+These macros simply expand to their HTML equivalents.
 
 <defitem img "<tag img ?attr=value...?>">
 
 Returns an HTML "<tag img>" tag.  Any arguments are passed through
-as is.<p>
+as is.
 
 </deflist macros>
 
 <subsection "HTML Style Macros">
 
-Macros relating to the style of displayed text.<p>
+Macros relating to the style of displayed text.
 
 <deflist macros>
 
@@ -94,7 +120,7 @@ Called with no arguments,
 these macros simply expand to the matching HTML tags. Alternatively, 
 each can be called with some number of arguments, which are returned 
 wrapped in matching tags.  In other words, in ehtml(5) input the following
-items are equivalent:<p>
+items are equivalent:
 
 <example><tag i>italic text<tag /i></example>
 
@@ -103,14 +129,14 @@ vs.
 <example><tag i {italic text}></example>
 
 The second form is easier to type.  Note that these macros do not 
-expand their arguments.<p>
+expand their arguments.
 
 </deflist macros>
 
 <subsection "Cross-Reference Macros">
 
 The following macros are used to define references and to make
-cross-reference links.<p>
+cross-reference links.
 
 <deflist macros>
 
@@ -119,27 +145,27 @@ cross-reference links.<p>
 The <itag xref> macro creates hyperlinks. Generally speaking,
 <i>id</i> identifies the page to link to; <i>anchor</i> is the
 link text.  If <i>anchor</i> isn't specified, then the <i>id</i> will
-be used as the link text.<p>
+be used as the link text.
 
 The <itag xref> macro recognizes three kinds of page IDs, in this 
-order:<p>
+order:
 
 <ul>
-<li> IDs defined using <itag xrefset>.<p>
+<li> IDs defined using <itag xrefset>.
 
-<li> Man page references, e.g., "<i name>(<i section>)".<p>
+<li> Man page references, e.g., "<i name>(<i section>)".
 
     This creates a link to 
     <tt><i docroot>/man<i section>/<i name>.html></tt>, where
     <i docroot> is a relative path set via the 
-    <xref ehtml(n)> <tt -docroot> configuration option.<p>
+    <xref ehtml(n)> <tt -docroot> configuration option.
 
-<li> Document references.<p>
+<li> Document references.
 
      If the ID appears to end with a file name with
      a typical document extension (as determined by the
      <xref ehtml(n)> <tt -doctypes> configuration option), it is
-     treated as a path relative to <i docroot>.<p> 
+     treated as a path relative to <i docroot>. 
 </ul>
 
 In the latter two cases, the ID may begin with "<i project>:".  In
@@ -148,7 +174,7 @@ Kite project; and it's further assumed that this project will usually
 be checked out into the same parent directory as the current project.
 Consequently, the man page or document reference is relative to
 the <i project>'s <tt docs/> directory, e.g., the path is preceded
-by "<tt><i docroot>/../../<i project>/docs/</tt>".<p>
+by "<tt><i docroot>/../../<i project>/docs/</tt>".
 
 
 <defitem xrefset "<tag xrefset {<i>id anchor url</i>}>">
@@ -158,16 +184,16 @@ This macro defines a cross-reference, which can be used by
 cross-reference to <itag xref>; it should be chosen so as not to
 conflict with other <itag xref> identifiers.  The <i>anchor</i> is
 the link text that will be used if no link text is specified in the
-<itag xref> macro.  The <i>url</i> is, of course, the URL to link to.<p>
+<itag xref> macro.  The <i>url</i> is, of course, the URL to link to.
 
 The macro returns a link to the <i>url</i> with the given <i>anchor</i>
-text, so that it can be used in a list of references for display.<p>
+text, so that it can be used in a list of references for display.
 
 Note that <itag xrefset> can appear anywhere in the input; it does
-not need to proceed the first <itag xref> to the <i>id</i>.<p>
+not need to proceed the first <itag xref> to the <i>id</i>.
 
 For example, the following macro defines "google" as a cross-reference
-ID.<p>
+ID.
 
 <example>
 <tag xrefset {google "Google" "http://www.google.com"}>
@@ -179,18 +205,33 @@ To find something, use <tag xref google>....
 
 </deflist macros>
 
+<subsection "Ordered and Unordered List Macros">
+
+In addition to the standard <tag ol> and <tag ul> lists, <xref ehtml(5)>
+defines versions of these lists that expect list items to be full; 
+consequently, the items are displayed with blank lines between them:
+
+<deflist ulp>
+<defitem olp {<tag olp>...<tag /olp>}>
+<defitem ulp {<tag ulp>...<tag /ulp>}>
+
+These macros enclose ordered and unordered lists whose 
+<tag li>...<tag /li> items should have blank lines between them.
+
+</deflist ulp>
+
 <subsection "Definition List Macros">
 
 The following macros are used to add definition lists to a document.
 A definition list displays a term followed by a definition of a term;
-usually, the definition is indented beneath the term.<p>
+usually, the definition is indented beneath the term.
 
 <deflist deflist>
 
 <defitem deflist {<tag deflist {?<i args>?}>...<tag /deflist {?<i args>?}>}>
 
 These tags contain a definition list.  The individual definitions are added 
-using the <itag def>, <itag defitem>, or <itag defopt> macros.<p>
+using the <itag def>, <itag defitem>, or <itag defopt> macros.
 
 Definition lists are frequently nested; the optional <i>args</i> can be used to relate the <itag deflist> to its <tag /deflist>.  In addition, 
 <itag defitem> accumulates lists of items by the lists in which they 
@@ -209,16 +250,16 @@ appear, for retrieval via <itag itemlist>.
 </example>
 
 Some document formats may define <tag def*> tags with additional semantics,
-for use in <tag deflist>s.<p>
+for use in <tag deflist>s.
 
 <defitem def {<tag def {<i text>}>}>
 
 This macro begins a definition within a <itag deflist>.
 The <i>text</i> is the text to display; it may contain
-embedded style macros.<p>
+embedded style macros.
 
 The <iref def> macro is followed by the text that defines the
-named item.<p>
+named item.
 
 <defitem defitem {<tag defitem {<i tag text>}>}>
 
@@ -230,15 +271,15 @@ The <i>tag</i> is a short
 string which identifies the item, such as a command's name; it should
 be unique within the document.  It becomes the item's HTML anchor, and
 is also used with <itag iref> to reference the item from within the
-same document.<p>
+same document.
 
 The <i>text</i> is the text that's
 actually displayed in the list; it usually includes more
 information, such as a command's full signature.  It may contain
-embedded style macros.<p>
+embedded style macros.
 
 The <iref defitem> macro is followed by the text that defines the
-named item. For example,<p>
+named item. For example,
 
 <example>
 <lb>defitem mycommand {mycommand <lb>i value<rb> ?<lb>i optionalValue<rb>?}<rb>
@@ -250,14 +291,14 @@ example.<lb>p<rb>;
 Note that the <i>tag</i> won't necessarily be same as the first token
 in the <i>text</i>; when documenting subcommands of a Tcl object, for
 example, the object usually appears as a variable reference in the
-first spot:<p>
+first spot:
 
 <example>
 <lb>defitem mysubcommand {$object mysubcommand <lb>i value<rb>}<rb>
 </example>
 
 Each of the macro definitions in this section is produced by
-<iref defitem>.<p>
+<iref defitem>.
 
 <defitem defopt {<tag defopt {<i text>}>}>
 
@@ -266,7 +307,7 @@ options as well.  When <itag defopt> appears in a definition list,
 it defines an option belonging to the item defined by the immediately
 preceding <itag defitem>.  It's assumed that the option is the first
 token in <i>text</i>, which may contain embedded style macros.  
-For example,<p>
+For example,
 
 <example>
 <lb>deflist commands<rb>
@@ -293,10 +334,10 @@ By default, this macro expands to a list of the items defined in this
 document. It's usually used in the "SYNOPSIS" section of 
 a <xref manpage(5)> document.  The list of macros in the
 <xref SYNOPSIS> section of this man page was produced by
-<itag itemlist>.<p>
+<itag itemlist>.
 
 If an item has options defined with <itag defopt>, they will appear,
-slightly indented, just below the item in the <itag itemlist>.<p>
+slightly indented, just below the item in the <itag itemlist>.
 
 If <i listname> is given, the output is confined to those items defined
 in the named <itag deflist> and any lists nested within it.
@@ -305,21 +346,21 @@ in the named <itag deflist> and any lists nested within it.
 
 The name "iref" stands for "item reference"; this macro creates a
 hyperlink to the definition of <i>item</i> in the same man page.
-For example,<p>
+For example,
 
 <example>
 <lb>iref defitem<rb>
 </example>
 
-expands to a link to <iref defitem>.<p>
+expands to a link to <iref defitem>.
 
 If the item name has multiple tokens, there is no need to quote them;
-<itag iref>'s arguments are accumulated into a single item name.<p>
+<itag iref>'s arguments are accumulated into a single item name.
 
 <defitem itag {<tag itag {<i name>}>}>
 
 This is simply an <itag iref> to macro <i name>; it creates a hyperlink
-in typewriter font with angle brackets.<p> 
+in typewriter font with angle brackets. 
 
 </deflist deflist>
 
@@ -327,7 +368,7 @@ in typewriter font with angle brackets.<p>
 
 A topic list is a table with two columns, one for topics and one for
 descriptions.  The column headers default to "Topic" and "Description",
-but can be changed.<p>
+but can be changed.
 
 <deflist topiclist>
 
@@ -335,13 +376,13 @@ but can be changed.<p>
 
 Brackets a <itag topic> list.  The <i h1> and <i h2> values are the
 column header strings; they default to "Topic" and "Description" 
-respectively.<p>
+respectively.
 
 <defitem topic {<tag topic "<i text>">...<tag /topic>}>
 
 Adds a topic to a <itag topiclist>.  The topic is displayed in two
 columns, the topic <i text> on the left and the discussion between
-the two tags on the right.<p>
+the two tags on the right.
 
 </deflist topiclist>
 
@@ -353,46 +394,46 @@ the two tags on the right.<p>
 
 These macros are used to bracket pre-formatted examples.  The examples
 are displayed in a box with a different background than the rest of
-the page.<p>
+the page.
 
 <defitem listing {<tag listing {?<i firstline>?}>...<tag /listing>}>
 
 These macros are used to bracket pre-formatted code listings.  Line
 numbers are added, so that the surrounding text can refer to specific
 lines.  The listing is displayed in a box with a different background than 
-the rest of the page.<p>
+the rest of the page.
 
 By default, the first line is numbered 1; set <i firstline> to pick 
-a different number.<p>
+a different number.
 
 <defitem mark {<tag mark {<i symbol>}>}>
 
 Defines a marker in an <itag example> or <itag listing>.  The marker 
 displays the <i symbol> in a small rounded box with a red background, and 
 is used to point out lines of interest for discussion in the following
-paragraphs.<p>
+paragraphs.
 
 Use <itag bigmark> to display the same marker as an <itag topic> in a 
-<itag topiclist>.<p>
+<itag topiclist>.
 
 <defitem bigmark {<tag bigmark {<i symbol>}>}>
 
 Creates a larger version of a <itag mark>; the larger version looks 
-better as the <itag topic> in a <itag topiclist>.<p>
+better as the <itag topic> in a <itag topiclist>.
 
 
 </deflist examples>
 
 <subsection "Change Log Macros">
 
-The following macros are used to add a change log to a document.<p>
+The following macros are used to add a change log to a document.
 
 <deflist macros>
 
 <defitem changelog "<tag changelog>...<tag /changelog>">
 
 Defines a change log table.  The content between the beginning and end
-macro should consist of <itag change> entries.<p>
+macro should consist of <itag change> entries.
 
 <defitem change "<tag change {<i>date status initiator</i>}>...<tag /change>">
 
@@ -401,7 +442,7 @@ is as of the specified <i>date</i> and was made by the
 <i>initiator</i>; the <i>status</i> can indicate whether the change is
 an addition, a deletion, or whatever the user likes.  The Extended
 HTML input between the beginning and end tag is expanded as usual, and
-is used as the description of the change.<p>
+is used as the description of the change.
 
 For example,
 
@@ -418,7 +459,7 @@ Initial draft.
 <subsection "Procedure Macros">
 
 The following macros are used to document procedures consisting of a 
-number of steps.<p>
+number of steps.
 
 <deflist macros>
 
@@ -428,21 +469,21 @@ Defines a procedure: instructions for performing a set of commands at
 a command line.  Each step consists of a description of what is to be
 done, and of an example of the commands to enter.  The procedure is
 formatted as a table of numbered steps, with each step's description in the
-left-hand column and example in the right-hand column.<p>
+left-hand column and example in the right-hand column.
 
 The content between the beginning and ending macros should consist of
-<itag step> entries.<p>
+<itag step> entries.
 
 <defitem quote "<tag quote {<i>text</i>}>">
 
-Quotes angle brackets and ampersands in the <i>text</i> for HTML display.<p>
+Quotes angle brackets and ampersands in the <i>text</i> for HTML display.
 
 <defitem step "<tag step> <i>description</i> <tag /step/> <i>example</i> <tag /step>">
 
 Defines a single step within a <itag procedure>.  The
 <i>description</i> is Extended HTML text saying what is to be done,
 and the <i>example</i> is Extended HTML text giving an example of how
-to do it.<p>
+to do it.
 
 For example,
 
@@ -472,35 +513,35 @@ $ emacs mydoc.ehtml
 
 <defitem hrule "<tag hrule>">
 
-Produces a horizontal rule across the page.<p>
+Produces a horizontal rule across the page.
 
 <defitem lb "<tag lb>">
 
-Returns the left-hand macro bracket, e.g., "<code><lb></code>".<p>
+Returns the left-hand macro bracket, e.g., "<code><lb></code>".
 
 <defitem link "<tag link {<i>url</i> ?<i>anchor</i>?}>">
 
 Creates a link to the specified <i>url</i>, displaying the specified
 <i>anchor</i> text.  If <i>anchor</i> is omitted, the <i>url</i>
-itself is displayed.<p>
+itself is displayed.
 
 If the page will be linked multiple times, it might be better to
-define a cross-reference using <itag xrefset>.<p>
+define a cross-reference using <itag xrefset>.
 
 <defitem nbsp "<tag nbsp {<i>text</i>}>">
 
 After trimming leading and trailing whitespace and normalizing
 internal whitespace to single blanks, <itag nbsp> replaces all
-remaining whitespace with non-breaking spaces.<p>
+remaining whitespace with non-breaking spaces.
 
 <defitem rb "<tag rb>">
 
-Returns the right-hand macro bracket, e.g., "<code><rb></code>".<p>
+Returns the right-hand macro bracket, e.g., "<code><rb></code>".
 
 <defitem tag "<tag tag {<i arglist>}>">
 
 Formats a macro tag in angle-brackets.  If the <i arglist> is given,
-it is expanded and included in the tag.<p>
+it is expanded and included in the tag.
 
 </deflist macros>
 
@@ -509,12 +550,12 @@ it is expanded and included in the tag.<p>
 
 <section AUTHOR>
 
-Will Duquette<p>
+Will Duquette
 
 <section HISTORY>
 
 Originally written for JNEM as jnem_ehtml(5); migrated to Mars in
-September 2008, and moved to Kite in July 2014.<p>
+September 2008, and moved to Kite in July 2014.
 
 
 </manpage>

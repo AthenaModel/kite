@@ -16,11 +16,11 @@ ehtml(n) defines a <xref macro(n)> macro set that is a basis for
 a format similar to HTML text, but with an expanded set of tags
 defined using a macro processor.  Many basic HTML tags work unchanged;
 new tags are defined for specific purposes.  Tags not needed for
-purposes of documentation are not provided.<p>
+purposes of documentation are not provided.
 
 See <xref ehtml(5)> for the basic syntax and standard macros.  See
 <xref manpage(5)> and <xref kitedoc(5)> for full document formats
-based on <xref ehtml(5)>.<p>
+based on <xref ehtml(5)>.
 
 To use <xref ehtml(n)> directly, create an instance of 
 <xref macro(n)> and register <xref ehtml(n)> with it:
@@ -34,7 +34,7 @@ mp register ::kitedocs::ehtml
 
 Extended HTML macros are simply Tcl commands whose return value is
 substituted into the input text.  The <xref ehtml(5)> man page
-describes some standard macros<p>
+describes some standard macros
 
 <section COMMANDS>
 
@@ -43,33 +43,33 @@ describes some standard macros<p>
 <defitem "ehtml css" {ehtml css}>
 
 Returns default CSS styles for the macros in this macro set.  Clients
-are free to use them or not.<p>
+are free to use them or not.
 
 <defitem "ehtml install" {ehtml install <i>macro</i>}>
 
 Installs the <xref ehtml(5)> macros into <i macro>, an instance
 of <xref macro(n)>.  This is usually called by the
-<xref macro(n)> object itself.<p>
+<xref macro(n)> object itself.
 
 <defitem "ehtml configure" {ehtml configure <i opt val>}>
 
-Configures the macro set.  The following options may be set:<p>
+Configures the macro set.  The following options may be set:
 
 <deflist options>
 <defopt {-docroot <i relpath>}>
 Sets the relative path from the document file being processed to the
 project's <tt docs/> directory.  For <tt docs/index.ehtml>, the
-<tt -docroot> should be "."<p>
+<tt -docroot> should be "."
 
 The macro set's <xref ehtml(5) xref> macro uses this to figure
 links to man pages and other documents.  If the value of the option 
-is "", then only explicit <xref ehtml(5) xrefset> IDs are allowed.<p>
+is "", then only explicit <xref ehtml(5) xrefset> IDs are allowed.
 
 <defopt {-doctypes <i typelist>}>
 The <i typelist> should be a list of file extensions, e.g., 
 "<tt>.html .text .docx</tt>".  The 
 <xref ehtml(5) xref> macro treats any xref ID ending with
-one of these extensions as a relative document path.<p>
+one of these extensions as a relative document path.
 
 The default set includes the following: 
 
@@ -106,7 +106,7 @@ library directory.
 
 <section AUTHOR>
 
-Will Duquette<p>
+Will Duquette
 
 <section HISTORY>
 

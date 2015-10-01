@@ -8,51 +8,51 @@
 
 This man page defines the project_macros(5) <xref macro(n)> macro set,
 which is provided by the <tt kite docs> command for use in both 
-<xref manpage(5)> and <xref kitedoc(5)> documents.<p>
+<xref manpage(5)> and <xref kitedoc(5)> documents.
 
 This macro set provides access to project metadata, and also to the 
-project code base.<p>
+project code base.
 
 <section MACROS>
 
-project_macros(5) provides the following project-specific macros.<p>
+project_macros(5) provides the following project-specific macros.
 
 <deflist macros>
 
 <defitem project {<tag project {<i subcomand> ?<i args...>?}>}>
 
-This macro gives access to project metadata.<p>
+This macro gives access to project metadata.
 
 <deflist project>
 
 <defitem "project name" {<tag project name>}>
 
-Returns the project's name.<p>
+Returns the project's name.
 
 <defitem "project version" {<tag project version>}>
 
-Returns the project's version number.<p>
+Returns the project's version number.
 
 <defitem "project description" {<tag project description>}>
 
-Returns the project's description string.<p>
+Returns the project's description string.
 
 <defitem "project tclsh" {<tag project {tclsh <i script>}>}>
 
 Executes the <i script> in the development Tcl shell with access
-to the project's code base, and returns the result.<p>
+to the project's code base, and returns the result.
 
 Documents will usually want to use the <itag toproject> and 
 <itag fromproject> macros instead, however.  This macro invokes 
 the <tt tclsh> executable once each time it is called; the 
 <itag toproject> and <itag fromproject> macros accumulate their
-scripts and invoke the <tt tclsh> a single time.<p>
+scripts and invoke the <tt tclsh> a single time.
 
 <defitem "project expand" {<tag project {expand <i script>}>}>
 
 Executes the <i script> in the development Tcl shell with access
 to the project's code base, and then expands any macros in 
-the result, returning the expansion.<p>
+the result, returning the expansion.
 
 </deflist project>
 
@@ -61,31 +61,33 @@ the result, returning the expansion.<p>
 Executes the <i script> in the development Tcl shell in the context of the 
 project's code base, returning nothing.  The <i script> will be sent to 
 the development Tcl shell as a batch with the scripts from all other 
-<itag toproject> and <itag fromproject> macros in the same document.<p>
+<itag toproject> and <itag fromproject> macros in the same document.
 
-This macro is usually used to require packages and do other setup.<p>
+This macro is usually used to require packages and do other setup.
 
 <defitem fromproject {<tag fromproject {<i script>}>}>
 
 Executes the <i script> in the development Tcl shell in the context of the 
 project's code base, returning the result.  The <i script> will be sent to 
 the development Tcl shell as a batch with the scripts from all other 
-<itag toproject> and <itag fromproject> macros in the same document.<p>
+<itag toproject> and <itag fromproject> macros in the same document.
 
 This macro is usually used to call documentation generators in the 
-project code base.<p>
+project code base.
+
+</deflist macros>
 
 <section "PROJECT TCL COMMANDS">
 
 Two special commands are made available to <itag project tclsh>,
-<itag project expand>, <itag toproject>, and <itag fromproject>:<p>
+<itag project expand>, <itag toproject>, and <itag fromproject>:
 
 <deflist specials>
 
 <defitem get {get <i x>}>
 
 Returns its argument.  This allows the script to easily
-return an interpolated string:<p>
+return an interpolated string:
 
 <example>
 <tag fromproject {{get "This is a sum: [expr {1 + 1}]"}}>
@@ -95,7 +97,7 @@ return an interpolated string:<p>
 
 Returns the project version number, so that <tt package require> commands
 can be sure to require the correct version of the code.  
-For example, a <itag toproject> command might look like this:<p>
+For example, a <itag toproject> command might look like this:
 
 <example>
 <tag toproject {{package require -exact mylib [version]}}>
@@ -106,11 +108,11 @@ For example, a <itag toproject> command might look like this:<p>
 
 <section AUTHOR>
 
-Will Duquette<p>
+Will Duquette
 
 <section HISTORY>
 
-New package.<p>
+New package.
 
 
 </manpage>

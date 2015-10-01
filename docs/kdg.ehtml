@@ -45,7 +45,7 @@
 
 This guide is intended for the Kite developer, but may also be of use to
 the Kite user as it documents Kite's expectations for the content of the
-project tree.<p>
+project tree.
 
 <hrule>
 
@@ -55,7 +55,7 @@ project tree.<p>
 
 <section projtree "The Project Tree">
 
-A typical Kite project tree has some or all of the following parts.<p>
+A typical Kite project tree has some or all of the following parts.
 
 <table tab.projtree "Project Directory Tree">
 <tr><th>Path</th> <th>Description</th></tr>
@@ -84,17 +84,17 @@ A typical Kite project tree has some or all of the following parts.<p>
 <treedir +src/>         <xref comp "Compiled source directories"></treedir>
 <treedir ++(name)/>     Compiled source directory <i>name</i></treedir>
 <treedir +.kite/>       Kite transient data directory.</treedir>
-</table><p>
+</table>
 
 The project <root> directory will frequently contain other files, e.g., 
 <tt README> and <tt LICENSE> files, and of course other subdirectories may 
-be added as needed.<p>
+be added as needed.
 
 <section projtree.new "Creating New Project Trees">
 
 It is possible to set up a Kite project tree by hand, but it is more 
 usually to use the <tt kite new> command.  At present, <tt kite new>
-supports three templates:<p>
+supports three templates:
 
 <topiclist>
 <topic [b lib]> 
@@ -115,20 +115,20 @@ defined by the implementation package.
 
 <topic [b appkit]>
 A project that provides an application, delivered as a "starkit".
-The project tree's contents are the same as for the <b app> template.<p>
+The project tree's contents are the same as for the <b app> template.
 </topic>
 
 </topiclist>
 
 Other templates might be added over time, as well as support for
-project template plugins.<p>
+project template plugins.
 
 <section projtree.add "Adding Elements to a Project Tree">
 
 The tree created by <tt kite new> is just a starting point;
-additional elements can be added by hand, or by using <tt kite add>.<p>
+additional elements can be added by hand, or by using <tt kite add>.
 
-At present, <tt kite add> supports two element templates:<p>
+At present, <tt kite add> supports two element templates:
 
 <topiclist>
 <topic [b lib]> 
@@ -159,17 +159,17 @@ updates the <xref projfile "project file"> accordingly.
 
 Library packages are placed in subdirectories of the <root lib/> directory.
 The directory name should match the package name, e.g., package 
-<tt mylib> resides in <root {lib/mylib/}>.<p>
+<tt mylib> resides in <root {lib/mylib/}>.
 
 Each library package should define the files defined in the following
-sections.<p>
+sections.
 
 <section lib.pkgindex "The 'pkgIndex.tcl' File">
 
 Every package will have a <tt pkgIndex.tcl> file.  This file is usually 
 created by <tt kite new> or <tt kite add>, but can be copied or created
 by hand.  Every <tt pkgIndex.tcl> file should look more or less like
-<xref fig.lib.pkgindex>.<p>
+<xref fig.lib.pkgindex>.
 
 <textfigure fig.lib.pkgindex "Standard 'pkgIndex.tcl' File">
 <listing>
@@ -201,29 +201,30 @@ replaced altogether whenever the project's version number changes.
 <topic [mark B]>
 This is the <tt package ifneeded> command, which loads the package when
 it is required by the application.  There are several things to notice about
-this line:<p>
+this line:
 
 <ul>
 <li> It loads the package by sourcing the <tt pkgModules.tcl> file.  This is
-standard in Kite projects; see <xref lib.pkgmodules>.<p>
+standard in Kite projects; see <xref lib.pkgmodules>.
 
 <li> It states the package version, "1.2.3" in this case.  The package's
-version number should always match that of the project as a whole.<p>
+version number should always match that of the project as a whole.
 
 <li> Kite keeps the version number up to date automatically.
+</ul>
 </topic>
 </topiclist>
 
 <b NOTE:> Kite rewrites the entire segment between the marks, so it will
 always look exactly like this.  If you need something different, you can
 remove the <tt kite-ifneeded> lines, but then you'll have to maintain
-the version number yourself.<p>
+the version number yourself.
 
 <section lib.pkgmodules "The 'pkgModules.tcl' File">
 
 The package's <tt pkgIndex.tcl> file always sources a file called 
 <tt pkgModules.tcl>, which is responsible for loading the rest of the
-package.  A typical <tt pkgModules.tcl> file is as follows:<p>
+package.  A typical <tt pkgModules.tcl> file is as follows:
 
 <textfigure fig.lib.pkgmodules "Standard 'pkgModules.tcl' file">
 <listing>
@@ -332,7 +333,7 @@ image files, the application can find them relative to
 <topic [mark H]>
 Finally, the package's modules are loaded in any logical sequence.  The
 idiom shown here, using <tt file join> with the package's 
-<tt library> variable, is guaranteed to work on every platform.<p>
+<tt library> variable, is guaranteed to work on every platform.
 </topic>
 
 </topiclist>
@@ -342,16 +343,16 @@ idiom shown here, using <tt file join> with the package's
 If the package consists of only one module, it might be tempting to
 have <tt pkgIndex.tcl> load that module directly.  Resist this temptation;
 Kite will not be able to update the provided and required version numbers
-properly.<p>
+properly.
 
 Similarly, if the package needs only one module it might be tempting to just
 put the module's code at the end of <tt pkgModules.tcl> instead of in its
-own file.  Resist this temptation as well.<p>
+own file.  Resist this temptation as well.
 
 <section lib.modules "Package Modules">
 
 A package module file can contain whatever TCL code you like; it's entirely
-up to you.  A typical module looks like this:<p>
+up to you.  A typical module looks like this:
 
 <textfigure fig.lib.module "A Typical Package Module">
 <listing>
@@ -390,7 +391,7 @@ proc ::mylib::myproc {text} { <mark C>
 }
 </listing>
 
-In general, a package module contains whatever code you need it to contain.<p>
+In general, a package module contains whatever code you need it to contain.
 
 <topiclist>
 <topic [mark A]>
@@ -461,7 +462,7 @@ if {[lsearch [namespace children] ::tcltest] == -1} {
 
 <section dep "Dependency Management">
 
-A Kite project can have the following kinds of external dependency:<p>
+A Kite project can have the following kinds of external dependency:
 
 <ul>
 <li> Teapot packages
@@ -474,16 +475,16 @@ A Kite project can have the following kinds of external dependency:<p>
     <li> For the current platform
     <li> With and without Tk
     </ul>
-</ul><p>
+</ul>
 
 <section dep.teapot "Teapot Packages">
 
 A teapot package is a Tcl package installed in a remote or local "teapot"
-repository, using the teapot-related tools that ship with ActiveTcl.<p>
+repository, using the teapot-related tools that ship with ActiveTcl.
 
 The user specifies dependencies on teapot packages in by adding 
 <xref project(5) require>
-statements to their <tt project.kite> file, e.g.,<p>
+statements to their <tt project.kite> file, e.g.,
 
 <example>
 require snit 2.3
@@ -494,10 +495,10 @@ require snit 2.3
 Projects will often require packages produced non-locally.  Kite will
 attempt to retrieve these from a remote teapot repository, usually
 <tt http://teapot.activestate.com>.  By default, every required package is
-assumed to be non-local.<p>
+assumed to be non-local.
 
 Kite uses the <tt teacup> tool to retrieve remote packages; see 
-<xref teapot> for details.<p>
+<xref teapot> for details.
 
 <section dep.teapot.local "Locally-built Teapot Packages">
 
@@ -506,9 +507,9 @@ It will retrieve these from the local teapot, just as for other external
 packages, and will track whether the local teapot contains the required
 versions.  However, it will never attempt to retrieve them from a remote
 teapot repository; rather the developer ensure that they are installed
-locally.<p>
+locally.
 
-To mark a package as locally produced, use the `-local` flag:<p>
+To mark a package as locally produced, use the `-local` flag:
 
 <example>
 require kitedocs 1.0.0 -local
@@ -518,27 +519,27 @@ require kitedocs 1.0.0 -local
 
 A basekit is a single-file Tcl interpreter that can be used as the 
 "prefix" of a wrapped stand-alone executable.  As such, basekits are an 
-implicit dependency of any project that builds stand-alone executables.<p>
+implicit dependency of any project that builds stand-alone executables.
 
 ActiveState includes two basekits with the ActiveTcl installation, one that 
 includes Tk and one that doesn't.  The non-Tk basekit is smaller, resulting
 in smaller executables when Tk isn't required; but the distinction is
 especially important on Windows systems, where Tk applications do not have
-access to stdin, stdout, and stderr.<p>
+access to stdin, stdout, and stderr.
 
 At present, Kite is delivered as a .kit, and is run using the development
 Tcl installation; and finds the basekits for the current system relative
 to that Tcl installation.  This means that Kite can only build executables
-for the specific platform on which it is running.<p>
+for the specific platform on which it is running.
 
 Basekits can also be retrieved from 
 <tt http://teapot.activestate.com> using the
 <tt teacup> tool.  In the future, Kite may take advantage of this 
-to support cross-platform builds.<p>
+to support cross-platform builds.
 
 <section dep.basekits.locating "Locating Basekits">
 
-ActiveState's basekits are distinguished by the following variables:<p>
+ActiveState's basekits are distinguished by the following variables:
 
 <ul>
 <li> Whether or not Tk is included.
@@ -550,43 +551,43 @@ ActiveState's basekits are distinguished by the following variables:<p>
 <section dep.basekits.locating.dist "In ActiveTcl Distributions">
 
 For basekits distributed with ActiveTcl, these features are represented
-in the filename as follows:<p>
+in the filename as follows:
 
-<tt>base-<i tcltk><i x.y>-[thread-]-<i platform>[.exe]</tt><p>
+<tt>base-<i tcltk><i x.y>-[thread-]-<i platform>[.exe]</tt>
 
 where <i tcltk> is either "<tt tcl>" or "<tt tk>", "<i x.y>" is the Tcl
 version, "thread-" is present or not, and <i platform> is the build  
-platform as returned by the standard Tcl <tt platform::identify> command.<p>
+platform as returned by the standard Tcl <tt platform::identify> command.
 
 As of 2014, ActiveState's freely available builds of ActiveTcl 8.5 and 8.6
-are all threaded, so the "<tt thread->" component can be assumed.<p>
+are all threaded, so the "<tt thread->" component can be assumed.
 
 On Windows and Linux, the basekits are installed into the same directory
 as the <i tclsh> executable.  On OS X, at least as of ActiveTcl 8.6, the
-basekits are installed in the <tt /Library/Tcl/basekits> directory.<p>
+basekits are installed in the <tt /Library/Tcl/basekits> directory.
 
 ActiveTcl generally also provides dynamic Tcl/Tk libraries, which have
 the same base name as the basekit but a different file extension
 (<tt .so>, <tt .dll>, or <tt .dylib>).  When looking for the basekit,
-it's usually necessary to filter these out.<p>
+it's usually necessary to filter these out.
 
 <section dep.basekits.locating.teapot "In the Teapot">
 
 Basekits can also be retrieved from the the remote teapot repository.  
-Artifacts in the repository are identified by four components:<p>
+Artifacts in the repository are identified by four components:
 
 <ul>
 <li> The entity type, usually <tt package> or <tt application>.  For 
-    basekits, this is always <tt application>.<p>
+    basekits, this is always <tt application>.
 
 <li> The artifact's name.  For basekits, this will be either 
-    <tt base-tcl-thread> or <tt base-tk-thread>.<p>
+    <tt base-tcl-thread> or <tt base-tk-thread>.
 
 <li> The version.  This is an ActiveState version number, which is usually
-    <i x.y.z.w.buildNum>, e.g., <tt 8.6.1.1.298358>.<p>
+    <i x.y.z.w.buildNum>, e.g., <tt 8.6.1.1.298358>.
 
 <li> The platform on which it was built, e.g., <tt win32-ix86>,
-    <tt macosx10.5-i386-x86_64>, or <tt linux-glibc2.3-ix86>.<p>
+    <tt macosx10.5-i386-x86_64>, or <tt linux-glibc2.3-ix86>.
 </ul>
 
 To pull down the desired basekit, then, it's generally necessary to
@@ -594,18 +595,18 @@ get a list of the available basekits and decide which one best fits the
 desired version and current platform.  This can be tricky.  Windows and
 Linux come in 32-bit and 64-bit flavors; and the 
 <tt platform::identify> value for the development platform often won't 
-exactly match that of the appropriate basekit.<p>
+exactly match that of the appropriate basekit.
 
-In general, then, follow these rules:<p>
+In general, then, follow these rules:
 
 <ul>
-<li> Always look for an <tt application>.<p>
+<li> Always look for an <tt application>.
 
 <li> For a console application, look for <tt base-tcl-thread>; for
-    a GUI application, look for <tt base-tk-thread>.<p>
+    a GUI application, look for <tt base-tk-thread>.
 
 <li> For Tcl version <i>X.Y</i>, look for the largest version 
-    (per <tt package vcompare>) that matches "X.Y*".<p>
+    (per <tt package vcompare>) that matches "X.Y*".
 
 <li> Match the platform as follows:
     <ul>
@@ -614,7 +615,7 @@ In general, then, follow these rules:<p>
     <li> 32-bit Linux: "<tt linux-*-ix86>".
     <li> 64-bit Linux: "<tt linux-*-x86_64>".
     <li> 64-bit Mac OSX: "<tt macosx*-x86_64>".
-    </ul><p>
+    </ul>
 </ul>
 
 Having selected these four components, you can retrieve the basekit as
@@ -625,9 +626,9 @@ $ teacup get --is application --output <i folder> \
     <i name> <i version> <i platform>
 </example>
 
-The basekit will be saved to the specified <i folder>, and will be called<p>
+The basekit will be saved to the specified <i folder>, and will be called
 
-<tt>application-<i name>-<i version>-<i platform>[.exe]</tt><p>
+<tt>application-<i name>-<i version>-<i platform>[.exe]</tt>
 
 <hrule>
 

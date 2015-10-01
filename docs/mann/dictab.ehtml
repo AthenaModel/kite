@@ -13,10 +13,10 @@ namespace import ::kiteutils::*
 
 For the purposes of this module, a <i>dictab</i>, or "dictionary table",
 is a list of dictionaries with identical keys (or at least with a core 
-of identical keys).<p>
+of identical keys).
 
 dicttab(n) provides code for formatting text tables for console output;
-eventually, it might provide other table-related utilities as well.<p>
+eventually, it might provide other table-related utilities as well.
 
 <section COMMANDS>
 
@@ -25,38 +25,38 @@ eventually, it might provide other table-related utilities as well.<p>
 <defitem "dictab format" {dicttab format <i table> ?<i options...>?}>
 
 Formats the <i table> for monospace text output, and returns the formatted
-text.  The options are as follows:<p>
+text.  The options are as follows:
 
 <deflist options>
 
 <defopt {-leader <i text>}>
 
 Adds the leader <i text> to the beginning of each line of the output.
-The leader defaults to the empty string.<p>
+The leader defaults to the empty string.
 
 <defopt {-headers}>
 
 If given, the output will include column headers.  The text of the 
 column headers is simply the key names in the table's dictionaries.
 Each column header label is separated from the column's data by a row
-of hyphens as wide as the column.<p>
+of hyphens as wide as the column.
 
 </deflist options>
 
 <defitem "dictab puts" {dictab puts <i table> ?<i options...>?}>
 
 This is a convenience command; it calls <iref dictab format> and 
-writes the result to standard out.<p>
+writes the result to standard out.
 
 </deflist commands>
 
 <section ENVIRONMENT>
 
-Requires Tcl 8.6 or later.<p>
+Requires Tcl 8.6 or later.
 
 <section AUTHOR>
 
-Will Duquette<p>
+Will Duquette
 
 </manpage>
 

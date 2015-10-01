@@ -11,6 +11,9 @@
 #    This module implements a macroset(i) extension for use with
 #    macro(n).
 #
+# TO BE DONE:
+#    * Use CSS instead of style tags.
+#
 #-----------------------------------------------------------------------
 
 namespace eval ::kitedocs:: {
@@ -26,152 +29,9 @@ snit::type ::kitedocs::ehtml {
     #-------------------------------------------------------------------
     # Lookup Tables
 
-    # css: Standard ehtml(5) CSS
-    typevariable css {
-        A {
-            text-decoration: none;
-        }
-
-        TABLE {
-            margin-top:    4px;
-            margin-bottom: 4px;
-        }
-
-        TR {
-            vertical-align: baseline;
-        }
-
-        TH {
-            padding-left: 4px;
-        }
-
-        TD {
-            padding-left: 4px;
-        }
-
-        /*--------------------------------------------------
-         * Table Formatting Classes
-         */
-
-        .table {  /* Replaces "pretty" */
-            border: 1px solid black;
-            border-spacing: 0;
-            color: black;
-            background-color: white;
-        }
-
-        .table tr:first-child {  /* Replaces "header" */
-            font-weight: bold;
-            color: white;
-            background-color: #000099;    
-        }
-
-        .table tr.tr-odd {      /* Replaces "evenrow" */
-            background-color: #EEEEEE;
-        }
-
-        .table tr.tr-even { }   /* Replaces "oddrow" */
-
-        .table th {
-            padding-left: 5px;
-            text-align:   left;
-        }
-
-        .table td {
-            padding-left:   5px;
-            vertical-align: baseline;
-        }
-
-        .table-wide {
-            width: 100%;
-        }
-
-
-        /* DEPRECATED: Use the "table", "tr-odd", and "tr-even" 
-         * classes, above.
-         *
-         * Table Formatting Classes: "pretty" 
-         * Border around the outside, even/odd striping, no internal
-         * border lines.
-         */
-        TABLE.pretty {
-            border: 1px solid black;
-            border-spacing: 0;
-        }
-
-        TABLE.pretty TR.header {
-            font-weight: bold;
-            color: white;
-            background-color: #000099;
-        }
-
-        TABLE.pretty TR.oddrow {
-            color: black;
-            background-color: white;
-        }
-
-        TABLE.pretty TR.evenrow {
-            color: black;
-            background-color: #EEEEEE;
-        }
-
-        /* Examples, listings, and marks */
-        PRE.example {
-            background:     #FFFDD1 ;
-            border:         1px solid blue;
-            padding-top:    2px;
-            padding-bottom: 2px;
-            padding-left:   4px;
-        }
-
-        PRE.listing {
-            background:     #FFFDD1 ;
-            border:         1px solid blue;
-            padding-top:    4px;
-            padding-bottom: 4px;
-            padding-left:   4px;
-        }
-
-        SPAN.linenum {
-            background:     #E3E08F ;
-        }
-
-        DIV.mark {
-            display: inline;
-            font-family: Verdana;
-            font-size: 75%;
-            background: black;
-            color: white;
-            border: 1px solid black;
-            border-radius: 5px;
-            padding-left: 2px;
-            padding-right: 2px;
-        }
-
-        DIV.bigmark {
-            display: inline;
-            font-family: Verdana;
-            font-size: 100%;
-            background: black;
-            color: white;
-            border: 1px solid black;
-            border-radius: 5px;
-            padding-left: 2px;
-            padding-right: 2px;
-        }
-
-        /* Topic Lists. */
-        TR.topic {
-            vertical-align: baseline;
-        }
-
-        TR.topicname {
-            min-width: 1.5em;
-        }
-
-    }
+    # css: Standard ehtml(5) CSS; read from disk on first install.
+    typevariable css {}
     
-
     #-------------------------------------------------------------------
     # Configuration Type Variables
 
@@ -229,15 +89,26 @@ snit::type ::kitedocs::ehtml {
     # transient data.
 
     typemethod install {macro} {
-        # FIRST, save the config data.
+        # FIRST, load the CSS from disk.
+        if {$css eq ""} {
+            set cssfile [file join $::kitedocs::library ehtml.css]
+            set css [readfile $cssfile]
+        }
+
+        # NEXT, save the config data.
+        $macro eval {
+            namespace eval ::ehtml:: {}
+        }
         $macro eval [list array set ::ehtml [array get config]]
         $macro eval [list array set ::trans $trans]
+
+        # NEXT, control tags
+        HtmlTag $macro nopara /nopara
 
         # NEXT, define HTML equivalents.
         StyleMacro $macro b
         StyleMacro $macro i
         StyleMacro $macro code
-        StyleMacro $macro tt
         StyleMacro $macro em
         StyleMacro $macro strong
         StyleMacro $macro sup
@@ -263,16 +134,32 @@ snit::type ::kitedocs::ehtml {
 
         $macro proc img {attrs} { return "<img $attrs>" }
 
+        # <tt> tag is obsolete in HTML 5.
+        $macro proc tt {args} {
+            set out "<span class=\"tt\">"
+
+            if {[llength $args] >= 1} {
+                append out "$args</span>"
+            }
+
+            return $out
+        }
+
+        $macro proc /tt {} {
+            return "</span>"
+        }
+
+
         # NEXT, define basic macros.
-        $macro proc hrule {} { return "<p><hr><p>" }
+        $macro proc hrule {} { return "<hr class=\"hrule\">" }
         $macro proc lb    {} { return "&lt;"       }
         $macro proc rb    {} { return "&gt;"       }
 
         $macro proc tag {name {arglist ""}} {
             if {$arglist ne ""} {
-                return "[tt][lb]$name [expand $arglist][rb][/tt]"
+                return "[code][lb]$name [expand $arglist][rb][/code]"
             } else {
-                return "[tt][lb]$name[rb][/tt]"
+                return "[code][lb]$name[rb][/code]"
             }
         }
 
@@ -388,11 +275,32 @@ snit::type ::kitedocs::ehtml {
             return "[b][tag xref $id][/b]"
         }
 
+        # NEXT, ulp/olp macros
+        $macro proc ulp {} {
+            return "<ul class=\"ulp\">"
+        }
+
+        $macro proc /ulp {} {
+            return "</ul>"
+        }
+
+        $macro proc olp {} {
+            return "<ol class=\"olp\">"
+        }
+
+        $macro proc /olp {} {
+            return "</ol>"
+        }
+
         # NEXT, define definition list macros.
+        # TBD: Can trans(dlstack) be replaced by the expander
+        # context stack?
+
         $macro proc deflist {args}  {
             variable trans
             lappend trans(dlstack) $args
 
+            macro cpush deflist
             return "<dl>" 
         }
 
@@ -400,18 +308,20 @@ snit::type ::kitedocs::ehtml {
             variable trans
             set trans(dlstack) [lrange $trans(dlstack) 0 end-1]
 
-            return "</dl>" 
+            set close [ehtml::DefClose]
+            return "[macro cpop deflist]$close</dl>" 
         }
 
-        $macro template def {text} {
+        $macro proc def {text} {
             set text [expand $text]
-        } {
-            |<--
-            <dt><b>$text</b></dt>
-            <dd>
+
+            set close [ehtml::DefClose]
+            macro cpush def
+
+            return "$close<dt class=\"def\">$text</dt><dd>"
         }
 
-        $macro template defitem {item text} {
+        $macro proc defitem {item text} {
             variable trans
             set text [expand $text]
             set trans(lastItem) $item
@@ -426,14 +336,16 @@ snit::type ::kitedocs::ehtml {
                 }
 
                 dict set trans(itemText) $item $text
+                return
             }
-        } {
-            |<--
-            <dt><b><tt><a name="[textToID $item]">$text</a></tt></b></dt>
-            <dd>      
+
+            set id [textToID $item]
+            set close [ehtml::DefClose]
+            macro cpush def
+            return "$close<dt class=\"defitem\"><a name=\"$id\">$text</a></dt><dd>"
         }
 
-        $macro template defopt {text} {
+        $macro proc defopt {text} {
             variable trans
 
             set opt [lindex $text 0]
@@ -444,11 +356,27 @@ snit::type ::kitedocs::ehtml {
                 dict lappend trans(optsFor) $trans(lastItem) $opt
                 dict set trans(optText) $id $text
             }
-        } {
-            |<--
-            <dt><b><tt><a name="$id">$text</a></tt></b></dt>
-            <dd>
-        }
+
+            set close [ehtml::DefClose]
+            macro cpush def
+            return "$close<dt class=\"defopt\"><a name=\"$id\">$text</a></dt><dd>"
+        }    
+
+        # Close an open definition
+        $macro proc ehtml::DefClose {} {
+            if {[macro cis def]} {
+                set text [macro cpop def]
+                if {[regexp {<dd>\s*$} $text]} {
+                    regsub {<dd>\s*$} $text "\n" text
+                } else {
+                    append text "</dd>\n"
+                }
+            } else {
+                set text ""
+            }
+
+            return $text
+        }    
 
         # iref args
         #
@@ -466,44 +394,74 @@ snit::type ::kitedocs::ehtml {
             }
 
             if {[dict exists $trans(itemText) $tag]} {
-                return "<tt><a href=\"#[textToID $tag]\">$tag</a></tt>"
+                set href "#[textToID $tag]"
             } else {
                 macro warn "iref not found, '$tag'"
-                return "<tt>$tag</tt>"
+                set href ""
             }
+
+            return "<a class=\"iref\" href=\"$href\">$tag</a>"
         }
 
         $macro proc itag {args} {
-            return "[tt][lb][iref {*}$args][rb][/tt]"
+            variable trans
+
+            set tag $args
+
+            if {[macro pass] == 1} {
+                return
+            }
+
+            if {[dict exists $trans(itemText) $tag]} {
+                set href "#[textToID $tag]"
+            } else {
+                macro warn "iref not found, '$tag'"
+                set href ""
+            }
+
+            return "<a class=\"iref\" href=\"$href\">[lb]$tag[rb]</a>"
         }
 
 
-        $macro template itemlist {{listname *}} {
+        $macro proc itemlist {{listname *}} {
             variable trans
+
+            if {[macro pass] == 1} {
+                return
+            }
 
             set items [list]
 
-            if {[macro pass] == 2} {
-                if {[dict exists $trans(itemLists) $listname]} {
-                    set items [dict get $trans(itemLists) $listname]
+            if {[dict exists $trans(itemLists) $listname]} {
+                set items [dict get $trans(itemLists) $listname]
+            }
+
+            set out "<ul class=\"itemlist\">\n"
+
+            foreach tag $items {
+                set id [textToID $tag]
+                append out \
+                    "<li><a class=\"iref\" href=\"#$id\">" \
+                    [dict get $trans(itemText) $tag] \
+                    "</a></li>\n"
+
+                if {![dict exists $trans(optsFor) $tag]} {
+                    continue
+                }
+
+                foreach opt [dict get $trans(optsFor) $tag] {
+                    append out \
+                        "<li>&nbsp;&nbsp;&nbsp;&nbsp;" \
+                        "<a class=\"iref\" href=\"#$tag$opt\">" \
+                        [dict get $trans(optText) $tag$opt] \
+                        "</a></li>\n"
                 }
             }
-        } {
-            |<--
-            [tforeach tag $items {
-                |<--
-                <tt><a href="#[textToID $tag]">[dict get $trans(itemText) $tag]</a></tt><br>
-                [tif {[dict exists $trans(optsFor) $tag]} {
-                    |<--
-                    [tforeach opt [dict get $trans(optsFor) $tag] {
-                        |<--
-                        &nbsp;&nbsp;&nbsp;&nbsp;
-                        <tt><a href="#$tag$opt">[dict get $trans(optText) $tag$opt]</a></tt><br>
-                    }]
-                }]
-            }]<p>
-        }
 
+            append out "</ul>\n"
+
+            return $out
+        }
 
         # Topic Lists
 
@@ -512,7 +470,7 @@ snit::type ::kitedocs::ehtml {
             set itemCounter 1
         } {
             |<--
-            <table class="table">
+            <table class="table topiclist">
             <tr>
             <th>$h1</th> 
             <th>$h2</th>
@@ -609,7 +567,7 @@ snit::type ::kitedocs::ehtml {
             </tr>
         }
 
-        $macro proc /changelog {} { return "</table><p>" }
+        $macro proc /changelog {} { return "</table>" }
 
         $macro proc change {date status initiator} {
             macro cpush change
@@ -650,7 +608,7 @@ snit::type ::kitedocs::ehtml {
             set procedureCounter 0
         } {
             |<--
-            <table border="1" cellspacing="0" cellpadding="2">
+            <table class="procedure">
         }
 
         $macro template step {} {
@@ -658,8 +616,8 @@ snit::type ::kitedocs::ehtml {
             incr procedureCounter
         } {
             |<--
-            <tr valign="top">
-            <td><b>$procedureCounter.</b></td>
+            <tr>
+            <td class="procedure-index">$procedureCounter.</td>
             <td>
         }
 
@@ -723,8 +681,8 @@ snit::type ::kitedocs::ehtml {
     # Translates the tag macro back to the equivalent HTMl tag.
 
     proc HtmlTag {macro tag {closetag ""}} {
-        $macro proc $tag {} [format { 
-            return "<%s>" 
+        $macro proc $tag {args} [format {
+            return "<%s>"
         } $tag]
 
         if {$closetag ne ""} {

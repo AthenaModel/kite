@@ -11,10 +11,24 @@ a flavor of "Extended HTML", i.e., an HTML-like format
 extended with Tcl macros.  The
 basic syntax and capabilities of Extended HTML are defined in the
 <xref ehtml(5)> man page.  This man page describes an extension 
-to the basic format, as an aid to writing man pages.<p>
+to the basic format, as an aid to writing man pages.
 
 The <xref manpage(n)> module translates man pages in
-manpage(5) format into HTML.<p>
+manpage(5) format into HTML.
+
+<subsection "Automatic Transformations">
+
+The <xref manpage(n)> processor uses <xref htmltrans(n)> to transform
+the output of the macro processor.  In particular, it supports:
+
+<ul>
+<li> Automated closure of <tag li> and similar tags.
+
+<li> Automatic paragraph detection and insertion of
+     <tag p>...<tag /p> tags.  Essentially, blank lines in prose force a
+     paragraph break.  There is no need to insert the paragraph
+     tags by hand.
+</ul>
 
 <section MACROS>
 
@@ -22,18 +36,18 @@ manpage(5) man pages may use any of the following macros, as well
 as those defined in the <xref ehtml(5)> man page.
 Note that these macros are simply Tcl commands; you can define
 your own macros, as described in <xref ehtml(5)>,
-and use them in your man pages.<p>
+and use them in your man pages.
 
 <deflist macros>
 
 <defitem manpage {<lb>manpage <i>nameList description</i><rb>}>
 
 This macro should be the first in the man page, as it expands to the
-HTML header and also the "NAME" section of the man page.<p>
+HTML header and also the "NAME" section of the man page.
 
 The macro has two forms.  In the first form, <i>nameList</i> is just
 the name of the man page; <i>description</i> is a short one-line
-description of the documented library, file format, or program:<p>
+description of the documented library, file format, or program:
 
 <example>
 <lb>manpage manpage(5) "Kite Man Page Format"<rb>
@@ -43,7 +57,7 @@ The second form is used when the man page documents a submodule of a
 larger library.  In this case, <i>nameList</i> is a list containing
 two entries, the name of the parent man page and the name of this man
 page.  For example, the man page for <xref kitedocs(n)>'s
-<xref marsmisc(n)> module begins with this macro:<p>
+<xref marsmisc(n)> module begins with this macro:
 
 <example>
 <lb>manpage {kitedocs(n) kitedoc(n)} "Kite Document Formatter"<rb>
@@ -53,9 +67,9 @@ page.  For example, the man page for <xref kitedocs(n)>'s
 
 This macro should be the last in the man page, as it expands to the
 HTML footer.  It also adds a timestamp for when the page was
-translated.<p>
+translated.
 
-For example,<p>
+For example,
 
 <example>
 <lb>/manpage<rb>
@@ -65,29 +79,29 @@ For example,<p>
 
 Begins a new section.  By convention, man page section names are
 displayed in all caps; consequently, <i>name</i> is converted to
-all caps when needed.<p>
+all caps when needed.
 
 Every section is included in a table of contents at the beginning of
-the generated man page.<p>
+the generated man page.
 
 The <i>name</i> can be almost anything; however, see
 <xref "MAN PAGE SKELETON"> for a list of the sections found in 
-most man pages.<p>
+most man pages.
 
 <defitem subsection {<lb>subsection <i>name</i><rb>}>
 
 Begins a new subsection under the current <iref section>.
 By convention, man page subsection names are displayed in mixed case.
 Subsections are included in the table of contents, indented under
-their parent section.<p>
+their parent section.
 
 The subsection <i>name</i> can be almost anything, but it should be
-unique within the man page.<p>
+unique within the man page.
 
 <defitem version {<lb>version<rb>}>
 
 Returns the project version number, as provided to 
-<xref manpage(n)>'s <xref manpage(n) format> subcommand.<p>
+<xref manpage(n)>'s <xref manpage(n) format> subcommand.
 
 <defitem mktree {<tag mktree "<i id>">...<tag /mktree>}>
 
@@ -95,10 +109,10 @@ This tag defines an unordered "<tag ul>" list that uses the
 "mktree" Javascript package for turning nested lists of links into
 dynamic lists that can be opened and closed.  The
 Javascript code and the necessary CSS styles are included in the HTML
-output automatically.<p>
+output automatically.
 
 The <i id> is used as the value of the "id" attribute of the 
-<tag ul> tag, which is generated like this:<p>
+<tag ul> tag, which is generated like this:
 
 <example>
 <tag ul {class="mktree" id="<i id>"}>
@@ -110,24 +124,24 @@ The <i id> is used as the value of the "id" attribute of the
 <section "MAN PAGE SKELETON">
 
 The sections included in a man page depend on just what you're
-documenting.  That said, here's a fairly typical skeleton:<p>
+documenting.  That said, here's a fairly typical skeleton:
 
 <example>
 <lb>manpage somelib(n)<rb>
 
 <lb>section SYNOPSIS<rb>
 
-Put how to load this library here.  Then, put the itemlist:&lt;p&gt;
+Put how to load this library here.  Then, put the itemlist:
 
 <lb>itemlist<rb>
 
 <lb>section DESCRIPTION<rb>
 
-A general description of the package.&lt;p&gt;
+A general description of the package.
 
 <lb>section COMMANDS<rb>
 
-If this were a C library, this might be "FUNCTIONS" instead.&lt;p&gt;
+If this were a C library, this might be "FUNCTIONS" instead.
 
 <lb>deflist commands<rb>
      .
@@ -138,28 +152,28 @@ If this were a C library, this might be "FUNCTIONS" instead.&lt;p&gt;
 <lb>section EXAMPLES<rb>
 
 Put examples here, assuming they didn't fit better under one of the
-items listed above.&lt;p&gt;
+items listed above.
 
 <lb>section AUTHOR<rb>
 
-Your name.&lt;p&gt;
+Your name.
 
 <lb>section HISTORY<rb>
 
 Any relevant historical information, like "This package was developed
-as a replacement for <lb>xref soandsolib(n)<rb>...."&lt;p&gt;
+as a replacement for <lb>xref soandsolib(n)<rb>...."
 
 <lb>/manpage<rb>
 </example>
 
 <section AUTHOR>
 
-Will Duquette<p>
+Will Duquette
 
 <section HISTORY>
 
 Originally written for JNEM as jnem_man(5); migrated to Mars in
-September 2008 as app_man(5), and moved to Kite in July 2014.<p>
+September 2008 as app_man(5), and moved to Kite in July 2014.
 
 </manpage>
 

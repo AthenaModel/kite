@@ -9,24 +9,24 @@
 The man page defines the syntax of Kite's <code>project.kite</code> file.
 The Kite project file defines the project's name, version, external
 dependencies, and build targets, so that Kite can perform various 
-development tasks automatically.<p>
+development tasks automatically.
 
 Note that the Kite project file is a Tcl script, and so 
-normal Tcl syntax rules apply.<p>
+normal Tcl syntax rules apply.
 
 Every Kite project file begins with a <iref project> statement.  This is
 typically followed by one or more build target statements, e.g.,
 <iref app> and <iref provide>.  These are followed by
 <iref require> statements that define the project's
-external dependencies.<p>
+external dependencies.
 
 A project's project file is usually created by Kite as part of initializing
 the project's directory tree, and is then updated by the developer as
-needed.<p>
+needed.
 
 <section STATEMENTS>
 
-Kite project files may contain the following statements.<p>
+Kite project files may contain the following statements.
 
 <deflist statements>
 
@@ -35,9 +35,9 @@ Kite project files may contain the following statements.<p>
 <b>Required.</b> This statement names the project, its
 current <i>version</i>, and a brief text <i>description</i>.  
 The project name and version are usually defined to match the 
-project's name in the VCS of choice.<p>
+project's name in the VCS of choice.
 
-For example,<p>
+For example,
 
 <pre>
 project athena-mars 3.0.0 "Mars Simulation Support Library"
@@ -49,7 +49,7 @@ an optional suffix.  Tcl package version numbers should consist of two
 or more integers, separated by dots; the final dot may be replaced by
 "a" or "b", indicating alpha or beta status.  The suffix, if given,
 can be any word preceded by a hyphen.  Thus, the following are valid
-project version numbers:<p>
+project version numbers:
 
 <ul>
 <li> <tt>1.2</tt>
@@ -62,7 +62,7 @@ project version numbers:<p>
 <defitem poc {poc <i>email</i>}>
 
 Specifies the e-mail address of the project's primary point-of-contact
-(POC).  This is made available to <xref kitedoc(5)> documentation.<p>
+(POC).  This is made available to <xref kitedoc(5)> documentation.
 
 <defitem app {app <i name> ?<i options...>?}>
 
@@ -71,25 +71,25 @@ This statement tells Kite that the project builds an application called
 and its main routine will be in <tt>lib/<i name>app/main.tcl</tt>.  Of
 the external dependencies listed in the project file, it will require
 those included in the external dependency block in its 
-<tt>lib/<i name>app/pkgModules.tcl</tt> file.<p>
+<tt>lib/<i name>app/pkgModules.tcl</tt> file.
 
 By default, it will be built as a console-mode starkit.  The following
-options may be used:<p>
+options may be used:
 
 <deflist options>
 
 <defopt {-apptype kit|exe}>
 
 To build a starkit (the default), select <b kit>; to build a standalone
-executable, select <b exe>.<p>
+executable, select <b exe>.
 
 <b TODO:> On OS X, we should have an additional option, <b app>, which
-builds an OS X .app.<p>
+builds an OS X .app.
 
 <defopt {-exclude <i packages...>}>
 
 The value, <i packages>, is a list of the names of external packages 
-that shouldn't be included in the application.<p> 
+that shouldn't be included in the application. 
 
 When a project defines multiple applications, it might be that a given
 application requires only some of the
@@ -98,7 +98,7 @@ By default all external packages are included in application executables,
 but included unneeded applications can make an executable bigger than
 necessary.  In addition, attempting to include Tk extensions in a 
 non-GUI application can cause <tt tclapp> to balk.  This option allows
-them to be explicitly excluded.<p>  
+them to be explicitly excluded.  
 
 <defopt {-force}>
 
@@ -109,37 +109,37 @@ This is useful as a stop-gap when building a non-GUI <b exe> application
 for a package that also delivers GUI apps and requires GUI packages; 
 in this specific case, <tt tclapp> will sometimes balk, and 
 <tt -force> prevents that.  The <tt -exclude> option is a preferable 
-solution for the long-term.<p>
+solution for the long-term.
 
 <defopt {-gui}>
 
 If present, the application will load Tk automatically; and when built
-as a standalone executable, will be built using a Tk basekit.<p>
+as a standalone executable, will be built using a Tk basekit.
 
 <defopt {-icon <i filename>}>
 
 Specifies the name of a <tt .ico> file to included in the finished 
 executable.  The specified <tt -icon> will be used only if the 
 <tt -apptype> is <b exe> and the platform is some flavor of Windows or
-Linux.<p>
+Linux.
 
 </deflist options>
 
 A project may contain any number of applications; the first listed in
-<tt project.kite> is called the <i primary> application.<p>
+<tt project.kite> is called the <i primary> application.
 
 <defitem provide {provide <i>name</i> ?<i options>?}>
 
 This statement tells Kite that the project provides a Tcl library package
 intended for use by other projects.  The package will be called 
 <i>name</i>; it must reside in <tt>lib/<i name></tt>, and will 
-always have the same version number as the project as a whole.<p>
+always have the same version number as the project as a whole.
 
 A project may contain any number of library packages.  Note that only
 packages intended for export need to be declared with <iref provide>; a 
 project defining an <iref app> will often contain a 
 number of packages intended for use only by the application itself, and 
-these need not be declared.<p>
+these need not be declared.
 
 If the normal template is used when defining the library (i.e., 
 <code>kite new</code> or <code>kite add</code>), then Kite will 
@@ -151,13 +151,13 @@ automatically update the version number in the library's
 in that block, corresponding to the external dependencies listed in 
 <tt project.kite> for those external libraries this package actually uses,
 Kite will keep their version numbers consistent with those in 
-<tt project.kite>.<p>
+<tt project.kite>.
 
 <b Binary Packages:> If the project exports a binary Tcl extension, the
 extension should be built as a TEA extension in a 
 "<tt src/mylib>" subdirectory, and installed into "<tt lib/mylib>" when
 it is built.  Then, the <b -binary> option should be used to tell Kite
-that the provided package is a binary extension:<p>
+that the provided package is a binary extension:
 
 <example>
 provide Mylib -binary
@@ -170,24 +170,24 @@ This statement tells Kite that the project contains a directory,
 <tt src/><i name>, containing some kind of code to be 
 compiled.  The directory might define a binary Tcl package, or some 
 other compiled product (i.e., a .a library to be linked with a binary
-Tcl package).<p>
+Tcl package).
 
 By default, Kite assumes that the named directory contains a 
 <tt Makefile>, and that it can issue "<tt make ...>" commands to build the
 directory's contents and clean up the build products.  Alternatively, the
-user can specify how to do this by passing the following options:<p>
+user can specify how to do this by passing the following options:
 
 <deflist options>
 
 <defopt {-build <i command>}>
 
 Specifies the command used to build the directory's contents.  
-Defaults to "<tt make clean all>".<p>
+Defaults to "<tt make clean all>".
 
 <defopt {-clean <i command>}>
 
 Specifies the command used to clean up the directory's build products.
-Defaults to "<tt make clean>".<p>
+Defaults to "<tt make clean>".
 
 </deflist options>
 
@@ -195,7 +195,7 @@ If the directory contains a binary extension, the <b -build> command
 should "install" the extension into "<tt lib/><i name>", 
 and the <b -clean> command should remove it.  In addition, if the project
 needs to export the library it should include the following statement
-in <tt project.kite>:<p>
+in <tt project.kite>:
 
 <example>provide <i name> -binary</example>
 
@@ -203,7 +203,7 @@ in <tt project.kite>:<p>
 
 This statement tells Kite that the project wants to run against the teapot
 package with the given name and version, where version takes any of the
-normal forms for <code>package require</code>.<p>
+normal forms for <code>package require</code>.
 
 By default, Kite assumes that the package is available from the ActiveState
 Teapot Repository, and will install it into the local teapot on 
@@ -220,36 +220,36 @@ and (<b TODO>) dependencies on required packages will be noted in
 
 The <tt kite dist> command builds distribution .zip files for the project.
 This command defines a distribution target called <i name>; the
-<i patterns> indicate the specific files to include in the .zip file.<p>
+<i patterns> indicate the specific files to include in the .zip file.
 
 The <i name> may include the token "%platform"; if so, it will be replaced
 by the return value of <tt platform::identify>.  This is appropriate for
-installation sets for projects containing stand-alone executables.<p>
+installation sets for projects containing stand-alone executables.
 
 The value of <i patterns> is a list of patterns; each pattern is one of the
-following:<p>
+following:
 
 <ul>
 <li> A glob pattern relative to the project root, e.g., 
      "<tt docs/*.html>".  This includes all matching files from the 
-     project tree.<p>
+     project tree.
 
 <li> The special pattern <b %apps>.  This includes all of the project's
-     application executables.<p>
+     application executables.
 
 <li> The special pattern <b %libs>.  This includes the teapot .zip files
-     for each of the project's <iref provide>d library packages.<p>
+     for each of the project's <iref provide>d library packages.
 
 <li> The special pattern <b %get>, which is followed by a list of two
      elements: a relative path and a URL.  Kite will retrieve the document
      at the URL, and include it in the distribution .zip file at the 
-     given path.  This is useful for large documents in binary formats.<p>
+     given path.  This is useful for large documents in binary formats.
 </ul>
 
 A project may define any number of distribution targets; by convention,
-the main one is called "install".<p>
+the main one is called "install".
 
-For example, a typical "install" distribution for a project delivering one or more applications as starkits might look like this:<p>
+For example, a typical "install" distribution for a project delivering one or more applications as starkits might look like this:
 
 <example>
 dist install {
@@ -259,7 +259,7 @@ dist install {
     docs/*/*.html
     %apps
 }
-</example><p>
+</example>
 
 If the project delivers its applications as stand-alone executables, and also
 provides one or more libraries, it might look like this:
@@ -281,13 +281,13 @@ dist install-%platform {
 The <i>script</i> will be automatically loaded in the Tcl shell produced by
 the <code>kite shell</code> command for "lib-only" projects or if 
 <code>kite shell -plain</code> is used. This allows the project to 
-customize the initial state of the shell.<p>
+customize the initial state of the shell.
 
 <defitem before {before <i tool script>}>
 
 Defines a hook <i script> to be executed just prior to the specified
 Kite <i tool>.  The script is executed in the development <tt tclsh>
-in the project context.  Hooks can be defined for the following tools:<p>
+in the project context.  Hooks can be defined for the following tools:
 
 <ul>
 <li> <b add>
@@ -301,14 +301,14 @@ in the project context.  Hooks can be defined for the following tools:<p>
 <li> <b new>
 <li> <b test>
 <li> <b wrap>
-</ul><p>
+</ul>
 
 <defitem after {after <i tool script>}>
 
 Defines a hook <i script> to be executed just after the specified
 Kite <i tool>.  The script is executed in the development <tt tclsh>
 in the project context.  This statement defines hooks for the same tools
-as the <iref before> statement.<p>
+as the <iref before> statement.
 
 <defitem xfile {xfile <i path url>}>
 
@@ -325,28 +325,28 @@ xfile docs/mydoc.docx http://example.com/mydoc.docx
 
 The <i path> should be a path relative to the project root, using "/" as
 the path separator, and ending in the desired file name.  The <i url> is
-an "http" or "https" URL from which the desired file can be retrieved.<p>
+an "http" or "https" URL from which the desired file can be retrieved.
 
 The <tt kite xfiles update> and <tt kite build all> commands will retrieve
 the designated file and save it in the project tree with the designated 
 name.  The <tt kite xfiles clean> and <tt kite clean> commands will 
-remove it.<p>
+remove it.
 
 It is generally a good idea to update the <tt .gitignores> file or 
 equivalent so that the external file won't be accidentally checked in
-to the VCS.<p>
+to the VCS.
 
 <defitem mansec {mansec <i section title>}>
 
 This command adds custom man page sections to the <tt docs/> directory.
 The <i section> is the man page section, e.g., "1", "5", "n", or some
-other string.  The <i title> is the section title, e.g.,<p>
+other string.  The <i title> is the section title, e.g.,
 
 <example>
 mansec type "Validation Data Types"
 </example>
 
-In this case, the related directory will be <tt docs/mantype/>.<p>
+In this case, the related directory will be <tt docs/mantype/>.
 
 This command can also be used to assign a new title to one of the 
 default man page sections, which are:
@@ -362,11 +362,11 @@ default man page sections, which are:
 
 <section AUTHOR>
 
-Will Duquette<p>
+Will Duquette
 
 <section HISTORY>
 
-Original file format.<p>
+Original file format.
 
 </manpage>
 

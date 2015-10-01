@@ -16,13 +16,13 @@ namespace import ::kiteutils::*
 
 macro(n) defines a Tcl-based macro expansion processor.  Input consists
 of plain text with embedded macros; the macros are evaluated, and their 
-return values are inserted into the body of text in their place.<p>
+return values are inserted into the body of text in their place.
 
-See <xref macro(5)> for the basic syntax and standard macros.<p>
+See <xref macro(5)> for the basic syntax and standard macros.
 
 Instances of macro(n) are wrapper around the Tcllib 
 <xref textutil::expander(n)> module, using a
-<xref smartinterp(n)> object as the macro interpreter.<p>
+<xref smartinterp(n)> object as the macro interpreter.
 
 <section MACROS>
 
@@ -30,10 +30,10 @@ The <xref macro(5)> man page describes some standard macros; and this
 module provides tools for adding additional macros.  In general,
 new macros are defined in sets using the <xref macroset(i)> interface;
 a <xref macroset(i)> object is then registered with the 
-macro(n) instance using the <iref register> method.<p>
+macro(n) instance using the <iref register> method.
 
 Macros are expanded in a safe <xref smartinterp(n)> interpreter.  Any
-Tcl commands present in the interpreter can be used as a macro.<p>
+Tcl commands present in the interpreter can be used as a macro.
 
 
 <section COMMANDS>
@@ -45,17 +45,17 @@ Tcl commands present in the interpreter can be used as a macro.<p>
 Creates a new macro(n) object called <i>name</i>. The object is
 represented as a new Tcl command in the caller's scope;
 <iref macro> returns the fully-qualified form of the
-<i>name</i>.<p>
+<i>name</i>.
 
 The processor is manipulated via the subcommands of the
-<iref macro> command, which are as follows:<p>
+<iref macro> command, which are as follows:
 
 </deflist commands>
 
 <section "INSTANCE COMMAND">
 
 Each instance of the <iref macro> object has the following
-subcommands:<p>
+subcommands:
 
 <deflist instance>
 
@@ -73,7 +73,7 @@ subcommands:<p>
 <defitem where {<i obj> where}>
 
 These commands provide access to the <xref textutil::expander(n)>;
-see that man page for details.<p>
+see that man page for details.
 
 <defitem alias {<i obj> alias <i>srcToken</i>}>
 <defitem alias {<i obj> alias <i>srcToken</i> {}}>
@@ -84,51 +84,51 @@ see that man page for details.<p>
 <defitem smartalias {<i obj> smartalias <i>alias min max argsyn prefix</i>}>
 
 These commands are used to define commands in the macro interpreter, i.e.,
-to define new macros.  See <xref smartinterp(n)> for details.<p>
+to define new macros.  See <xref smartinterp(n)> for details.
 
 <defitem reset {<i obj> reset}>
 
 Re-initializes the macro interpreter, defining any macros in registered
 macro sets.  Any other macros defined by the client
-will need to be redefined.<p>
+will need to be redefined.
 
 <defitem register {<i obj> register <i macroset>}>
 
 Registers a <xref macroset(i)> macro set with this macro processor.
-Its macros will be defined for use on the next <i reset>.<p>
+Its macros will be defined for use on the next <i reset>.
 
 <defitem eval {<i obj> eval <i>script</i>}>
 
-Evaluates the script in the context of the macro interpreter.<p>
+Evaluates the script in the context of the macro interpreter.
 
 <defitem expand {<i obj> expand <i>text</i>}>
 
 Expands the <i>text</i> in two passes, and returns the result of the
 expansion.   Use <iref pass> to write
-macros which are pass-sensitive.<p>
+macros which are pass-sensitive.
 
 <defitem expandfile {<i obj> expandfile <i>name</i>}>
 
 Reads the contents of the text file called <i>name</i>, expands it in
 two passes, and returns the expansion.  Use <iref pass> to write
-macros which are pass-sensitive.<p>
+macros which are pass-sensitive.
 
 <defitem expandonce {<i obj> expandonce <i text>}>
 
 Does a simple single-pass expansion of the text.  This is useful in
 the implementation of macros that recursively expand one or more of
-their arguments, as it leaves the <iref pass> number unchanged.<p>
+their arguments, as it leaves the <iref pass> number unchanged.
 
 <defitem pass {<i obj> pass}>
 
 Returns the expansion pass number, 1 or 2.   It's common to build up 
 indices during the first pass and generate tables of links in the 
-second.<p>
+second.
 
 <defitem warn {<i obj> warn <i text>}>
 
 Outputs the <i text> to the console as a warning.
-<b TODO:> There should be a <tt -warncmd> option to handle the warning.<p>
+<b TODO:> There should be a <tt -warncmd> option to handle the warning.
 
 </deflist ehtml>
 
@@ -146,7 +146,7 @@ library directory.
 
 <section AUTHOR>
 
-Will Duquette<p>
+Will Duquette
 
 <section HISTORY>
 

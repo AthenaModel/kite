@@ -2,6 +2,10 @@
 
 ## Next
 
+* Consider making `<itemlist>` use nested lists with `mktree`.
+
+## Old Notes
+
 * 'kite deps' needs to show actual versions in teapot.
 * Flesh out the test suites
 * Flesh out the KDG.

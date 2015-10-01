@@ -14,28 +14,28 @@ namespace import ::kitedocs::*
 manpage(n) defines a formatter for project man pages written in 
 <xref manpage(5)> format.  <xref manpage(5)> is an "Extended HTML"
 format; a man page is an HTML-like file with embedded macros that make it
-easy to adhere to man page format.<p>
+easy to adhere to man page format.
 
 See <xref manpage(5)> for a description of man page syntax and the
 available macros.  Note that individual man pages can define their
-own macros.<p>
+own macros.
 
 <subsection "Cross-References">
 
 <xref manpage(n)> supports <xref ehtml(5)>'s <xref ehtml(5) xref>
 macro.  It is assumed that the man page directories are direct children
-of the project's <tt docs/> directory.<p>
+of the project's <tt docs/> directory.
 
 <section COMMANDS>
 
-This module provides the following commands:<p>
+This module provides the following commands:
 
 <deflist commands>
 
 <defitem register {manpage register <i macroset>}>
 
 Registers a <xref macroset(i)> macro set with manpage(n).  The macro set
-will be available at the next and subsequent calls to <iref format>.<p>
+will be available at the next and subsequent calls to <iref format>.
 
 <defitem format {manpage format <i>srcdir destdir</i> ?<i>options...</i>?}>
 
@@ -45,7 +45,7 @@ along with an HTML "index.html" file, and puts them in the destination
 directory (<i>destdir</i>).  
 
 Note that the macro expander is reset between man pages; page-specific
-macros do not carry over from one man page to the next.<p>
+macros do not carry over from one man page to the next.
 
 <deflist options>
 
@@ -53,40 +53,49 @@ macros do not carry over from one man page to the next.<p>
 
 Specifies the name of the project being documented. 
 Defaults to "YourProject".  This string appears in the headers
-and footers of the generated pages.<p>
+and footers of the generated pages.
 
 <defopt {-version <i>x.y.z</i>}>
 
 Specifies the client project's version number, for inclusion in the
-generated man pages.  Defaults to "0.0.0", as a placeholder.<p>
+generated man pages.  Defaults to "0.0.0", as a placeholder.
 
 <defopt {-description <i>description</i>}>
 
 Specifies a brief one-line description of the project being documented. 
 Defaults to "Your project description".  This string
-appears in the headers of the generated pages.<p>
+appears in the headers of the generated pages.
 
 <defopt {-section <i>title</i>}>
 
 Specifies the section title for the collection of man pages in the
 <i>srcdir</i>.  This section title will be used in the generated
-index page.<p>
+index page.
+
+<defopt {-errfile <i filename>}>
+
+The <iref format> command processes each <xref manpage(5)> files in
+several passes.  If an error is detected in a particular pass, the 
+intermediate input to that pass is written to the given <i filename>
+as an aid to diagnosing the problem.
 
 </deflist options>
 
+</deflist commands>
+
 <section ENVIRONMENT>
 
-manpage(n) requires Tcl 8.6 or later.<p>
+manpage(n) requires Tcl 8.6 or later.
 
 <section AUTHOR>
 
-Will Duquette<p>
+Will Duquette
 
 <section HISTORY>
 
 Originally written for JNEM as manpage(n); migrated to Mars in
 September 2008 as app_man(1), and then to Kite as manpage(n) in 
-July 2014.<p>
+July 2014.
 
 </manpage>
 

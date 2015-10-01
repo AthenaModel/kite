@@ -14,16 +14,16 @@ namespace import ::kiteutils::*
 macroset(i) is an interface for defining macro sets for the 
 <xref macro(n)> macro processor.  A macro set is an object that
 defines one or more macros in the context of a given instance of
-<xref macro(n)> via its <iref install> method.<p>
+<xref macro(n)> via its <iref install> method.
 
 Macro sets are registered with an instance of <xref macro(n)>
-using the <xref macro(n)> <xref macro(n) register> method.<p>
+using the <xref macro(n)> <xref macro(n) register> method.
 
 
 <section COMMANDS>
 
 A macroset(i) object is a command or command prefix that takes the
-following subcommands:<p>
+following subcommands:
 
 <deflist commands>
 
@@ -31,7 +31,7 @@ following subcommands:<p>
 
 Installs the macro set's macros into the <xref macro(n)> instance
 called <i macro>.  The command may use any of <xref macro(n)>'s
-usual mechanisms to define macros.<p>
+usual mechanisms to define macros.
 
 </deflist commands>
 
@@ -49,7 +49,7 @@ library directory.
 
 <section AUTHOR>
 
-Will Duquette<p>
+Will Duquette
 
 <section HISTORY>
 

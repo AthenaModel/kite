@@ -11,7 +11,7 @@ namespace import ::kiteutils::*
 
 <section DESCRIPTION>
 
-stringx(n) contains a collection of string-manipulation utilities.<p>
+stringx(n) contains a collection of string-manipulation utilities.
 
 <section COMMANDS>
 
@@ -21,7 +21,7 @@ stringx(n) contains a collection of string-manipulation utilities.<p>
 
 Defines a command called <i name> in the caller's context; the new command
 will return the block of code contained in the <i template> after making
-several transformations.<p>
+several transformations.
 
 First, the <i template> will be outdented using <iref outdent>.  
 Second, double backslashes will be replaced with single backslashes; 
@@ -31,7 +31,7 @@ continuation backslashes.
 Finally, <tt string map> will be called to
 replace the block's arguments with the values in the caller's <i arglist>.
 Argument names appear in the <i template> prefixed by a percent sign, 
-"%".  For example,<p>
+"%".  For example,
 
 <example>
 % <b>codeblock hello {first last} {
@@ -46,7 +46,7 @@ How are you?
 </example>
 
 If given, the <i initbody> may transform the arguments in some way or
-define additional scalar local variables for use in the <i template>:<p>
+define additional scalar local variables for use in the <i template>:
 
 <example>
 codeblock timestamp {seconds} {
@@ -59,29 +59,29 @@ codeblock timestamp {seconds} {
 
 The <iref codeblock> command is similar to 
 <xref template(n)>, but is better suited to creating templates of 
-Tcl code.  It can also be used for creating arbitrary strings.<p>
+Tcl code.  It can also be used for creating arbitrary strings.
 
 <defitem normalize {normalize <i>text</i>}>
 
 Given a text string, trims leading and trailing whitespace, and
-reduces all internal whitespace to single spaces.<p>
+reduces all internal whitespace to single spaces.
 
 <defitem outdent {outdent <i>block</i>}>
 
 Given a block of text, "outdent" deletes any leading blank line or trailing
 blank line. It also determines the longest common whitespace prefix shared 
 by the remaining lines (assuming the whitespace does not contain tab 
-characters) and deletes it from each line.<p>  
+characters) and deletes it from each line.  
 
 </deflist>
 
 <section ENVIRONMENT>
 
-Requires Tcl 8.6 or later.<p>
+Requires Tcl 8.6 or later.
 
 <section AUTHOR>
 
-Will Duquette<p>
+Will Duquette
 
 </manpage>
 
