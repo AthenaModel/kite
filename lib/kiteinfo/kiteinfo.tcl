@@ -65,7 +65,7 @@ namespace eval ::kiteinfo:: {
         mansec-1 Executables
         local-textutil::expander 0
         local-snit 0
-        version 0.4.11
+        version 0.4.12
         reqver-crc32 1.3
         dists install-%platform
     }

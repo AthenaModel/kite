@@ -14,7 +14,7 @@
 # Package Definition
 
 # -kite-provide-start  DO NOT EDIT THIS BLOCK BY HAND
-package provide kitedocs 0.4.11
+package provide kitedocs 0.4.12
 # -kite-provide-end
 
 #-----------------------------------------------------------------------
@@ -23,7 +23,7 @@ package provide kitedocs 0.4.11
 # -kite-require-start ADD EXTERNAL DEPENDENCIES
 package require snit 2.3
 package require textutil::expander 1.3.1
-package require -exact kiteutils 0.4.11
+package require -exact kiteutils 0.4.12
 # -kite-require-end
 
 #-----------------------------------------------------------------------
