@@ -72,7 +72,7 @@ test hrule-1.1 {hrule} -setup {
     trans expand {-<hrule>-}
 } -cleanup {
     cleanup
-} -result {-<p><hr><p>-}
+} -result {-<hr class="hrule">-}
 
 #-------------------------------------------------------------------
 # lb
@@ -175,7 +175,7 @@ test xref-1.3 {unknown xref id} -setup {
     trans expand {-<xref foo(n)>-}
 } -cleanup {
     cleanup
-} -result {-<b><tt>&lt;xref foo(n)&gt;</tt></b>-}
+} -result {-<b><code>&lt;xref foo(n)&gt;</code></b>-}
 
 test xref-1.4 {manref when docroot set to "."} -setup {
     setup
@@ -228,7 +228,7 @@ test html_equivalent-1.1 {expand to themselves.} -setup {
 <b>........</b>
 <i>........</i>
 <code>.....</code>
-<tt>.......</tt>
+<span class="tt">.......</span>
 <em>.......</em>
 <strong>...</strong>
 <sup>......</sup>
@@ -264,7 +264,7 @@ test html_equivalent-1.2 {style macros convenience forms} -setup {
 <b>.....some text</b>
 <i>.....some text</i>
 <code>..some text</code>
-<tt>....some text</tt>
+<span class="tt">....some text</span>
 <em>....some text</em>
 <strong>some text</strong>
 <sup>...some text</sup>
@@ -291,35 +291,38 @@ test deflist-1.1 {definition list} -setup {
     pexpand {
         <deflist>
         <def "The Term">
-        Text describing the term.<p>
+        Text describing the term.
         <def "Another Term">
-        Text describing the term.<p>
+        Text describing the term.
         </deflist>
     }
 } -cleanup {
     cleanup
 } -result {
 <dl>
-<dt><b>The Term</b></dt>
-<dd>
-        
-Text describing the term.<p>
-<dt><b>Another Term</b></dt>
-<dd>
-        
-Text describing the term.<p>
+<dt class="def">The Term</dt><dd>
+Text describing the term.
+</dd>
+<dt class="def">Another Term</dt><dd>
+Text describing the term.
+</dd>
 </dl>
 }
 
 test deflist-1.2 {def expands term} -setup {
     setup
 } -body {
-    pexpand {<def "The <i Term>">}
+    pexpand {
+        <deflist>
+        <def "The <i Term>">
+        </deflist>
+    }
 } -cleanup {
     cleanup
 } -result {
-<dt><b>The <i>Term</i></b></dt>
-<dd>
+<dl>
+<dt class="def">The <i>Term</i></dt>
+</dl>
 }
 
 #-------------------------------------------------------------------
@@ -342,7 +345,7 @@ test topiclist-1.1 {topic list} -setup {
 } -cleanup {
     cleanup
 } -result {
-<table class="table">
+<table class="table topiclist">
 <tr>
 <th>Topic</th> 
 <th>Description</th>
@@ -464,7 +467,7 @@ Text describing the change.
 <td>will</td>
 </tr>
         
-</table><p>
+</table>
 }
 
 #-------------------------------------------------------------------
@@ -486,10 +489,10 @@ test procedure-1.1 {procedure} -setup {
 } -cleanup {
     cleanup
 } -result {
-<table border="1" cellspacing="0" cellpadding="2">
+<table class="procedure">
         
-<tr valign="top">
-<td><b>1.</b></td>
+<tr>
+<td class="procedure-index">1.</td>
 <td>
         
 What to do.

@@ -149,6 +149,7 @@ snit::type ::kitedocs::manpage {
             version     "0.0.0"
             description "Your project description"
             section     "Project Man Pages"
+            errfile     ""
         }
 
         # NEXT, initialize the ehtml processor.
@@ -194,6 +195,9 @@ snit::type ::kitedocs::manpage {
                 -section {
                     set info(section) $val
                 }
+                -errfile {
+                    set info(errfile) $val
+                }
                 default {
                     error "Unknown option: \"$opt\""
                 }
@@ -218,10 +222,23 @@ snit::type ::kitedocs::manpage {
 
             try {
                 set output [$ehtml expandfile $infile]
+            } on error {result} {
+                $type SaveErrFile ""
+                throw SYNTAX "During expansion of [file tail $infile]:\n$result"
+            }
+
+            try {
                 set output [htmltrans fix $output]
+            } on error {result} {
+                $type SaveErrFile $output
+                throw SYNTAX "During html fixing of [file tail $infile]:\n$result"
+            }
+
+            try {
                 set output [htmltrans para $output]
             } on error {result} {
-                throw SYNTAX "[file tail $infile]:\n$result"
+                $type SaveErrFile $output
+                throw SYNTAX "During paragraph detection for [file tail $infile]:\n$result"
             }
 
             set f [open $outfile w]
@@ -251,6 +268,12 @@ snit::type ::kitedocs::manpage {
         set curSection {}
 
         $ehtml reset
+    }
+
+    typemethod SaveErrFile {output} {
+        if {$info(errfile) ne ""} {
+            writefile $info(errfile) $output
+        }
     }
 
     #-------------------------------------------------------------------
@@ -302,11 +325,13 @@ snit::type ::kitedocs::manpage {
     proc mktree {id} {
         set mktreeFlag 1
         
-        return "<ul class=\"mktree\" id=\"$id\">"
+        # Mark it "<nopara>" so that the htmltrans(n) paragrapher
+        # lives it alone.
+        return "<nopara><ul class=\"mktree\" id=\"$id\">"
     }
 
     proc /mktree {} {
-        return "</ul>"
+        return "</ul></nopara>"
     }
 
     #-------------------------------------------------------------------

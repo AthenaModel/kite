@@ -178,16 +178,20 @@ snit::type docs {
             throw FATAL "Unknown man page section: \"man$num\""
         }
 
+        set errfile [project root .kite manerr.html]
+
         # NEXT, process the man pages in the directory.
         try {
             puts "Formatting man pages in $mandir..."
-            kitedocs::manpage format $mandir $mandir         \
-                -project     [project name]                  \
-                -version     [project version]               \
-                -description [project description]           \
-                -section     "($num) [project mansec $num]"
+            kitedocs::manpage format $mandir $mandir          \
+                -project     [project name]                   \
+                -version     [project version]                \
+                -description [project description]            \
+                -section     "($num) [project mansec $num]"   \
+                -errfile     $errfile
         } trap SYNTAX {result} {
-            throw FATAL "Syntax error in man page: $result"
+            throw FATAL \
+                "Syntax error in man page: $result\nSee $errfile for intermediate outputs."
         }
     }
 

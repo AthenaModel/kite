@@ -40,6 +40,32 @@ the <itag changelog> macros.
 ehtml(5) input may use any of the following macros; formats
 like <xref manpage(5)> will add additional macros.
 
+<subsection "Control Macros">
+
+The following macros are used to control processing by the 
+<xref kitedocs(n)> document processors.
+
+<deflist control>
+
+<defitem nopara {<tag nopara>...<tag /nopara>}>
+
+These tags are for use with ehtml(5) processors that use 
+<xref htmltrans(n)>'s automatic paragraph detection filter
+(e.g., <xref manpage(n)> and <xref kitedoc(n)>).
+
+The tags disable automatic paragraph detection
+for the content they contain.  The content is treated like any
+other "opaque" content (e.g., the HTML <tag head> element); structure
+and tag names are checked, but no paragraph tags are inserted.
+
+The <tag nopara> and <tag /nopara> tags themselves are stripped during
+processing by <xref htmltrans(n)>.
+
+If used with other ehtml(5) processors, the tags will be accepted
+but will simply pass through into the output.
+
+</deflist control>
+
 <subsection "HTML Equivalent Macros">
 
 The following macros are used in place of their HTML equivalents.  

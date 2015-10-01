@@ -179,20 +179,7 @@ test parse-1.6 {comments} -body {
  hmstart 1 () ()
 }
 
-test parse-2.1 {any tags are acceptable} -body {
-    pparse {
-        A <foo>single</foo> line of <@@@>text</&&&>.
-    }
-} -result {
- hmstart 0 () (\n        A )
-<foo> foo 0 () (single)
-</foo> foo 1 () ( line of )
-<@@@> @@@ 0 () (text)
-</&&&> &&& 1 () (.\n    )
- hmstart 1 () ()
-}
-
-test parse-2.2 {structure is not checked} -body {
+test parse-2.1 {structure is not checked} -body {
     pparse {
         </html>A </foo>single<foo> line of text<html>
     }
@@ -205,7 +192,7 @@ test parse-2.2 {structure is not checked} -body {
  hmstart 1 () ()
 }
 
-test parse-2.3 {attribute syntax is not checked} -body {
+test parse-2.2 {attribute syntax is not checked} -body {
     pparse {
         <foo this+that, those[]>
     }
@@ -215,7 +202,7 @@ test parse-2.3 {attribute syntax is not checked} -body {
  hmstart 1 () ()
 }
 
-test parse-2.4 {end tag attributes are retained} -body {
+test parse-2.3 {end tag attributes are retained} -body {
     pparse {
         </foo this="bogus">
     }
@@ -225,7 +212,7 @@ test parse-2.4 {end tag attributes are retained} -body {
  hmstart 1 () ()
 }
 
-test parse-2.5 {removes whitespace between tag and attrs} -body {
+test parse-2.4 {removes whitespace between tag and attrs} -body {
     pparse {
         <foo     this  >
     }
@@ -445,31 +432,31 @@ test fix-1.13 {Closes sibling <th>, <td> in <tr>} -body {
 
 test fix-2.1 {Closing tag with no opening tag 1} -body {
     codecatch {SYNTAX UNOPENED} pdo fix {</foo>}
-} -result {Closing tag with no opening tag: </foo>}
+} -match glob -result {Closing tag with no opening tag: </foo>,*}
 
 test fix-2.2 {<li> outside list} -body {
     codecatch {SYNTAX MISPLACED} pdo fix {<li>}
-} -result {Item tag with no container: <li>}
+} -match glob -result {Item tag with no container: <li>,*}
 
 test fix-2.3 {<dt> outside list} -body {
     codecatch {SYNTAX MISPLACED} pdo fix {<dt>}
-} -result {Item tag with no container: <dt>}
+} -match glob -result {Item tag with no container: <dt>,*}
 
 test fix-2.4 {<dd> outside list} -body {
     codecatch {SYNTAX MISPLACED} pdo fix {<dd>}
-} -result {Item tag with no container: <dd>}
+} -match glob -result {Item tag with no container: <dd>,*}
 
 test fix-2.5 {<tr> outside table} -body {
     codecatch {SYNTAX MISPLACED} pdo fix {<tr>}
-} -result {Item tag with no container: <tr>}
+} -match glob -result {Item tag with no container: <tr>,*}
 
 test fix-2.6 {<th> outside table row} -body {
     codecatch {SYNTAX MISPLACED} pdo fix {<th>}
-} -result {Item tag with no container: <th>}
+} -match glob -result {Item tag with no container: <th>,*}
 
 test fix-2.7 {<td> outside table row} -body {
     codecatch {SYNTAX MISPLACED} pdo fix {<td>}
-} -result {Item tag with no container: <td>}
+} -match glob -result {Item tag with no container: <td>,*}
 
 #-------------------------------------------------------------------
 # para
@@ -548,11 +535,9 @@ paragraph one.
 
 </p>
 
-<div>
-<p>A block.
-</p>
-
-<ul><li>An item</li></ul>
+<div><p>
+A block.
+</p><ul><li>An item</li></ul>
 </div>
 <p>This is paragraph two.</p>
 }
@@ -586,6 +571,27 @@ test para-1.6 {textblock tag with multiple paragraphs} -body {
 </ul>
 }
 
+test para-1.7 {pseudo tags are removed} -body {
+    pdo para {<nopara>Some content</nopara>}
+} -result {
+Some content
+}
+
+test para-1.8 {nopara tags short-circuit paragraphing} -body {
+    pdo para {
+        <nopara>
+        Some unparagraphed content.
+
+        Some more unparagraphed content.
+        </nopara>
+    }
+} -result {
+
+Some unparagraphed content.
+
+Some more unparagraphed content.
+}
+
 test para-2.1 {Unknown tag} -body {
     codecatch {SYNTAX UNKNOWN} pdo para {<foo>}
 } -result {Unknown HTML tag: "<foo>"}
@@ -597,6 +603,8 @@ test para-2.2 {Prose tag in structural context} -body {
 test para-2.3 {Non-prose tag in text-only context} -body {
     codecatch {SYNTAX MISPLACED} pdo para {<h1><ul><li>text</li></ul></h1>}
 } -result {Non-prose tag in text-only context: <ul> in <h1>}
+
+
 
 #-------------------------------------------------------------------
 # Cleanup

@@ -109,6 +109,24 @@ div.mark {
     padding-right: 2px;
 }
 
+/* procedure */
+
+table.procedure {
+    border: 1px solid black;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table.procedure td {
+    border: 1px solid black;
+}
+
+td.procedure-index {
+    padding-right: 5px;
+    text-align: right;
+    width: 2em;
+}
+
 
 /* topiclist/ */
 .topiclist {

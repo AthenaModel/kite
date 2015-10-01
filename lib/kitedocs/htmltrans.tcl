@@ -31,7 +31,7 @@ snit::type ::kitedocs::htmltrans {
     # string map mapping to reconvert HTML entities back to braces.
 
     typevariable braceMap {
-        &#123; \{ &#125; \}
+        "&#92;" "\\" "&#123;" "\{" "&#125;" "\}"
     }
 
     # tagmeta
@@ -47,6 +47,9 @@ snit::type ::kitedocs::htmltrans {
             !DOCTYPE !--
             area base basefont br col embed hr img input keygen link meta
             param source track wbr
+        }
+        pseudo {
+            nopara
         }
     }
 
@@ -70,6 +73,7 @@ snit::type ::kitedocs::htmltrans {
     #   BLOCK      - Tag introduces BLOCK context
     #   OPAQUE     - Tag begins an opaque element
     #   PARAGRAPH  - Explicitly begin paragraph
+    #   PSEUDO     - Pseudo-tags, to be removed during processing.
     #   PROSE      - Tag can be used in prose without changing context
     #   STRUCTURAL - Tag introduces STRUCTURE context
     #   TEXTONLY   - Tag introduces TEXTONLY context
@@ -86,7 +90,9 @@ snit::type ::kitedocs::htmltrans {
             datalist embed head hr iframe img input keygen link map menu
             menuitem meta object optgroup option output param pre progress
             rp rt ruby script select source style textarea title track
-            video
+            video 
+
+            nopara
         }
 
         PARAGRAPH {
@@ -184,7 +190,7 @@ snit::type ::kitedocs::htmltrans {
         set sub "\}\n${t} {\\2} {\\1} {\\3} \{"
         regsub -all -- {<()(!DOCTYPE)\s*([^>]*)>} $html $sub html
         regsub -all -- {<()(!--)(.*?)-->} $html $sub html
-        regsub -all -- {<(/?)([^\s>]+)\s*([^>]*)>} $html $sub html
+        regsub -all -- {<(/?)([[:alpha:]]\w*)\s*([^>]*)>} $html $sub html
 
 
         set start "${t} {hmstart} {} {} \{"
@@ -276,11 +282,12 @@ snit::type ::kitedocs::htmltrans {
             # FIRST, close tags back to the matching open tag.
             # If there is none, throw an error.
             set last [lpop trans(stack)]
-            
+            set near [GetNear]
+
             while {$last ne $tag} {
                 if {$last eq ""} {
                     throw {SYNTAX UNOPENED} \
-                        "Closing tag with no opening tag: $full"
+                        "Closing tag with no opening tag: $full,\n$near"
                 }
                 Emit "</$last>"
                 set last [lpop trans(stack)]
@@ -308,11 +315,12 @@ snit::type ::kitedocs::htmltrans {
 
         if {[llength $clist] > 0} {
             set last [lindex $trans(stack) end]
+            set near [GetNear]
 
             while {$last ni $clist} {
                 lpop trans(stack)
                 if {$last eq ""} {
-                    throw {SYNTAX MISPLACED} "Item tag with no container: $full"                    
+                    throw {SYNTAX MISPLACED} "Item tag with no container: $full,\n$near"                    
                 }
 
                 Emit "</$last>"
@@ -335,6 +343,20 @@ snit::type ::kitedocs::htmltrans {
 
     proc Emit {args} {
         append trans(output) {*}$args
+    }
+
+    # GetNear
+    #
+    # Returns the section of output just prior to an error.
+
+    proc GetNear {} {
+        if {[string length $trans(output)] < 60} {
+            set result $trans(output)
+        } else {
+            set result "...[string range $trans(output) end-60 end]"
+        }
+
+        return "near \"[string map [list \n \\n] $result]\""
     }
 
     #-------------------------------------------------------------------
@@ -604,7 +626,9 @@ snit::type ::kitedocs::htmltrans {
         dbg "CPush $tag [contextof $tag] $attrs"
 
         # FIRST, emit the tag into the containing context.
-        CEmit [fmttag $tag "" $attrs]
+        if {![ispseudo $tag]} {
+            CEmit [fmttag $tag "" $attrs]
+        }
 
         # NEXT, if there's no end tag we're done.
         if {[issingle $tag]} {
@@ -643,7 +667,9 @@ snit::type ::kitedocs::htmltrans {
             } else {
                 CEmit $output
             }
-            CEmit "</$tag>"
+            if {![ispseudo $tag]} {
+                CEmit "</$tag>"
+            }
         }
     }
 
@@ -765,6 +791,14 @@ snit::type ::kitedocs::htmltrans {
 
     proc isprose {tag} {
         expr {[dict get $tagmeta(context) $tag] eq "PROSE"}
+    }
+
+    # ispseudo tag
+    #
+    # Returns 1 if the tag is a pseudo tag, used to control processing.
+
+    proc ispseudo {tag} {
+        expr {$tag in $tagmeta(pseudo)}
     }
 
     # iswhite text

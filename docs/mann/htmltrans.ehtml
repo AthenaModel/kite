@@ -31,7 +31,8 @@ An HTML-like tag is a string consisting of:
 <ul>
 <li> A left angle bracket: "<b &lt;>"
 <li> Optionally, a slash character: "<b />"
-<li> The tag name: one or more non-whitespace characters other than "<b &gt;>"
+<li> The tag name: a letter followed by zero or more letters, digits, or
+     underscores.
 <li> Optionally, one or more whitespace characters
 <li> Optionally, the attribute data: <i any> mix of
      characters other than "<b &gt;>"
@@ -126,6 +127,12 @@ In particular:
      single paragraph simply enclosed in the tags, the <tag p>...<tag /p>
      tags are inserted only if the block contains multiple paragraphs or
      other complex entities.
+
+<li> The <tag nopara>...<tag /nopara> tags disable paragraph detection
+     for the content they contain.  The content is treated like any
+     other "opaque" content (e.g., the HTML <tag head> element); structure
+     and tag names are checked, but no paragraphing is done.  The tags
+     themselves are removed during processing.<p>
 </ulp>
 
 Details of the algorithm can be found in the file <tt htmltrans.md> in 

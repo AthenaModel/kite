@@ -102,6 +102,9 @@ snit::type ::kitedocs::ehtml {
         $macro eval [list array set ::ehtml [array get config]]
         $macro eval [list array set ::trans $trans]
 
+        # NEXT, control tags
+        HtmlTag $macro nopara /nopara
+
         # NEXT, define HTML equivalents.
         StyleMacro $macro b
         StyleMacro $macro i
@@ -145,6 +148,7 @@ snit::type ::kitedocs::ehtml {
         $macro proc /tt {} {
             return "</span>"
         }
+
 
         # NEXT, define basic macros.
         $macro proc hrule {} { return "<hr class=\"hrule\">" }
@@ -604,7 +608,7 @@ snit::type ::kitedocs::ehtml {
             set procedureCounter 0
         } {
             |<--
-            <table border="1" cellspacing="0" cellpadding="2">
+            <table class="procedure">
         }
 
         $macro template step {} {
@@ -612,8 +616,8 @@ snit::type ::kitedocs::ehtml {
             incr procedureCounter
         } {
             |<--
-            <tr valign="top">
-            <td><b>$procedureCounter.</b></td>
+            <tr>
+            <td class="procedure-index">$procedureCounter.</td>
             <td>
         }
 
@@ -677,8 +681,8 @@ snit::type ::kitedocs::ehtml {
     # Translates the tag macro back to the equivalent HTMl tag.
 
     proc HtmlTag {macro tag {closetag ""}} {
-        $macro proc $tag {} [format { 
-            return "<%s>" 
+        $macro proc $tag {args} [format {
+            return "<%s>"
         } $tag]
 
         if {$closetag ne ""} {

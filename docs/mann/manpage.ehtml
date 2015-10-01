@@ -72,6 +72,13 @@ Specifies the section title for the collection of man pages in the
 <i>srcdir</i>.  This section title will be used in the generated
 index page.
 
+<defopt {-errfile <i filename>}>
+
+The <iref format> command processes each <xref manpage(5)> files in
+several passes.  If an error is detected in a particular pass, the 
+intermediate input to that pass is written to the given <i filename>
+as an aid to diagnosing the problem.
+
 </deflist options>
 
 </deflist commands>
