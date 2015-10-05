@@ -14,6 +14,7 @@ be used by other projects.
   <li> <xref kdg.html           "Kite Developer's Guide">
   <li> <xref tcl_standard.html  "Tcl Coding Standard">
   <li> <xref release_notes.md   "Kite Release Notes">
+  <li> <xref kite.docx          "Kite White Paper (docx)">
 </ul>
 
 <preface man "Man Pages">
