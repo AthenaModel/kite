@@ -266,6 +266,24 @@ snit::type plat {
                 }
             }
 
+            indexcache {
+                # Where teacup stores its index caches, by platform.
+                switch -exact -- [os flavor] {
+                    linux   { 
+                        set pathsOf($name) ~/.teapot
+                    }
+                    osx     {
+                        set pathsOf($name) \
+                     {~/Library/Application\ Support/ActiveState/Teapot/}
+                    }
+                    windows { 
+                        # This doesn't matter on Windows
+                        set pathsOf($name) "" 
+                    }
+                }
+
+            }
+
             default { error "Unknown symbolic name: \"$name\""}
         }
 

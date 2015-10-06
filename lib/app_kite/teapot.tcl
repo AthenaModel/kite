@@ -31,74 +31,85 @@ snit::type teapot {
         return [file normalize [file join ~ .kite teapot]]
     }
 
-    # create
+    # fix
     #
-    # Creates the Kite teapot, if need be, and links it to the
-    # current tclsh.
-    #
-    # TODO: We need a better place to get the local teapot name.
+    # Creates the Kite teapot, if need be, and does everything
+    # else it can without requiring admin privileges.  Emits a 
+    # script the user can execute that does the rest
 
-    typemethod create {} {
-        # FIRST, create the teapot
+    typemethod fix {} {
+        # FIRST, if everything's OK there's nothing to be done.
+        if {[$type state] eq "ok"} {
+            puts "The local teapot appears to be in working order already."
+            return
+        }
+
+        # NEXT, create the teapot if it doesn't exist.
         if {[$type state] eq "missing"} {
             puts "Creating teapot at [teapot local]..."
             teacup create [teapot local]
         }
 
-        # NEXT, make it the default teapot.
-        puts "Making Kite teapot the default installation teapot."
-        teacup default [teapot local] 
-
-        # NEXT, suggest that the user link it.
-        puts ""
-        puts [outdent {
-            Next, link the new teapot to your tclsh using
-
-                $ kite teapot link
-
-            If you are on Linux or OS X you will probably need to
-            use "sudo" for this step.
-
-                $ sudo kite teapot link
-        }]
-    }
-
-
-    # link
-    #
-    # Links the Kite teapot to the current tclsh.
-
-    typemethod link {} {
-        puts "Linking Kite teapot to [plat pathto tclsh -required]..."
-        try {
-            teacup link make [teapot local] [plat pathto tclsh]
-        } trap CHILDSTATUS {result eopts} {
-            if {[string match "*cannot be written.*" $result]} {
-                puts "Error: $result"
-                puts ""
-                puts "Consider using 'sudo -E'.  See 'kite help teapot' for details.\n"
-                throw FATAL \
-                    "Failed to link [teapot local] to the tclsh."
-            } else {
-                # Rethrow
-                return {*}$eopts $result
-            }
+        # NEXT, output the script.
+        if {[os flavor] eq "windows"} {
+            EmitBatchFile
+        } else {
+            EmitBashScript
         }
     }
 
-    # remove
+    # EmitBatchFile
     #
-    # Unlinks the Kite teapot from the current tclsh, and removes it
-    # from the disk.
+    # Outputs the script for Windows users.
 
-    typemethod remove {} {
-        # FIRST, unlink the teapot.
-        puts "Unlinking Kite teapot from [plat pathto tclsh -required]..."
-        teacup link cut [teapot local] [plat pathto tclsh]
+    proc EmitBatchFile {} {
+        set filename [file join ~ .kite fixteapot.bat]
 
-        # NEXT, remove it.
-        puts "Removing [teapot local] from disk"
-        file delete -force [teapot local]
+        puts [outdent "
+            Kite has created a teapot repository in your home directory.
+            It needs to be linked to the tclsh you are using; and it 
+            appears that this will require admin privileges.  Kite is
+            about to write a batch file that you (or someone who has
+            admin privileges) can use to take care of this.
+
+            The script is here:
+                $filename
+
+            Run it, and then run 'kite teapot' to check the results.
+        "]
+
+        writefile $filename [::teapot::FixTeapotBat]
+    }
+
+    # EmitBashScript
+    #
+    # Outputs the script for Windows users.
+
+    proc EmitBashScript {} {
+        set filename [file join ~ .kite fixteapot]
+
+        if {[os username] eq ""} {
+            throw FATAL [outdent "
+                Kite cannot determined your user name; none of the usual
+                environment variables are set.  Please set USER to your
+                user name, and try again.
+            "]
+        }
+
+        puts [outdent "
+            Kite has created a teapot repository in your home directory.
+            It needs to be linked to the tclsh you are using; and it 
+            appears that this will require superuser privileges.  Kite is
+            about to write a bash script that you (or someone who has
+            superuser privileges) can use to take care of this.
+
+            The script is here:
+                $filename
+
+            Run it, and then run 'kite teapot' to check the results.
+        "]
+
+        writefile $filename [::teapot::FixTeapotBash]
     }
 
     #-------------------------------------------------------------------
@@ -176,3 +187,27 @@ snit::type teapot {
 
 }
 
+# TBD: Fix the queries!
+
+codeblock teapot::FixTeapotBat {} {
+    set teacup    [plat pathto teacup -required]
+    set kitepath  [teapot local]
+    set tclsh     [plat pathto tclsh -required]
+} {
+    %teacup default %kitepath
+    %teacup link make %kitepath %tclsh
+}
+
+
+codeblock teapot::FixTeapotBash {} {
+    set teacup     [plat pathto teacup -required]
+    set kitepath   [teapot local]
+    set tclsh      [plat pathto tclsh -required]
+    set indexcache [plat pathof indexcache -required]
+    set user       [os username]
+} {
+    %teacup default %kitepath
+    %teacup link make %kitepath %tclsh
+    chown -R %user %indexcache
+    chown -R %user %kitepath
+}
