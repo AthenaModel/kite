@@ -122,8 +122,6 @@ snit::type ::kitedocs::ehtml {
         StyleMacro $macro h6
 
         HtmlTag $macro blockquote /blockquote
-        HtmlTag $macro ol /ol
-        HtmlTag $macro ul /ul
         HtmlTag $macro li /li
         HtmlTag $macro p /p
         HtmlTag $macro table /table
@@ -274,6 +272,14 @@ snit::type ::kitedocs::ehtml {
             macro warn "xref: unknown xrefid '$id'"
             return "[b][tag xref $id][/b]"
         }
+
+        # NEXT, ol/ul macros, no paragraph detection
+        $macro proc ol  {} { return "<nopara><ol>" }
+        $macro proc /ol {} { return "</ol></nopara>" }
+
+        $macro proc ul  {} { return "<nopara><ul>" }
+        $macro proc /ul {} { return "</ul></nopara>" }
+
 
         # NEXT, ulp/olp macros
         $macro proc ulp {} {

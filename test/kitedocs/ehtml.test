@@ -213,8 +213,6 @@ test html_equivalent-1.1 {expand to themselves.} -setup {
         <sup>......</sup>
         <sub>......</sub>
         <pre>......</pre>
-        <ol>.......</ol>
-        <ul>.......</ul>
         <li>.......</li>
         <p>........</p>
         <table>....</table>
@@ -234,8 +232,6 @@ test html_equivalent-1.1 {expand to themselves.} -setup {
 <sup>......</sup>
 <sub>......</sub>
 <pre>......</pre>
-<ol>.......</ol>
-<ul>.......</ul>
 <li>.......</li>
 <p>........</p>
 <table>....</table>
@@ -280,6 +276,19 @@ test html_equivalent-1.3 {img can have args} -setup {
     cleanup
 } -result {-<img src="tbd">-}
 
+test html_equivalent-1.4 {plain ol,ul tags have no para} -setup {
+    setup
+} -body {
+    pexpand {
+        <ol>.......</ol>
+        <ul>.......</ul>
+    }
+} -cleanup {
+    cleanup
+} -result {
+<nopara><ol>.......</ol></nopara>
+<nopara><ul>.......</ul></nopara>
+}
 
 #-------------------------------------------------------------------
 # deflist.../deflist
