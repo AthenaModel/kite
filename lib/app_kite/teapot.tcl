@@ -150,8 +150,8 @@ snit::type teapot {
 
     proc TeapotIsLinked {} {
         expr {
-            [teapot local]     in [LinkedTeapots] &&
-            [plat pathto tclsh]  in [LinkedShells]            
+            [teapot local]      in [LinkedTeapots] &&
+            [plat pathto tclsh] in [LinkedShells]            
         }
     }
 
@@ -162,6 +162,7 @@ snit::type teapot {
     proc LinkedShells {} {
         set links [teacup link info [teapot local]]
 
+        set result ""
         foreach {dummy path} $links {
             set newpath [file normalize $path]
             lappend result $newpath
@@ -205,6 +206,11 @@ codeblock teapot::FixTeapotBash {} {
     set tclsh      [plat pathto tclsh -required]
     set indexcache [plat pathof indexcache -required]
     set user       [os username]
+
+    # On OSX, the paths might have spaces in them.
+    set teacup     [string map [list " " {\ }] $teacup]
+    set tclsh      [string map [list " " {\ }] $tclsh]
+    set indexcache [string map [list " " {\ }] $indexcache]
 } {
     %teacup default %kitepath
     %teacup link make %kitepath %tclsh

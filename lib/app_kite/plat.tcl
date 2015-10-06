@@ -36,7 +36,8 @@ snit::type plat {
     # pathsOf - important directories, by symbolic name.
 
     typevariable pathsOf -array {
-        tclhome  {}
+        tclhome    {}
+        indexcache {}
     }
 
     #-------------------------------------------------------------------
@@ -270,15 +271,15 @@ snit::type plat {
                 # Where teacup stores its index caches, by platform.
                 switch -exact -- [os flavor] {
                     linux   { 
-                        set pathsOf($name) ~/.teapot
+                        set path ~/.teapot
                     }
                     osx     {
-                        set pathsOf($name) \
-                     {~/Library/Application\ Support/ActiveState/Teapot/}
+                        set path \
+                     "~/Library/Application\ Support/ActiveState/Teapot/"
                     }
                     windows { 
                         # This doesn't matter on Windows
-                        set pathsOf($name) "" 
+                        set path "" 
                     }
                 }
 
