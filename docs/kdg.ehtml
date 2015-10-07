@@ -43,13 +43,21 @@
 
 <preface audience "Audience">
 
-This guide is intended for the Kite developer, but may also be of use to
-the Kite user as it documents Kite's expectations for the content of the
-project tree.
+This guide is primarily intended for the Kite developer, as it documents
+Kite's expectations for the structure and content of project directory 
+trees; however, it should also be of use to the new Kite user who wants
+to know what Kite does and how Kite projects work.
 
 <hrule>
 
 <section overview "Kite Overview">
+
+Kite is a command-line tool for managing TCL/TK projects, formatting 
+project HTML documentation, running tests, and automating builds.
+For a general overview of Kite, see the 
+<i><link kite.docx "Kite White Paper"></i>.  For specifics about the
+Kite commands described in this document, including precise calling
+syntax, use the "<tt kite help>" command.
 
 <hrule>
 
@@ -90,11 +98,21 @@ The project <root> directory will frequently contain other files, e.g.,
 <tt README> and <tt LICENSE> files, and of course other subdirectories may 
 be added as needed.
 
+Things to note:
+
+<ulp>
+<li> The <tt project.kite> file contains all of the information Kite needs
+     to know to perform project tasks.  See <xref projfile>.
+
+<li> The <root src/> subdirectories are a place for C libraries or any 
+     other code requiring a non-Kite compilation step.  See <xref comp>.
+</ulp>
+
 <section projtree.new "Creating New Project Trees">
 
-It is possible to set up a Kite project tree by hand, but it is more 
-usually to use the <tt kite new> command.  At present, <tt kite new>
-supports three templates:
+It is possible to set up a Kite project tree by hand, but it is both more
+usual and much easier to use the <tt kite new> command.  At present, 
+<tt kite new> supports three templates:
 
 <topiclist>
 <topic [b lib]> 
@@ -105,17 +123,19 @@ The project includes stub documentation and the package's
 
 <topic [b app]>
 A project that provides an application, delivered as a standalone executable
-for the current platform.  The package includes the stub documentation,
+for the current platform.  The project tree includes the stub documentation,
 the application's loader script (<root "bin/<i name>.tcl">), and an 
 application implementation package called <tt>app_<i name></tt>.  The 
 package includes both <root lib/> and <root test/> directories.
 The application's loader script calls the <tt main> command, which is
-defined by the implementation package.
+defined by the <tt>app_<i name></tt> implementation package.
 </topic>
 
 <topic [b appkit]>
 A project that provides an application, delivered as a "starkit".
 The project tree's contents are the same as for the <b app> template.
+This template is useful for tools that will run only in the development
+environment.
 </topic>
 
 </topiclist>
@@ -134,7 +154,8 @@ At present, <tt kite add> supports two element templates:
 <topic [b lib]> 
 Adds a new library package called <i name> to the project tree, in the
 form of the package's <root lib/> and <root test/> directories, and
-updates the <xref projfile "project file"> accordingly.
+adds a <tt provide> statement to the <xref projfile "project file">.  If
+the library is for internal use only, remove the <tt provide> statement.
 </topic>
 
 <topic [b app]>
@@ -146,20 +167,49 @@ updates the <xref projfile "project file"> accordingly.
 
 </topiclist>
 
-
-
-
 <hrule>
 
 <section projfile "The Project File">
+
+The Kite project file, <root project.kite>, is the equivalent of a set of
+Makefiles for a C project or of a Maven file for Java projects.  It
+contains all data about the project that the Kite executable needs to do
+its job.  In particular, the project file specifies:
+
+<ul>
+<li> The project's name, version, and description
+<li> The e-mail address of the primary point-of-contact
+<li> The applications contained in the project
+<li> The library packages provided by the project
+<li> The external library packages required by the project
+<li> Non-TCL project components that require compilation
+<li> Content of distribution .zip files 
+</ul>
+
+The initial content of the project file is created by the 
+<tt kite new> command when the project tree is first initialized, and 
+extended by <tt kite add> as new components are added.  Other content is
+added by the developer, by hand.
+
+The project version is particularly important.  The version number
+specified in the project file is available to all of the project's
+applications at run time, and is embedded in every library package
+provided for external use.
+
+The syntax of the project file is defined in the 
+<xref project(5)> man page.
 
 <hrule>
 
 <section lib "Library Packages">
 
-Library packages are placed in subdirectories of the <root lib/> directory.
-The directory name should match the package name, e.g., package 
-<tt mylib> resides in <root {lib/mylib/}>.
+This section describes the code layout for library packages in the project
+tree.  Library packages usually also have test suites and man pages; see
+<xref testing> and <xref docs> for details.
+
+A library package's source code is placed in a subdirectory of the 
+<root lib/> directory.  The directory name should match the package 
+name, e.g., package <tt mylib> resides in <root {lib/mylib/}>.
 
 Each library package should define the files defined in the following
 sections.
@@ -169,7 +219,7 @@ sections.
 Every package will have a <tt pkgIndex.tcl> file.  This file is usually 
 created by <tt kite new> or <tt kite add>, but can be copied or created
 by hand.  Every <tt pkgIndex.tcl> file should look more or less like
-<xref fig.lib.pkgindex>.
+<xref fig.lib.pkgindex>.  User-provided content is shown in boldface.
 
 <textfigure fig.lib.pkgindex "Standard 'pkgIndex.tcl' File">
 <listing>
@@ -178,16 +228,16 @@ by hand.  Every <tt pkgIndex.tcl> file should look more or less like
 #    pkgIndex.tcl
 #
 # PROJECT:
-#    myproject - My Project Description
+#    <b myproject - My Project Description>
 #
 # DESCRIPTION:
-#    mylib(n) package index file
+#    <b mylib>(n) package index file
 #
 #    Generated by Kite.
 #-------------------------------------------------------------------------
 
 # -kite-ifneeded-start <mark A> DO NOT EDIT THIS BLOCK BY HAND 
-package ifneeded mylib 1.2.3 [list source [file join $dir pkgModules.tcl]] <mark B> 
+package ifneeded <b mylib> 1.2.3 [list source [file join $dir pkgModules.tcl]] <mark B> 
 # -kite-ifneeded-end <mark A>
 </listing>
 
@@ -217,14 +267,15 @@ version number should always match that of the project as a whole.
 
 <b NOTE:> Kite rewrites the entire segment between the marks, so it will
 always look exactly like this.  If you need something different, you can
-remove the <tt kite-ifneeded> lines, but then you'll have to maintain
+remove the <tt kite-ifneeded> lines; but then you'll have to maintain
 the version number yourself.
 
 <section lib.pkgmodules "The 'pkgModules.tcl' File">
 
 The package's <tt pkgIndex.tcl> file always sources a file called 
 <tt pkgModules.tcl>, which is responsible for loading the rest of the
-package.  A typical <tt pkgModules.tcl> file is as follows:
+package.  A typical <tt pkgModules.tcl> file is as follows; user-provided
+content is shown in bold.
 
 <textfigure fig.lib.pkgmodules "Standard 'pkgModules.tcl' file">
 <listing>
@@ -233,10 +284,10 @@ package.  A typical <tt pkgModules.tcl> file is as follows:
 #    pkgModules.tcl
 #
 # PROJECT:
-#    myproject - My Project Description
+#    <b myproject - My Project Description>
 #
 # DESCRIPTION:
-#    mylib(n) package modules file
+#    <b mylib(n)> package modules file
 #
 #    Generated by Kite.
 #-----------------------------------------------------------------------
@@ -245,21 +296,21 @@ package.  A typical <tt pkgModules.tcl> file is as follows:
 # Package Definition
 
 # -kite-provide-start <mark A> DO NOT EDIT THIS BLOCK BY HAND
-package provide mylib 1.2.3 <mark B>
+package provide <b mylib> 1.2.3 <mark B>
 # -kite-provide-end <mark A>
 
 #-----------------------------------------------------------------------
 # Required Packages
 
 # -kite-require-start <mark C> ADD EXTERNAL DEPENDENCIES
-package require snit 2.3 <mark D>
-package require -exact myotherlib 1.2.3 <mark E>
+<b>package require snit 2.3</b> <mark D>
+<b>package require -exact myotherlib 1.2.3</b> <mark E>
 # -kite-require-end <mark C>
 
 #-----------------------------------------------------------------------
 # Namespace definition
 
-namespace eval ::mylib:: { <mark F>
+namespace eval ::<b mylib>:: { <mark F>
     variable library [file dirname [info script]] <mark G>
 }
 
@@ -269,9 +320,9 @@ namespace eval ::mylib:: { <mark F>
 # Note: modules are listed in order of dependencies; be careful if you
 # change the order!
 
-source [file join $::mylib::library module1.tcl] <mark H>
-source [file join $::mylib::library module2.tcl]
-...
+<b>source [file join $::mylib::library module1.tcl]</b> <mark H>
+<b>source [file join $::mylib::library module2.tcl]</b>
+<b>...</b>
 </listing>
 
 <topiclist>
@@ -338,17 +389,6 @@ idiom shown here, using <tt file join> with the package's
 
 </topiclist>
 
-<section lib.onemodule "Packages with One Module">
-
-If the package consists of only one module, it might be tempting to
-have <tt pkgIndex.tcl> load that module directly.  Resist this temptation;
-Kite will not be able to update the provided and required version numbers
-properly.
-
-Similarly, if the package needs only one module it might be tempting to just
-put the module's code at the end of <tt pkgModules.tcl> instead of in its
-own file.  Resist this temptation as well.
-
 <section lib.modules "Package Modules">
 
 A package module file can contain whatever TCL code you like; it's entirely
@@ -410,9 +450,56 @@ You'll have to write this yourself.
 
 </topiclist>
 
+<section lib.otherfiles "Other Files">
+
+A package can also contain data files or files in other languages
+(e.g., SQL files).  These should also be placed in the package directory;
+the package should find them using its package library variable.  For 
+example, a module in the <tt mylib> package might load a file 
+called <tt data.txt> using code like this:
+
+<example>
+set data [readfile [file join $::mylib::library data.txt]]
+</example>
+
+The <tt readfile> command is defined in the <xref kiteutils(n)> package.
+
+<section lib.onemodule "Packages with One Module">
+
+If the package consists of only one module, it might be tempting to
+have <tt pkgIndex.tcl> load that module directly.  Resist this temptation;
+Kite will not be able to update the provided and required version numbers
+properly.
+
+Similarly, if the package needs only one module it might be tempting to just
+put the module's code at the end of <tt pkgModules.tcl> instead of in its
+own file.  Resist this temptation as well.
+
+<section lib.manymodules "Packages with Many Modules">
+
+If a package has a large number of modules or data files, it can be useful 
+to put related groups of files into subdirectories.  All such modules 
+should be still be loaded by the package's 
+<tt><xref lib.pkgmodules pkgModules.tcl></tt> file.
+
+
 <hrule>
 
 <section app "Applications">
+
+An application is a TCL/TK program.  An application's code consists of
+a loader script, which resides in the <root bin/> directory, 
+and an implementation package.  The implementation package is structured 
+in the same way as a normal <xref lib "library package"> but has 
+additional files.
+
+<section app.loader "Application Loader File">
+
+<section app.pkgindex "The 'pkgIndex.tcl' File">
+<section app.pkgmodules "The 'pkgModules.tcl' File">
+<section app.main "The 'main.tcl' File">
+<section app.modules "Application Modules">
+<section app.otherfiles "Other Files">
 
 <hrule>
 
