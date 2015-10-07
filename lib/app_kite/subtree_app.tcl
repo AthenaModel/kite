@@ -117,10 +117,12 @@ codeblock subtree::App_loader {app} {
         # for the user.
         puts $result
         puts ""
+        exit 1
     } on error {result eopts} {
         # A genuine error; report it in detail.
         puts "Unexpected Error: $result"
         puts "\nStack Trace:\n[dict get $eopts -errorinfo]"
+        exit 1
     }
 }
 
