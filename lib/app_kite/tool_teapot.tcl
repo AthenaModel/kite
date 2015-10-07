@@ -30,27 +30,15 @@ tool define teapot {
         Display the status of the local teapot.  If there are problems,
         Kite will give directions for how to fix them.
 
-    kite teapot create
-        Creates the teapot at ~/.kite/teapot, if it doesn't already exist,
-        and makes it the "default" teapot.
-
-    kite teapot link
-        Links the local teapot to the user's tclsh, so that it will load
-        packages from the teapot automatically.
-
-        On Linux and OS X, it may be necessary to use sudo with this command:
-
-            $ sudo -E kite teapot link
+    kite teapot fix
+        Creates a local teapot at ~/.kite/teapot, if it doesn't already 
+        exist, and outputs a script or batch file to make it the 
+        "default" teapot.  This script usually requires "admin" or 
+        "root" privileges; on Linux or OS X, it is generally run using 
+        'sudo'. 
 
     kite teapot list
         Displays the content of the local teapot.
-
-    kite teapot remove
-        Removes ~/.kite/teapot. Removing the local teapot may cause your 
-        Kite projects to be unable to find their external dependencies.  
-
-        Because this command unlinks the tclsh from the teapot, you may need
-        to use 'sudo' on Linux or OS X, just as for 'kite teapot link'.
 } {
     #-------------------------------------------------------------------
     # Execution
@@ -65,10 +53,8 @@ tool define teapot {
 
         switch -exact -- $sub {
             ""      { DisplayStatus }
-            create  { teapot create }
-            link    { teapot link   }
+            fix     { teapot fix    }
             list    { DisplayList   }
-            remove  { teapot remove }
             default { throw FATAL "Unknown subcommand: \"$sub\""}
         }
 
@@ -89,19 +75,19 @@ tool define teapot {
         switch -exact -- $state {
             missing {
                 puts "Kite hasn't yet created its local teapot. Please use"
-                puts "'kite teapot create' to do so.  See 'kite help teapot'"
+                puts "'kite teapot fix' to do so.  See 'kite help teapot'"
                 puts "for details."
             }
 
             non-default {
                 puts "Kite's local teapot isn't the default installation"
-                puts "teapot.  Please use 'kite teapot create' to make it"
+                puts "teapot.  Please use 'kite teapot fix' to make it"
                 puts "so.  See 'kite help teapot' for details."
             }
 
             unlinked {
                 puts "Kite's local teapot isn't linked to the development"
-                puts "tclsh.  Please use 'kite teapot link' to do so."
+                puts "tclsh.  Please use 'kite teapot fix' to do so."
                 puts "See 'kite help teapot' for details."
             }
 

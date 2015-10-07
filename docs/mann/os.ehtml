@@ -61,6 +61,11 @@ Returns a prettier version of the flavor, e.g., "Windows".
 Looks for the named executable on the user's <b PATH>, returning
 the normalized path on success and "" on failure.
 
+<defitem "os username" {os username}>
+
+Attempt to determine the user name by querying the environment.  Returns
+"" if the user name cannot be determined.
+
 </deflist>
 
 <section ENVIRONMENT>

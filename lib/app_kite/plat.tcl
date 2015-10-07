@@ -36,7 +36,8 @@ snit::type plat {
     # pathsOf - important directories, by symbolic name.
 
     typevariable pathsOf -array {
-        tclhome  {}
+        tclhome    {}
+        indexcache {}
     }
 
     #-------------------------------------------------------------------
@@ -264,6 +265,24 @@ snit::type plat {
                 } else {
                     set path [file dirname [file dirname $tclsh]]
                 }
+            }
+
+            indexcache {
+                # Where teacup stores its index caches, by platform.
+                switch -exact -- [os flavor] {
+                    linux   { 
+                        set path ~/.teapot
+                    }
+                    osx     {
+                        set path \
+                     "~/Library/Application\ Support/ActiveState/Teapot/"
+                    }
+                    windows { 
+                        # This doesn't matter on Windows
+                        set path "" 
+                    }
+                }
+
             }
 
             default { error "Unknown symbolic name: \"$name\""}

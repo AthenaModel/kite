@@ -14,7 +14,7 @@
 # Package Definition
 
 # -kite-provide-start  DO NOT EDIT THIS BLOCK BY HAND
-package provide app_kite 0.4.12
+package provide app_kite 0.5.0
 # -kite-provide-end
 
 #-----------------------------------------------------------------------
@@ -23,10 +23,13 @@ package provide app_kite 0.4.12
 # -kite-require-start ADD EXTERNAL DEPENDENCIES
 package require snit 2.3
 package require platform 1.0
-package require zipfile::encode 0.3
+catch {
+    # Allow bootstrapping!
+    package require zipfile::encode 0.3
+}
 package require tls 1.6
-package require -exact kiteutils 0.4.12
-package require -exact kitedocs 0.4.12
+package require -exact kiteutils 0.5.0
+package require -exact kitedocs 0.5.0
 # -kite-require-end
 
 # HTTP is always present, and we always want https.
