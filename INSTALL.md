@@ -20,24 +20,32 @@ To install Kite given an installation .zip file, do the following.
 
    On Windows,
 
+```
     $ cp <kite>/bin/kite-<platform>.exe ~/bin/kite.exe
+```
 
    On Linux or OSX,
 
+```
     $ cp <kite>/bin/kite-<platform> ~/bin/kite
+```
 
 6. Kite is now installed.  To test it:
 
+```
     $ kite version
     Kite 0.5.0
     $
+```
 
 7. Initialize the local teapot repository.  This will allow Kite to 
    pull in external dependencies safely.  See 'kite help teapot'
    for details.
 
-8. If desired, install the Kite Tcl packages into the local teapot.
+8. Install the Kite Tcl packages into the local teapot.
    In the Kite directory, e.g.,
 
+```
     $ teacup install package-kiteutils-<version>-tcl.zip
     $ teacup install package-kitedocs-<version>-tcl.zip
+```

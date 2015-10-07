@@ -18,17 +18,21 @@ scratch, do the following.
    add ~/github/kite/bin to your path.  Verify that you can run Kite
    as a Tcl script:
 
+```
      $ kite.tcl version
      Kite 0.5.0
      $
-   
+```
+
    If you cannot, then check your Tcl installation.
 
 4. Switch to ~/github/kite
 
 5. Set up the local teapot repository; see "kite.tcl help teapot".
 
+```
     $ kite.tcl teapot fix
+```
 
 6. Kite will create the local teapot directory in ~/.kite/teapot; however,
    it will also need to link it to your "tclsh", which requires admin 
@@ -36,37 +40,58 @@ scratch, do the following.
    ("~/.kite/fixteapot.bat" on Windows) that takes the necessary steps.
    Run this script.
 
-   On Linux and OSX, you will usually need to run it using "sudo".
+   On Linux and OSX, you will usually need to run it using "sudo":
+
+```
+     $ chmod +x ~/.kite/fixteapot
+     $ sudo ~/.kite/fixteapot
+```
+
+   On Windows, just run the batch file:
+
+```
+     C:\> .kite/fixteapot.bat
+```
 
    Verify that the work is complete:
 
+```
      $ kite.tcl teapot
      Local teapot: /home/will/.kite/teapot
 
      Kite's local teapot is ready for use.
      $
+```
 
 7. Update Kite's dependencies. This will pull Snit and other required
    packages into the local teapot.
 
+```
     $ kite.tcl deps update
+```
 
 8. Build Kite.  This will run all tests, build all documentation, and so
    forth.
 
+```
     $ kite.tcl build
+```
 
 9. Install Kite.  This will copy ./bin/kite-<version>-<platform>.exe 
    (or whatever) to ~/bin/kite, and install the Kite Tcl libraries into the 
    local teapot.
 
+```
     $ kite.tcl install
+```
 
    NOTE: When installing a new build of Kite, always use kite.tcl to do
    do the installation, rather than a previously installed Kite executable.
    If you say
 
+```
     $ kite install                    DON'T DO THIS
+```
 
    then ~/bin/kite will try to overwrite itself with the new executable.
    This is known not to work on Windows systems.
@@ -77,9 +102,11 @@ scratch, do the following.
 
 11. Use Kite normally:
 
+```
     $ kite version
     Kite 0.5.0
     $
+```
 
 ## Installing Kite
 
@@ -96,9 +123,15 @@ Tcl development environment, do the following:
 
 2. Build Kite.  If there are any issues, follow Kite's instructions.
 
+```
     $ kite build
+```
 
 3. Install Kite.
 
+```
     $ kite.tcl install
+```
 
+Note that it isn't necessary to build Kite to test changes; just use
+`kite.tcl` instead of `kite` to run with your modifications.

@@ -8,8 +8,8 @@ be used by other projects.
 
 <ul>
   <li> <xref ../README.md       "Project README">
+  <li> <xref ../BUILD.md        "Build Instructions">
   <li> <xref ../INSTALL.md      "Installation Instructions">
-  <li> <xref BUILD.md           "Build Instructions">
   <li> <xref project(5)         "Syntax: project.kite">
   <li> <xref kdg.html           "Kite Developer's Guide">
   <li> <xref tcl_standard.html  "Tcl Coding Standard">
