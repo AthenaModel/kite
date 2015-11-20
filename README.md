@@ -7,10 +7,10 @@ Kite build tool for Athena Tcl projects.
 See also [BUILD.md](./BUILD.md) and [INSTALL.md](./INSTALL.md).
 
 The vision for Kite is to be a 
-[Leiningen-like](http://htmlpreview.github.io/?https://github.jpl.nasa.gov/will/athena-kite.git)
+[Leiningen-like](http://leiningen.org)
 tool for Tcl development.  
 
-Kite provides a number of libraries; see the [Documentation Tree](docs/index.html) for details.  For information on using the Kite tool, build Kite and execute `kite help` at the command line.
+Kite provides a number of libraries; see the [Documentation Tree](http://htmlpreview.github.io/?https://github.com/AthenaModel/kite/blob/master/docs/index.html) for details.  For information on using the Kite tool, build Kite and execute `kite help` at the command line.
 
 ## Assumptions
 
