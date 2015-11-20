@@ -1,0 +1,421 @@
+<html>
+<head>
+<title>kite 0.5.0: control(n) -- Control Structures, submodule of kiteutils(n)</title>
+<style type="text/css" media="screen,print">
+/* ehtml(5) Standard CSS */
+
+/*---------------------------------------------------------*/
+/* General Use                                             */
+
+a {
+    /* No underlines */
+    text-decoration: none;
+}
+
+/* Special formatting for definition lists, to get proper
+ * blank lines after descriptions but not after topics. */
+dt {
+    margin-bottom: 0;
+}
+
+dd { 
+    margin-bottom: 1em; 
+}
+
+dd > p:first-child { 
+    margin-top: 0; 
+}
+
+
+/*---------------------------------------------------------*/
+/* Specific Macros                                         */
+
+/* bigmark */
+div.bigmark {
+    display: inline;
+    font-family: Verdana;
+    font-size: 100%;
+    background: black;
+    color: white;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+/* def, defitem, defopt */
+
+dt.def {
+    font-weight: bold;
+}
+
+dt.defitem {
+    font-weight: bold;
+    font-family: monospace;
+}
+
+dt.defopt {
+    font-weight: bold;
+    font-family: monospace;
+}
+
+
+/* example/ */
+pre.example {
+    background:     #FFFDD1 ;
+    border:         1px solid blue;
+    padding-top:    2px;
+    padding-bottom: 2px;
+    padding-left:   4px;
+}
+
+
+/* hrule */
+hr.hrule {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+/* iref */
+a.iref {
+    font-family: monospace;
+}
+
+/* itemlist */                
+ul.itemlist {
+    padding-left: 0;
+    list-style-type: none;
+}
+
+/* listing/ */
+pre.listing {
+    background:     #FFFDD1 ;
+    border:         1px solid blue;
+    padding-top:    4px;
+    padding-bottom: 4px;
+    padding-left:   4px;
+}
+
+span.linenum {
+    background:     #E3E08F ;
+}
+
+/* mark */
+div.mark {
+    display:       inline;
+    font-family:   Verdana;
+    font-size:     75%;
+    background:    black;
+    color:         white;
+    border:        1px solid black;
+    border-radius: 5px;
+    padding-left:  2px;
+    padding-right: 2px;
+}
+
+/* procedure */
+
+table.procedure {
+    border: 1px solid black;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table.procedure td {
+    border: 1px solid black;
+}
+
+td.procedure-index {
+    padding-right: 5px;
+    text-align: right;
+    width: 2em;
+}
+
+
+/* topiclist/ */
+.topiclist {
+    margin-top:    1em;
+    margin-bottom: 1em;
+}
+
+tr.topic {
+    vertical-align: baseline;
+}
+
+tr.topicname {
+    min-width: 1.5em;
+}
+
+/* tt/ */
+
+.tt {
+    font-family: monospace;
+}
+
+
+
+/* olp/ */
+
+ol.olp > li {
+    margin-bottom: 1em;
+}
+
+/* ulp/ */
+
+ul.ulp > li {
+    margin-bottom: 1em;
+}
+
+/*---------------------------------------------------------*/
+/* table/ plus macros that use it.    Most formatting is
+ * depends on the "table" class.                           */
+
+table {
+    margin-top:     1em;
+    margin-bottom:  1em;
+    vertical-align: baseline;
+}
+
+th {
+    padding-left: 5px;
+    text-align:   left;
+}
+
+td {
+    padding-left:   5px;
+    vertical-align: baseline;
+}
+
+
+/* "table" class: standard table formatting. */
+.table {
+    border:           1px solid black;
+    border-spacing:   0;
+    color:            black;
+    background-color: white;
+}
+
+.table tr:first-child {
+    font-weight:      bold;
+    color:            white;
+    background-color: #000099;    
+}
+
+.table tr.tr-odd {
+    background-color: #EEEEEE;
+}
+
+.table tr.tr-even { }
+
+.table-wide {
+    width: 100%;
+}
+
+        BODY {
+            color: black;
+            background: white;
+            margin-left: 6%;
+            margin-right: 6%;
+        }
+
+        H1 {
+            margin-left: -5%;
+        }
+        H2 {
+            margin-left: -5%;
+        }
+        HR {
+            margin-left: -5%;
+        }
+
+        TABLE {
+            text-align:    left;
+        }
+        
+        /* mktree styles */
+        ul.mktree  li  { list-style: none; }
+        ul.mktree, ul.mktree ul, ul.mktree li { 
+            margin-left:10px; padding:0px; }
+        ul.mktree li .bullet { padding-left: 10px }
+        ul.mktree  li.liOpen   .bullet {cursor : pointer; }
+        ul.mktree  li.liClosed .bullet {cursor : pointer; }
+        ul.mktree  li.liBullet .bullet {cursor : default; }
+        ul.mktree  li.liOpen   ul {display: block; }
+        ul.mktree  li.liClosed ul {display: none; }
+    
+</style>
+
+
+
+</head>
+
+<body>
+<h1 style="background: red;">
+&nbsp;kite 0.5.0: Kite Project Automation Tool
+</h1>
+    
+
+<h2><a name="name">NAME</a></h2>
+    
+
+<p><b>control(n)</b> -- Control Structures, submodule of <a href="../mann/kiteutils.html">kiteutils(n)</a>
+
+</p>
+
+<ul>
+
+    <li><a href="#name">NAME</a></li>
+    
+
+    <li><a href="#synopsis">SYNOPSIS</a></li>
+    
+
+    <li><a href="#description">DESCRIPTION</a></li>
+    
+
+    <li><a href="#commands">COMMANDS</a></li>
+    
+
+    <li><a href="#environment">ENVIRONMENT</a></li>
+    
+
+    <li><a href="#author">AUTHOR</a></li>
+    
+
+</ul>
+    
+    
+
+<h2><a name="synopsis">SYNOPSIS</a></h2>
+    
+
+<pre>
+package require kiteutils 0.5.0
+namespace import ::kiteutils::*
+</pre>
+
+<ul class="itemlist">
+<li><a class="iref" href="#assert">assert <i>expression</i></a></li>
+<li><a class="iref" href="#bgcatch">bgcatch <i>script</i></a></li>
+<li><a class="iref" href="#callwith">callwith <i>prefix</i> ?<i>args...</i>?</a></li>
+<li><a class="iref" href="#foroption">foroption <i>optvar argvar</i> ?-all? <i>body</i></a></li>
+<li><a class="iref" href="#require">require <i>expression message</i></a></li>
+</ul>
+
+
+<h2><a name="description">DESCRIPTION</a></h2>
+<p>control(n) contains commands the modify the flow of control in some 
+way.
+
+</p>
+
+<h2><a name="commands">COMMANDS</a></h2>
+    
+
+<dl>
+
+<dt class="defitem"><a name="assert">assert <i>expression</i></a></dt><dd><p>
+
+<a class="iref" href="#assert">assert</a> tests an invariant Boolean <i>expression</i>.  If the
+expression is false, <a class="iref" href="#assert">assert</a> throws the following error:
+
+</p><pre>Assertion failed: <i>expression</i></pre>
+<p>The Tcl <code>errorCode</code> variable will be set to "ASSERT".
+
+</p>
+
+</dd>
+<dt class="defitem"><a name="bgcatch">bgcatch <i>script</i></a></dt><dd>
+
+Executes an arbitrary Tcl <i>script</i> in the caller's context.  If
+the script throws an error, the error is handled by
+<code>bgerror</code>.  <a class="iref" href="#bgcatch">bgcatch</a> never returns a value.
+
+
+</dd>
+<dt class="defitem"><a name="callwith">callwith <i>prefix</i> ?<i>args...</i>?</a></dt><dd>
+
+Calls a command <i>prefix</i> with zero or more additional arguments
+in the global scope.  This is to be used when calling callback
+commands.  If <i>prefix</i> is the empty list, then <a class="iref" href="#callwith">callwith</a>
+does and returns nothing.
+
+</dd>
+<dt class="defitem"><a name="foroption">foroption <i>optvar argvar</i> ?-all? <i>body</i></a></dt><dd><p>
+
+The <a class="iref" href="#foroption">foroption</a> command is a tool for looping over options and values
+from an argument list.  Here, <i>argvar</i> is the name of the variable
+containing the argument list, and <i>optvar</i> is the name of a variable
+to receive the successive option names.  The <i>body</i> is a set of 
+Tcl <span class="tt">switch</span> cases, one for each valid option.</p>
+
+<p>The options are extracted from the argument list using 
+<a href="../mann/listx.html#lshift">lshift</a>.  When an option takes a value, the relevant 
+switch case can extract its value from the list in the same way.</p>
+
+<p>It's an <b>INVALID</b> error if <a class="iref" href="#foroption">foroption</a> reads an option without
+a matching case.</p>
+
+<p>By default, <a class="iref" href="#foroption">foroption</a> keeps reading options until it reaches
+the end of the argument list, or finds a list item that begins with 
+something other than "-".  In this case, the <i>argvar</i> will contain
+the non-option arguments when <a class="iref" href="#foroption">foroption</a> returns.</p>
+
+<p>If the <b>-all</b> option is included, 
+<a class="iref" href="#foroption">foroption</a> throws an <b>INVALID</b> error if finds an argument
+that isn't an option or an option value.</p>
+
+<p>For example,
+
+</p><pre class="example">
+proc myproc {args} {
+    array set opts {
+        -this {}
+        -that {}
+    }
+
+    foroption opt args -all {
+        -this -
+        -that { 
+            set opts($opt) [lshift args] 
+        }
+    }
+
+    ...
+}
+</pre>
+
+
+</dd>
+<dt class="defitem"><a name="require">require <i>expression message</i></a></dt><dd>
+
+This is identical to <a class="iref" href="#assert">assert</a> except that error message is the
+specified <i>message</i>.
+
+</dd>
+</dl>
+
+<h2><a name="environment">ENVIRONMENT</a></h2>
+<p>Requires Tcl 8.6 or later.
+
+</p>
+
+<h2><a name="author">AUTHOR</a></h2>
+<p>Will Duquette
+
+</p>
+
+<hr>
+<p><i>kite 0.5.0 Man page generated by manpage(n) on 
+Fri Nov 20 09:34:56 PST 2015</i>
+</p>
+
+</body>
+</html>
+    
+
+
+
+
+
+

@@ -1,0 +1,522 @@
+<html>
+<head>
+<title>kite 0.5.0: macro(n) -- Macro Processor, submodule of kiteutils(n)</title>
+<style type="text/css" media="screen,print">
+/* ehtml(5) Standard CSS */
+
+/*---------------------------------------------------------*/
+/* General Use                                             */
+
+a {
+    /* No underlines */
+    text-decoration: none;
+}
+
+/* Special formatting for definition lists, to get proper
+ * blank lines after descriptions but not after topics. */
+dt {
+    margin-bottom: 0;
+}
+
+dd { 
+    margin-bottom: 1em; 
+}
+
+dd > p:first-child { 
+    margin-top: 0; 
+}
+
+
+/*---------------------------------------------------------*/
+/* Specific Macros                                         */
+
+/* bigmark */
+div.bigmark {
+    display: inline;
+    font-family: Verdana;
+    font-size: 100%;
+    background: black;
+    color: white;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+/* def, defitem, defopt */
+
+dt.def {
+    font-weight: bold;
+}
+
+dt.defitem {
+    font-weight: bold;
+    font-family: monospace;
+}
+
+dt.defopt {
+    font-weight: bold;
+    font-family: monospace;
+}
+
+
+/* example/ */
+pre.example {
+    background:     #FFFDD1 ;
+    border:         1px solid blue;
+    padding-top:    2px;
+    padding-bottom: 2px;
+    padding-left:   4px;
+}
+
+
+/* hrule */
+hr.hrule {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+/* iref */
+a.iref {
+    font-family: monospace;
+}
+
+/* itemlist */                
+ul.itemlist {
+    padding-left: 0;
+    list-style-type: none;
+}
+
+/* listing/ */
+pre.listing {
+    background:     #FFFDD1 ;
+    border:         1px solid blue;
+    padding-top:    4px;
+    padding-bottom: 4px;
+    padding-left:   4px;
+}
+
+span.linenum {
+    background:     #E3E08F ;
+}
+
+/* mark */
+div.mark {
+    display:       inline;
+    font-family:   Verdana;
+    font-size:     75%;
+    background:    black;
+    color:         white;
+    border:        1px solid black;
+    border-radius: 5px;
+    padding-left:  2px;
+    padding-right: 2px;
+}
+
+/* procedure */
+
+table.procedure {
+    border: 1px solid black;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table.procedure td {
+    border: 1px solid black;
+}
+
+td.procedure-index {
+    padding-right: 5px;
+    text-align: right;
+    width: 2em;
+}
+
+
+/* topiclist/ */
+.topiclist {
+    margin-top:    1em;
+    margin-bottom: 1em;
+}
+
+tr.topic {
+    vertical-align: baseline;
+}
+
+tr.topicname {
+    min-width: 1.5em;
+}
+
+/* tt/ */
+
+.tt {
+    font-family: monospace;
+}
+
+
+
+/* olp/ */
+
+ol.olp > li {
+    margin-bottom: 1em;
+}
+
+/* ulp/ */
+
+ul.ulp > li {
+    margin-bottom: 1em;
+}
+
+/*---------------------------------------------------------*/
+/* table/ plus macros that use it.    Most formatting is
+ * depends on the "table" class.                           */
+
+table {
+    margin-top:     1em;
+    margin-bottom:  1em;
+    vertical-align: baseline;
+}
+
+th {
+    padding-left: 5px;
+    text-align:   left;
+}
+
+td {
+    padding-left:   5px;
+    vertical-align: baseline;
+}
+
+
+/* "table" class: standard table formatting. */
+.table {
+    border:           1px solid black;
+    border-spacing:   0;
+    color:            black;
+    background-color: white;
+}
+
+.table tr:first-child {
+    font-weight:      bold;
+    color:            white;
+    background-color: #000099;    
+}
+
+.table tr.tr-odd {
+    background-color: #EEEEEE;
+}
+
+.table tr.tr-even { }
+
+.table-wide {
+    width: 100%;
+}
+
+        BODY {
+            color: black;
+            background: white;
+            margin-left: 6%;
+            margin-right: 6%;
+        }
+
+        H1 {
+            margin-left: -5%;
+        }
+        H2 {
+            margin-left: -5%;
+        }
+        HR {
+            margin-left: -5%;
+        }
+
+        TABLE {
+            text-align:    left;
+        }
+        
+        /* mktree styles */
+        ul.mktree  li  { list-style: none; }
+        ul.mktree, ul.mktree ul, ul.mktree li { 
+            margin-left:10px; padding:0px; }
+        ul.mktree li .bullet { padding-left: 10px }
+        ul.mktree  li.liOpen   .bullet {cursor : pointer; }
+        ul.mktree  li.liClosed .bullet {cursor : pointer; }
+        ul.mktree  li.liBullet .bullet {cursor : default; }
+        ul.mktree  li.liOpen   ul {display: block; }
+        ul.mktree  li.liClosed ul {display: none; }
+    
+</style>
+
+
+
+</head>
+
+<body>
+<h1 style="background: red;">
+&nbsp;kite 0.5.0: Kite Project Automation Tool
+</h1>
+    
+
+<h2><a name="name">NAME</a></h2>
+    
+
+<p><b>macro(n)</b> -- Macro Processor, submodule of <a href="../mann/kiteutils.html">kiteutils(n)</a>
+
+</p>
+
+<ul>
+
+    <li><a href="#name">NAME</a></li>
+    
+
+    <li><a href="#synopsis">SYNOPSIS</a></li>
+    
+
+    <li><a href="#description">DESCRIPTION</a></li>
+    
+
+    <li><a href="#macros">MACROS</a></li>
+    
+
+    <li><a href="#commands">COMMANDS</a></li>
+    
+
+    <li><a href="#instance_command">INSTANCE COMMAND</a></li>
+    
+
+    <li><a href="#see_also">SEE ALSO</a></li>
+    
+
+    <li><a href="#environment">ENVIRONMENT</a></li>
+    
+
+    <li><a href="#author">AUTHOR</a></li>
+    
+
+    <li><a href="#history">HISTORY</a></li>
+    
+
+</ul>
+    
+    
+
+<p><a href="http://tcllib.sourceforge.net/doc/expander.html">textutil::expander(n)</a>
+
+</p>
+
+<h2><a name="synopsis">SYNOPSIS</a></h2>
+    
+
+<pre>
+package require kiteutils 0.5.0
+namespace import ::kiteutils::*
+</pre>
+
+<ul class="itemlist">
+<li><a class="iref" href="#macro">macro <i>name</i></a></li>
+<li><a class="iref" href="#cget"><i>obj</i> cget <i>varname</i></a></li>
+<li><a class="iref" href="#cis"><i>obj</i> cis <i>cname</i></a></li>
+<li><a class="iref" href="#cname"><i>obj</i> cname</a></li>
+<li><a class="iref" href="#cpop"><i>obj</i> cpop <i>cname</i></a></li>
+<li><a class="iref" href="#cpush"><i>obj</i> cpush <i>cname</i></a></li>
+<li><a class="iref" href="#cset"><i>obj</i> cset <i>varname value</i></a></li>
+<li><a class="iref" href="#cvar"><i>obj</i> cvar <i>varname</i></a></li>
+<li><a class="iref" href="#errmode"><i>obj</i> errmode</a></li>
+<li><a class="iref" href="#lb"><i>obj</i> lb</a></li>
+<li><a class="iref" href="#rb"><i>obj</i> rb</a></li>
+<li><a class="iref" href="#setbrackets"><i>obj</i> setbrackets</a></li>
+<li><a class="iref" href="#where"><i>obj</i> where</a></li>
+<li><a class="iref" href="#alias"><i>obj</i> alias <i>srcCmd targetCmd</i> ?<i>arg...</i>?</a></li>
+<li><a class="iref" href="#alias"><i>obj</i> alias <i>srcCmd targetCmd</i> ?<i>arg...</i>?</a></li>
+<li><a class="iref" href="#alias"><i>obj</i> alias <i>srcCmd targetCmd</i> ?<i>arg...</i>?</a></li>
+<li><a class="iref" href="#alias"><i>obj</i> alias <i>srcCmd targetCmd</i> ?<i>arg...</i>?</a></li>
+<li><a class="iref" href="#ensemble"><i>obj</i> ensemble <i>alias</i></a></li>
+<li><a class="iref" href="#proc"><i>obj</i> proc <i>name arglist body</i></a></li>
+<li><a class="iref" href="#smartalias"><i>obj</i> smartalias <i>alias min max argsyn prefix</i></a></li>
+<li><a class="iref" href="#reset"><i>obj</i> reset</a></li>
+<li><a class="iref" href="#register"><i>obj</i> register <i>macroset</i></a></li>
+<li><a class="iref" href="#eval"><i>obj</i> eval <i>script</i></a></li>
+<li><a class="iref" href="#expand"><i>obj</i> expand <i>text</i></a></li>
+<li><a class="iref" href="#expandfile"><i>obj</i> expandfile <i>name</i></a></li>
+<li><a class="iref" href="#expandonce"><i>obj</i> expandonce <i>text</i></a></li>
+<li><a class="iref" href="#pass"><i>obj</i> pass</a></li>
+<li><a class="iref" href="#warn"><i>obj</i> warn <i>text</i></a></li>
+</ul>
+
+
+<h2><a name="description">DESCRIPTION</a></h2>
+<p>macro(n) defines a Tcl-based macro expansion processor.  Input consists
+of plain text with embedded macros; the macros are evaluated, and their 
+return values are inserted into the body of text in their place.</p>
+
+<p>See <a href="../man5/macro.html">macro(5)</a> for the basic syntax and standard macros.</p>
+
+<p>Instances of macro(n) are wrapper around the Tcllib 
+<a href="http://tcllib.sourceforge.net/doc/expander.html">textutil::expander(n)</a> module, using a
+<a href="../mann/smartinterp.html">smartinterp(n)</a> object as the macro interpreter.
+
+</p>
+
+<h2><a name="macros">MACROS</a></h2>
+<p>The <a href="../man5/macro.html">macro(5)</a> man page describes some standard macros; and this 
+module provides tools for adding additional macros.  In general,
+new macros are defined in sets using the <a href="../mani/macroset.html">macroset(i)</a> interface;
+a <a href="../mani/macroset.html">macroset(i)</a> object is then registered with the 
+macro(n) instance using the <a class="iref" href="#register">register</a> method.</p>
+
+<p>Macros are expanded in a safe <a href="../mann/smartinterp.html">smartinterp(n)</a> interpreter.  Any
+Tcl commands present in the interpreter can be used as a macro.
+
+
+</p>
+
+<h2><a name="commands">COMMANDS</a></h2>
+    
+
+<dl>
+
+<dt class="defitem"><a name="macro">macro <i>name</i></a></dt><dd><p>
+
+Creates a new macro(n) object called <i>name</i>. The object is
+represented as a new Tcl command in the caller's scope;
+<a class="iref" href="#macro">macro</a> returns the fully-qualified form of the
+<i>name</i>.</p>
+
+<p>The processor is manipulated via the subcommands of the
+<a class="iref" href="#macro">macro</a> command, which are as follows:
+
+</p>
+</dd>
+</dl>
+
+<h2><a name="instance_command">INSTANCE COMMAND</a></h2>
+<p>Each instance of the <a class="iref" href="#macro">macro</a> object has the following
+subcommands:
+
+</p>
+
+<dl>
+
+<dt class="defitem"><a name="cget"><i>obj</i> cget <i>varname</i></a></dt>
+<dt class="defitem"><a name="cis"><i>obj</i> cis <i>cname</i></a></dt>
+<dt class="defitem"><a name="cname"><i>obj</i> cname</a></dt>
+<dt class="defitem"><a name="cpop"><i>obj</i> cpop <i>cname</i></a></dt>
+<dt class="defitem"><a name="cpush"><i>obj</i> cpush <i>cname</i></a></dt>
+<dt class="defitem"><a name="cset"><i>obj</i> cset <i>varname value</i></a></dt>
+<dt class="defitem"><a name="cvar"><i>obj</i> cvar <i>varname</i></a></dt>
+<dt class="defitem"><a name="errmode"><i>obj</i> errmode</a></dt>
+<dt class="defitem"><a name="lb"><i>obj</i> lb</a></dt>
+<dt class="defitem"><a name="rb"><i>obj</i> rb</a></dt>
+<dt class="defitem"><a name="setbrackets"><i>obj</i> setbrackets</a></dt>
+<dt class="defitem"><a name="where"><i>obj</i> where</a></dt><dd>
+
+These commands provide access to the <a href="http://tcllib.sourceforge.net/doc/expander.html">textutil::expander(n)</a>;
+see that man page for details.
+
+</dd>
+<dt class="defitem"><a name="alias"><i>obj</i> alias <i>srcToken</i></a></dt>
+<dt class="defitem"><a name="alias"><i>obj</i> alias <i>srcToken</i> {}</a></dt>
+<dt class="defitem"><a name="alias"><i>obj</i> alias <i>srcCmd targetCmd</i> ?<i>arg...</i>?</a></dt>
+<dt class="defitem"><a name="alias"><i>obj</i> alias <i>srcCmd targetCmd</i> ?<i>arg...</i>?</a></dt>
+<dt class="defitem"><a name="ensemble"><i>obj</i> ensemble <i>alias</i></a></dt>
+<dt class="defitem"><a name="proc"><i>obj</i> proc <i>name arglist body</i></a></dt>
+<dt class="defitem"><a name="smartalias"><i>obj</i> smartalias <i>alias min max argsyn prefix</i></a></dt><dd>
+
+These commands are used to define commands in the macro interpreter, i.e.,
+to define new macros.  See <a href="../mann/smartinterp.html">smartinterp(n)</a> for details.
+
+</dd>
+<dt class="defitem"><a name="reset"><i>obj</i> reset</a></dt><dd>
+
+Re-initializes the macro interpreter, defining any macros in registered
+macro sets.  Any other macros defined by the client
+will need to be redefined.
+
+</dd>
+<dt class="defitem"><a name="register"><i>obj</i> register <i>macroset</i></a></dt><dd>
+
+Registers a <a href="../mani/macroset.html">macroset(i)</a> macro set with this macro processor.
+Its macros will be defined for use on the next <i>reset</i>.
+
+</dd>
+<dt class="defitem"><a name="eval"><i>obj</i> eval <i>script</i></a></dt><dd>
+
+Evaluates the script in the context of the macro interpreter.
+
+</dd>
+<dt class="defitem"><a name="expand"><i>obj</i> expand <i>text</i></a></dt><dd>
+
+Expands the <i>text</i> in two passes, and returns the result of the
+expansion.   Use <a class="iref" href="#pass">pass</a> to write
+macros which are pass-sensitive.
+
+</dd>
+<dt class="defitem"><a name="expandfile"><i>obj</i> expandfile <i>name</i></a></dt><dd>
+
+Reads the contents of the text file called <i>name</i>, expands it in
+two passes, and returns the expansion.  Use <a class="iref" href="#pass">pass</a> to write
+macros which are pass-sensitive.
+
+</dd>
+<dt class="defitem"><a name="expandonce"><i>obj</i> expandonce <i>text</i></a></dt><dd>
+
+Does a simple single-pass expansion of the text.  This is useful in
+the implementation of macros that recursively expand one or more of
+their arguments, as it leaves the <a class="iref" href="#pass">pass</a> number unchanged.
+
+</dd>
+<dt class="defitem"><a name="pass"><i>obj</i> pass</a></dt><dd>
+
+Returns the expansion pass number, 1 or 2.   It's common to build up 
+indices during the first pass and generate tables of links in the 
+second.
+
+</dd>
+<dt class="defitem"><a name="warn"><i>obj</i> warn <i>text</i></a></dt><dd>
+
+Outputs the <i>text</i> to the console as a warning.
+<b>TODO:</b> There should be a <span class="tt">-warncmd</span> option to handle the warning.
+
+</dd>
+</dl>
+
+<h2><a name="see_also">SEE ALSO</a></h2>
+    
+
+<p><a href="../man5/macro.html">macro(5)</a>, <a href="http://tcllib.sourceforge.net/doc/expander.html">textutil::expander(n)</a>.
+
+</p>
+
+<h2><a name="environment">ENVIRONMENT</a></h2>
+<p>macro(n) requires Tcl 8.6 or later.</p>
+
+<p>To use macro(n) in a Tcl script, the environment variable
+<code>TCLLIBPATH</code> must include the parent of the kitedocs(n)
+library directory.
+
+</p>
+
+<h2><a name="author">AUTHOR</a></h2>
+<p>Will Duquette
+
+</p>
+
+<h2><a name="history">HISTORY</a></h2>
+<p>Original package, based on code in the JNEM jnem_man(1) tool,
+heavily revised for Kite.
+
+</p>
+
+<hr>
+<p><i>kite 0.5.0 Man page generated by manpage(n) on 
+Fri Nov 20 09:34:56 PST 2015</i>
+</p>
+
+</body>
+</html>
+    
+
+
+
+
+
+
+

@@ -1,0 +1,694 @@
+<html>
+<head>
+<title>kite 0.5.0: smartinterp(n) -- Smart Tcl Interpreter, submodule of kiteutils(n)</title>
+<style type="text/css" media="screen,print">
+/* ehtml(5) Standard CSS */
+
+/*---------------------------------------------------------*/
+/* General Use                                             */
+
+a {
+    /* No underlines */
+    text-decoration: none;
+}
+
+/* Special formatting for definition lists, to get proper
+ * blank lines after descriptions but not after topics. */
+dt {
+    margin-bottom: 0;
+}
+
+dd { 
+    margin-bottom: 1em; 
+}
+
+dd > p:first-child { 
+    margin-top: 0; 
+}
+
+
+/*---------------------------------------------------------*/
+/* Specific Macros                                         */
+
+/* bigmark */
+div.bigmark {
+    display: inline;
+    font-family: Verdana;
+    font-size: 100%;
+    background: black;
+    color: white;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+/* def, defitem, defopt */
+
+dt.def {
+    font-weight: bold;
+}
+
+dt.defitem {
+    font-weight: bold;
+    font-family: monospace;
+}
+
+dt.defopt {
+    font-weight: bold;
+    font-family: monospace;
+}
+
+
+/* example/ */
+pre.example {
+    background:     #FFFDD1 ;
+    border:         1px solid blue;
+    padding-top:    2px;
+    padding-bottom: 2px;
+    padding-left:   4px;
+}
+
+
+/* hrule */
+hr.hrule {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+/* iref */
+a.iref {
+    font-family: monospace;
+}
+
+/* itemlist */                
+ul.itemlist {
+    padding-left: 0;
+    list-style-type: none;
+}
+
+/* listing/ */
+pre.listing {
+    background:     #FFFDD1 ;
+    border:         1px solid blue;
+    padding-top:    4px;
+    padding-bottom: 4px;
+    padding-left:   4px;
+}
+
+span.linenum {
+    background:     #E3E08F ;
+}
+
+/* mark */
+div.mark {
+    display:       inline;
+    font-family:   Verdana;
+    font-size:     75%;
+    background:    black;
+    color:         white;
+    border:        1px solid black;
+    border-radius: 5px;
+    padding-left:  2px;
+    padding-right: 2px;
+}
+
+/* procedure */
+
+table.procedure {
+    border: 1px solid black;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table.procedure td {
+    border: 1px solid black;
+}
+
+td.procedure-index {
+    padding-right: 5px;
+    text-align: right;
+    width: 2em;
+}
+
+
+/* topiclist/ */
+.topiclist {
+    margin-top:    1em;
+    margin-bottom: 1em;
+}
+
+tr.topic {
+    vertical-align: baseline;
+}
+
+tr.topicname {
+    min-width: 1.5em;
+}
+
+/* tt/ */
+
+.tt {
+    font-family: monospace;
+}
+
+
+
+/* olp/ */
+
+ol.olp > li {
+    margin-bottom: 1em;
+}
+
+/* ulp/ */
+
+ul.ulp > li {
+    margin-bottom: 1em;
+}
+
+/*---------------------------------------------------------*/
+/* table/ plus macros that use it.    Most formatting is
+ * depends on the "table" class.                           */
+
+table {
+    margin-top:     1em;
+    margin-bottom:  1em;
+    vertical-align: baseline;
+}
+
+th {
+    padding-left: 5px;
+    text-align:   left;
+}
+
+td {
+    padding-left:   5px;
+    vertical-align: baseline;
+}
+
+
+/* "table" class: standard table formatting. */
+.table {
+    border:           1px solid black;
+    border-spacing:   0;
+    color:            black;
+    background-color: white;
+}
+
+.table tr:first-child {
+    font-weight:      bold;
+    color:            white;
+    background-color: #000099;    
+}
+
+.table tr.tr-odd {
+    background-color: #EEEEEE;
+}
+
+.table tr.tr-even { }
+
+.table-wide {
+    width: 100%;
+}
+
+        BODY {
+            color: black;
+            background: white;
+            margin-left: 6%;
+            margin-right: 6%;
+        }
+
+        H1 {
+            margin-left: -5%;
+        }
+        H2 {
+            margin-left: -5%;
+        }
+        HR {
+            margin-left: -5%;
+        }
+
+        TABLE {
+            text-align:    left;
+        }
+        
+        /* mktree styles */
+        ul.mktree  li  { list-style: none; }
+        ul.mktree, ul.mktree ul, ul.mktree li { 
+            margin-left:10px; padding:0px; }
+        ul.mktree li .bullet { padding-left: 10px }
+        ul.mktree  li.liOpen   .bullet {cursor : pointer; }
+        ul.mktree  li.liClosed .bullet {cursor : pointer; }
+        ul.mktree  li.liBullet .bullet {cursor : default; }
+        ul.mktree  li.liOpen   ul {display: block; }
+        ul.mktree  li.liClosed ul {display: none; }
+    
+</style>
+
+
+
+</head>
+
+<body>
+<h1 style="background: red;">
+&nbsp;kite 0.5.0: Kite Project Automation Tool
+</h1>
+    
+
+<h2><a name="name">NAME</a></h2>
+    
+
+<p><b>smartinterp(n)</b> -- Smart Tcl Interpreter, submodule of <a href="../mann/kiteutils.html">kiteutils(n)</a>
+
+</p>
+
+<ul>
+
+    <li><a href="#name">NAME</a></li>
+    
+
+    <li><a href="#synopsis">SYNOPSIS</a></li>
+    
+
+    <li><a href="#description">DESCRIPTION</a></li>
+    <ul>
+
+    <li><a href="#smart_aliases_and_ensembles">Smart Aliases and Ensembles</a></li>
+
+    <li><a href="#functions_and_expressions">Functions and Expressions</a></li>
+
+</ul>
+    
+
+    <li><a href="#commands">COMMANDS</a></li>
+    
+
+    <li><a href="#instance_command">INSTANCE COMMAND</a></li>
+    
+
+    <li><a href="#environment">ENVIRONMENT</a></li>
+    
+
+    <li><a href="#author">AUTHOR</a></li>
+    
+
+    <li><a href="#history">HISTORY</a></li>
+    
+
+</ul>
+    
+    
+
+<h2><a name="synopsis">SYNOPSIS</a></h2>
+    
+
+<pre>
+package require kiteutils 0.5.0
+namespace import ::kiteutils::smartinterp
+</pre>
+
+<ul class="itemlist">
+<li><a class="iref" href="#smartinterp">smartinterp <i>name</i> ?<i>options...</i>?</a></li>
+<li>&nbsp;&nbsp;&nbsp;&nbsp;<a class="iref" href="#smartinterp-cli">-cli <i>bool</i></a></li>
+<li>&nbsp;&nbsp;&nbsp;&nbsp;<a class="iref" href="#smartinterp-trusted">-trusted <i>bool</i></a></li>
+<li><a class="iref" href="#cget">$obj cget <i>option</i></a></li>
+<li><a class="iref" href="#configure">$obj configure <i>option value...</i></a></li>
+<li><a class="iref" href="#alias">$obj alias <i>srcCmd targetCmd</i> ?<i>arg...</i>?</a></li>
+<li><a class="iref" href="#alias">$obj alias <i>srcCmd targetCmd</i> ?<i>arg...</i>?</a></li>
+<li><a class="iref" href="#alias">$obj alias <i>srcCmd targetCmd</i> ?<i>arg...</i>?</a></li>
+<li><a class="iref" href="#alias">$obj alias <i>srcCmd targetCmd</i> ?<i>arg...</i>?</a></li>
+<li><a class="iref" href="#expose">$obj expose <i>hiddenName</i> ?<i>exposedCmdName</i>?</a></li>
+<li><a class="iref" href="#hide">$obj hide <i>exposedCmdName</i> ?<i>hiddenCmdName</i>?</a></li>
+<li><a class="iref" href="#hidden">$obj hidden</a></li>
+<li><a class="iref" href="#invokehidden">$obj invokehidden ?-global? <i>hiddenName</i> ?<i>arg...</i>?</a></li>
+<li><a class="iref" href="#cmdinfo">$obj cmdinfo <i>alias</i></a></li>
+<li><a class="iref" href="#ensemble">$obj ensemble <i>alias</i></a></li>
+<li><a class="iref" href="#eval">$obj eval <i>script</i></a></li>
+<li><a class="iref" href="#expr_eval">$obj expr eval <i>expression</i></a></li>
+<li><a class="iref" href="#expr_validate">$obj expr validate <i>expression</i></a></li>
+<li><a class="iref" href="#function">$obj function <i>name min max argsyn prefix</i></a></li>
+<li><a class="iref" href="#help">$obj help <i>command</i></a></li>
+<li><a class="iref" href="#proc">$obj proc <i>name arglist body</i></a></li>
+<li><a class="iref" href="#setsig">$obj setsig <i>prefix min max argsyn</i></a></li>
+<li><a class="iref" href="#siginfo">$obj siginfo <i>command</i></a></li>
+<li><a class="iref" href="#smartalias">$obj smartalias <i>alias min max argsyn prefix</i></a></li>
+</ul>
+
+
+<h2><a name="description">DESCRIPTION</a></h2>
+<p>smartinterp(n) defines an object that wraps and adds intelligence to
+standard Tcl <b>interp</b> objects.  An <b>interp</b> is a slave
+interpreter, under the control of the application's interpreter; they
+are commonly used for parsing data files (such as <a href="../mann/parmset.html">parmset(n)</a>'s
+parameter files) and for implementing command languages safely.</p>
+
+<p>The usual technique for defining such file formats and command
+languages is to alias commands into a "safe" <b>interp</b>.  
+The primary shortcoming of using Tcl <b>interp</b>s in this way is
+the handling of standard error messages, i.e., the messages Tcl
+generates when a command has the wrong number of arguments.
+In particular,
+
+</p>
+
+<ul class="ulp">
+  <li> The error messages reference the command in the master
+       interpreter, not its alias in the slave.  As these often are
+       very different, much confusion results.
+
+  </li><li> The argument syntax Tcl generates automatically for procs
+       with variable length argument lists is almost never what you
+       want a user to see.
+</li></ul>
+<p>smartinterp(n) extends the standard <b>interp</b> with a range of
+subcommands for defining commands within the interpreter, and in
+particular for defining "smart aliases".  When defining a smart alias,
+the programmer specifies the valid minimum and maximum number of
+arguments, and also the precise argument syntax string to use in
+error messages.  The programmer can also implement ensembles of
+smart aliases, and ensembles with sub-ensembles, all with complete
+generality.
+
+</p>
+
+<h2><a name="smart_aliases_and_ensembles">Smart Aliases and Ensembles</a></h2>
+<p>This section shows how to define a number of typical commands using
+smart aliases and ensembles.  The discussion presumes that all of the commands
+are aliased to subcommands of an object called "<b>::sim</b>":</p>
+
+<p>A command called <b>shutdown</b> which takes no arguments:
+
+</p>
+
+<pre>    $interp smartalias shutdown 0 0 {} [list ::sim ShutDown]</pre>
+<p>A command called <b>ratio</b> which takes one optional argument:
+
+</p>
+
+<pre>    $interp smartalias ratio 0 1 {?value?} [list ::sim Ratio]</pre>
+<p>A command called <b>magic aggroe</b> which takes some variable number
+of options and values:
+
+</p>
+
+<pre>
+    $interp ensemble magic
+
+    $interp smartalias "magic aggroe" 2 - {option value ?option value...?} \
+        [list ::sim MagicAggroe]
+</pre>
+
+<h2><a name="functions_and_expressions">Functions and Expressions</a></h2>
+<p>Tcl's default error messages for functions with too many or too few
+arguments are not very helpful, especially for functions defined as
+procedures in the <code>::tcl::mathfunc</code> namespace.  
+smartinterp(n)'s normal smart alias error messages aren't appropriate
+either.  Consequently, smartinterp(n) modifies the built-in
+<code>expr</code> command to translate ugly error messages into
+more useful ones.</p>
+
+<p>The application can define its own math functions as procedures in the
+<code>::tcl::mathfunc</code> namespace.  Such functions can be defined
+as procedures within the smartinterp(n) itself, i.e., by using
+<a class="iref" href="#proc">proc</a>, or as aliases to application commands by using
+<a class="iref" href="#function">function</a>.
+
+</p>
+
+<h2><a name="commands">COMMANDS</a></h2>
+    
+
+<dl>
+
+<dt class="defitem"><a name="smartinterp">smartinterp <i>name</i> ?<i>options...</i>?</a></dt><dd><p>
+
+Creates a new smartinterp(n) object called <i>name</i>. The object is
+represented as a new Tcl command in the caller's scope;
+<a class="iref" href="#smartinterp">smartinterp</a> returns the fully-qualified form of the
+<i>name</i>.</p>
+
+<p>The <a class="iref" href="#smartinterp">smartinterp</a> may be created with the following options:
+
+</p><dl>
+
+<dt class="defopt"><a name="smartinterp-cli">-cli <i>bool</i></a></dt><dd>
+
+Here, <i>bool</i> is a boolean flag indicating whether or not the interp
+is connected to a command line interface (CLI).  If not (the default)
+then the error messages produced for invalid commands by the interp
+mimic those of Tcl itself, e.g., "wrong # args: should be...".  If
+<i>bool</i> is true, though, then the error messages will be worded
+and formatted to be easily read by the human operator.
+
+</dd>
+<dt class="defopt"><a name="smartinterp-trusted">-trusted <i>bool</i></a></dt><dd><p>
+
+Here, <i>bool</i> is a boolean flag indicating whether the interp is
+trusted or not; it defaults to <b>no</b>.  If the smartinterp(n) is
+untrusted, the default case, then the underlying Tcl interpreter is a
+"safe" interpreter; otherwise a trusted slave will be created.</p>
+
+<p>This option can only be set at object creation, and cannot be
+changed thereafter.</p>
+
+<p>This option switches the sense of the <code>-safe</code> option used
+to create a "safe" interp because safety should be the default case
+and trust the exception.
+
+</p>
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+<h2><a name="instance_command">INSTANCE COMMAND</a></h2>
+<p>Each instance of the <a class="iref" href="#smartinterp">smartinterp</a> object has the following
+subcommands:
+
+</p>
+
+<dl>
+
+<dt class="defitem"><a name="cget">$obj cget <i>option</i></a></dt><dd>
+
+Returns the value of the specified <i>option</i>.
+
+</dd>
+<dt class="defitem"><a name="configure">$obj configure <i>option value...</i></a></dt><dd>
+
+Sets the value of one or more of the object's options.
+
+</dd>
+<dt class="defitem"><a name="alias">$obj alias <i>srcToken</i></a></dt>
+<dt class="defitem"><a name="alias">$obj alias <i>srcToken</i> {}</a></dt>
+<dt class="defitem"><a name="alias">$obj alias <i>srcCmd targetCmd</i> ?<i>arg...</i>?</a></dt>
+<dt class="defitem"><a name="alias">$obj alias <i>srcCmd targetCmd</i> ?<i>arg...</i>?</a></dt>
+<dt class="defitem"><a name="expose">$obj expose <i>hiddenName</i> ?<i>exposedCmdName</i>?</a></dt>
+<dt class="defitem"><a name="hide">$obj hide <i>exposedCmdName</i> ?<i>hiddenCmdName</i>?</a></dt>
+<dt class="defitem"><a name="hidden">$obj hidden</a></dt>
+<dt class="defitem"><a name="invokehidden">$obj invokehidden ?-global? <i>hiddenName</i> ?<i>arg...</i>?</a></dt><dd>
+
+These subcommands are delegated to the underlying Tcl <b>interp</b>;
+see interp(n) for details.
+
+</dd>
+<dt class="defitem"><a name="cmdinfo">$obj cmdinfo <i>alias</i></a></dt><dd>
+
+Returns detailed information about the definition of the alias,
+including the minimum and maximum number of arguments and the command
+prefix to which it maps.  If the alias is an ensemble, information
+information about each subcommand is included.  The command is
+recursive; if the alias is an ensemble with sub-ensembles, the entire
+tree is returned.
+
+</dd>
+<dt class="defitem"><a name="ensemble">$obj ensemble <i>alias</i></a></dt><dd><p>
+
+Defines an ensemble alias, called <i>alias</i>, to which subcommands
+will be added with  <a class="iref" href="#smartalias">smartalias</a>.  If the <i>alias</i> contains
+multiple tokens, the final token is taken to be a sub-ensemble. In
+this case, the leading tokens must have previously been defined as
+an <a class="iref" href="#ensemble">ensemble</a>.</p>
+
+<p>See <a href="#smart_aliases_and_ensembles">Smart Aliases and Ensembles</a> for examples.
+
+</p>
+</dd>
+<dt class="defitem"><a name="eval">$obj eval <i>script</i></a></dt><dd>
+
+Evaluates the <i>script</i> in the context of the interpreter, and returns
+the result.
+
+</dd>
+<dt class="defitem"><a name="expr_eval">$obj expr eval <i>expression</i></a></dt><dd><p>
+
+Evaluates the expression within the interp.
+This is shorthand for
+
+</p><pre>$obj eval [list expr <i>expression</i>]</pre>
+
+</dd>
+<dt class="defitem"><a name="expr_validate">$obj expr validate <i>expression</i></a></dt><dd><p>
+
+Attempts to validate the expression, finding any syntax errors.  
+Returns the expression if no errors are found, and throws
+an error with errorcode <b>INVALID</b> otherwise.  The algorithm
+used is necessarily heuristic, but avoids false positives.</p>
+
+<p><b>NOTE:</b> This command validates the expression by executing it
+in the context of the interpreter's global namespace, and filtering
+out irrelevant errors.  Do not include functions or commands that
+cause side effects!</p>
+
+<p><b>NOTE:</b> Variable references will be flagged as errors unless
+the variables are defined in the interpreter's global namespace.
+
+</p>
+</dd>
+<dt class="defitem"><a name="function">$obj function <i>name min max argsyn prefix</i></a></dt><dd><p>
+
+Defines a new math function within the interp, as an alias to the
+given client command <i>prefix</i>, where <i>min</i> is the minimum
+number of function arguments, <i>max</i> is the maximum number
+(or "-" if there is no maximum) and <i>argsyn</i> is the argument
+syntax, specified the same way as for a smart alias.</p>
+
+<p>When the function is called in an expression in the interp, the client's 
+command <i>prefix</i> will be called with the function arguments 
+appended.
+
+</p>
+</dd>
+<dt class="defitem"><a name="help">$obj help <i>command</i></a></dt><dd><p>
+
+Returns a short "help" message for the named <i>command</i>, which may
+be a <a class="iref" href="#smartinterp">smartinterp</a>, <a class="iref" href="#ensemble">ensemble</a>, standard Tcl command, or
+<a class="iref" href="#proc">proc</a>.  The message will
+include the command syntax; for ensembles, it will also include the
+list of valid subcommands.</p>
+
+<p>If <i>command</i> is not known to the <a class="iref" href="#smartinterp">smartinterp</a>, then
+it will throw the error 'No help found: \"<i>command</i>\"'.</p>
+
+<p>The "help" message is used as part of the <a class="iref" href="#smartinterp">smartinterp</a>-generated
+error messages when <code>-cli</code> is enabled.
+
+</p>
+</dd>
+<dt class="defitem"><a name="proc">$obj proc <i>name arglist body</i></a></dt><dd><p>
+
+Defines a proc within the interp.  This is shorthand for
+
+</p><pre>$obj eval [list expr <i>expression</i>]</pre>
+
+</dd>
+<dt class="defitem"><a name="setsig">$obj setsig <i>prefix min max argsyn</i></a></dt><dd><p>
+
+Defines the <a class="iref" href="#siginfo">siginfo</a> information for a command defined in
+the interpreter that has no other source of signature information.</p>
+
+<p>When defining signatures for an ensemble command, define
+the signature for the bare command first (e.g., "string") and then for 
+the subcommands (e.g., "string equal").
+
+</p>
+</dd>
+<dt class="defitem"><a name="siginfo">$obj siginfo <i>command</i></a></dt><dd><p>
+
+Returns signature info for the given command, suitable for doing
+"Wrong # args" checks.  The <i>command</i> can be a single command name,
+an ensemble with subcommands, or an entire command string with all arguments.
+The <a class="iref" href="#siginfo">siginfo</a> method will break the <i>command</i> into words and
+identify the actual command or ensemble subcommand and return the signature
+info for that prefix.</p>
+
+<p>The information is returned as a dictionary with the following keys:
+
+</p><ul>
+    <li> <b>prefix</b> -- The command prefix extracted from the <i>command</i>
+    </li><li> <b>min</b> -- The minimum number of arguments required by the
+         command.
+    </li><li> <b>max</b> -- The maximum number of arguments required, or "-" 
+         if there is no specific maximum.
+    </li><li> <b>argsyn</b> -- The argument syntax string.
+</li></ul>
+<p>For example, the standard <b>set</b> command has <b>prefix</b> "set", 
+<b>min</b> "1",
+<b>max</b> "2", and <b>argsyn</b> "varName ?newValue?".</p>
+
+<p>If the <a class="iref" href="#siginfo">siginfo</a> command cannot find signature info for the given
+command, it returns the empty string.  It will succeed for the following 
+kinds of command:
+
+</p>
+
+<ul>
+    <li> Procs defined in the interpreter.
+    </li><li> Smart aliases and ensembles.
+    </li><li> A selection of standard Tcl commands, e.g., <b>set</b>.
+    </li><li> Any commands defined by the client using <a class="iref" href="#setsig">setsig</a>.
+</li></ul>
+
+</dd>
+<dt class="defitem"><a name="smartalias">$obj smartalias <i>alias min max argsyn prefix</i></a></dt><dd><p>
+
+Defines an alias called <i>alias</i> which must take at least
+<i>min</i> but no more than <i>max</i> arguments.  If <i>max</i> is
+"<b>-</b>" then the number of arguments is unlimited.  If the alias
+is called with a number of arguments outside the valid range, the
+following error will be thrown:
+
+</p><pre>wrong # args: should be "<i>alias</i> <i>argsyn</i>"</pre>
+<p>When the <i>alias</i> is called in the <a class="iref" href="#smartinterp">smartinterp</a>, its arguments
+will be concatenated with the specified command <i>prefix</i>, and
+the result will be called in the parent interpreter.</p>
+
+<p>If <i>alias</i> contains multiple tokens, the final token is taken
+to be a subcommand of the ensemble alias named by the leading tokens.  This
+ensemble alias must already have been defined using the
+<a class="iref" href="#ensemble">ensemble</a> subcommand.</p>
+
+<p>See <a href="#smart_aliases_and_ensembles">Smart Aliases and Ensembles</a> for examples.
+
+
+</p>
+
+</dd>
+</dl>
+
+<h2><a name="environment">ENVIRONMENT</a></h2>
+<p>Requires Tcl 8.6 or later.</p>
+
+<p>To use this package in a Tcl script, the environment variable
+<code>TCLLIBPATH</code> must include the parent of the package directory.
+
+</p>
+
+<h2><a name="author">AUTHOR</a></h2>
+<p>Will Duquette
+
+</p>
+
+<h2><a name="history">HISTORY</a></h2>
+<p>Original package.
+
+</p>
+
+<hr>
+<p><i>kite 0.5.0 Man page generated by manpage(n) on 
+Fri Nov 20 09:34:56 PST 2015</i>
+</p>
+
+</body>
+</html>
+    
+
+
+
+
+
+
+
+
+

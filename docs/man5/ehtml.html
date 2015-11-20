@@ -1,0 +1,1010 @@
+<html>
+<head>
+<title>kite 0.5.0: ehtml(5) -- Extended HTML Format, submodule of macro(5)</title>
+<style type="text/css" media="screen,print">
+/* ehtml(5) Standard CSS */
+
+/*---------------------------------------------------------*/
+/* General Use                                             */
+
+a {
+    /* No underlines */
+    text-decoration: none;
+}
+
+/* Special formatting for definition lists, to get proper
+ * blank lines after descriptions but not after topics. */
+dt {
+    margin-bottom: 0;
+}
+
+dd { 
+    margin-bottom: 1em; 
+}
+
+dd > p:first-child { 
+    margin-top: 0; 
+}
+
+
+/*---------------------------------------------------------*/
+/* Specific Macros                                         */
+
+/* bigmark */
+div.bigmark {
+    display: inline;
+    font-family: Verdana;
+    font-size: 100%;
+    background: black;
+    color: white;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+/* def, defitem, defopt */
+
+dt.def {
+    font-weight: bold;
+}
+
+dt.defitem {
+    font-weight: bold;
+    font-family: monospace;
+}
+
+dt.defopt {
+    font-weight: bold;
+    font-family: monospace;
+}
+
+
+/* example/ */
+pre.example {
+    background:     #FFFDD1 ;
+    border:         1px solid blue;
+    padding-top:    2px;
+    padding-bottom: 2px;
+    padding-left:   4px;
+}
+
+
+/* hrule */
+hr.hrule {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+/* iref */
+a.iref {
+    font-family: monospace;
+}
+
+/* itemlist */                
+ul.itemlist {
+    padding-left: 0;
+    list-style-type: none;
+}
+
+/* listing/ */
+pre.listing {
+    background:     #FFFDD1 ;
+    border:         1px solid blue;
+    padding-top:    4px;
+    padding-bottom: 4px;
+    padding-left:   4px;
+}
+
+span.linenum {
+    background:     #E3E08F ;
+}
+
+/* mark */
+div.mark {
+    display:       inline;
+    font-family:   Verdana;
+    font-size:     75%;
+    background:    black;
+    color:         white;
+    border:        1px solid black;
+    border-radius: 5px;
+    padding-left:  2px;
+    padding-right: 2px;
+}
+
+/* procedure */
+
+table.procedure {
+    border: 1px solid black;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table.procedure td {
+    border: 1px solid black;
+}
+
+td.procedure-index {
+    padding-right: 5px;
+    text-align: right;
+    width: 2em;
+}
+
+
+/* topiclist/ */
+.topiclist {
+    margin-top:    1em;
+    margin-bottom: 1em;
+}
+
+tr.topic {
+    vertical-align: baseline;
+}
+
+tr.topicname {
+    min-width: 1.5em;
+}
+
+/* tt/ */
+
+.tt {
+    font-family: monospace;
+}
+
+
+
+/* olp/ */
+
+ol.olp > li {
+    margin-bottom: 1em;
+}
+
+/* ulp/ */
+
+ul.ulp > li {
+    margin-bottom: 1em;
+}
+
+/*---------------------------------------------------------*/
+/* table/ plus macros that use it.    Most formatting is
+ * depends on the "table" class.                           */
+
+table {
+    margin-top:     1em;
+    margin-bottom:  1em;
+    vertical-align: baseline;
+}
+
+th {
+    padding-left: 5px;
+    text-align:   left;
+}
+
+td {
+    padding-left:   5px;
+    vertical-align: baseline;
+}
+
+
+/* "table" class: standard table formatting. */
+.table {
+    border:           1px solid black;
+    border-spacing:   0;
+    color:            black;
+    background-color: white;
+}
+
+.table tr:first-child {
+    font-weight:      bold;
+    color:            white;
+    background-color: #000099;    
+}
+
+.table tr.tr-odd {
+    background-color: #EEEEEE;
+}
+
+.table tr.tr-even { }
+
+.table-wide {
+    width: 100%;
+}
+
+        BODY {
+            color: black;
+            background: white;
+            margin-left: 6%;
+            margin-right: 6%;
+        }
+
+        H1 {
+            margin-left: -5%;
+        }
+        H2 {
+            margin-left: -5%;
+        }
+        HR {
+            margin-left: -5%;
+        }
+
+        TABLE {
+            text-align:    left;
+        }
+        
+        /* mktree styles */
+        ul.mktree  li  { list-style: none; }
+        ul.mktree, ul.mktree ul, ul.mktree li { 
+            margin-left:10px; padding:0px; }
+        ul.mktree li .bullet { padding-left: 10px }
+        ul.mktree  li.liOpen   .bullet {cursor : pointer; }
+        ul.mktree  li.liClosed .bullet {cursor : pointer; }
+        ul.mktree  li.liBullet .bullet {cursor : default; }
+        ul.mktree  li.liOpen   ul {display: block; }
+        ul.mktree  li.liClosed ul {display: none; }
+    
+</style>
+
+
+
+</head>
+
+<body>
+<h1 style="background: red;">
+&nbsp;kite 0.5.0: Kite Project Automation Tool
+</h1>
+    
+
+<h2><a name="name">NAME</a></h2>
+    
+
+<p><b>ehtml(5)</b> -- Extended HTML Format, submodule of <a href="../man5/macro.html">macro(5)</a>
+
+</p>
+
+<ul>
+
+    <li><a href="#name">NAME</a></li>
+    
+
+    <li><a href="#synopsis">SYNOPSIS</a></li>
+    
+
+    <li><a href="#description">DESCRIPTION</a></li>
+    
+
+    <li><a href="#basic_syntax">BASIC SYNTAX</a></li>
+    
+
+    <li><a href="#macros">MACROS</a></li>
+    <ul>
+
+    <li><a href="#control_macros">Control Macros</a></li>
+
+    <li><a href="#html_equivalent_macros">HTML Equivalent Macros</a></li>
+
+    <li><a href="#html_style_macros">HTML Style Macros</a></li>
+
+    <li><a href="#crossreference_macros">Cross-Reference Macros</a></li>
+
+    <li><a href="#ordered_and_unordered_list_macros">Ordered and Unordered List Macros</a></li>
+
+    <li><a href="#definition_list_macros">Definition List Macros</a></li>
+
+    <li><a href="#topic_list_macros">Topic List Macros</a></li>
+
+    <li><a href="#examples_listings_and_marks">Examples, Listings, and Marks</a></li>
+
+    <li><a href="#change_log_macros">Change Log Macros</a></li>
+
+    <li><a href="#procedure_macros">Procedure Macros</a></li>
+
+    <li><a href="#miscellaneous_macros">Miscellaneous Macros</a></li>
+
+</ul>
+    
+
+    <li><a href="#author">AUTHOR</a></li>
+    
+
+    <li><a href="#history">HISTORY</a></li>
+    
+
+</ul>
+    
+    
+
+<h2><a name="synopsis">SYNOPSIS</a></h2>
+    
+
+<ul class="itemlist">
+<li><a class="iref" href="#nopara"><code>&lt;nopara&gt;</code>...<code>&lt;/nopara&gt;</code></a></li>
+<li><a class="iref" href="#blockquote"><code>&lt;blockquote&gt;</code>...<code>&lt;/blockquote&gt;</code></a></li>
+<li><a class="iref" href="#p"><code>&lt;p&gt;</code>............<code>&lt;/p&gt;</code></a></li>
+<li><a class="iref" href="#li"><code>&lt;li&gt;</code>...........<code>&lt;/li&gt;</code></a></li>
+<li><a class="iref" href="#ol"><code>&lt;ol&gt;</code>...........<code>&lt;/ol&gt;</code></a></li>
+<li><a class="iref" href="#table"><code>&lt;table&gt;</code>........<code>&lt;/table&gt;</code></a></li>
+<li><a class="iref" href="#tr"><code>&lt;tr&gt;</code>...........<code>&lt;/tr&gt;</code></a></li>
+<li><a class="iref" href="#th"><code>&lt;th&gt;</code>...........<code>&lt;/th&gt;</code></a></li>
+<li><a class="iref" href="#td"><code>&lt;td&gt;</code>...........<code>&lt;/td&gt;</code></a></li>
+<li><a class="iref" href="#ul"><code>&lt;ul&gt;</code>...........<code>&lt;/ul&gt;</code></a></li>
+<li><a class="iref" href="#br"><code>&lt;br&gt;</code></a></li>
+<li><a class="iref" href="#img"><code>&lt;img ?attr=value...?&gt;</code></a></li>
+<li><a class="iref" href="#b"><code>&lt;b&gt;</code>........<code>&lt;/b&gt;</code>      <b>or</b> <code>&lt;b <i>words...</i>&gt;</code></a></li>
+<li><a class="iref" href="#code"><code>&lt;code&gt;</code>.....<code>&lt;/code&gt;</code>   <b>or</b> <code>&lt;code <i>words...</i>&gt;</code></a></li>
+<li><a class="iref" href="#em"><code>&lt;em&gt;</code>.......<code>&lt;/em&gt;</code>     <b>or</b> <code>&lt;em <i>words...</i>&gt;</code></a></li>
+<li><a class="iref" href="#h1"><code>&lt;h1&gt;</code>.......<code>&lt;/h1&gt;</code>     <b>or</b> <code>&lt;h1 <i>words...</i>&gt;</code></a></li>
+<li><a class="iref" href="#h2"><code>&lt;h2&gt;</code>.......<code>&lt;/h2&gt;</code>     <b>or</b> <code>&lt;h2 <i>words...</i>&gt;</code></a></li>
+<li><a class="iref" href="#h3"><code>&lt;h3&gt;</code>.......<code>&lt;/h3&gt;</code>     <b>or</b> <code>&lt;h3 <i>words...</i>&gt;</code></a></li>
+<li><a class="iref" href="#h4"><code>&lt;h4&gt;</code>.......<code>&lt;/h4&gt;</code>     <b>or</b> <code>&lt;h4 <i>words...</i>&gt;</code></a></li>
+<li><a class="iref" href="#h5"><code>&lt;h5&gt;</code>.......<code>&lt;/h5&gt;</code>     <b>or</b> <code>&lt;h5 <i>words...</i>&gt;</code></a></li>
+<li><a class="iref" href="#h6"><code>&lt;h6&gt;</code>.......<code>&lt;/h6&gt;</code>     <b>or</b> <code>&lt;h6 <i>words...</i>&gt;</code></a></li>
+<li><a class="iref" href="#i"><code>&lt;i&gt;</code>........<code>&lt;/i&gt;</code>      <b>or</b> <code>&lt;i <i>words...</i>&gt;</code></a></li>
+<li><a class="iref" href="#pre"><code>&lt;pre&gt;</code>......<code>&lt;/pre&gt;</code>    <b>or</b> <code>&lt;pre <i>words...</i>&gt;</code></a></li>
+<li><a class="iref" href="#strong"><code>&lt;strong&gt;</code>...<code>&lt;/strong&gt;</code> <b>or</b> <code>&lt;strong <i>words...</i>&gt;</code></a></li>
+<li><a class="iref" href="#sub"><code>&lt;sub&gt;</code>......<code>&lt;/sub&gt;</code>    <b>or</b> <code>&lt;sub <i>words...</i>&gt;</code></a></li>
+<li><a class="iref" href="#sup"><code>&lt;sup&gt;</code>......<code>&lt;/sup&gt;</code>    <b>or</b> <code>&lt;sup <i>words...</i>&gt;</code></a></li>
+<li><a class="iref" href="#tt"><code>&lt;tt&gt;</code>.......<code>&lt;/tt&gt;</code>     <b>or</b> <code>&lt;tt <i>words...</i>&gt;</code></a></li>
+<li><a class="iref" href="#xref"><code>&lt;xref <i>id</i> ?<i>anchor</i>?&gt;</code></a></li>
+<li><a class="iref" href="#xrefset"><code>&lt;xrefset <i>id anchor url</i>&gt;</code></a></li>
+<li><a class="iref" href="#olp"><code>&lt;olp&gt;</code>...<code>&lt;/olp&gt;</code></a></li>
+<li><a class="iref" href="#ulp"><code>&lt;ulp&gt;</code>...<code>&lt;/ulp&gt;</code></a></li>
+<li><a class="iref" href="#deflist"><code>&lt;deflist ?<i>args</i>?&gt;</code>...<code>&lt;/deflist ?<i>args</i>?&gt;</code></a></li>
+<li><a class="iref" href="#def"><code>&lt;def <i>text</i>&gt;</code></a></li>
+<li><a class="iref" href="#defitem"><code>&lt;defitem <i>tag text</i>&gt;</code></a></li>
+<li><a class="iref" href="#defopt"><code>&lt;defopt <i>text</i>&gt;</code></a></li>
+<li><a class="iref" href="#itemlist"><code>&lt;itemlist ?<i>listname</i>?&gt;</code></a></li>
+<li><a class="iref" href="#iref"><code>&lt;iref <i>item...</i>&gt;</code></a></li>
+<li><a class="iref" href="#itag"><code>&lt;itag <i>name</i>&gt;</code></a></li>
+<li><a class="iref" href="#topiclist"><code>&lt;topiclist ?h1? ?h2?&gt;</code>...<code>&lt;/topiclist&gt;</code></a></li>
+<li><a class="iref" href="#topic"><code>&lt;topic <i>text</i>&gt;</code>...<code>&lt;/topic&gt;</code></a></li>
+<li><a class="iref" href="#example"><code>&lt;example&gt;</code>...<code>&lt;/example&gt;</code></a></li>
+<li><a class="iref" href="#listing"><code>&lt;listing ?<i>firstline</i>?&gt;</code>...<code>&lt;/listing&gt;</code></a></li>
+<li><a class="iref" href="#mark"><code>&lt;mark <i>symbol</i>&gt;</code></a></li>
+<li><a class="iref" href="#bigmark"><code>&lt;bigmark <i>symbol</i>&gt;</code></a></li>
+<li><a class="iref" href="#changelog"><code>&lt;changelog&gt;</code>...<code>&lt;/changelog&gt;</code></a></li>
+<li><a class="iref" href="#change"><code>&lt;change <i>date status initiator</i>&gt;</code>...<code>&lt;/change&gt;</code></a></li>
+<li><a class="iref" href="#procedure"><code>&lt;procedure&gt;</code>...<code>&lt;/procedure&gt;</code></a></li>
+<li><a class="iref" href="#quote"><code>&lt;quote <i>text</i>&gt;</code></a></li>
+<li><a class="iref" href="#step"><code>&lt;step&gt;</code> <i>description</i> <code>&lt;/step/&gt;</code> <i>example</i> <code>&lt;/step&gt;</code></a></li>
+<li><a class="iref" href="#hrule"><code>&lt;hrule&gt;</code></a></li>
+<li><a class="iref" href="#lb"><code>&lt;lb&gt;</code></a></li>
+<li><a class="iref" href="#link"><code>&lt;link <i>url</i> ?<i>anchor</i>?&gt;</code></a></li>
+<li><a class="iref" href="#nbsp"><code>&lt;nbsp <i>text</i>&gt;</code></a></li>
+<li><a class="iref" href="#rb"><code>&lt;rb&gt;</code></a></li>
+<li><a class="iref" href="#tag"><code>&lt;tag <i>arglist</i>&gt;</code></a></li>
+</ul>
+
+
+<h2><a name="description">DESCRIPTION</a></h2>
+<p>This man page defines the ehtml(5) "Extended HTML" macro set,
+i.e., HTML extended with Tcl macros.  When <a href="../mann/ehtml.html">ehtml(n)</a> is registered 
+with an instance of <a href="../mann/macro.html">macro(n)</a>, the instance will translate
+ehtml(5) input into plain HTML.</p>
+
+<p>The ehtml(5) format is the basis for more specific formats, including
+both <a href="../man5/kitedoc.html">kitedoc(5)</a> and <a href="../man5/manpage.html">manpage(5)</a>, the format used to
+write this man page.  The basics of the format are documented here.
+
+</p>
+
+<h2><a name="basic_syntax">BASIC SYNTAX</a></h2>
+<p>The majority of the content of a ehtml(5) document is standard HTML
+body text.  Macros are entered in double angle brackets, like so:
+
+</p>
+
+<pre class="example">
+<code>&lt;mymacro&gt;</code>
+</pre>
+<p>Some macros occur in pairs; for example, change logs are created using
+the <a class="iref" href="#changelog">&lt;changelog&gt;</a> macros.
+
+</p>
+
+<pre class="example">
+<code>&lt;changelog&gt;</code>
+    .
+    .
+    .
+<code>&lt;/changelog&gt;</code>
+</pre>
+
+<h2><a name="macros">MACROS</a></h2>
+<p>ehtml(5) input may use any of the following macros; formats
+like <a href="../man5/manpage.html">manpage(5)</a> will add additional macros.
+
+</p>
+
+<h2><a name="control_macros">Control Macros</a></h2>
+<p>The following macros are used to control processing by the 
+<a href="../mann/kitedocs.html">kitedocs(n)</a> document processors.
+
+</p>
+
+<dl>
+
+<dt class="defitem"><a name="nopara"><code>&lt;nopara&gt;</code>...<code>&lt;/nopara&gt;</code></a></dt><dd><p>
+
+These tags are for use with ehtml(5) processors that use 
+<a href="../mann/htmltrans.html">htmltrans(n)</a>'s automatic paragraph detection filter
+(e.g., <a href="../mann/manpage.html">manpage(n)</a> and <a href="../mann/kitedoc.html">kitedoc(n)</a>).</p>
+
+<p>The tags disable automatic paragraph detection
+for the content they contain.  The content is treated like any
+other "opaque" content (e.g., the HTML <code>&lt;head&gt;</code> element); structure
+and tag names are checked, but no paragraph tags are inserted.</p>
+
+<p>The <code>&lt;nopara&gt;</code> and <code>&lt;/nopara&gt;</code> tags themselves are stripped during
+processing by <a href="../mann/htmltrans.html">htmltrans(n)</a>.</p>
+
+<p>If used with other ehtml(5) processors, the tags will be accepted
+but will simply pass through into the output.
+
+</p>
+</dd>
+</dl>
+
+<h2><a name="html_equivalent_macros">HTML Equivalent Macros</a></h2>
+<p>The following macros are used in place of their HTML equivalents.  
+They take no arguments; any formatting is done using CSS provided by
+the document format.
+
+</p>
+
+<dl>
+
+<dt class="defitem"><a name="blockquote"><code>&lt;blockquote&gt;</code>...<code>&lt;/blockquote&gt;</code></a></dt>
+<dt class="defitem"><a name="p"><code>&lt;p&gt;</code>............<code>&lt;/p&gt;</code></a></dt>
+<dt class="defitem"><a name="li"><code>&lt;li&gt;</code>...........<code>&lt;/li&gt;</code></a></dt>
+<dt class="defitem"><a name="ol"><code>&lt;ol&gt;</code>...........<code>&lt;/ol&gt;</code></a></dt>
+<dt class="defitem"><a name="table"><code>&lt;table&gt;</code>........<code>&lt;/table&gt;</code></a></dt>
+<dt class="defitem"><a name="tr"><code>&lt;tr&gt;</code>...........<code>&lt;/tr&gt;</code></a></dt>
+<dt class="defitem"><a name="th"><code>&lt;th&gt;</code>...........<code>&lt;/th&gt;</code></a></dt>
+<dt class="defitem"><a name="td"><code>&lt;td&gt;</code>...........<code>&lt;/td&gt;</code></a></dt>
+<dt class="defitem"><a name="ul"><code>&lt;ul&gt;</code>...........<code>&lt;/ul&gt;</code></a></dt>
+<dt class="defitem"><a name="br"><code>&lt;br&gt;</code></a></dt><dd>
+
+These macros simply expand to their HTML equivalents.
+
+</dd>
+<dt class="defitem"><a name="img"><code>&lt;img ?attr=value...?&gt;</code></a></dt><dd>
+
+Returns an HTML "<code>&lt;img&gt;</code>" tag.  Any arguments are passed through
+as is.
+
+</dd>
+</dl>
+
+<h2><a name="html_style_macros">HTML Style Macros</a></h2>
+<p>Macros relating to the style of displayed text.
+
+</p>
+
+<dl>
+
+<dt class="defitem"><a name="b"><code>&lt;b&gt;</code>........<code>&lt;/b&gt;</code>      <b>or</b> <code>&lt;b <i>words...</i>&gt;</code></a></dt>
+<dt class="defitem"><a name="code"><code>&lt;code&gt;</code>.....<code>&lt;/code&gt;</code>   <b>or</b> <code>&lt;code <i>words...</i>&gt;</code></a></dt>
+<dt class="defitem"><a name="em"><code>&lt;em&gt;</code>.......<code>&lt;/em&gt;</code>     <b>or</b> <code>&lt;em <i>words...</i>&gt;</code></a></dt>
+<dt class="defitem"><a name="h1"><code>&lt;h1&gt;</code>.......<code>&lt;/h1&gt;</code>     <b>or</b> <code>&lt;h1 <i>words...</i>&gt;</code></a></dt>
+<dt class="defitem"><a name="h2"><code>&lt;h2&gt;</code>.......<code>&lt;/h2&gt;</code>     <b>or</b> <code>&lt;h2 <i>words...</i>&gt;</code></a></dt>
+<dt class="defitem"><a name="h3"><code>&lt;h3&gt;</code>.......<code>&lt;/h3&gt;</code>     <b>or</b> <code>&lt;h3 <i>words...</i>&gt;</code></a></dt>
+<dt class="defitem"><a name="h4"><code>&lt;h4&gt;</code>.......<code>&lt;/h4&gt;</code>     <b>or</b> <code>&lt;h4 <i>words...</i>&gt;</code></a></dt>
+<dt class="defitem"><a name="h5"><code>&lt;h5&gt;</code>.......<code>&lt;/h5&gt;</code>     <b>or</b> <code>&lt;h5 <i>words...</i>&gt;</code></a></dt>
+<dt class="defitem"><a name="h6"><code>&lt;h6&gt;</code>.......<code>&lt;/h6&gt;</code>     <b>or</b> <code>&lt;h6 <i>words...</i>&gt;</code></a></dt>
+<dt class="defitem"><a name="i"><code>&lt;i&gt;</code>........<code>&lt;/i&gt;</code>      <b>or</b> <code>&lt;i <i>words...</i>&gt;</code></a></dt>
+<dt class="defitem"><a name="pre"><code>&lt;pre&gt;</code>......<code>&lt;/pre&gt;</code>    <b>or</b> <code>&lt;pre <i>words...</i>&gt;</code></a></dt>
+<dt class="defitem"><a name="strong"><code>&lt;strong&gt;</code>...<code>&lt;/strong&gt;</code> <b>or</b> <code>&lt;strong <i>words...</i>&gt;</code></a></dt>
+<dt class="defitem"><a name="sub"><code>&lt;sub&gt;</code>......<code>&lt;/sub&gt;</code>    <b>or</b> <code>&lt;sub <i>words...</i>&gt;</code></a></dt>
+<dt class="defitem"><a name="sup"><code>&lt;sup&gt;</code>......<code>&lt;/sup&gt;</code>    <b>or</b> <code>&lt;sup <i>words...</i>&gt;</code></a></dt>
+<dt class="defitem"><a name="tt"><code>&lt;tt&gt;</code>.......<code>&lt;/tt&gt;</code>     <b>or</b> <code>&lt;tt <i>words...</i>&gt;</code></a></dt><dd><p>
+
+Called with no arguments,
+these macros simply expand to the matching HTML tags. Alternatively, 
+each can be called with some number of arguments, which are returned 
+wrapped in matching tags.  In other words, in ehtml(5) input the following
+items are equivalent:
+
+</p><pre class="example"><code>&lt;i&gt;</code>italic text<code>&lt;/i&gt;</code></pre>
+<p>vs. 
+
+</p>
+
+<pre class="example"><code>&lt;i italic text&gt;</code></pre>
+<p>The second form is easier to type.  Note that these macros do not 
+expand their arguments.
+
+</p>
+
+</dd>
+</dl>
+
+<h2><a name="crossreference_macros">Cross-Reference Macros</a></h2>
+<p>The following macros are used to define references and to make
+cross-reference links.
+
+</p>
+
+<dl>
+
+<dt class="defitem"><a name="xref"><code>&lt;xref <i>id</i> ?<i>anchor</i>?&gt;</code></a></dt><dd><p>
+
+The <a class="iref" href="#xref">&lt;xref&gt;</a> macro creates hyperlinks. Generally speaking,
+<i>id</i> identifies the page to link to; <i>anchor</i> is the
+link text.  If <i>anchor</i> isn't specified, then the <i>id</i> will
+be used as the link text.</p>
+
+<p>The <a class="iref" href="#xref">&lt;xref&gt;</a> macro recognizes three kinds of page IDs, in this 
+order:
+
+</p><ul>
+<li> IDs defined using <a class="iref" href="#xrefset">&lt;xrefset&gt;</a>.
+
+</li><li> Man page references, e.g., "<i>name</i>(<i>section</i>)".
+
+    This creates a link to 
+    <span class="tt"><i>docroot</i>/man<i>section</i>/<i>name</i>.html></span>, where
+    <i>docroot</i> is a relative path set via the 
+    <a href="../mann/ehtml.html">ehtml(n)</a> <span class="tt">-docroot</span> configuration option.
+
+</li><li> Document references.
+
+     If the ID appears to end with a file name with
+     a typical document extension (as determined by the
+     <a href="../mann/ehtml.html">ehtml(n)</a> <span class="tt">-doctypes</span> configuration option), it is
+     treated as a path relative to <i>docroot</i>. 
+</li></ul>
+<p>In the latter two cases, the ID may begin with "<i>project</i>:".  In
+this case, it's assumed that "<i>project</i>" is the name of a sibling
+Kite project; and it's further assumed that this project will usually
+be checked out into the same parent directory as the current project.
+Consequently, the man page or document reference is relative to
+the <i>project</i>'s <span class="tt">docs/</span> directory, e.g., the path is preceded
+by "<span class="tt"><i>docroot</i>/../../<i>project</i>/docs/</span>".
+
+
+</p>
+
+</dd>
+<dt class="defitem"><a name="xrefset"><code>&lt;xrefset <i>id anchor url</i>&gt;</code></a></dt><dd><p>
+
+This macro defines a cross-reference, which can be used by
+<a class="iref" href="#xref">&lt;xref&gt;</a> to create hyperlinks.  The <i>id</i> identifies the
+cross-reference to <a class="iref" href="#xref">&lt;xref&gt;</a>; it should be chosen so as not to
+conflict with other <a class="iref" href="#xref">&lt;xref&gt;</a> identifiers.  The <i>anchor</i> is
+the link text that will be used if no link text is specified in the
+<a class="iref" href="#xref">&lt;xref&gt;</a> macro.  The <i>url</i> is, of course, the URL to link to.</p>
+
+<p>The macro returns a link to the <i>url</i> with the given <i>anchor</i>
+text, so that it can be used in a list of references for display.</p>
+
+<p>Note that <a class="iref" href="#xrefset">&lt;xrefset&gt;</a> can appear anywhere in the input; it does
+not need to proceed the first <a class="iref" href="#xref">&lt;xref&gt;</a> to the <i>id</i>.</p>
+
+<p>For example, the following macro defines "google" as a cross-reference
+ID.
+
+</p><pre class="example">
+<code>&lt;xrefset google "Google" "http://www.google.com"&gt;</code>
+    .
+    .
+    .
+To find something, use <code>&lt;xref google&gt;</code>....
+</pre>
+
+</dd>
+</dl>
+
+<h2><a name="ordered_and_unordered_list_macros">Ordered and Unordered List Macros</a></h2>
+<p>In addition to the standard <code>&lt;ol&gt;</code> and <code>&lt;ul&gt;</code> lists, <a href="../man5/ehtml.html">ehtml(5)</a>
+defines versions of these lists that expect list items to be full; 
+consequently, the items are displayed with blank lines between them:
+
+</p>
+
+<dl>
+<dt class="defitem"><a name="olp"><code>&lt;olp&gt;</code>...<code>&lt;/olp&gt;</code></a></dt>
+<dt class="defitem"><a name="ulp"><code>&lt;ulp&gt;</code>...<code>&lt;/ulp&gt;</code></a></dt><dd>
+
+These macros enclose ordered and unordered lists whose 
+<code>&lt;li&gt;</code>...<code>&lt;/li&gt;</code> items should have blank lines between them.
+
+</dd>
+</dl>
+
+<h2><a name="definition_list_macros">Definition List Macros</a></h2>
+<p>The following macros are used to add definition lists to a document.
+A definition list displays a term followed by a definition of a term;
+usually, the definition is indented beneath the term.
+
+</p>
+
+<dl>
+
+<dt class="defitem"><a name="deflist"><code>&lt;deflist ?<i>args</i>?&gt;</code>...<code>&lt;/deflist ?<i>args</i>?&gt;</code></a></dt><dd><p>
+
+These tags contain a definition list.  The individual definitions are added 
+using the <a class="iref" href="#def">&lt;def&gt;</a>, <a class="iref" href="#defitem">&lt;defitem&gt;</a>, or <a class="iref" href="#defopt">&lt;defopt&gt;</a> macros.</p>
+
+<p>Definition lists are frequently nested; the optional <i>args</i> can be used to relate the <a class="iref" href="#deflist">&lt;deflist&gt;</a> to its <code>&lt;/deflist&gt;</code>.  In addition, 
+<a class="iref" href="#defitem">&lt;defitem&gt;</a> accumulates lists of items by the lists in which they 
+appear, for retrieval via <a class="iref" href="#itemlist">&lt;itemlist&gt;</a>.
+
+</p><pre class="example">
+<code>&lt;section COMMANDS&gt;</code>
+
+<code>&lt;itemlist commands&gt;</code>
+
+<code>&lt;deflist commands&gt;</code>
+    .
+    .
+    .
+<code>&lt;/deflist commands&gt;</code>
+</pre>
+<p>Some document formats may define <code>&lt;def*&gt;</code> tags with additional semantics,
+for use in <code>&lt;deflist&gt;</code>s.
+
+</p>
+
+</dd>
+<dt class="defitem"><a name="def"><code>&lt;def <i>text</i>&gt;</code></a></dt><dd><p>
+
+This macro begins a definition within a <a class="iref" href="#deflist">&lt;deflist&gt;</a>.
+The <i>text</i> is the text to display; it may contain
+embedded style macros.</p>
+
+<p>The <a class="iref" href="#def">def</a> macro is followed by the text that defines the
+named item.
+
+</p>
+</dd>
+<dt class="defitem"><a name="defitem"><code>&lt;defitem <i>tag text</i>&gt;</code></a></dt><dd><p>
+
+This macro begins an item definition within a <a class="iref" href="#deflist">&lt;deflist&gt;</a>, that is,
+a definition of a code item: a Tcl command, a program, a URL, or whatever
+it might be.</p>
+
+<p>The <i>tag</i> is a short
+string which identifies the item, such as a command's name; it should
+be unique within the document.  It becomes the item's HTML anchor, and
+is also used with <a class="iref" href="#iref">&lt;iref&gt;</a> to reference the item from within the
+same document.</p>
+
+<p>The <i>text</i> is the text that's
+actually displayed in the list; it usually includes more
+information, such as a command's full signature.  It may contain
+embedded style macros.</p>
+
+<p>The <a class="iref" href="#defitem">defitem</a> macro is followed by the text that defines the
+named item. For example,
+
+</p><pre class="example">
+&lt;defitem mycommand {mycommand &lt;i value&gt; ?&lt;i optionalValue&gt;?}&gt;
+
+This command does nothing in particular, being merely a pedagogical
+example.&lt;p&gt;;
+</pre>
+<p>Note that the <i>tag</i> won't necessarily be same as the first token
+in the <i>text</i>; when documenting subcommands of a Tcl object, for
+example, the object usually appears as a variable reference in the
+first spot:
+
+</p>
+
+<pre class="example">
+&lt;defitem mysubcommand {$object mysubcommand &lt;i value&gt;}&gt;
+</pre>
+<p>Each of the macro definitions in this section is produced by
+<a class="iref" href="#defitem">defitem</a>.
+
+</p>
+
+</dd>
+<dt class="defitem"><a name="defopt"><code>&lt;defopt <i>text</i>&gt;</code></a></dt><dd><p>
+
+Programs often have options; Tcl commands and objects often have
+options as well.  When <a class="iref" href="#defopt">&lt;defopt&gt;</a> appears in a definition list,
+it defines an option belonging to the item defined by the immediately
+preceding <a class="iref" href="#defitem">&lt;defitem&gt;</a>.  It's assumed that the option is the first
+token in <i>text</i>, which may contain embedded style macros.  
+For example,
+
+</p><pre class="example">
+&lt;deflist commands&gt;
+    . . .
+&lt;defitem mycommand {mycommand ?&lt; options...&gt;?}&gt;
+
+This command has the following options:&lt;p&gt;
+
+&lt;deflist mycommand options&gt;
+
+&lt;defopt {-this &lt;i value&gt;}&gt;
+
+Description of the the option...
+    . . .
+&lt;/deflist mycommand options&gt;
+. . .
+
+&lt;/deflist commands&gt;
+</pre>
+
+</dd>
+<dt class="defitem"><a name="itemlist"><code>&lt;itemlist ?<i>listname</i>?&gt;</code></a></dt><dd><p>
+
+By default, this macro expands to a list of the items defined in this
+document. It's usually used in the "SYNOPSIS" section of 
+a <a href="../man5/manpage.html">manpage(5)</a> document.  The list of macros in the
+<a href="#synopsis">SYNOPSIS</a> section of this man page was produced by
+<a class="iref" href="#itemlist">&lt;itemlist&gt;</a>.</p>
+
+<p>If an item has options defined with <a class="iref" href="#defopt">&lt;defopt&gt;</a>, they will appear,
+slightly indented, just below the item in the <a class="iref" href="#itemlist">&lt;itemlist&gt;</a>.</p>
+
+<p>If <i>listname</i> is given, the output is confined to those items defined
+in the named <a class="iref" href="#deflist">&lt;deflist&gt;</a> and any lists nested within it.
+
+</p>
+</dd>
+<dt class="defitem"><a name="iref"><code>&lt;iref <i>item...</i>&gt;</code></a></dt><dd><p>
+
+The name "iref" stands for "item reference"; this macro creates a
+hyperlink to the definition of <i>item</i> in the same man page.
+For example,
+
+</p><pre class="example">
+&lt;iref defitem&gt;
+</pre>
+<p>expands to a link to <a class="iref" href="#defitem">defitem</a>.</p>
+
+<p>If the item name has multiple tokens, there is no need to quote them;
+<a class="iref" href="#iref">&lt;iref&gt;</a>'s arguments are accumulated into a single item name.
+
+</p>
+
+</dd>
+<dt class="defitem"><a name="itag"><code>&lt;itag <i>name</i>&gt;</code></a></dt><dd>
+
+This is simply an <a class="iref" href="#iref">&lt;iref&gt;</a> to macro <i>name</i>; it creates a hyperlink
+in typewriter font with angle brackets. 
+
+</dd>
+</dl>
+
+<h2><a name="topic_list_macros">Topic List Macros</a></h2>
+<p>A topic list is a table with two columns, one for topics and one for
+descriptions.  The column headers default to "Topic" and "Description",
+but can be changed.
+
+</p>
+
+<dl>
+
+<dt class="defitem"><a name="topiclist"><code>&lt;topiclist ?h1? ?h2?&gt;</code>...<code>&lt;/topiclist&gt;</code></a></dt><dd>
+
+Brackets a <a class="iref" href="#topic">&lt;topic&gt;</a> list.  The <i>h1</i> and <i>h2</i> values are the
+column header strings; they default to "Topic" and "Description" 
+respectively.
+
+</dd>
+<dt class="defitem"><a name="topic"><code>&lt;topic <i>text</i>&gt;</code>...<code>&lt;/topic&gt;</code></a></dt><dd>
+
+Adds a topic to a <a class="iref" href="#topiclist">&lt;topiclist&gt;</a>.  The topic is displayed in two
+columns, the topic <i>text</i> on the left and the discussion between
+the two tags on the right.
+
+</dd>
+</dl>
+
+<h2><a name="examples_listings_and_marks">Examples, Listings, and Marks</a></h2>
+    
+
+<dl>
+
+<dt class="defitem"><a name="example"><code>&lt;example&gt;</code>...<code>&lt;/example&gt;</code></a></dt><dd>
+
+These macros are used to bracket pre-formatted examples.  The examples
+are displayed in a box with a different background than the rest of
+the page.
+
+</dd>
+<dt class="defitem"><a name="listing"><code>&lt;listing ?<i>firstline</i>?&gt;</code>...<code>&lt;/listing&gt;</code></a></dt><dd><p>
+
+These macros are used to bracket pre-formatted code listings.  Line
+numbers are added, so that the surrounding text can refer to specific
+lines.  The listing is displayed in a box with a different background than 
+the rest of the page.</p>
+
+<p>By default, the first line is numbered 1; set <i>firstline</i> to pick 
+a different number.
+
+</p>
+</dd>
+<dt class="defitem"><a name="mark"><code>&lt;mark <i>symbol</i>&gt;</code></a></dt><dd><p>
+
+Defines a marker in an <a class="iref" href="#example">&lt;example&gt;</a> or <a class="iref" href="#listing">&lt;listing&gt;</a>.  The marker 
+displays the <i>symbol</i> in a small rounded box with a red background, and 
+is used to point out lines of interest for discussion in the following
+paragraphs.</p>
+
+<p>Use <a class="iref" href="#bigmark">&lt;bigmark&gt;</a> to display the same marker as an <a class="iref" href="#topic">&lt;topic&gt;</a> in a 
+<a class="iref" href="#topiclist">&lt;topiclist&gt;</a>.
+
+</p>
+</dd>
+<dt class="defitem"><a name="bigmark"><code>&lt;bigmark <i>symbol</i>&gt;</code></a></dt><dd>
+
+Creates a larger version of a <a class="iref" href="#mark">&lt;mark&gt;</a>; the larger version looks 
+better as the <a class="iref" href="#topic">&lt;topic&gt;</a> in a <a class="iref" href="#topiclist">&lt;topiclist&gt;</a>.
+
+
+</dd>
+</dl>
+
+<h2><a name="change_log_macros">Change Log Macros</a></h2>
+<p>The following macros are used to add a change log to a document.
+
+</p>
+
+<dl>
+
+<dt class="defitem"><a name="changelog"><code>&lt;changelog&gt;</code>...<code>&lt;/changelog&gt;</code></a></dt><dd>
+
+Defines a change log table.  The content between the beginning and end
+macro should consist of <a class="iref" href="#change">&lt;change&gt;</a> entries.
+
+</dd>
+<dt class="defitem"><a name="change"><code>&lt;change <i>date status initiator</i>&gt;</code>...<code>&lt;/change&gt;</code></a></dt><dd><p>
+
+Defines a single change entry within a <a class="iref" href="#changelog">&lt;changelog&gt;</a>.  The change
+is as of the specified <i>date</i> and was made by the
+<i>initiator</i>; the <i>status</i> can indicate whether the change is
+an addition, a deletion, or whatever the user likes.  The Extended
+HTML input between the beginning and end tag is expanded as usual, and
+is used as the description of the change.</p>
+
+<p>For example,
+
+</p><pre class="example">
+<code>&lt;changelog&gt;</code>
+<code>&lt;change 10/01/2008 New whd&gt;</code>
+Initial draft.
+<code>&lt;/change&gt;</code>
+<code>&lt;/changelog&gt;</code>
+</pre>
+
+</dd>
+</dl>
+
+<h2><a name="procedure_macros">Procedure Macros</a></h2>
+<p>The following macros are used to document procedures consisting of a 
+number of steps.
+
+</p>
+
+<dl>
+
+<dt class="defitem"><a name="procedure"><code>&lt;procedure&gt;</code>...<code>&lt;/procedure&gt;</code></a></dt><dd><p>
+
+Defines a procedure: instructions for performing a set of commands at
+a command line.  Each step consists of a description of what is to be
+done, and of an example of the commands to enter.  The procedure is
+formatted as a table of numbered steps, with each step's description in the
+left-hand column and example in the right-hand column.</p>
+
+<p>The content between the beginning and ending macros should consist of
+<a class="iref" href="#step">&lt;step&gt;</a> entries.
+
+</p>
+</dd>
+<dt class="defitem"><a name="quote"><code>&lt;quote <i>text</i>&gt;</code></a></dt><dd>
+
+Quotes angle brackets and ampersands in the <i>text</i> for HTML display.
+
+</dd>
+<dt class="defitem"><a name="step"><code>&lt;step&gt;</code> <i>description</i> <code>&lt;/step/&gt;</code> <i>example</i> <code>&lt;/step&gt;</code></a></dt><dd><p>
+
+Defines a single step within a <a class="iref" href="#procedure">&lt;procedure&gt;</a>.  The
+<i>description</i> is Extended HTML text saying what is to be done,
+and the <i>example</i> is Extended HTML text giving an example of how
+to do it.</p>
+
+<p>For example,
+
+</p><pre class="example">
+<code>&lt;procedure&gt;</code>
+
+<code>&lt;step&gt;</code>
+Edit the document.
+<code>&lt;/step/&gt;</code>
+&lt;pre&gt;
+$ emacs mydoc.ehtml
+&lt;/pre&gt;
+<code>&lt;/step&gt;</code>
+    .
+    .
+    .
+
+<code>&lt;/procedure&gt;</code>
+</pre>
+
+</dd>
+</dl>
+
+
+<h2><a name="miscellaneous_macros">Miscellaneous Macros</a></h2>
+    
+
+<dl>
+
+<dt class="defitem"><a name="hrule"><code>&lt;hrule&gt;</code></a></dt><dd>
+
+Produces a horizontal rule across the page.
+
+</dd>
+<dt class="defitem"><a name="lb"><code>&lt;lb&gt;</code></a></dt><dd>
+
+Returns the left-hand macro bracket, e.g., "<code>&lt;</code>".
+
+</dd>
+<dt class="defitem"><a name="link"><code>&lt;link <i>url</i> ?<i>anchor</i>?&gt;</code></a></dt><dd><p>
+
+Creates a link to the specified <i>url</i>, displaying the specified
+<i>anchor</i> text.  If <i>anchor</i> is omitted, the <i>url</i>
+itself is displayed.</p>
+
+<p>If the page will be linked multiple times, it might be better to
+define a cross-reference using <a class="iref" href="#xrefset">&lt;xrefset&gt;</a>.
+
+</p>
+</dd>
+<dt class="defitem"><a name="nbsp"><code>&lt;nbsp <i>text</i>&gt;</code></a></dt><dd>
+
+After trimming leading and trailing whitespace and normalizing
+internal whitespace to single blanks, <a class="iref" href="#nbsp">&lt;nbsp&gt;</a> replaces all
+remaining whitespace with non-breaking spaces.
+
+</dd>
+<dt class="defitem"><a name="rb"><code>&lt;rb&gt;</code></a></dt><dd>
+
+Returns the right-hand macro bracket, e.g., "<code>&gt;</code>".
+
+</dd>
+<dt class="defitem"><a name="tag"><code>&lt;tag <i>arglist</i>&gt;</code></a></dt><dd>
+
+Formats a macro tag in angle-brackets.  If the <i>arglist</i> is given,
+it is expanded and included in the tag.
+
+</dd>
+</dl>
+
+
+
+
+<h2><a name="author">AUTHOR</a></h2>
+<p>Will Duquette
+
+</p>
+
+<h2><a name="history">HISTORY</a></h2>
+<p>Originally written for JNEM as jnem_ehtml(5); migrated to Mars in
+September 2008, and moved to Kite in July 2014.
+
+
+</p>
+
+<hr>
+<p><i>kite 0.5.0 Man page generated by manpage(n) on 
+Fri Nov 20 09:34:55 PST 2015</i>
+</p>
+
+</body>
+</html>
+    
+
+
+
+
+
+
+
+

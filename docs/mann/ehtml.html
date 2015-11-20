@@ -1,0 +1,448 @@
+<html>
+<head>
+<title>kite 0.5.0: ehtml(n) -- Extended HTML Macro Set, submodule of kitedocs(n)</title>
+<style type="text/css" media="screen,print">
+/* ehtml(5) Standard CSS */
+
+/*---------------------------------------------------------*/
+/* General Use                                             */
+
+a {
+    /* No underlines */
+    text-decoration: none;
+}
+
+/* Special formatting for definition lists, to get proper
+ * blank lines after descriptions but not after topics. */
+dt {
+    margin-bottom: 0;
+}
+
+dd { 
+    margin-bottom: 1em; 
+}
+
+dd > p:first-child { 
+    margin-top: 0; 
+}
+
+
+/*---------------------------------------------------------*/
+/* Specific Macros                                         */
+
+/* bigmark */
+div.bigmark {
+    display: inline;
+    font-family: Verdana;
+    font-size: 100%;
+    background: black;
+    color: white;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+/* def, defitem, defopt */
+
+dt.def {
+    font-weight: bold;
+}
+
+dt.defitem {
+    font-weight: bold;
+    font-family: monospace;
+}
+
+dt.defopt {
+    font-weight: bold;
+    font-family: monospace;
+}
+
+
+/* example/ */
+pre.example {
+    background:     #FFFDD1 ;
+    border:         1px solid blue;
+    padding-top:    2px;
+    padding-bottom: 2px;
+    padding-left:   4px;
+}
+
+
+/* hrule */
+hr.hrule {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+/* iref */
+a.iref {
+    font-family: monospace;
+}
+
+/* itemlist */                
+ul.itemlist {
+    padding-left: 0;
+    list-style-type: none;
+}
+
+/* listing/ */
+pre.listing {
+    background:     #FFFDD1 ;
+    border:         1px solid blue;
+    padding-top:    4px;
+    padding-bottom: 4px;
+    padding-left:   4px;
+}
+
+span.linenum {
+    background:     #E3E08F ;
+}
+
+/* mark */
+div.mark {
+    display:       inline;
+    font-family:   Verdana;
+    font-size:     75%;
+    background:    black;
+    color:         white;
+    border:        1px solid black;
+    border-radius: 5px;
+    padding-left:  2px;
+    padding-right: 2px;
+}
+
+/* procedure */
+
+table.procedure {
+    border: 1px solid black;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table.procedure td {
+    border: 1px solid black;
+}
+
+td.procedure-index {
+    padding-right: 5px;
+    text-align: right;
+    width: 2em;
+}
+
+
+/* topiclist/ */
+.topiclist {
+    margin-top:    1em;
+    margin-bottom: 1em;
+}
+
+tr.topic {
+    vertical-align: baseline;
+}
+
+tr.topicname {
+    min-width: 1.5em;
+}
+
+/* tt/ */
+
+.tt {
+    font-family: monospace;
+}
+
+
+
+/* olp/ */
+
+ol.olp > li {
+    margin-bottom: 1em;
+}
+
+/* ulp/ */
+
+ul.ulp > li {
+    margin-bottom: 1em;
+}
+
+/*---------------------------------------------------------*/
+/* table/ plus macros that use it.    Most formatting is
+ * depends on the "table" class.                           */
+
+table {
+    margin-top:     1em;
+    margin-bottom:  1em;
+    vertical-align: baseline;
+}
+
+th {
+    padding-left: 5px;
+    text-align:   left;
+}
+
+td {
+    padding-left:   5px;
+    vertical-align: baseline;
+}
+
+
+/* "table" class: standard table formatting. */
+.table {
+    border:           1px solid black;
+    border-spacing:   0;
+    color:            black;
+    background-color: white;
+}
+
+.table tr:first-child {
+    font-weight:      bold;
+    color:            white;
+    background-color: #000099;    
+}
+
+.table tr.tr-odd {
+    background-color: #EEEEEE;
+}
+
+.table tr.tr-even { }
+
+.table-wide {
+    width: 100%;
+}
+
+        BODY {
+            color: black;
+            background: white;
+            margin-left: 6%;
+            margin-right: 6%;
+        }
+
+        H1 {
+            margin-left: -5%;
+        }
+        H2 {
+            margin-left: -5%;
+        }
+        HR {
+            margin-left: -5%;
+        }
+
+        TABLE {
+            text-align:    left;
+        }
+        
+        /* mktree styles */
+        ul.mktree  li  { list-style: none; }
+        ul.mktree, ul.mktree ul, ul.mktree li { 
+            margin-left:10px; padding:0px; }
+        ul.mktree li .bullet { padding-left: 10px }
+        ul.mktree  li.liOpen   .bullet {cursor : pointer; }
+        ul.mktree  li.liClosed .bullet {cursor : pointer; }
+        ul.mktree  li.liBullet .bullet {cursor : default; }
+        ul.mktree  li.liOpen   ul {display: block; }
+        ul.mktree  li.liClosed ul {display: none; }
+    
+</style>
+
+
+
+</head>
+
+<body>
+<h1 style="background: red;">
+&nbsp;kite 0.5.0: Kite Project Automation Tool
+</h1>
+    
+
+<h2><a name="name">NAME</a></h2>
+    
+
+<p><b>ehtml(n)</b> -- Extended HTML Macro Set, submodule of <a href="../mann/kitedocs.html">kitedocs(n)</a>
+
+</p>
+
+<ul>
+
+    <li><a href="#name">NAME</a></li>
+    
+
+    <li><a href="#synopsis">SYNOPSIS</a></li>
+    
+
+    <li><a href="#description">DESCRIPTION</a></li>
+    
+
+    <li><a href="#macros">MACROS</a></li>
+    
+
+    <li><a href="#commands">COMMANDS</a></li>
+    
+
+    <li><a href="#see_also">SEE ALSO</a></li>
+    
+
+    <li><a href="#environment">ENVIRONMENT</a></li>
+    
+
+    <li><a href="#author">AUTHOR</a></li>
+    
+
+    <li><a href="#history">HISTORY</a></li>
+    
+
+</ul>
+    
+    
+
+<h2><a name="synopsis">SYNOPSIS</a></h2>
+    
+
+<pre>
+package require kitedocs 0.5.0
+namespace import ::kitedocs::*
+</pre>
+
+<ul class="itemlist">
+<li><a class="iref" href="#ehtml_css">ehtml css</a></li>
+<li><a class="iref" href="#ehtml_install">ehtml install <i>macro</i></a></li>
+<li><a class="iref" href="#ehtml_configure">ehtml configure <i>opt val</i></a></li>
+<li>&nbsp;&nbsp;&nbsp;&nbsp;<a class="iref" href="#ehtml configure-docroot">-docroot <i>relpath</i></a></li>
+<li>&nbsp;&nbsp;&nbsp;&nbsp;<a class="iref" href="#ehtml configure-doctypes">-doctypes <i>typelist</i></a></li>
+</ul>
+
+
+<h2><a name="description">DESCRIPTION</a></h2>
+<p>ehtml(n) defines a <a href="../mann/macro.html">macro(n)</a> macro set that is a basis for 
+"Extended HTML" documents.  Extended HTML is
+a format similar to HTML text, but with an expanded set of tags
+defined using a macro processor.  Many basic HTML tags work unchanged;
+new tags are defined for specific purposes.  Tags not needed for
+purposes of documentation are not provided.</p>
+
+<p>See <a href="../man5/ehtml.html">ehtml(5)</a> for the basic syntax and standard macros.  See
+<a href="../man5/manpage.html">manpage(5)</a> and <a href="../man5/kitedoc.html">kitedoc(5)</a> for full document formats
+based on <a href="../man5/ehtml.html">ehtml(5)</a>.</p>
+
+<p>To use <a href="../mann/ehtml.html">ehtml(n)</a> directly, create an instance of 
+<a href="../mann/macro.html">macro(n)</a> and register <a href="../mann/ehtml.html">ehtml(n)</a> with it:
+
+</p>
+
+<pre class="example">
+macro mp
+mp register ::kitedocs::ehtml
+</pre>
+
+<h2><a name="macros">MACROS</a></h2>
+<p>Extended HTML macros are simply Tcl commands whose return value is
+substituted into the input text.  The <a href="../man5/ehtml.html">ehtml(5)</a> man page
+describes some standard macros
+
+</p>
+
+<h2><a name="commands">COMMANDS</a></h2>
+    
+
+<dl>
+
+<dt class="defitem"><a name="ehtml_css">ehtml css</a></dt><dd>
+
+Returns default CSS styles for the macros in this macro set.  Clients
+are free to use them or not.
+
+</dd>
+<dt class="defitem"><a name="ehtml_install">ehtml install <i>macro</i></a></dt><dd>
+
+Installs the <a href="../man5/ehtml.html">ehtml(5)</a> macros into <i>macro</i>, an instance
+of <a href="../mann/macro.html">macro(n)</a>.  This is usually called by the
+<a href="../mann/macro.html">macro(n)</a> object itself.
+
+</dd>
+<dt class="defitem"><a name="ehtml_configure">ehtml configure <i>opt val</i></a></dt><dd><p>
+
+Configures the macro set.  The following options may be set:
+
+</p><dl>
+<dt class="defopt"><a name="ehtml configure-docroot">-docroot <i>relpath</i></a></dt><dd><p>
+Sets the relative path from the document file being processed to the
+project's <span class="tt">docs/</span> directory.  For <span class="tt">docs/index.ehtml</span>, the
+<span class="tt">-docroot</span> should be "."</p>
+
+<p>The macro set's <a href="../man5/ehtml.html#xref">xref</a> macro uses this to figure
+links to man pages and other documents.  If the value of the option 
+is "", then only explicit <a href="../man5/ehtml.html#xrefset">xrefset</a> IDs are allowed.
+
+</p>
+</dd>
+<dt class="defopt"><a name="ehtml configure-doctypes">-doctypes <i>typelist</i></a></dt><dd><p>
+The <i>typelist</i> should be a list of file extensions, e.g., 
+"<span class="tt">.html .text .docx</span>".  The 
+<a href="../man5/ehtml.html#xref">xref</a> macro treats any xref ID ending with
+one of these extensions as a relative document path.</p>
+
+<p>The default set includes the following: 
+
+</p><ul>
+<li> <span class="tt">.html</span> 
+</li><li> <span class="tt">.htm</span> 
+</li><li> <span class="tt">.txt</span> 
+</li><li> <span class="tt">.text</span> 
+</li><li> <span class="tt">.md</span> 
+</li><li> <span class="tt">.docx</span> 
+</li><li> <span class="tt">.xlsx</span> 
+</li><li> <span class="tt">.pptx</span> 
+</li><li> <span class="tt">.pdf</span>
+</li></ul>
+
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+
+<h2><a name="see_also">SEE ALSO</a></h2>
+    
+
+<p><a href="../man5/ehtml.html">ehtml(5)</a>, <a href="../man5/manpage.html">manpage(5)</a>, <a href="../man5/kitedoc.html">kitedoc(5)</a>,
+<a href="../mann/macro.html">macro(n)</a>
+
+</p>
+
+<h2><a name="environment">ENVIRONMENT</a></h2>
+<p>ehtml(n) requires Tcl 8.6 or later.</p>
+
+<p>To use ehtml(n) in a Tcl script, the environment variable
+<code>TCLLIBPATH</code> must include the parent of the kitedocs(n)
+library directory.
+
+</p>
+
+<h2><a name="author">AUTHOR</a></h2>
+<p>Will Duquette
+
+</p>
+
+<h2><a name="history">HISTORY</a></h2>
+<p>Original package, based on code in the JNEM jnem_man(1) tool,
+heavily revised for Mars 3.0.
+
+</p>
+
+<hr>
+<p><i>kite 0.5.0 Man page generated by manpage(n) on 
+Fri Nov 20 09:34:56 PST 2015</i>
+</p>
+
+</body>
+</html>
+    
+
+
+
+
+
+
+

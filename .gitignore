@@ -3,8 +3,6 @@
 *.kit
 /.kite
 /includes
-/docs/*.html
-/docs/*/*.html
 teapot.txt
 /*.zip
 *~

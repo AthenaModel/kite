@@ -1,0 +1,534 @@
+<html>
+<head>
+<title>kite 0.5.0: macro(5) -- Basic macro(n) macros</title>
+<style type="text/css" media="screen,print">
+/* ehtml(5) Standard CSS */
+
+/*---------------------------------------------------------*/
+/* General Use                                             */
+
+a {
+    /* No underlines */
+    text-decoration: none;
+}
+
+/* Special formatting for definition lists, to get proper
+ * blank lines after descriptions but not after topics. */
+dt {
+    margin-bottom: 0;
+}
+
+dd { 
+    margin-bottom: 1em; 
+}
+
+dd > p:first-child { 
+    margin-top: 0; 
+}
+
+
+/*---------------------------------------------------------*/
+/* Specific Macros                                         */
+
+/* bigmark */
+div.bigmark {
+    display: inline;
+    font-family: Verdana;
+    font-size: 100%;
+    background: black;
+    color: white;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+/* def, defitem, defopt */
+
+dt.def {
+    font-weight: bold;
+}
+
+dt.defitem {
+    font-weight: bold;
+    font-family: monospace;
+}
+
+dt.defopt {
+    font-weight: bold;
+    font-family: monospace;
+}
+
+
+/* example/ */
+pre.example {
+    background:     #FFFDD1 ;
+    border:         1px solid blue;
+    padding-top:    2px;
+    padding-bottom: 2px;
+    padding-left:   4px;
+}
+
+
+/* hrule */
+hr.hrule {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+/* iref */
+a.iref {
+    font-family: monospace;
+}
+
+/* itemlist */                
+ul.itemlist {
+    padding-left: 0;
+    list-style-type: none;
+}
+
+/* listing/ */
+pre.listing {
+    background:     #FFFDD1 ;
+    border:         1px solid blue;
+    padding-top:    4px;
+    padding-bottom: 4px;
+    padding-left:   4px;
+}
+
+span.linenum {
+    background:     #E3E08F ;
+}
+
+/* mark */
+div.mark {
+    display:       inline;
+    font-family:   Verdana;
+    font-size:     75%;
+    background:    black;
+    color:         white;
+    border:        1px solid black;
+    border-radius: 5px;
+    padding-left:  2px;
+    padding-right: 2px;
+}
+
+/* procedure */
+
+table.procedure {
+    border: 1px solid black;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table.procedure td {
+    border: 1px solid black;
+}
+
+td.procedure-index {
+    padding-right: 5px;
+    text-align: right;
+    width: 2em;
+}
+
+
+/* topiclist/ */
+.topiclist {
+    margin-top:    1em;
+    margin-bottom: 1em;
+}
+
+tr.topic {
+    vertical-align: baseline;
+}
+
+tr.topicname {
+    min-width: 1.5em;
+}
+
+/* tt/ */
+
+.tt {
+    font-family: monospace;
+}
+
+
+
+/* olp/ */
+
+ol.olp > li {
+    margin-bottom: 1em;
+}
+
+/* ulp/ */
+
+ul.ulp > li {
+    margin-bottom: 1em;
+}
+
+/*---------------------------------------------------------*/
+/* table/ plus macros that use it.    Most formatting is
+ * depends on the "table" class.                           */
+
+table {
+    margin-top:     1em;
+    margin-bottom:  1em;
+    vertical-align: baseline;
+}
+
+th {
+    padding-left: 5px;
+    text-align:   left;
+}
+
+td {
+    padding-left:   5px;
+    vertical-align: baseline;
+}
+
+
+/* "table" class: standard table formatting. */
+.table {
+    border:           1px solid black;
+    border-spacing:   0;
+    color:            black;
+    background-color: white;
+}
+
+.table tr:first-child {
+    font-weight:      bold;
+    color:            white;
+    background-color: #000099;    
+}
+
+.table tr.tr-odd {
+    background-color: #EEEEEE;
+}
+
+.table tr.tr-even { }
+
+.table-wide {
+    width: 100%;
+}
+
+        BODY {
+            color: black;
+            background: white;
+            margin-left: 6%;
+            margin-right: 6%;
+        }
+
+        H1 {
+            margin-left: -5%;
+        }
+        H2 {
+            margin-left: -5%;
+        }
+        HR {
+            margin-left: -5%;
+        }
+
+        TABLE {
+            text-align:    left;
+        }
+        
+        /* mktree styles */
+        ul.mktree  li  { list-style: none; }
+        ul.mktree, ul.mktree ul, ul.mktree li { 
+            margin-left:10px; padding:0px; }
+        ul.mktree li .bullet { padding-left: 10px }
+        ul.mktree  li.liOpen   .bullet {cursor : pointer; }
+        ul.mktree  li.liClosed .bullet {cursor : pointer; }
+        ul.mktree  li.liBullet .bullet {cursor : default; }
+        ul.mktree  li.liOpen   ul {display: block; }
+        ul.mktree  li.liClosed ul {display: none; }
+    
+</style>
+
+
+
+</head>
+
+<body>
+<h1 style="background: red;">
+&nbsp;kite 0.5.0: Kite Project Automation Tool
+</h1>
+    
+
+<h2><a name="name">NAME</a></h2>
+    
+
+<p><b>macro(5)</b> -- Basic macro(n) macros
+
+</p>
+
+<ul>
+
+    <li><a href="#name">NAME</a></li>
+    
+
+    <li><a href="#synopsis">SYNOPSIS</a></li>
+    
+
+    <li><a href="#description">DESCRIPTION</a></li>
+    <ul>
+
+    <li><a href="#basic_syntax">Basic Syntax</a></li>
+
+    <li><a href="#twopass_expansion">Two-Pass Expansion</a></li>
+
+</ul>
+    
+
+    <li><a href="#basic_macros">BASIC MACROS</a></li>
+    
+
+    <li><a href="#defining_macros">DEFINING MACROS</a></li>
+    
+
+    <li><a href="#author">AUTHOR</a></li>
+    
+
+    <li><a href="#history">HISTORY</a></li>
+    
+
+</ul>
+    
+    
+
+<p><a href="http://tcllib.sourceforge.net/doc/expander.html">textutil::expander(n)</a>
+
+</p>
+
+<h2><a name="synopsis">SYNOPSIS</a></h2>
+    
+
+<ul class="itemlist">
+<li><a class="iref" href="#expand"><code>&lt;expand <i>text</i>&gt;</code></a></li>
+<li><a class="iref" href="#lb"><code>&lt;lb&gt;</code></a></li>
+<li><a class="iref" href="#macro"><code>&lt;macro <i>subcommand</i> ?<i>args...</i>?&gt;</code></a></li>
+<li><a class="iref" href="#macro_cget"><code>&lt;macro cget <i>varname</i>&gt;</code></a></li>
+<li><a class="iref" href="#macro_cis"><code>&lt;macro cis <i>cname</i>&gt;</code></a></li>
+<li><a class="iref" href="#macro_cname"><code>&lt;macro cname&gt;</code></a></li>
+<li><a class="iref" href="#macro_cpop"><code>&lt;macro cpop <i>cname</i>&gt;</code></a></li>
+<li><a class="iref" href="#macro_cpush"><code>&lt;macro cpush <i>cname</i>&gt;</code></a></li>
+<li><a class="iref" href="#macro_cset"><code>&lt;macro cset <i>varname value</i>&gt;</code></a></li>
+<li><a class="iref" href="#macro_cvar"><code>&lt;macro cvar <i>varname</i>&gt;</code></a></li>
+<li><a class="iref" href="#macro_pass"><code>&lt;macro pass&gt;</code></a></li>
+<li><a class="iref" href="#macro_warn"><code>&lt;macro warn <i>text</i>&gt;</code></a></li>
+<li><a class="iref" href="#pass"><code>&lt;pass&gt;</code></a></li>
+<li><a class="iref" href="#proc"><code>&lt;proc <i>name arglist body</i>&gt;</code></a></li>
+<li><a class="iref" href="#rb"><code>&lt;rb&gt;</code></a></li>
+<li><a class="iref" href="#swallow"><code>&lt;swallow <i>script</i>&gt;</code></a></li>
+<li><a class="iref" href="#template"><code>&lt;template <i>name arglist</i> ?<i>initbody</i>? <i>template</i>&gt;</code></a></li>
+<li><a class="iref" href="#tforeach"><code>&lt;tforeach <i>vars items</i> ?<i>initbody</i>? <i>template</i>&gt;</code></a></li>
+<li><a class="iref" href="#tif"><code>&lt;tif <i>condition thenbody</i> ?else <i>elsebody</i>?&gt;</code></a></li>
+<li><a class="iref" href="#tsubst"><code>&lt;tsubst <i>tstring</i>&gt;</code></a></li>
+</ul>
+
+
+<h2><a name="description">DESCRIPTION</a></h2>
+<p>This man page defines the basic macros provided by the 
+<a href="../mann/macro.html">macro(n)</a> macro processor.
+
+</p>
+
+<h2><a name="basic_syntax">Basic Syntax</a></h2>
+<p>The body of the input text can have any desired format.  The standard
+macro expansion brackets are "&lt;" and "&gt;"; anything between these brackets
+is evaluated as a Tcl script in the macro processor's interpreter and
+its return value inserted into the output in the macro's place.
+
+</p>
+
+<h2><a name="twopass_expansion">Two-Pass Expansion</a></h2>
+    
+
+<p><a href="../mann/macro.html">macro(n)</a> expands its input twice.  Individual macros can customize
+their behavior based on which pass it is.  A section-header macro, for
+example, might contribute to an index on the first pass and actually
+output the header on the second.  A table-of-contents macro might do
+nothing on the first pass and output the table-of-contents on the second,
+based on the indices built up during the first pass.</p>
+
+<p>The pass number is returned by the <a href="../mann/macro.html">macro(n)</a> object's 
+<a href="../mann/macro.html#pass">pass</a> method, and by the <a class="iref" href="#pass">&lt;pass&gt;</a> macro.
+
+</p>
+
+<h2><a name="basic_macros">BASIC MACROS</a></h2>
+    
+
+<p><a href="../mann/macro.html">macro(n)</a> defines a small number of standard macros, as follows.
+Usually, specific macro languages based on <a href="../mann/macro.html">macro(n)</a> will define
+there own.  Note that these macros are simply Tcl commands; you can define
+your own macros as described in <a href="#defining_macros">DEFINING MACROS</a>.
+
+</p>
+
+<dl>
+
+
+<dt class="defitem"><a name="expand"><code>&lt;expand <i>text</i>&gt;</code></a></dt><dd>
+
+Performs a macro expansion on its input.  This is primarily useful for
+expanding documentation text for a module that computes its documentation
+and returns it in <a href="../man5/ehtml.html">ehtml(5)</a> format.
+
+</dd>
+<dt class="defitem"><a name="lb"><code>&lt;lb&gt;</code></a></dt><dd>
+
+Returns the left-hand macro bracket, e.g., "<code>&lt;</code>".
+Formats that produce HTML will usually redefine this to product the
+appropriate HTML attribute.
+
+</dd>
+<dt class="defitem"><a name="macro"><code>&lt;macro <i>subcommand</i> ?<i>args...</i>?&gt;</code></a></dt><dd><p>
+
+This macro gives access to some of macro(n)'s advanced features.  It is
+usually used within macro definitions.
+
+</p><dl>
+
+<dt class="defitem"><a name="macro_cget"><code>&lt;macro cget <i>varname</i>&gt;</code></a></dt>
+<dt class="defitem"><a name="macro_cis"><code>&lt;macro cis <i>cname</i>&gt;</code></a></dt>
+<dt class="defitem"><a name="macro_cname"><code>&lt;macro cname&gt;</code></a></dt>
+<dt class="defitem"><a name="macro_cpop"><code>&lt;macro cpop <i>cname</i>&gt;</code></a></dt>
+<dt class="defitem"><a name="macro_cpush"><code>&lt;macro cpush <i>cname</i>&gt;</code></a></dt>
+<dt class="defitem"><a name="macro_cset"><code>&lt;macro cset <i>varname value</i>&gt;</code></a></dt>
+<dt class="defitem"><a name="macro_cvar"><code>&lt;macro cvar <i>varname</i>&gt;</code></a></dt><dd>
+
+These macro's give access to 
+<a href="http://tcllib.sourceforge.net/doc/expander.html">textutil::expander(n)</a>'s context stack mechanism, which allows the
+definition of pairs of starting and ending tag macros that work together.
+
+</dd>
+<dt class="defitem"><a name="macro_pass"><code>&lt;macro pass&gt;</code></a></dt><dd>
+
+Returns the pass number.
+
+</dd>
+<dt class="defitem"><a name="macro_warn"><code>&lt;macro warn <i>text</i>&gt;</code></a></dt><dd>
+
+Outputs a warning to the console.
+
+</dd>
+</dl>
+
+
+</dd>
+<dt class="defitem"><a name="pass"><code>&lt;pass&gt;</code></a></dt><dd>
+
+<b>Deprecated:</b> Returns the pass number.  
+Use <a class="iref" href="#macro_pass">&lt;macro pass&gt;</a> instead.
+
+</dd>
+<dt class="defitem"><a name="proc"><code>&lt;proc <i>name arglist body</i>&gt;</code></a></dt><dd>
+
+This is simply the normal Tcl <span class="tt">proc</span> command.  It can be used 
+in-line to define new macros.
+
+</dd>
+<dt class="defitem"><a name="rb"><code>&lt;rb&gt;</code></a></dt><dd>
+
+Returns the right-hand macro bracket, e.g., "<code>&gt;</code>".
+
+</dd>
+<dt class="defitem"><a name="swallow"><code>&lt;swallow <i>script</i>&gt;</code></a></dt><dd><p>
+
+This macro is mostly used when defining macros inline in a
+manpage.  It executes the <i>script</i>, and returns nothing;
+because it returns nothing, it doesn't affect the output.</p>
+
+<p>See <a href="#defining_macros">DEFINING MACROS</a> for an example.
+
+</p>
+</dd>
+<dt class="defitem"><a name="template"><code>&lt;template <i>name arglist</i> ?<i>initbody</i>? <i>template</i>&gt;</code></a></dt><dd>
+
+Defines a new macro using a template.  The arguments are the same as for
+<a href="../mann/template.html">template(n)</a>'s <a href="../mann/template.html#template">template</a> command.
+
+</dd>
+<dt class="defitem"><a name="tforeach"><code>&lt;tforeach <i>vars items</i> ?<i>initbody</i>? <i>template</i>&gt;</code></a></dt><dd>
+
+Substitutes in the template for each item in a list.  The semantics are the
+same as for <a href="../mann/template.html">template(n)</a>'s <a href="../mann/template.html#tforeach">tforeach</a> command.
+
+</dd>
+<dt class="defitem"><a name="tif"><code>&lt;tif <i>condition thenbody</i> ?else <i>elsebody</i>?&gt;</code></a></dt><dd>
+
+Substitutes in one of two templates depending on whether a condition is
+true or false  The semantics are the
+same as for <a href="../mann/template.html">template(n)</a>'s <a href="../mann/template.html#tif">tif</a> command.
+
+</dd>
+<dt class="defitem"><a name="tsubst"><code>&lt;tsubst <i>tstring</i>&gt;</code></a></dt><dd>
+
+Substitutes variables and commands into a string.  The semantics are the
+same as for 
+<a href="../mann/template.html">template(n)</a>'s <a href="../mann/template.html#tsubst">tsubst</a> command.
+
+</dd>
+</dl>
+
+
+<h2><a name="defining_macros">DEFINING MACROS</a></h2>
+<p>macro(5) macros have Tcl syntax; in fact, a macro can contain 
+arbitrary Tclcode.  In particular, the input can define new
+macros using the standard Tcl <span class="tt">proc</span> command or the
+<a class="iref" href="#template">&lt;template&gt;</a> command.  This is sometimes done in
+conjunction with the <a class="iref" href="#swallow">&lt;swallow&gt;</a> macro, to avoid including the
+output in the finished man page.</p>
+
+<p>For example, here's the definition of a macro that returns a timestamp
+using Tcl's <span class="tt">clock</span> command:
+
+</p>
+
+<pre class="example">
+&lt;proc timestamp {} {
+    return [clock format [clock seconds]]
+}&gt;
+</pre>
+<p>When writing macros, remember that macro(n) usually makes <b>two passes</b>
+over its input, and so every macro will be executed <b>twice</b>.
+This is usually only a problem when a macro is accumulating data into
+a Tcl variable in the first pass so that it can be used during the
+second pass (e.g., to output an accumulated list, such as a table of
+contents).</p>
+
+<p>In such a case, the macro can use <a href="../mann/macro.html">macro(n)</a>'s
+<a href="../mann/macro.html#pass">pass</a> method or the <a class="iref" href="#macro_pass">&lt;macro pass&gt;</a> macro 
+to find out which pass it is.
+
+</p>
+
+<h2><a name="author">AUTHOR</a></h2>
+<p>Will Duquette
+
+</p>
+
+<h2><a name="history">HISTORY</a></h2>
+<p>Originally written for JNEM as jnem_ehtml(5); migrated to Mars in
+September 2008, and moved to Kite in July 2014.
+
+
+</p>
+
+<hr>
+<p><i>kite 0.5.0 Man page generated by manpage(n) on 
+Fri Nov 20 09:34:55 PST 2015</i>
+</p>
+
+</body>
+</html>
+    
+
+
+
+
+
+
+
+

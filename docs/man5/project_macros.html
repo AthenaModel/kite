@@ -1,0 +1,453 @@
+<html>
+<head>
+<title>kite 0.5.0: project_macros(5) -- Project Documentation Macros, submodule of macro(5)</title>
+<style type="text/css" media="screen,print">
+/* ehtml(5) Standard CSS */
+
+/*---------------------------------------------------------*/
+/* General Use                                             */
+
+a {
+    /* No underlines */
+    text-decoration: none;
+}
+
+/* Special formatting for definition lists, to get proper
+ * blank lines after descriptions but not after topics. */
+dt {
+    margin-bottom: 0;
+}
+
+dd { 
+    margin-bottom: 1em; 
+}
+
+dd > p:first-child { 
+    margin-top: 0; 
+}
+
+
+/*---------------------------------------------------------*/
+/* Specific Macros                                         */
+
+/* bigmark */
+div.bigmark {
+    display: inline;
+    font-family: Verdana;
+    font-size: 100%;
+    background: black;
+    color: white;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+/* def, defitem, defopt */
+
+dt.def {
+    font-weight: bold;
+}
+
+dt.defitem {
+    font-weight: bold;
+    font-family: monospace;
+}
+
+dt.defopt {
+    font-weight: bold;
+    font-family: monospace;
+}
+
+
+/* example/ */
+pre.example {
+    background:     #FFFDD1 ;
+    border:         1px solid blue;
+    padding-top:    2px;
+    padding-bottom: 2px;
+    padding-left:   4px;
+}
+
+
+/* hrule */
+hr.hrule {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+/* iref */
+a.iref {
+    font-family: monospace;
+}
+
+/* itemlist */                
+ul.itemlist {
+    padding-left: 0;
+    list-style-type: none;
+}
+
+/* listing/ */
+pre.listing {
+    background:     #FFFDD1 ;
+    border:         1px solid blue;
+    padding-top:    4px;
+    padding-bottom: 4px;
+    padding-left:   4px;
+}
+
+span.linenum {
+    background:     #E3E08F ;
+}
+
+/* mark */
+div.mark {
+    display:       inline;
+    font-family:   Verdana;
+    font-size:     75%;
+    background:    black;
+    color:         white;
+    border:        1px solid black;
+    border-radius: 5px;
+    padding-left:  2px;
+    padding-right: 2px;
+}
+
+/* procedure */
+
+table.procedure {
+    border: 1px solid black;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table.procedure td {
+    border: 1px solid black;
+}
+
+td.procedure-index {
+    padding-right: 5px;
+    text-align: right;
+    width: 2em;
+}
+
+
+/* topiclist/ */
+.topiclist {
+    margin-top:    1em;
+    margin-bottom: 1em;
+}
+
+tr.topic {
+    vertical-align: baseline;
+}
+
+tr.topicname {
+    min-width: 1.5em;
+}
+
+/* tt/ */
+
+.tt {
+    font-family: monospace;
+}
+
+
+
+/* olp/ */
+
+ol.olp > li {
+    margin-bottom: 1em;
+}
+
+/* ulp/ */
+
+ul.ulp > li {
+    margin-bottom: 1em;
+}
+
+/*---------------------------------------------------------*/
+/* table/ plus macros that use it.    Most formatting is
+ * depends on the "table" class.                           */
+
+table {
+    margin-top:     1em;
+    margin-bottom:  1em;
+    vertical-align: baseline;
+}
+
+th {
+    padding-left: 5px;
+    text-align:   left;
+}
+
+td {
+    padding-left:   5px;
+    vertical-align: baseline;
+}
+
+
+/* "table" class: standard table formatting. */
+.table {
+    border:           1px solid black;
+    border-spacing:   0;
+    color:            black;
+    background-color: white;
+}
+
+.table tr:first-child {
+    font-weight:      bold;
+    color:            white;
+    background-color: #000099;    
+}
+
+.table tr.tr-odd {
+    background-color: #EEEEEE;
+}
+
+.table tr.tr-even { }
+
+.table-wide {
+    width: 100%;
+}
+
+        BODY {
+            color: black;
+            background: white;
+            margin-left: 6%;
+            margin-right: 6%;
+        }
+
+        H1 {
+            margin-left: -5%;
+        }
+        H2 {
+            margin-left: -5%;
+        }
+        HR {
+            margin-left: -5%;
+        }
+
+        TABLE {
+            text-align:    left;
+        }
+        
+        /* mktree styles */
+        ul.mktree  li  { list-style: none; }
+        ul.mktree, ul.mktree ul, ul.mktree li { 
+            margin-left:10px; padding:0px; }
+        ul.mktree li .bullet { padding-left: 10px }
+        ul.mktree  li.liOpen   .bullet {cursor : pointer; }
+        ul.mktree  li.liClosed .bullet {cursor : pointer; }
+        ul.mktree  li.liBullet .bullet {cursor : default; }
+        ul.mktree  li.liOpen   ul {display: block; }
+        ul.mktree  li.liClosed ul {display: none; }
+    
+</style>
+
+
+
+</head>
+
+<body>
+<h1 style="background: red;">
+&nbsp;kite 0.5.0: Kite Project Automation Tool
+</h1>
+    
+
+<h2><a name="name">NAME</a></h2>
+    
+
+<p><b>project_macros(5)</b> -- Project Documentation Macros, submodule of <a href="../man5/macro.html">macro(5)</a>
+
+</p>
+
+<ul>
+
+    <li><a href="#name">NAME</a></li>
+    
+
+    <li><a href="#synopsis">SYNOPSIS</a></li>
+    
+
+    <li><a href="#description">DESCRIPTION</a></li>
+    
+
+    <li><a href="#macros">MACROS</a></li>
+    
+
+    <li><a href="#project_tcl_commands">PROJECT TCL COMMANDS</a></li>
+    
+
+    <li><a href="#author">AUTHOR</a></li>
+    
+
+    <li><a href="#history">HISTORY</a></li>
+    
+
+</ul>
+    
+    
+
+<h2><a name="synopsis">SYNOPSIS</a></h2>
+    
+
+<ul class="itemlist">
+<li><a class="iref" href="#project"><code>&lt;project <i>subcomand</i> ?<i>args...</i>?&gt;</code></a></li>
+<li><a class="iref" href="#project_name"><code>&lt;project name&gt;</code></a></li>
+<li><a class="iref" href="#project_version"><code>&lt;project version&gt;</code></a></li>
+<li><a class="iref" href="#project_description"><code>&lt;project description&gt;</code></a></li>
+<li><a class="iref" href="#project_tclsh"><code>&lt;project tclsh <i>script</i>&gt;</code></a></li>
+<li><a class="iref" href="#project_expand"><code>&lt;project expand <i>script</i>&gt;</code></a></li>
+<li><a class="iref" href="#toproject"><code>&lt;toproject <i>script</i>&gt;</code></a></li>
+<li><a class="iref" href="#fromproject"><code>&lt;fromproject <i>script</i>&gt;</code></a></li>
+<li><a class="iref" href="#get">get <i>x</i></a></li>
+<li><a class="iref" href="#version">version</a></li>
+</ul>
+
+
+<h2><a name="description">DESCRIPTION</a></h2>
+<p>This man page defines the project_macros(5) <a href="../mann/macro.html">macro(n)</a> macro set,
+which is provided by the <span class="tt">kite docs</span> command for use in both 
+<a href="../man5/manpage.html">manpage(5)</a> and <a href="../man5/kitedoc.html">kitedoc(5)</a> documents.</p>
+
+<p>This macro set provides access to project metadata, and also to the 
+project code base.
+
+</p>
+
+<h2><a name="macros">MACROS</a></h2>
+<p>project_macros(5) provides the following project-specific macros.
+
+</p>
+
+<dl>
+
+<dt class="defitem"><a name="project"><code>&lt;project <i>subcomand</i> ?<i>args...</i>?&gt;</code></a></dt><dd><p>
+
+This macro gives access to project metadata.
+
+</p><dl>
+
+<dt class="defitem"><a name="project_name"><code>&lt;project name&gt;</code></a></dt><dd>
+
+Returns the project's name.
+
+</dd>
+<dt class="defitem"><a name="project_version"><code>&lt;project version&gt;</code></a></dt><dd>
+
+Returns the project's version number.
+
+</dd>
+<dt class="defitem"><a name="project_description"><code>&lt;project description&gt;</code></a></dt><dd>
+
+Returns the project's description string.
+
+</dd>
+<dt class="defitem"><a name="project_tclsh"><code>&lt;project tclsh <i>script</i>&gt;</code></a></dt><dd><p>
+
+Executes the <i>script</i> in the development Tcl shell with access
+to the project's code base, and returns the result.</p>
+
+<p>Documents will usually want to use the <a class="iref" href="#toproject">&lt;toproject&gt;</a> and 
+<a class="iref" href="#fromproject">&lt;fromproject&gt;</a> macros instead, however.  This macro invokes 
+the <span class="tt">tclsh</span> executable once each time it is called; the 
+<a class="iref" href="#toproject">&lt;toproject&gt;</a> and <a class="iref" href="#fromproject">&lt;fromproject&gt;</a> macros accumulate their
+scripts and invoke the <span class="tt">tclsh</span> a single time.
+
+</p>
+</dd>
+<dt class="defitem"><a name="project_expand"><code>&lt;project expand <i>script</i>&gt;</code></a></dt><dd>
+
+Executes the <i>script</i> in the development Tcl shell with access
+to the project's code base, and then expands any macros in 
+the result, returning the expansion.
+
+</dd>
+</dl>
+
+</dd>
+<dt class="defitem"><a name="toproject"><code>&lt;toproject <i>script</i>&gt;</code></a></dt><dd><p>
+
+Executes the <i>script</i> in the development Tcl shell in the context of the 
+project's code base, returning nothing.  The <i>script</i> will be sent to 
+the development Tcl shell as a batch with the scripts from all other 
+<a class="iref" href="#toproject">&lt;toproject&gt;</a> and <a class="iref" href="#fromproject">&lt;fromproject&gt;</a> macros in the same document.</p>
+
+<p>This macro is usually used to require packages and do other setup.
+
+</p>
+</dd>
+<dt class="defitem"><a name="fromproject"><code>&lt;fromproject <i>script</i>&gt;</code></a></dt><dd><p>
+
+Executes the <i>script</i> in the development Tcl shell in the context of the 
+project's code base, returning the result.  The <i>script</i> will be sent to 
+the development Tcl shell as a batch with the scripts from all other 
+<a class="iref" href="#toproject">&lt;toproject&gt;</a> and <a class="iref" href="#fromproject">&lt;fromproject&gt;</a> macros in the same document.</p>
+
+<p>This macro is usually used to call documentation generators in the 
+project code base.
+
+</p>
+</dd>
+</dl>
+
+<h2><a name="project_tcl_commands">PROJECT TCL COMMANDS</a></h2>
+<p>Two special commands are made available to <a class="iref" href="#project_tclsh">&lt;project tclsh&gt;</a>,
+<a class="iref" href="#project_expand">&lt;project expand&gt;</a>, <a class="iref" href="#toproject">&lt;toproject&gt;</a>, and <a class="iref" href="#fromproject">&lt;fromproject&gt;</a>:
+
+</p>
+
+<dl>
+
+<dt class="defitem"><a name="get">get <i>x</i></a></dt><dd><p>
+
+Returns its argument.  This allows the script to easily
+return an interpolated string:
+
+</p><pre class="example">
+<code>&lt;fromproject {get "This is a sum: [expr {1 + 1}]"}&gt;</code>
+</pre>
+
+</dd>
+<dt class="defitem"><a name="version">version</a></dt><dd><p>
+
+Returns the project version number, so that <span class="tt">package require</span> commands
+can be sure to require the correct version of the code.  
+For example, a <a class="iref" href="#toproject">&lt;toproject&gt;</a> command might look like this:
+
+</p><pre class="example">
+<code>&lt;toproject {package require -exact mylib [version]}&gt;</code>
+</pre>
+
+</dd>
+</dl>
+
+
+<h2><a name="author">AUTHOR</a></h2>
+<p>Will Duquette
+
+</p>
+
+<h2><a name="history">HISTORY</a></h2>
+<p>New package.
+
+
+</p>
+
+<hr>
+<p><i>kite 0.5.0 Man page generated by manpage(n) on 
+Fri Nov 20 09:34:56 PST 2015</i>
+</p>
+
+</body>
+</html>
+    
+
+
+
+
+
+
+
+

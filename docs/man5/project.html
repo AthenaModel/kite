@@ -1,0 +1,727 @@
+<html>
+<head>
+<title>kite 0.5.0: project(5) -- Kite Project File Format</title>
+<style type="text/css" media="screen,print">
+/* ehtml(5) Standard CSS */
+
+/*---------------------------------------------------------*/
+/* General Use                                             */
+
+a {
+    /* No underlines */
+    text-decoration: none;
+}
+
+/* Special formatting for definition lists, to get proper
+ * blank lines after descriptions but not after topics. */
+dt {
+    margin-bottom: 0;
+}
+
+dd { 
+    margin-bottom: 1em; 
+}
+
+dd > p:first-child { 
+    margin-top: 0; 
+}
+
+
+/*---------------------------------------------------------*/
+/* Specific Macros                                         */
+
+/* bigmark */
+div.bigmark {
+    display: inline;
+    font-family: Verdana;
+    font-size: 100%;
+    background: black;
+    color: white;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+/* def, defitem, defopt */
+
+dt.def {
+    font-weight: bold;
+}
+
+dt.defitem {
+    font-weight: bold;
+    font-family: monospace;
+}
+
+dt.defopt {
+    font-weight: bold;
+    font-family: monospace;
+}
+
+
+/* example/ */
+pre.example {
+    background:     #FFFDD1 ;
+    border:         1px solid blue;
+    padding-top:    2px;
+    padding-bottom: 2px;
+    padding-left:   4px;
+}
+
+
+/* hrule */
+hr.hrule {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+/* iref */
+a.iref {
+    font-family: monospace;
+}
+
+/* itemlist */                
+ul.itemlist {
+    padding-left: 0;
+    list-style-type: none;
+}
+
+/* listing/ */
+pre.listing {
+    background:     #FFFDD1 ;
+    border:         1px solid blue;
+    padding-top:    4px;
+    padding-bottom: 4px;
+    padding-left:   4px;
+}
+
+span.linenum {
+    background:     #E3E08F ;
+}
+
+/* mark */
+div.mark {
+    display:       inline;
+    font-family:   Verdana;
+    font-size:     75%;
+    background:    black;
+    color:         white;
+    border:        1px solid black;
+    border-radius: 5px;
+    padding-left:  2px;
+    padding-right: 2px;
+}
+
+/* procedure */
+
+table.procedure {
+    border: 1px solid black;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table.procedure td {
+    border: 1px solid black;
+}
+
+td.procedure-index {
+    padding-right: 5px;
+    text-align: right;
+    width: 2em;
+}
+
+
+/* topiclist/ */
+.topiclist {
+    margin-top:    1em;
+    margin-bottom: 1em;
+}
+
+tr.topic {
+    vertical-align: baseline;
+}
+
+tr.topicname {
+    min-width: 1.5em;
+}
+
+/* tt/ */
+
+.tt {
+    font-family: monospace;
+}
+
+
+
+/* olp/ */
+
+ol.olp > li {
+    margin-bottom: 1em;
+}
+
+/* ulp/ */
+
+ul.ulp > li {
+    margin-bottom: 1em;
+}
+
+/*---------------------------------------------------------*/
+/* table/ plus macros that use it.    Most formatting is
+ * depends on the "table" class.                           */
+
+table {
+    margin-top:     1em;
+    margin-bottom:  1em;
+    vertical-align: baseline;
+}
+
+th {
+    padding-left: 5px;
+    text-align:   left;
+}
+
+td {
+    padding-left:   5px;
+    vertical-align: baseline;
+}
+
+
+/* "table" class: standard table formatting. */
+.table {
+    border:           1px solid black;
+    border-spacing:   0;
+    color:            black;
+    background-color: white;
+}
+
+.table tr:first-child {
+    font-weight:      bold;
+    color:            white;
+    background-color: #000099;    
+}
+
+.table tr.tr-odd {
+    background-color: #EEEEEE;
+}
+
+.table tr.tr-even { }
+
+.table-wide {
+    width: 100%;
+}
+
+        BODY {
+            color: black;
+            background: white;
+            margin-left: 6%;
+            margin-right: 6%;
+        }
+
+        H1 {
+            margin-left: -5%;
+        }
+        H2 {
+            margin-left: -5%;
+        }
+        HR {
+            margin-left: -5%;
+        }
+
+        TABLE {
+            text-align:    left;
+        }
+        
+        /* mktree styles */
+        ul.mktree  li  { list-style: none; }
+        ul.mktree, ul.mktree ul, ul.mktree li { 
+            margin-left:10px; padding:0px; }
+        ul.mktree li .bullet { padding-left: 10px }
+        ul.mktree  li.liOpen   .bullet {cursor : pointer; }
+        ul.mktree  li.liClosed .bullet {cursor : pointer; }
+        ul.mktree  li.liBullet .bullet {cursor : default; }
+        ul.mktree  li.liOpen   ul {display: block; }
+        ul.mktree  li.liClosed ul {display: none; }
+    
+</style>
+
+
+
+</head>
+
+<body>
+<h1 style="background: red;">
+&nbsp;kite 0.5.0: Kite Project Automation Tool
+</h1>
+    
+
+<h2><a name="name">NAME</a></h2>
+    
+
+<p><b>project(5)</b> -- Kite Project File Format
+
+</p>
+
+<ul>
+
+    <li><a href="#name">NAME</a></li>
+    
+
+    <li><a href="#synopsis">SYNOPSIS</a></li>
+    
+
+    <li><a href="#description">DESCRIPTION</a></li>
+    
+
+    <li><a href="#statements">STATEMENTS</a></li>
+    
+
+    <li><a href="#author">AUTHOR</a></li>
+    
+
+    <li><a href="#history">HISTORY</a></li>
+    
+
+</ul>
+    
+    
+
+<h2><a name="synopsis">SYNOPSIS</a></h2>
+    
+
+<ul class="itemlist">
+<li><a class="iref" href="#project">project <i>name version description</i></a></li>
+<li><a class="iref" href="#poc">poc <i>email</i></a></li>
+<li><a class="iref" href="#app">app <i>name</i> ?<i>options...</i>?</a></li>
+<li>&nbsp;&nbsp;&nbsp;&nbsp;<a class="iref" href="#app-apptype">-apptype kit|exe</a></li>
+<li>&nbsp;&nbsp;&nbsp;&nbsp;<a class="iref" href="#app-exclude">-exclude <i>packages...</i></a></li>
+<li>&nbsp;&nbsp;&nbsp;&nbsp;<a class="iref" href="#app-force">-force</a></li>
+<li>&nbsp;&nbsp;&nbsp;&nbsp;<a class="iref" href="#app-gui">-gui</a></li>
+<li>&nbsp;&nbsp;&nbsp;&nbsp;<a class="iref" href="#app-icon">-icon <i>filename</i></a></li>
+<li><a class="iref" href="#provide">provide <i>name</i> ?<i>options</i>?</a></li>
+<li><a class="iref" href="#src">src <i>name</i> ?<i>options...</i>?</a></li>
+<li>&nbsp;&nbsp;&nbsp;&nbsp;<a class="iref" href="#src-build">-build <i>command</i></a></li>
+<li>&nbsp;&nbsp;&nbsp;&nbsp;<a class="iref" href="#src-clean">-clean <i>command</i></a></li>
+<li><a class="iref" href="#require">require <i>name version</i> ?<i>options...</i>?</a></li>
+<li><a class="iref" href="#dist">dist <i>name patterns</i></a></li>
+<li><a class="iref" href="#shell">shell <i>script</i></a></li>
+<li><a class="iref" href="#before">before <i>tool script</i></a></li>
+<li><a class="iref" href="#after">after <i>tool script</i></a></li>
+<li><a class="iref" href="#xfile">xfile <i>path url</i></a></li>
+<li><a class="iref" href="#mansec">mansec <i>section title</i></a></li>
+</ul>
+
+
+<h2><a name="description">DESCRIPTION</a></h2>
+<p>The man page defines the syntax of Kite's <code>project.kite</code> file.
+The Kite project file defines the project's name, version, external
+dependencies, and build targets, so that Kite can perform various 
+development tasks automatically.</p>
+
+<p>Note that the Kite project file is a Tcl script, and so 
+normal Tcl syntax rules apply.</p>
+
+<p>Every Kite project file begins with a <a class="iref" href="#project">project</a> statement.  This is
+typically followed by one or more build target statements, e.g.,
+<a class="iref" href="#app">app</a> and <a class="iref" href="#provide">provide</a>.  These are followed by
+<a class="iref" href="#require">require</a> statements that define the project's
+external dependencies.</p>
+
+<p>A project's project file is usually created by Kite as part of initializing
+the project's directory tree, and is then updated by the developer as
+needed.
+
+</p>
+
+<h2><a name="statements">STATEMENTS</a></h2>
+<p>Kite project files may contain the following statements.
+
+</p>
+
+<dl>
+
+<dt class="defitem"><a name="project">project <i>name version description</i></a></dt><dd><p>
+
+<b>Required.</b> This statement names the project, its
+current <i>version</i>, and a brief text <i>description</i>.  
+The project name and version are usually defined to match the 
+project's name in the VCS of choice.</p>
+
+<p>For example,
+
+</p><pre>
+project athena-mars 3.0.0 "Mars Simulation Support Library"
+</pre>
+<p>The version number must be a valid Tcl package version number, as 
+described on Tcl's package(n) man page, except that it may include
+an optional suffix.  Tcl package version numbers should consist of two 
+or more integers, separated by dots; the final dot may be replaced by
+"a" or "b", indicating alpha or beta status.  The suffix, if given,
+can be any word preceded by a hyphen.  Thus, the following are valid
+project version numbers:
+
+</p>
+
+<ul>
+<li> <span class="tt">1.2</span>
+</li><li> <span class="tt">1a2</span>
+</li><li> <span class="tt">1.2b3</span>
+</li><li> <span class="tt">1.2.3</span>
+</li><li> <span class="tt">1.2.3-MYSUFFIX</span>
+</li></ul>
+
+</dd>
+<dt class="defitem"><a name="poc">poc <i>email</i></a></dt><dd>
+
+Specifies the e-mail address of the project's primary point-of-contact
+(POC).  This is made available to <a href="../man5/kitedoc.html">kitedoc(5)</a> documentation.
+
+</dd>
+<dt class="defitem"><a name="app">app <i>name</i> ?<i>options...</i>?</a></dt><dd><p>
+
+This statement tells Kite that the project builds an application called
+<i>name</i>.  The application has loader script <span class="tt">bin/<i>name</i>.tcl</span>,
+and its main routine will be in <span class="tt">lib/<i>name</i>app/main.tcl</span>.  Of
+the external dependencies listed in the project file, it will require
+those included in the external dependency block in its 
+<span class="tt">lib/<i>name</i>app/pkgModules.tcl</span> file.</p>
+
+<p>By default, it will be built as a console-mode starkit.  The following
+options may be used:
+
+</p><dl>
+
+<dt class="defopt"><a name="app-apptype">-apptype kit|exe</a></dt><dd><p>
+
+To build a starkit (the default), select <b>kit</b>; to build a standalone
+executable, select <b>exe</b>.</p>
+
+<p><b>TODO:</b> On OS X, we should have an additional option, <b>app</b>, which
+builds an OS X .app.
+
+</p>
+</dd>
+<dt class="defopt"><a name="app-exclude">-exclude <i>packages...</i></a></dt><dd><p>
+
+The value, <i>packages</i>, is a list of the names of external packages 
+that shouldn't be included in the application.</p>
+
+<p>When a project defines multiple applications, it might be that a given
+application requires only some of the
+external packages that are <a class="iref" href="#require">require</a>'d in <span class="tt">project.kite</span>.
+By default all external packages are included in application executables,
+but included unneeded applications can make an executable bigger than
+necessary.  In addition, attempting to include Tk extensions in a 
+non-GUI application can cause <span class="tt">tclapp</span> to balk.  This option allows
+them to be explicitly excluded.  
+
+</p>
+</dd>
+<dt class="defopt"><a name="app-force">-force</a></dt><dd>
+
+If present, this causes '<span class="tt">kite build</span>' to include the 
+<span class="tt">tclapp -force</span> option, which causes <span class="tt">tclapp</span> to build the 
+requested application even if all required libraries are not available.
+This is useful as a stop-gap when building a non-GUI <b>exe</b> application
+for a package that also delivers GUI apps and requires GUI packages; 
+in this specific case, <span class="tt">tclapp</span> will sometimes balk, and 
+<span class="tt">-force</span> prevents that.  The <span class="tt">-exclude</span> option is a preferable 
+solution for the long-term.
+
+</dd>
+<dt class="defopt"><a name="app-gui">-gui</a></dt><dd>
+
+If present, the application will load Tk automatically; and when built
+as a standalone executable, will be built using a Tk basekit.
+
+</dd>
+<dt class="defopt"><a name="app-icon">-icon <i>filename</i></a></dt><dd>
+
+Specifies the name of a <span class="tt">.ico</span> file to included in the finished 
+executable.  The specified <span class="tt">-icon</span> will be used only if the 
+<span class="tt">-apptype</span> is <b>exe</b> and the platform is some flavor of Windows or
+Linux.
+
+</dd>
+</dl>
+<p>A project may contain any number of applications; the first listed in
+<span class="tt">project.kite</span> is called the <i>primary</i> application.
+
+</p>
+
+</dd>
+<dt class="defitem"><a name="provide">provide <i>name</i> ?<i>options</i>?</a></dt><dd><p>
+
+This statement tells Kite that the project provides a Tcl library package
+intended for use by other projects.  The package will be called 
+<i>name</i>; it must reside in <span class="tt">lib/<i>name</i></span>, and will 
+always have the same version number as the project as a whole.</p>
+
+<p>A project may contain any number of library packages.  Note that only
+packages intended for export need to be declared with <a class="iref" href="#provide">provide</a>; a 
+project defining an <a class="iref" href="#app">app</a> will often contain a 
+number of packages intended for use only by the application itself, and 
+these need not be declared.</p>
+
+<p>If the normal template is used when defining the library (i.e., 
+<code>kite new</code> or <code>kite add</code>), then Kite will 
+automatically update the version number in the library's 
+<span class="tt">lib/<i>name</i>/pkgIndex.tcl</span> and
+<span class="tt">lib/<i>name</i>/pkgModules.tcl</span> files.  Moreover, the 
+<span class="tt">lib/<i>name</i>/pkgModules.tcl</span> will contain a block marked 
+"ADD EXTERNAL DEPENDENCIES".  If you place <span class="tt">package require</span> statements
+in that block, corresponding to the external dependencies listed in 
+<span class="tt">project.kite</span> for those external libraries this package actually uses,
+Kite will keep their version numbers consistent with those in 
+<span class="tt">project.kite</span>.</p>
+
+<p><b>Binary Packages:</b> If the project exports a binary Tcl extension, the
+extension should be built as a TEA extension in a 
+"<span class="tt">src/mylib</span>" subdirectory, and installed into "<span class="tt">lib/mylib</span>" when
+it is built.  Then, the <b>-binary</b> option should be used to tell Kite
+that the provided package is a binary extension:
+
+</p><pre class="example">
+provide Mylib -binary
+src Mylib ...
+</pre>
+
+</dd>
+<dt class="defitem"><a name="src">src <i>name</i> ?<i>options...</i>?</a></dt><dd><p>
+
+This statement tells Kite that the project contains a directory,
+<span class="tt">src/</span><i>name</i>, containing some kind of code to be 
+compiled.  The directory might define a binary Tcl package, or some 
+other compiled product (i.e., a .a library to be linked with a binary
+Tcl package).</p>
+
+<p>By default, Kite assumes that the named directory contains a 
+<span class="tt">Makefile</span>, and that it can issue "<span class="tt">make ...</span>" commands to build the
+directory's contents and clean up the build products.  Alternatively, the
+user can specify how to do this by passing the following options:
+
+</p><dl>
+
+<dt class="defopt"><a name="src-build">-build <i>command</i></a></dt><dd>
+
+Specifies the command used to build the directory's contents.  
+Defaults to "<span class="tt">make clean all</span>".
+
+</dd>
+<dt class="defopt"><a name="src-clean">-clean <i>command</i></a></dt><dd>
+
+Specifies the command used to clean up the directory's build products.
+Defaults to "<span class="tt">make clean</span>".
+
+</dd>
+</dl>
+<p>If the directory contains a binary extension, the <b>-build</b> command 
+should "install" the extension into "<span class="tt">lib/</span><i>name</i>", 
+and the <b>-clean</b> command should remove it.  In addition, if the project
+needs to export the library it should include the following statement
+in <span class="tt">project.kite</span>:
+
+</p>
+
+<pre class="example">provide <i>name</i> -binary</pre>
+
+</dd>
+<dt class="defitem"><a name="require">require <i>name version</i> ?<i>options...</i>?</a></dt><dd><p>
+
+This statement tells Kite that the project wants to run against the teapot
+package with the given name and version, where version takes any of the
+normal forms for <code>package require</code>.</p>
+
+<p>By default, Kite assumes that the package is available from the ActiveState
+Teapot Repository, and will install it into the local teapot on 
+<code>kite deps update</code>.  If the <b>-local</b> option is given, then 
+the package is assumed to be locally built and installed into the local 
+teapot by hand. Kite will report on its absence, but will not attempt to 
+fetch it.</p>
+
+<p>Required packages will be built into the project's <a class="iref" href="#app">app</a>
+and (<b>TODO</b>) dependencies on required packages will be noted in 
+<a class="iref" href="#provide">provide</a> packages when built as teapot .zip files.
+
+</p>
+</dd>
+<dt class="defitem"><a name="dist">dist <i>name patterns</i></a></dt><dd><p>
+
+The <span class="tt">kite dist</span> command builds distribution .zip files for the project.
+This command defines a distribution target called <i>name</i>; the
+<i>patterns</i> indicate the specific files to include in the .zip file.</p>
+
+<p>The <i>name</i> may include the token "%platform"; if so, it will be replaced
+by the return value of <span class="tt">platform::identify</span>.  This is appropriate for
+installation sets for projects containing stand-alone executables.</p>
+
+<p>The value of <i>patterns</i> is a list of patterns; each pattern is one of the
+following:
+
+</p><ul>
+<li> A glob pattern relative to the project root, e.g., 
+     "<span class="tt">docs/*.html</span>".  This includes all matching files from the 
+     project tree.
+
+</li><li> The special pattern <b>%apps</b>.  This includes all of the project's
+     application executables.
+
+</li><li> The special pattern <b>%libs</b>.  This includes the teapot .zip files
+     for each of the project's <a class="iref" href="#provide">provide</a>d library packages.
+
+</li><li> The special pattern <b>%get</b>, which is followed by a list of two
+     elements: a relative path and a URL.  Kite will retrieve the document
+     at the URL, and include it in the distribution .zip file at the 
+     given path.  This is useful for large documents in binary formats.
+</li></ul>
+<p>A project may define any number of distribution targets; by convention,
+the main one is called "install".</p>
+
+<p>For example, a typical "install" distribution for a project delivering one or more applications as starkits might look like this:
+
+</p>
+
+<pre class="example">
+dist install {
+    README.md
+    LICENSE.md
+    docs/*.html
+    docs/*/*.html
+    %apps
+}
+</pre>
+<p>If the project delivers its applications as stand-alone executables, and also
+provides one or more libraries, it might look like this:
+
+</p>
+
+<pre class="example">
+dist install-%platform {
+    README.md
+    LICENSE.md
+    %get { docs/ug.docx http://www.example.com/ug.docx }
+    docs/*.html
+    docs/*/*.html
+    %apps
+    %libs
+}
+</pre>
+
+</dd>
+<dt class="defitem"><a name="shell">shell <i>script</i></a></dt><dd>
+
+The <i>script</i> will be automatically loaded in the Tcl shell produced by
+the <code>kite shell</code> command for "lib-only" projects or if 
+<code>kite shell -plain</code> is used. This allows the project to 
+customize the initial state of the shell.
+
+</dd>
+<dt class="defitem"><a name="before">before <i>tool script</i></a></dt><dd><p>
+
+Defines a hook <i>script</i> to be executed just prior to the specified
+Kite <i>tool</i>.  The script is executed in the development <span class="tt">tclsh</span>
+in the project context.  Hooks can be defined for the following tools:
+
+</p><ul>
+<li> <b>add</b>
+</li><li> <b>build</b>
+</li><li> <b>clean</b>
+</li><li> <b>compile</b>
+</li><li> <b>deps</b>
+</li><li> <b>dist</b>
+</li><li> <b>docs</b>
+</li><li> <b>install</b>
+</li><li> <b>new</b>
+</li><li> <b>test</b>
+</li><li> <b>wrap</b>
+</li></ul>
+
+</dd>
+<dt class="defitem"><a name="after">after <i>tool script</i></a></dt><dd>
+
+Defines a hook <i>script</i> to be executed just after the specified
+Kite <i>tool</i>.  The script is executed in the development <span class="tt">tclsh</span>
+in the project context.  This statement defines hooks for the same tools
+as the <a class="iref" href="#before">before</a> statement.
+
+</dd>
+<dt class="defitem"><a name="xfile">xfile <i>path url</i></a></dt><dd><p>
+
+Occasionally there are files that need to be 
+available when building a project that cannot be retained in the VCS
+repository (e.g., large MS Office files).  One approach is to use the
+<span class="tt">%get</span> pattern in a <a class="iref" href="#dist">dist</a> set; alternatively, the external
+file can be called out on its own in the project file using the 
+<a class="iref" href="#xfile">xfile</a> statement.  For example,
+
+</p><pre class="example">
+xfile docs/mydoc.docx http://example.com/mydoc.docx
+</pre>
+<p>The <i>path</i> should be a path relative to the project root, using "/" as
+the path separator, and ending in the desired file name.  The <i>url</i> is
+an "http" or "https" URL from which the desired file can be retrieved.</p>
+
+<p>The <span class="tt">kite xfiles update</span> and <span class="tt">kite build all</span> commands will retrieve
+the designated file and save it in the project tree with the designated 
+name.  The <span class="tt">kite xfiles clean</span> and <span class="tt">kite clean</span> commands will 
+remove it.</p>
+
+<p>It is generally a good idea to update the <span class="tt">.gitignores</span> file or 
+equivalent so that the external file won't be accidentally checked in
+to the VCS.
+
+</p>
+
+</dd>
+<dt class="defitem"><a name="mansec">mansec <i>section title</i></a></dt><dd><p>
+
+This command adds custom man page sections to the <span class="tt">docs/</span> directory.
+The <i>section</i> is the man page section, e.g., "1", "5", "n", or some
+other string.  The <i>title</i> is the section title, e.g.,
+
+</p><pre class="example">
+mansec type "Validation Data Types"
+</pre>
+<p>In this case, the related directory will be <span class="tt">docs/mantype/</span>.</p>
+
+<p>This command can also be used to assign a new title to one of the 
+default man page sections, which are:
+
+</p>
+
+<ul>
+<li> Section 1: Executables
+</li><li> Section 5: File Formats
+</li><li> Section i: Tcl Interfaces
+</li><li> Section n: Tcl Commands
+</li></ul>
+
+</dd>
+</dl>
+
+<h2><a name="author">AUTHOR</a></h2>
+<p>Will Duquette
+
+</p>
+
+<h2><a name="history">HISTORY</a></h2>
+<p>Original file format.
+
+</p>
+
+<hr>
+<p><i>kite 0.5.0 Man page generated by manpage(n) on 
+Fri Nov 20 09:34:56 PST 2015</i>
+</p>
+
+</body>
+</html>
+    
+
+
+
+
+
+
+
+

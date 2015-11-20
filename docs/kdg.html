@@ -1,0 +1,2076 @@
+<html><head>
+<title>kite 0.5.0: Kite Developer's Guide</title>
+<style>
+/* ehtml(5) Standard CSS */
+
+/*---------------------------------------------------------*/
+/* General Use                                             */
+
+a {
+    /* No underlines */
+    text-decoration: none;
+}
+
+/* Special formatting for definition lists, to get proper
+ * blank lines after descriptions but not after topics. */
+dt {
+    margin-bottom: 0;
+}
+
+dd { 
+    margin-bottom: 1em; 
+}
+
+dd > p:first-child { 
+    margin-top: 0; 
+}
+
+
+/*---------------------------------------------------------*/
+/* Specific Macros                                         */
+
+/* bigmark */
+div.bigmark {
+    display: inline;
+    font-family: Verdana;
+    font-size: 100%;
+    background: black;
+    color: white;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+/* def, defitem, defopt */
+
+dt.def {
+    font-weight: bold;
+}
+
+dt.defitem {
+    font-weight: bold;
+    font-family: monospace;
+}
+
+dt.defopt {
+    font-weight: bold;
+    font-family: monospace;
+}
+
+
+/* example/ */
+pre.example {
+    background:     #FFFDD1 ;
+    border:         1px solid blue;
+    padding-top:    2px;
+    padding-bottom: 2px;
+    padding-left:   4px;
+}
+
+
+/* hrule */
+hr.hrule {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+/* iref */
+a.iref {
+    font-family: monospace;
+}
+
+/* itemlist */                
+ul.itemlist {
+    padding-left: 0;
+    list-style-type: none;
+}
+
+/* listing/ */
+pre.listing {
+    background:     #FFFDD1 ;
+    border:         1px solid blue;
+    padding-top:    4px;
+    padding-bottom: 4px;
+    padding-left:   4px;
+}
+
+span.linenum {
+    background:     #E3E08F ;
+}
+
+/* mark */
+div.mark {
+    display:       inline;
+    font-family:   Verdana;
+    font-size:     75%;
+    background:    black;
+    color:         white;
+    border:        1px solid black;
+    border-radius: 5px;
+    padding-left:  2px;
+    padding-right: 2px;
+}
+
+/* procedure */
+
+table.procedure {
+    border: 1px solid black;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table.procedure td {
+    border: 1px solid black;
+}
+
+td.procedure-index {
+    padding-right: 5px;
+    text-align: right;
+    width: 2em;
+}
+
+
+/* topiclist/ */
+.topiclist {
+    margin-top:    1em;
+    margin-bottom: 1em;
+}
+
+tr.topic {
+    vertical-align: baseline;
+}
+
+tr.topicname {
+    min-width: 1.5em;
+}
+
+/* tt/ */
+
+.tt {
+    font-family: monospace;
+}
+
+
+
+/* olp/ */
+
+ol.olp > li {
+    margin-bottom: 1em;
+}
+
+/* ulp/ */
+
+ul.ulp > li {
+    margin-bottom: 1em;
+}
+
+/*---------------------------------------------------------*/
+/* table/ plus macros that use it.    Most formatting is
+ * depends on the "table" class.                           */
+
+table {
+    margin-top:     1em;
+    margin-bottom:  1em;
+    vertical-align: baseline;
+}
+
+th {
+    padding-left: 5px;
+    text-align:   left;
+}
+
+td {
+    padding-left:   5px;
+    vertical-align: baseline;
+}
+
+
+/* "table" class: standard table formatting. */
+.table {
+    border:           1px solid black;
+    border-spacing:   0;
+    color:            black;
+    background-color: white;
+}
+
+.table tr:first-child {
+    font-weight:      bold;
+    color:            white;
+    background-color: #000099;    
+}
+
+.table tr.tr-odd {
+    background-color: #EEEEEE;
+}
+
+.table tr.tr-even { }
+
+.table-wide {
+    width: 100%;
+}
+
+        BODY {
+            color: black;
+            background: white;
+            margin-left: 1%;
+            margin-right: 1%;
+        }
+    
+</style>
+</head>
+
+<body>
+<h1 style="background: red;">
+&nbsp;kite 0.5.0: Kite Project Automation Tool
+</h1>
+    
+<h1>Kite Developer's Guide</h1>
+    
+
+
+
+<hr class="hrule">
+
+<h2>Table of Contents</h2>
+
+<p><b><a href="#audience" name="toc.audience">Audience</a></b></p>
+
+
+<p><b><a href="#overview" name="toc.overview">1. Kite Overview</a></b></p>
+
+
+<p><b><a href="#projtree" name="toc.projtree">2. The Project Tree</a></b></p>
+
+<ul>
+
+    <li><a href="#projtree.new" name="toc.projtree.new">2.1 Creating New Project Trees</a></li>
+
+    
+
+    <li><a href="#projtree.add" name="toc.projtree.add">2.2 Adding Elements to a Project Tree</a></li>
+
+    
+
+</ul>
+    
+<p><b><a href="#projfile" name="toc.projfile">3. The Project File</a></b></p>
+
+
+<p><b><a href="#lib" name="toc.lib">4. Library Packages</a></b></p>
+
+<ul>
+
+    <li><a href="#lib.pkgindex" name="toc.lib.pkgindex">4.1 The 'pkgIndex.tcl' File</a></li>
+
+    
+
+    <li><a href="#lib.pkgmodules" name="toc.lib.pkgmodules">4.2 The 'pkgModules.tcl' File</a></li>
+
+    
+
+    <li><a href="#lib.modules" name="toc.lib.modules">4.3 Package Modules</a></li>
+
+    
+
+    <li><a href="#lib.otherfiles" name="toc.lib.otherfiles">4.4 Other Files</a></li>
+
+    
+
+    <li><a href="#lib.onemodule" name="toc.lib.onemodule">4.5 Packages with One Module</a></li>
+
+    
+
+    <li><a href="#lib.manymodules" name="toc.lib.manymodules">4.6 Packages with Many Modules</a></li>
+
+    
+
+</ul>
+    
+<p><b><a href="#app" name="toc.app">5. Applications</a></b></p>
+
+<ul>
+
+    <li><a href="#app.loader" name="toc.app.loader">5.1 Application Loader File</a></li>
+
+    
+
+    <li><a href="#app.pkgindex" name="toc.app.pkgindex">5.2 The 'pkgIndex.tcl' File</a></li>
+
+    
+
+    <li><a href="#app.pkgmodules" name="toc.app.pkgmodules">5.3 The 'pkgModules.tcl' File</a></li>
+
+    
+
+    <li><a href="#app.main" name="toc.app.main">5.4 The 'main.tcl' File</a></li>
+
+    
+
+    <li><a href="#app.modules" name="toc.app.modules">5.5 Application Modules and Data Files</a></li>
+
+    
+
+</ul>
+    
+<p><b><a href="#testing" name="toc.testing">6. Project Test Suites</a></b></p>
+
+<ul>
+
+    <li><a href="#testing.all_tests" name="toc.testing.all_tests">6.1 The 'all_tests.test' File</a></li>
+
+    
+
+    <li><a href="#testing.module_test" name="toc.testing.module_test">6.2 Module Test Files</a></li>
+
+    
+
+    <li><a href="#testing.ted" name="toc.testing.ted">6.3 Test Execution Deputies</a></li>
+
+    
+
+</ul>
+    
+<p><b><a href="#docs" name="toc.docs">7. Documentation Tools</a></b></p>
+
+
+<p><b><a href="#dep" name="toc.dep">8. Dependency Management</a></b></p>
+
+<ul>
+
+    <li><a href="#dep.teapot" name="toc.dep.teapot">8.1 Teapot Repositories and Packages</a></li>
+
+    <ul>
+
+    <li><a href="#dep.teapot.package" name="toc.dep.teapot.package">8.1.1 Required Packages</a></li>
+
+    
+
+    <li><a href="#dep.teapot.local" name="toc.dep.teapot.local">8.1.2 Locally-built Teapot Packages</a></li>
+
+    
+
+</ul>
+    
+
+    <li><a href="#dep.basekits" name="toc.dep.basekits">8.2 Basekits</a></li>
+
+    <ul>
+
+    <li><a href="#dep.basekits.locating" name="toc.dep.basekits.locating">8.2.1 Locating Basekits</a></li>
+
+    <ul>
+
+    <li><a href="#dep.basekits.locating.dist" name="toc.dep.basekits.locating.dist">8.2.1.1 In ActiveTcl Distributions</a></li>
+
+    
+
+    <li><a href="#dep.basekits.locating.teapot" name="toc.dep.basekits.locating.teapot">8.2.1.2 In the Teapot</a></li>
+
+    
+
+</ul>
+    
+
+</ul>
+    
+
+</ul>
+    
+<p><b><a href="#comp" name="toc.comp">9. Compilation</a></b></p>
+
+
+<p><b><a href="#dist" name="toc.dist">10. Building Distributions</a></b></p>
+
+
+<p><b><a href="#install" name="toc.install">11. Local Installation</a></b></p>
+
+
+
+
+<h2>List of Tables</h2>
+<ul>
+
+    <li><a href="#tab.projtree" name="toc.tab.projtree">Table 2-1: Project Directory Tree</a></li>
+
+</ul>
+    
+<h2>List of Figures</h2>
+<ul>
+
+    <li><a href="#fig.lib.pkgindex" name="toc.fig.lib.pkgindex">Figure 4-1: Standard 'pkgIndex.tcl' File</a></li>
+
+    <li><a href="#fig.lib.pkgmodules" name="toc.fig.lib.pkgmodules">Figure 4-2: Standard 'pkgModules.tcl' file</a></li>
+
+    <li><a href="#fig.lib.module" name="toc.fig.lib.module">Figure 4-3: A Typical Package Module</a></li>
+
+    <li><a href="#fig.app_loader" name="toc.fig.app_loader">Figure 5-1: Sample Application Loader Script</a></li>
+
+    <li><a href="#fig.main_tcl" name="toc.fig.main_tcl">Figure 5-2: Sample 'main.tcl' File</a></li>
+
+    <li><a href="#fig.all_tests" name="toc.fig.all_tests">Figure 6-1: Sample 'all_tests.test' File</a></li>
+
+    <li><a href="#fig.module_test" name="toc.fig.module_test">Figure 6-2: Sample 'mymodule.test' File</a></li>
+
+</ul>
+    
+    
+
+<hr class="hrule">
+
+
+<h2><a name="audience" href="#toc.audience">Audience</a></h2>
+<p>This guide is primarily intended for the Kite developer, as it documents
+Kite's expectations for the structure and content of project directory 
+trees; however, it should also be of use to the new Kite user who wants
+to know what Kite does and how Kite projects work.
+
+</p>
+
+<hr class="hrule">
+
+
+<h2><a name="overview" href="#toc.overview">1. Kite Overview</a></h2>
+<p>Kite is a command-line tool for managing TCL/TK projects, formatting 
+project HTML documentation, running tests, and automating builds.
+For a general overview of Kite, see the 
+<i><a href="kite.docx">Kite White Paper</a></i>.  For specifics about the
+Kite commands described in this document, including precise calling
+syntax, use the "<span class="tt">kite help</span>" command.
+
+</p>
+
+<hr class="hrule">
+
+
+<h2><a name="projtree" href="#toc.projtree">2. The Project Tree</a></h2>
+<p>A typical Kite project tree has some or all of the following parts.
+
+</p>
+
+<center><table class="table">
+<caption><b><a name="tab.projtree" href="#toc.tab.projtree">Table 2-1: Project Directory Tree</a><b></b></b></caption>
+    
+<tr><th>Path</th> <th>Description</th></tr>
+
+<tr class="tr-even"><td><b><tt><i>root</i>/</tt></b></td>
+<td>
+           Root of the project tree</td>
+</tr>
+    
+<tr class="tr-odd"><td><b><tt>&nbsp;&nbsp;&nbsp;&nbsp;project.kite</tt></b></td>
+<td>
+     <a href="#projfile">Kite Project File</a>
+                        </td>
+</tr>
+    
+<tr class="tr-even"><td><b><tt>&nbsp;&nbsp;&nbsp;&nbsp;bin/</tt></b></td>
+<td>
+             <a href="#app">Application</a> loader scripts and 
+                        ancillary tools.</td>
+</tr>
+    
+<tr class="tr-odd"><td><b><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>name</i>.tcl</tt></b></td>
+<td>
+      Application loader script for application <i>name</i>.
+                        </td>
+</tr>
+    
+<tr class="tr-even"><td><b><tt>&nbsp;&nbsp;&nbsp;&nbsp;docs/</tt></b></td>
+<td>
+            <a href="#docs">Project documentation</a></td>
+</tr>
+    
+<tr class="tr-odd"><td><b><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;man1/</tt></b></td>
+<td>
+           Man page section (1): Executables</td>
+</tr>
+    
+<tr class="tr-even"><td><b><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;man5/</tt></b></td>
+<td>
+           Man page section (5): File Formats</td>
+</tr>
+    
+<tr class="tr-odd"><td><b><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mann/</tt></b></td>
+<td>
+           Man page section (n): Tcl Commands</td>
+</tr>
+    
+<tr class="tr-even"><td><b><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mani/</tt></b></td>
+<td>
+           Man page section (i): Tcl Interfaces</td>
+</tr>
+    
+<tr class="tr-odd"><td><b><tt>&nbsp;&nbsp;&nbsp;&nbsp;lib/</tt></b></td>
+<td>
+             Tcl <a href="#lib">Library Packages</a> </td>
+</tr>
+    
+<tr class="tr-even"><td><b><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>name</i>/</tt></b></td>
+<td>
+         Tcl source code for package
+                        <i>name</i></td>
+</tr>
+    
+<tr class="tr-odd"><td><b><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;app_<i>name</i>/</tt></b></td>
+<td>
+     Tcl source code for application <i>name</i>.
+                        </td>
+</tr>
+    
+<tr class="tr-even"><td><b><tt>&nbsp;&nbsp;&nbsp;&nbsp;test/</tt></b></td>
+<td>
+            <a href="#testing">Project test suites</a>.  
+                        <span class="tt">test/</span> directories are usually parallel to
+                        <span class="tt">lib/</span> directories.</td>
+</tr>
+    
+<tr class="tr-odd"><td><b><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>name</i>/</tt></b></td>
+<td>
+         Test suite for package <i>name</i></td>
+</tr>
+    
+<tr class="tr-even"><td><b><tt>&nbsp;&nbsp;&nbsp;&nbsp;src/</tt></b></td>
+<td>
+             <a href="#comp">Compiled source directories</a></td>
+</tr>
+    
+<tr class="tr-odd"><td><b><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>name</i>/</tt></b></td>
+<td>
+         Compiled source directory <i>name</i></td>
+</tr>
+    
+<tr class="tr-even"><td><b><tt>&nbsp;&nbsp;&nbsp;&nbsp;.kite/</tt></b></td>
+<td>
+           Kite transient data directory.</td>
+</tr>
+    
+</table></center>
+<p>The project <span class="tt"><i>root</i>/</span> directory will frequently contain other files, e.g., 
+<span class="tt">README</span> and <span class="tt">LICENSE</span> files, and of course other subdirectories may 
+be added as needed.</p>
+
+<p>Things to note:
+
+</p>
+
+<ul class="ulp">
+<li> The <span class="tt">project.kite</span> file contains all of the information Kite needs
+     to know to perform project tasks.  See <a href="#projfile">Section 3</a>.
+
+</li><li> The <span class="tt"><i>root</i>/src/</span> subdirectories are a place for C libraries or any 
+     other code requiring a non-Kite compilation step.  See <a href="#comp">Section 9</a>.
+</li></ul>
+
+
+<h3><a name="projtree.new" href="#toc.projtree.new">2.1 Creating New Project Trees</a></h3>
+<p>It is possible to set up a Kite project tree by hand, but it is both more
+usual and much easier to use the <span class="tt">kite new</span> command.  At present, 
+<span class="tt">kite new</span> supports three templates:
+
+</p>
+
+<table class="table topiclist">
+<tr>
+<th>Topic</th> 
+<th>Description</th>
+</tr>
+        
+<tr class="tr-even">
+<td><b>lib</b></td>
+<td>
+         
+A project that provides a Tcl library package for external use.
+The project includes stub documentation and the package's 
+<span class="tt"><i>root</i>/lib/</span> and <span class="tt"><i>root</i>/test/</span> directories.
+</td>
+</tr>
+        
+
+<tr class="tr-odd">
+<td><b>app</b></td>
+<td>
+        
+A project that provides an application, delivered as a standalone executable
+for the current platform.  The project tree includes the stub documentation,
+the application's loader script (<span class="tt"><i>root</i>/bin/<i>name</i>.tcl</span>), and an 
+application implementation package called <span class="tt">app_<i>name</i></span>.  The 
+package includes both <span class="tt"><i>root</i>/lib/</span> and <span class="tt"><i>root</i>/test/</span> directories.
+The application's loader script calls the <span class="tt">main</span> command, which is
+defined by the <span class="tt">app_<i>name</i></span> implementation package.
+</td>
+</tr>
+        
+
+<tr class="tr-even">
+<td><b>appkit</b></td>
+<td>
+        
+A project that provides an application, delivered as a "starkit".
+The project tree's contents are the same as for the <b>app</b> template.
+This template is useful for tools that will run only in the development
+environment.
+</td>
+</tr>
+        
+
+</table>
+<p>Other templates might be added over time, as well as support for
+project template plugins.
+
+
+</p>
+
+<h3><a name="projtree.add" href="#toc.projtree.add">2.2 Adding Elements to a Project Tree</a></h3>
+<p>The tree created by <span class="tt">kite new</span> is just a starting point;
+additional elements can be added by hand, or by using <span class="tt">kite add</span>.</p>
+
+<p>At present, <span class="tt">kite add</span> supports two element templates:
+
+</p>
+
+<table class="table topiclist">
+<tr>
+<th>Topic</th> 
+<th>Description</th>
+</tr>
+        
+<tr class="tr-even">
+<td><b>lib</b></td>
+<td>
+         
+Adds a new library package called <i>name</i> to the project tree, in the
+form of the package's <span class="tt"><i>root</i>/lib/</span> and <span class="tt"><i>root</i>/test/</span> directories, and
+adds a <span class="tt">provide</span> statement to the <a href="#projfile">project file</a>.  If
+the library is for internal use only, remove the <span class="tt">provide</span> statement.
+</td>
+</tr>
+        
+
+<tr class="tr-odd">
+<td><b>app</b></td>
+<td>
+        
+Adds a new application package called <i>name</i> to the project tree, 
+including its loader script and its implementation package's  
+<span class="tt"><i>root</i>/lib/</span> and <span class="tt"><i>root</i>/test/</span> directories, and
+updates the <a href="#projfile">project file</a> accordingly.
+</td>
+</tr>
+        
+
+</table>
+        
+
+<hr class="hrule">
+
+
+<h2><a name="projfile" href="#toc.projfile">3. The Project File</a></h2>
+<p>The Kite project file, <span class="tt"><i>root</i>/project.kite</span>, is the equivalent of a set of
+Makefiles for a C project or of a Maven file for Java projects.  It
+contains all data about the project that the Kite executable needs to do
+its job.  In particular, the project file specifies:
+
+</p>
+
+<ul>
+<li> The project's name, version, and description
+</li><li> The e-mail address of the primary point-of-contact
+</li><li> The applications contained in the project
+</li><li> The library packages provided by the project
+</li><li> The external library packages required by the project
+</li><li> Non-TCL project components that require compilation
+</li><li> Content of distribution .zip files 
+</li></ul>
+<p>The initial content of the project file is created by the 
+<span class="tt">kite new</span> command when the project tree is first initialized, and 
+extended by <span class="tt">kite add</span> as new components are added.  Other content is
+added by the developer, by hand.</p>
+
+<p>The project version is particularly important.  The version number
+specified in the project file is available to all of the project's
+applications at run time, and is embedded in every library package
+provided for external use.</p>
+
+<p>The syntax of the project file is defined in the 
+<a href="./man5/project.html">project(5)</a> man page.
+
+</p>
+
+<hr class="hrule">
+
+
+<h2><a name="lib" href="#toc.lib">4. Library Packages</a></h2>
+<p>This section describes the code layout for library packages in the project
+tree.  Library packages usually also have test suites and man pages; see
+<a href="#testing">Section 6</a> and <a href="#docs">Section 7</a> for details.</p>
+
+<p>A library package's source code is placed in a subdirectory of the 
+<span class="tt"><i>root</i>/lib/</span> directory.  The directory name should match the package 
+name, e.g., package <span class="tt">mylib</span> resides in <span class="tt"><i>root</i>/lib/mylib/</span>.</p>
+
+<p>Each library package should define the files defined in the following
+sections.
+
+
+</p>
+
+<h3><a name="lib.pkgindex" href="#toc.lib.pkgindex">4.1 The 'pkgIndex.tcl' File</a></h3>
+<p>Every package will have a <span class="tt">pkgIndex.tcl</span> file.  This file is usually 
+created by <span class="tt">kite new</span> or <span class="tt">kite add</span>, but can be copied or created
+by hand.  Every <span class="tt">pkgIndex.tcl</span> file should look more or less like
+<a href="#fig.lib.pkgindex">Figure 4-1</a>.  User-provided content is shown in boldface.
+
+
+        </p>
+
+<center><a name="fig.lib.pkgindex" href="#toc.fig.lib.pkgindex">
+        <b>Figure 4-1: Standard 'pkgIndex.tcl' File</b></a></center>
+    
+<pre class="listing">
+<span class="linenum">0001</span> #-------------------------------------------------------------------------
+<span class="linenum">0002</span> # TITLE:
+<span class="linenum">0003</span> #    pkgIndex.tcl
+<span class="linenum">0004</span> #
+<span class="linenum">0005</span> # PROJECT:
+<span class="linenum">0006</span> #    <b>myproject - My Project Description</b>
+<span class="linenum">0007</span> #
+<span class="linenum">0008</span> # DESCRIPTION:
+<span class="linenum">0009</span> #    <b>mylib</b>(n) package index file
+<span class="linenum">0010</span> #
+<span class="linenum">0011</span> #    Generated by Kite.
+<span class="linenum">0012</span> #-------------------------------------------------------------------------
+<span class="linenum">0013</span> 
+<span class="linenum">0014</span> # -kite-ifneeded-start <div class="mark">A</div> DO NOT EDIT THIS BLOCK BY HAND 
+<span class="linenum">0015</span> package ifneeded <b>mylib</b> 1.2.3 [list source [file join $dir pkgModules.tcl]] <div class="mark">B</div> 
+<span class="linenum">0016</span> # -kite-ifneeded-end <div class="mark">A</div>
+</pre>
+
+
+<table class="table topiclist">
+<tr>
+<th>Topic</th> 
+<th>Description</th>
+</tr>
+        
+<tr class="tr-even">
+<td><div class="mark">A</div></td>
+<td>
+        
+These lines are Kite update marks.  They bracket code that Kite will update
+or replace as the project metadata changes.  In this case, the code is
+replaced altogether whenever the project's version number changes.
+</td>
+</tr>
+        
+
+<tr class="tr-odd">
+<td><div class="mark">B</div></td>
+<td><p>
+        
+This is the <span class="tt">package ifneeded</span> command, which loads the package when
+it is required by the application.  There are several things to notice about
+this line:
+
+</p><ul>
+<li> It loads the package by sourcing the <span class="tt">pkgModules.tcl</span> file.  This is
+standard in Kite projects; see <a href="#lib.pkgmodules">Section 4.2</a>.
+
+</li><li> It states the package version, "1.2.3" in this case.  The package's
+version number should always match that of the project as a whole.
+
+</li><li> Kite keeps the version number up to date automatically.
+</li></ul>
+</td>
+</tr>
+        
+</table>
+        
+
+<p><b>NOTE:</b> Kite rewrites the entire segment between the marks, so it will
+always look exactly like this.  If you need something different, you can
+remove the <span class="tt">kite-ifneeded</span> lines; but then you'll have to maintain
+the version number yourself.
+
+
+</p>
+
+<h3><a name="lib.pkgmodules" href="#toc.lib.pkgmodules">4.2 The 'pkgModules.tcl' File</a></h3>
+<p>The package's <span class="tt">pkgIndex.tcl</span> file always sources a file called 
+<span class="tt">pkgModules.tcl</span>, which is responsible for loading the rest of the
+package.  A typical <span class="tt">pkgModules.tcl</span> file is as follows; user-provided
+content is shown in bold.
+
+
+        </p>
+
+<center><a name="fig.lib.pkgmodules" href="#toc.fig.lib.pkgmodules">
+        <b>Figure 4-2: Standard 'pkgModules.tcl' file</b></a></center>
+    
+<pre class="listing">
+<span class="linenum">0001</span> #-----------------------------------------------------------------------
+<span class="linenum">0002</span> # TITLE:
+<span class="linenum">0003</span> #    pkgModules.tcl
+<span class="linenum">0004</span> #
+<span class="linenum">0005</span> # PROJECT:
+<span class="linenum">0006</span> #    <b>myproject - My Project Description</b>
+<span class="linenum">0007</span> #
+<span class="linenum">0008</span> # DESCRIPTION:
+<span class="linenum">0009</span> #    <b>mylib(n)</b> package modules file
+<span class="linenum">0010</span> #
+<span class="linenum">0011</span> #    Generated by Kite.
+<span class="linenum">0012</span> #-----------------------------------------------------------------------
+<span class="linenum">0013</span> 
+<span class="linenum">0014</span> #-----------------------------------------------------------------------
+<span class="linenum">0015</span> # Package Definition
+<span class="linenum">0016</span> 
+<span class="linenum">0017</span> # -kite-provide-start <div class="mark">A</div> DO NOT EDIT THIS BLOCK BY HAND
+<span class="linenum">0018</span> package provide <b>mylib</b> 1.2.3 <div class="mark">B</div>
+<span class="linenum">0019</span> # -kite-provide-end <div class="mark">A</div>
+<span class="linenum">0020</span> 
+<span class="linenum">0021</span> #-----------------------------------------------------------------------
+<span class="linenum">0022</span> # Required Packages
+<span class="linenum">0023</span> 
+<span class="linenum">0024</span> # -kite-require-start <div class="mark">C</div> ADD EXTERNAL DEPENDENCIES
+<span class="linenum">0025</span> <b>package require snit 2.3</b> <div class="mark">D</div>
+<span class="linenum">0026</span> <b>package require -exact myotherlib 1.2.3</b> <div class="mark">E</div>
+<span class="linenum">0027</span> # -kite-require-end <div class="mark">C</div>
+<span class="linenum">0028</span> 
+<span class="linenum">0029</span> #-----------------------------------------------------------------------
+<span class="linenum">0030</span> # Namespace definition
+<span class="linenum">0031</span> 
+<span class="linenum">0032</span> namespace eval ::<b>mylib</b>:: { <div class="mark">F</div>
+<span class="linenum">0033</span>     variable library [file dirname [info script]] <div class="mark">G</div>
+<span class="linenum">0034</span> }
+<span class="linenum">0035</span> 
+<span class="linenum">0036</span> #-----------------------------------------------------------------------
+<span class="linenum">0037</span> # Submodules
+<span class="linenum">0038</span> #
+<span class="linenum">0039</span> # Note: modules are listed in order of dependencies; be careful if you
+<span class="linenum">0040</span> # change the order!
+<span class="linenum">0041</span> 
+<span class="linenum">0042</span> <b>source [file join $::mylib::library module1.tcl]</b> <div class="mark">H</div>
+<span class="linenum">0043</span> <b>source [file join $::mylib::library module2.tcl]</b>
+<span class="linenum">0044</span> <b>...</b>
+</pre>
+
+
+<table class="table topiclist">
+<tr>
+<th>Topic</th> 
+<th>Description</th>
+</tr>
+        
+<tr class="tr-even">
+<td><div class="mark">A</div></td>
+<td>
+        
+These lines are Kite update marks.  They bracket code that Kite will
+update or replace as the project metadata changes.  In this case, the 
+code is replaced altogether whenever the package version number changes.
+</td>
+</tr>
+        
+
+<tr class="tr-odd">
+<td><div class="mark">B</div></td>
+<td>
+        
+This is the <span class="tt">package provide</span> command; it tells TCL the name and version
+number of the provided package.  The package version number should always
+match the project version number, and so Kite updates this block automatically
+whenever the project version number changes.
+</td>
+</tr>
+        
+
+<tr class="tr-even">
+<td><div class="mark">C</div></td>
+<td>
+        
+More Kite update marks.  Any <span class="tt">package require</span> statements found between
+these marks that correspond to libraries either <span class="tt">require</span>'d or 
+<span class="tt">provide</span>'d in the <a href="#projfile">project file</a> will have their
+version numbers updated.  Other lines will be left alone.  Note that 
+the <span class="tt">package require</span> command must be the only thing on the line.
+</td>
+</tr>
+        
+
+<tr class="tr-odd">
+<td><div class="mark">D</div></td>
+<td>
+        
+This is an example of a package that is <span class="tt">require</span>'d in the 
+project file.  Kite knows the desired version number, and will update this
+line to include it.  If the <span class="tt">-exact</span> flag is included, Kite will 
+preserve it.
+</td>
+</tr>
+        
+
+<tr class="tr-even">
+<td><div class="mark">E</div></td>
+<td>
+        
+This is an example of a package that is <span class="tt">provide</span>'d by this same
+project.  Because provided packages might be available in the local 
+teapot (see <a href="#dep">Section 8</a>), Kite always includes the <span class="tt">-exact</span> flag;
+together with control of the <span class="tt">auto_path</span>, this ensures that this
+package will always load a consistent version of its sibling package 
+in deployment, and the version in the same project tree during 
+development.
+</td>
+</tr>
+        
+
+<tr class="tr-odd">
+<td><div class="mark">F</div></td>
+<td>
+        
+Every package gets a namespace with the same name.  It might or might
+not put its code in that namespace (application implementation packages
+often leave their code in the global namespace), but it's useful to 
+always have a private namespace.
+</td>
+</tr>
+        
+
+<tr class="tr-even">
+<td><div class="mark">G</div></td>
+<td>
+        
+Every package gets a variable called <span class="tt">library</span> in its private namespace.
+This variable contains the path of the package's directory, whether it's
+a normal disk directory or included in a virtual file system.  It's used
+below when loading the package's modules, and it's also useful when loading
+other package resources at run time.  If the package has data files or 
+image files, the application can find them relative to 
+<span class="tt">::mylib::library</span>.
+</td>
+</tr>
+        
+
+<tr class="tr-odd">
+<td><div class="mark">H</div></td>
+<td>
+        
+Finally, the package's modules are loaded in any logical sequence.  The
+idiom shown here, using <span class="tt">file join</span> with the package's 
+<span class="tt">library</span> variable, is guaranteed to work on every platform.
+</td>
+</tr>
+        
+
+</table>
+        
+
+
+<h3><a name="lib.modules" href="#toc.lib.modules">4.3 Package Modules</a></h3>
+<p>A package module file can contain whatever TCL code you like; it's entirely
+up to you.  A typical module looks like this:
+
+
+        </p>
+
+<center><a name="fig.lib.module" href="#toc.fig.lib.module">
+        <b>Figure 4-3: A Typical Package Module</b></a></center>
+    
+<pre class="listing">
+<span class="linenum">0001</span> #-----------------------------------------------------------------------
+<span class="linenum">0002</span> # TITLE:
+<span class="linenum">0003</span> #    mymodule.tcl
+<span class="linenum">0004</span> #
+<span class="linenum">0005</span> # PROJECT:
+<span class="linenum">0006</span> #    myproject - My Project Description
+<span class="linenum">0007</span> #
+<span class="linenum">0008</span> # DESCRIPTION:
+<span class="linenum">0009</span> #    mylib(n) module: mymodule
+<span class="linenum">0010</span> #
+<span class="linenum">0011</span> #-----------------------------------------------------------------------
+<span class="linenum">0012</span> 
+<span class="linenum">0013</span> <div class="mark">A</div>
+<span class="linenum">0014</span> 
+<span class="linenum">0015</span> #-----------------------------------------------------------------------
+<span class="linenum">0016</span> # Exported commands
+<span class="linenum">0017</span> 
+<span class="linenum">0018</span> namespace eval ::mylib:: {
+<span class="linenum">0019</span>     namespace export myproc   <div class="mark">B</div>
+<span class="linenum">0020</span> }
+<span class="linenum">0021</span> 
+<span class="linenum">0022</span> #-----------------------------------------------------------------------
+<span class="linenum">0023</span> # Command Definitions
+<span class="linenum">0024</span> 
+<span class="linenum">0025</span> # myproc text
+<span class="linenum">0026</span> #
+<span class="linenum">0027</span> # text   - A block of text
+<span class="linenum">0028</span> #
+<span class="linenum">0029</span> # Does something to the block of text.
+<span class="linenum">0030</span> 
+<span class="linenum">0031</span> proc ::mylib::myproc {text} { <div class="mark">C</div>
+<span class="linenum">0032</span>     # Whatever you like.
+<span class="linenum">0033</span> }
+</pre>
+<p>In general, a package module contains whatever code you need it to contain.
+
+</p>
+
+<table class="table topiclist">
+<tr>
+<th>Topic</th> 
+<th>Description</th>
+</tr>
+        
+<tr class="tr-even">
+<td><div class="mark">A</div></td>
+<td>
+        
+Note that the module doesn't call either <span class="tt">package provide</span> or 
+<span class="tt">package require</span>.  That's the job of the <span class="tt">pkgModules.tcl</span> file.
+</td>
+</tr>
+        
+
+<tr class="tr-odd">
+<td><div class="mark">B</div></td>
+<td>
+        
+You don't need to put your code in the package namespace; but if you do,
+you might want to export some commands.
+</td>
+</tr>
+        
+
+<tr class="tr-even">
+<td><div class="mark">C</div></td>
+<td>
+        
+You'll have to write this yourself.
+</td>
+</tr>
+        
+
+</table>
+        
+
+
+<h3><a name="lib.otherfiles" href="#toc.lib.otherfiles">4.4 Other Files</a></h3>
+<p>A package can also contain data files or files in other languages
+(e.g., SQL files).  These should also be placed in the package directory;
+the package should find them using its package library variable.  For 
+example, a module in the <span class="tt">mylib</span> package might load a file 
+called <span class="tt">data.txt</span> using code like this:
+
+</p>
+
+<pre class="example">
+set data [readfile [file join $::mylib::library data.txt]]
+</pre>
+<p>The <span class="tt">readfile</span> command is defined in the <a href="./mann/kiteutils.html">kiteutils(n)</a> package.
+
+
+</p>
+
+<h3><a name="lib.onemodule" href="#toc.lib.onemodule">4.5 Packages with One Module</a></h3>
+<p>If the package consists of only one module, it might be tempting to
+have <span class="tt">pkgIndex.tcl</span> load that module directly.  Resist this temptation;
+Kite will not be able to update the provided and required version numbers
+properly.</p>
+
+<p>Similarly, if the package needs only one module it might be tempting to just
+put the module's code at the end of <span class="tt">pkgModules.tcl</span> instead of in its
+own file.  Resist this temptation as well.
+
+
+</p>
+
+<h3><a name="lib.manymodules" href="#toc.lib.manymodules">4.6 Packages with Many Modules</a></h3>
+<p>If a package has a large number of modules or data files, it can be useful 
+to put related groups of files into subdirectories.  All such modules 
+should be still be loaded by the package's 
+<span class="tt"><a href="#lib.pkgmodules">pkgModules.tcl</a></span> file.
+
+
+</p>
+
+<hr class="hrule">
+
+
+<h2><a name="app" href="#toc.app">5. Applications</a></h2>
+<p>An application is a TCL/TK program.  An application's code consists of
+a loader script, which resides in the <span class="tt"><i>root</i>/bin/</span> directory, 
+and an implementation package.  The implementation package is structured 
+in the same way as a normal <a href="#lib">library package</a> but has 
+additional files.
+
+
+</p>
+
+<h3><a name="app.loader" href="#toc.app.loader">5.1 Application Loader File</a></h3>
+<p>Each application has a loader script: the script is called to invoke the
+application.  It is placed in the <span class="tt"><i>root</i>/bin/</span> directory, and its name
+should match the application name, e.g., application <span class="tt">myapp</span>'s loader
+file will be <span class="tt"><i>root</i>/bin/myapp.tcl</span>.</p>
+
+<p>The contents of the loader script is generated completely by Kite when
+the application is added to the project, and is left alone thereafter.
+Thus, it can safely be edited, but there is rarely any need to do so.</p>
+
+<p>Here's a sample listing, explaining 
+the contents of the loader script.
+
+
+        </p>
+
+<center><a name="fig.app_loader" href="#toc.fig.app_loader">
+        <b>Figure 5-1: Sample Application Loader Script</b></a></center>
+    
+<pre class="listing">
+<span class="linenum">0001</span> #!/bin/sh
+<span class="linenum">0002</span> # -*-tcl-*-
+<span class="linenum">0003</span> # The next line restarts using tclsh \
+<span class="linenum">0004</span> exec tclsh "$0" "$@" <div class="mark">A</div>
+<span class="linenum">0005</span> 
+<span class="linenum">0006</span> #-----------------------------------------------------------------------
+<span class="linenum">0007</span> # TITLE:
+<span class="linenum">0008</span> #    myapp.tcl
+<span class="linenum">0009</span> #
+<span class="linenum">0010</span> # PROJECT:
+<span class="linenum">0011</span> #    myapp
+<span class="linenum">0012</span> #
+<span class="linenum">0013</span> # DESCRIPTION:
+<span class="linenum">0014</span> #    Application Launcher for myapp
+<span class="linenum">0015</span> #
+<span class="linenum">0016</span> #    This script serves as the main entry point for the myapp
+<span class="linenum">0017</span> #    tool.  The tool is invoked using 
+<span class="linenum">0018</span> #    the following syntax:
+<span class="linenum">0019</span> #
+<span class="linenum">0020</span> #        $ myapp ?args....?
+<span class="linenum">0021</span> #
+<span class="linenum">0022</span> #    Generated by Kite.
+<span class="linenum">0023</span> #-----------------------------------------------------------------------
+<span class="linenum">0024</span> 
+<span class="linenum">0025</span> #-----------------------------------------------------------------------
+<span class="linenum">0026</span> # Set up the auto_path, so that we can find the correct libraries.  
+<span class="linenum">0027</span> # In development, there might be directories loaded from TCLLIBPATH;
+<span class="linenum">0028</span> # strip them out.
+<span class="linenum">0029</span> 
+<span class="linenum">0030</span> # First, remove all TCLLIBPATH directories from the auto_path.
+<span class="linenum">0031</span> 
+<span class="linenum">0032</span> if {[info exists env(TCLLIBPATH)]} { <div class="mark">B</div>
+<span class="linenum">0033</span>     set old_path $auto_path
+<span class="linenum">0034</span>     set auto_path [list]
+<span class="linenum">0035</span> 
+<span class="linenum">0036</span>     foreach dir $old_path {
+<span class="linenum">0037</span>         if {$dir ni $env(TCLLIBPATH)} {
+<span class="linenum">0038</span>             lappend auto_path $dir
+<span class="linenum">0039</span>         }
+<span class="linenum">0040</span>     }
+<span class="linenum">0041</span> }
+<span class="linenum">0042</span> 
+<span class="linenum">0043</span> # Next, get the project library directories.  Whether we're
+<span class="linenum">0044</span> # in a starkit or not, the libraries can be found relative to this
+<span class="linenum">0045</span> # script file.
+<span class="linenum">0046</span> 
+<span class="linenum">0047</span> set appdir  [file normalize [file dirname [info script]]]
+<span class="linenum">0048</span> set libdir  [file normalize [file join $appdir .. lib]]
+<span class="linenum">0049</span> 
+<span class="linenum">0050</span> # Add the project libs to the new lib path.
+<span class="linenum">0051</span> set auto_path [linsert $auto_path 0 $libdir] <div class="mark">C</div>
+<span class="linenum">0052</span> 
+<span class="linenum">0053</span> #-----------------------------------------------------------------------
+<span class="linenum">0054</span> # Next, require Tcl/Tk and other required packages.
+<span class="linenum">0055</span> 
+<span class="linenum">0056</span> package require Tcl <div class="mark">D</div>
+<span class="linenum">0057</span> package require kiteinfo <div class="mark">E</div>
+<span class="linenum">0058</span> 
+<span class="linenum">0059</span> if {[kiteinfo gui myapp]} { <div class="mark">F</div>
+<span class="linenum">0060</span>     package require Tk
+<span class="linenum">0061</span> }
+<span class="linenum">0062</span> 
+<span class="linenum">0063</span> #-----------------------------------------------------------------------
+<span class="linenum">0064</span> # NEXT, load the application code.  This should define the "main"
+<span class="linenum">0065</span> # command.
+<span class="linenum">0066</span> 
+<span class="linenum">0067</span> package require app_myapp <div class="mark">G</div>
+<span class="linenum">0068</span> 
+<span class="linenum">0069</span> #-----------------------------------------------------------------------
+<span class="linenum">0070</span> # Run the program
+<span class="linenum">0071</span> 
+<span class="linenum">0072</span> try {
+<span class="linenum">0073</span>     # Allow for interactive testing
+<span class="linenum">0074</span>     if {!$tcl_interactive} {
+<span class="linenum">0075</span>         main $argv <div class="mark">H</div>
+<span class="linenum">0076</span>     }
+<span class="linenum">0077</span> } trap FATAL {result} { <div class="mark">I</div>
+<span class="linenum">0078</span>     # A fatal application error; result is a message intended
+<span class="linenum">0079</span>     # for the user.
+<span class="linenum">0080</span>     puts $result
+<span class="linenum">0081</span>     puts ""
+<span class="linenum">0082</span>     exit 1
+<span class="linenum">0083</span> } on error {result eopts} { <div class="mark">J</div>
+<span class="linenum">0084</span>     # A genuine error; report it in detail.
+<span class="linenum">0085</span>     puts "Unexpected Error: $result"
+<span class="linenum">0086</span>     puts "\nStack Trace:\n[dict get $eopts -errorinfo]"
+<span class="linenum">0087</span>     exit 1
+<span class="linenum">0088</span> }
+</pre>
+
+
+<table class="table topiclist">
+<tr>
+<th>Topic</th> 
+<th>Description</th>
+</tr>
+        
+<tr class="tr-even">
+<td><div class="mark">A</div></td>
+<td>
+        
+This is a standard header for executable TCL scripts.  If the file is
+marked as executable by the operating system, then it can be used to
+invoke the application directly during development.
+</td>
+</tr>
+        
+
+<tr class="tr-odd">
+<td><div class="mark">B</div></td>
+<td><p>
+        
+The <span class="tt">auto_path</span> variable gives TCL a list of directories in which
+to find library packages.  The <span class="tt">tclsh</span> initializes the 
+<span class="tt">auto_path</span> from a number of sources, one of each is the
+<span class="tt">TCLLIBPATH</span> environment variable.</p>
+
+<p>The <span class="tt">TCLLIBPATH</span> variable tells TCL where specifically to look for
+locally installed library packages.  In our case, we want our application 
+to find its packages in the project tree or in the local "teapot" (see
+<a href="#dep">Section 8</a>); the <span class="tt">TCLLIBPATH</span> is irrelevant at best and a fruitful
+source of errors at worst.  Consequently, if it is set we remove all
+of the directories it lists from the TCL <span class="tt">auto_path</span> list.
+</p>
+</td>
+</tr>
+        
+
+<tr class="tr-even">
+<td><div class="mark">C</div></td>
+<td>
+        
+Next, we add our project's <span class="tt"><i>root</i>/lib/</span> directory to the <span class="tt">auto_path</span>
+so that the application can find its packages.  The <span class="tt"><i>root</i>/lib/</span> 
+directory is found relative to the loader script.
+</td>
+</tr>
+        
+
+<tr class="tr-odd">
+<td><div class="mark">D</div></td>
+<td>
+        
+It isn't strictly necessary to require the "Tcl" package, but it is
+good practice.
+</td>
+</tr>
+        
+
+<tr class="tr-even">
+<td><div class="mark">E</div></td>
+<td>
+        
+The <span class="tt">kiteinfo</span> package is a part of the project that is generated
+automatically by Kite.  It makes project metadata (such as the 
+project version number) available to the project's applications.  We
+require it automatically.
+</td>
+</tr>
+        
+
+<tr class="tr-odd">
+<td><div class="mark">F</div></td>
+<td>
+        
+And then, if the project metadata indicates that this is a GUI application
+we require the Tk GUI toolkit automatically, prior to loading any of the
+application code.
+</td>
+</tr>
+        
+
+<tr class="tr-even">
+<td><div class="mark">G</div></td>
+<td>
+        
+Application <span class="tt">myapp</span>'s code is found in the implementation package
+<span class="tt">app_myapp</span>, so we load that package.  This simply loads the code
+into memory; it does not execute the application.
+</td>
+</tr>
+        
+
+<tr class="tr-odd">
+<td><div class="mark">H</div></td>
+<td><p>
+        
+Next we invoke the application code by passing the application's 
+command-line arguments to a routine called <span class="tt">main</span>, which is defined
+by the <span class="tt">app_myapp</span> package.</p>
+
+<p>The check on the <span class="tt">{$tcl_interactive}</span> variable means that we can 
+load the application code into an interactive TCL shell for interactive
+testing and debugging by sourcing 
+the loader script; it will load the code but won't execute the application.
+</p>
+</td>
+</tr>
+        
+
+<tr class="tr-even">
+<td><div class="mark">I</div></td>
+<td><p>
+        
+If the application wishes to terminate due to an explicitly checked error
+condition, it may do so by throwing an error with error code <b>FATAL</b>.
+The application will display the error message to the user, and terminate
+itself cleanly.</p>
+
+<p>Note that the error message will not be visible for wrapped
+GUI applications on Windows; such applications should handle errors at the 
+GUI level.
+</p>
+</td>
+</tr>
+        
+
+<tr class="tr-odd">
+<td><div class="mark">J</div></td>
+<td>
+        
+This clause catches all other errors, which are 
+by definition bugs or they would not have bubbled all the way up 
+to this point.  Consequently, the loader outputs the error message
+and a full stack trace as an aid to debugging.
+</td>
+</tr>
+        
+
+</table>
+        
+
+
+
+<h3><a name="app.pkgindex" href="#toc.app.pkgindex">5.2 The 'pkgIndex.tcl' File</a></h3>
+<p>The application package's <span class="tt">pkgIndex.tcl</span> file is no different than
+a library package's <span class="tt">pkgIndex.tcl</span> file. See <a href="#lib.pkgindex">Section 4.1</a> for
+an example.
+
+
+</p>
+
+<h3><a name="app.pkgmodules" href="#toc.app.pkgmodules">5.3 The 'pkgModules.tcl' File</a></h3>
+<p>The application package's <span class="tt">pkgModules.tcl</span> file is no different
+than a library package's <span class="tt">pkgModules.tcl</span> file.  See 
+<a href="#lib.pkgmodules">Section 4.2</a> for an example.</p>
+
+<p>If the application requires specific packages other than Tcl, Tk,
+<span class="tt">kiteinfo</span>, or the application package itself, the relevant 
+<span class="tt">package require</span> and <span class="tt">namespace import</span> commands should be 
+added to this file.
+
+
+</p>
+
+<h3><a name="app.main" href="#toc.app.main">5.4 The 'main.tcl' File</a></h3>
+<p>This is the application's true main program; it must define the command
+<span class="tt">main</span>, which must take one argument, a list of command-line 
+arguments.  Here's the default <span class="tt">main.tcl</span> file; it simply outputs
+the project name, version, and description, and its command line 
+arguments.</p>
+
+<p>Simple applications will often be contained almost entirely in this
+file; larger applications will frequently define a singleton object
+called <span class="tt">app</span> in <span class="tt"><i>root</i>/lib/app_myapp/app.tcl</span> and have <span class="tt">main</span>
+simply call <span class="tt">app init</span>.
+
+
+        </p>
+
+<center><a name="fig.main_tcl" href="#toc.fig.main_tcl">
+        <b>Figure 5-2: Sample 'main.tcl' File</b></a></center>
+    
+<pre class="listing">
+<span class="linenum">0001</span> #-----------------------------------------------------------------------
+<span class="linenum">0002</span> # TITLE:
+<span class="linenum">0003</span> #   main.tcl
+<span class="linenum">0004</span> #
+<span class="linenum">0005</span> # PROJECT:
+<span class="linenum">0006</span> #   myapp - Your project description
+<span class="linenum">0007</span> #
+<span class="linenum">0008</span> # DESCRIPTION:
+<span class="linenum">0009</span> #   app_myapp(n) Package, main module.
+<span class="linenum">0010</span> #
+<span class="linenum">0011</span> #-----------------------------------------------------------------------
+<span class="linenum">0012</span> 
+<span class="linenum">0013</span> #-----------------------------------------------------------------------
+<span class="linenum">0014</span> # Commands
+<span class="linenum">0015</span> 
+<span class="linenum">0016</span> # main argv
+<span class="linenum">0017</span> #
+<span class="linenum">0018</span> # argv  - Arguments
+<span class="linenum">0019</span> #
+<span class="linenum">0020</span> # Dummy example main proc.
+<span class="linenum">0021</span> 
+<span class="linenum">0022</span> proc main {argv} {
+<span class="linenum">0023</span>     puts "[kiteinfo project] [kiteinfo version]: [kiteinfo description]"
+<span class="linenum">0024</span>     puts ""
+<span class="linenum">0025</span>     puts "Arguments: "&lt;$argv&gt;"
+<span class="linenum">0026</span> }
+</pre>
+
+
+
+<h3><a name="app.modules" href="#toc.app.modules">5.5 Application Modules and Data Files</a></h3>
+<p>The application implementation package can contain additional code
+modules and data files, just as a library package can.
+
+</p>
+
+<hr class="hrule">
+
+
+<h2><a name="testing" href="#toc.testing">6. Project Test Suites</a></h2>
+<p>Kite supports automated project testing via its <b>kite test</b> command.</p>
+
+<p>In addition to its <span class="tt"><i>root</i>/lib/</span> directory, every TCL package initialized by 
+<span class="tt">kite new</span> and <span class="tt">kite add</span> has a <span class="tt"><i>root</i>/test/</span> directory containing
+its <b>tcltest(n)</b> test suite.  (<b>tcltest(n)</b> is an excellent unit test 
+framework included with TCL/TK; see the TCL man pages for documentation.)
+This includes application implementation packages as well as library
+packages; it is common to test application code just like library code.</p>
+
+<p>Each package test suite consists of a boilerplate file called
+<span class="tt">all_tests.test</span> plus any number of module-specific test files.
+
+
+</p>
+
+<h3><a name="testing.all_tests" href="#toc.testing.all_tests">6.1 The 'all_tests.test' File</a></h3>
+<p>Here's a sample listing of a package's <span class="tt">all_tests.test</span> file.  
+Kite uses this when running the package's test suite.  There is
+rarely any need to modify this file.
+
+
+        </p>
+
+<center><a name="fig.all_tests" href="#toc.fig.all_tests">
+        <b>Figure 6-1: Sample 'all_tests.test' File</b></a></center>
+    
+<pre class="listing">
+<span class="linenum">0001</span> # -*-Tcl-*-
+<span class="linenum">0002</span> #-----------------------------------------------------------------------
+<span class="linenum">0003</span> # TITLE:
+<span class="linenum">0004</span> #    all_tests.test
+<span class="linenum">0005</span> #
+<span class="linenum">0006</span> # PROJECT:
+<span class="linenum">0007</span> #    myproj - My TCL Project
+<span class="linenum">0008</span> #
+<span class="linenum">0009</span> # DESCRIPTION:
+<span class="linenum">0010</span> #    mylib(n) test suite: all tests
+<span class="linenum">0011</span> #
+<span class="linenum">0012</span> #    Generated by Kite from all_tests.template.
+<span class="linenum">0013</span> #-----------------------------------------------------------------------
+<span class="linenum">0014</span> 
+<span class="linenum">0015</span> #-----------------------------------------------------------------------
+<span class="linenum">0016</span> # Initialize tcltest(n)
+<span class="linenum">0017</span> 
+<span class="linenum">0018</span> if {[lsearch [namespace children] ::tcltest] == -1} {
+<span class="linenum">0019</span>     package require tcltest 2.2 
+<span class="linenum">0020</span>     eval ::tcltest::configure $argv
+<span class="linenum">0021</span> }
+<span class="linenum">0022</span> 
+<span class="linenum">0023</span> ::tcltest::configure \
+<span class="linenum">0024</span>     -testdir [file dirname [file normalize [info script]]] \
+<span class="linenum">0025</span>     -notfile all_tests.test
+<span class="linenum">0026</span> 
+<span class="linenum">0027</span> #-----------------------------------------------------------------------
+<span class="linenum">0028</span> # Run all of the tests in this directory
+<span class="linenum">0029</span> 
+<span class="linenum">0030</span> ::tcltest::runAllTests
+</pre>
+
+
+
+<h3><a name="testing.module_test" href="#toc.testing.module_test">6.2 Module Test Files</a></h3>
+<p>The test file for a module in a package is designed so that Kite can 
+execute the entire package test suite all at once or one file at a time.
+Thus, each file must load the package.</p>
+
+<p>When the test directory is first populated, Kite creates a sample 
+module test file like the following.  The developer should replace 
+the single test in this file with tests for each of the module's
+features.  Then, for subsequent modules the developer should use 
+the first module's test file as a template.
+
+
+        </p>
+
+<center><a name="fig.module_test" href="#toc.fig.module_test">
+        <b>Figure 6-2: Sample 'mymodule.test' File</b></a></center>
+    
+<pre class="listing">
+<span class="linenum">0001</span> # -*-Tcl-*-
+<span class="linenum">0002</span> #-----------------------------------------------------------------------
+<span class="linenum">0003</span> # TITLE:
+<span class="linenum">0004</span> #    mymodule.test
+<span class="linenum">0005</span> #
+<span class="linenum">0006</span> # PROJECT:
+<span class="linenum">0007</span> #    myapp - Your project description
+<span class="linenum">0008</span> #
+<span class="linenum">0009</span> # DESCRIPTION:
+<span class="linenum">0010</span> #    mylib(n) test suite for main.tcl
+<span class="linenum">0011</span> #
+<span class="linenum">0012</span> #-----------------------------------------------------------------------
+<span class="linenum">0013</span> 
+<span class="linenum">0014</span> #-----------------------------------------------------------------------
+<span class="linenum">0015</span> # Initialize tcltest(n)
+<span class="linenum">0016</span> 
+<span class="linenum">0017</span> if {[lsearch [namespace children] ::tcltest] == -1} {
+<span class="linenum">0018</span>     package require tcltest 2.2 
+<span class="linenum">0019</span>     eval ::tcltest::configure $argv
+<span class="linenum">0020</span> }
+<span class="linenum">0021</span> 
+<span class="linenum">0022</span> namespace import ::tcltest::test
+<span class="linenum">0023</span>  
+<span class="linenum">0024</span> #-----------------------------------------------------------------------
+<span class="linenum">0025</span> # Load the package to be tested
+<span class="linenum">0026</span> 
+<span class="linenum">0027</span> source ../../lib/mylib/pkgModules.tcl <div class="mark">A</div>
+<span class="linenum">0028</span> namespace import ::mylib::*           <div class="mark">B</div>
+<span class="linenum">0029</span> 
+<span class="linenum">0030</span> #-------------------------------------------------------------------
+<span class="linenum">0031</span> # Setup
+<span class="linenum">0032</span> 
+<span class="linenum">0033</span> # setup
+<span class="linenum">0034</span> #
+<span class="linenum">0035</span> # Set up for tests
+<span class="linenum">0036</span> 
+<span class="linenum">0037</span> proc setup {} { <div class="mark">C</div>
+<span class="linenum">0038</span>     # TBD
+<span class="linenum">0039</span> }
+<span class="linenum">0040</span> 
+<span class="linenum">0041</span> # cleanup
+<span class="linenum">0042</span> #
+<span class="linenum">0043</span> # Cleans up after a test.
+<span class="linenum">0044</span> 
+<span class="linenum">0045</span> proc cleanup {} { <div class="mark">D</div>
+<span class="linenum">0046</span>     # TBD
+<span class="linenum">0047</span> }
+<span class="linenum">0048</span> 
+<span class="linenum">0049</span> 
+<span class="linenum">0050</span> #-------------------------------------------------------------------
+<span class="linenum">0051</span> # dummy
+<span class="linenum">0052</span> 
+<span class="linenum">0053</span> test dummy-1.1 {Dummy} -setup { <div class="mark">E</div>
+<span class="linenum">0054</span>     setup
+<span class="linenum">0055</span> } -body {
+<span class="linenum">0056</span>     set result 0
+<span class="linenum">0057</span> } -cleanup {
+<span class="linenum">0058</span>     cleanup
+<span class="linenum">0059</span> } -result {1} <div class="mark">F</div>
+<span class="linenum">0060</span> 
+<span class="linenum">0061</span> 
+<span class="linenum">0062</span> #-------------------------------------------------------------------
+<span class="linenum">0063</span> # Cleanup
+<span class="linenum">0064</span> 
+<span class="linenum">0065</span> tcltest::cleanupTests
+</pre>
+
+
+<table class="table topiclist">
+<tr>
+<th>Topic</th> 
+<th>Description</th>
+</tr>
+        
+<tr class="tr-even">
+<td><div class="mark">A</div></td>
+<td>
+        
+The package's code is sourced in explicitly.  This prevents the test suite
+from accidently loading the package code from somewhere else (i.e., 
+from the local teapot).
+</td>
+</tr>
+        
+
+<tr class="tr-odd">
+<td><div class="mark">B</div></td>
+<td>
+        
+The package's exported commands are automatically imported into the 
+global namespace for convenience.  Note that each test file runs in its
+own interpreter by default, so there's no worry about crosstalk from
+one test file to the next.
+</td>
+</tr>
+        
+
+<tr class="tr-even">
+<td><div class="mark">C</div></td>
+<td>
+        
+If tests share common setup code, it's customary to define a procedure
+called <span class="tt">setup</span> to avoid duplicating the code.
+</td>
+</tr>
+        
+
+<tr class="tr-odd">
+<td><div class="mark">D</div></td>
+<td>
+        
+If tests share common cleanup code, it's customary to define a procedure
+called <span class="tt">cleanup</span> to avoid duplicating the code.
+</td>
+</tr>
+        
+
+<tr class="tr-even">
+<td><div class="mark">E</div></td>
+<td>
+        
+<b>tcltest(n)</b> tests are defined using the <span class="tt">test</span> command.  See the 
+<b>tcltest(n)</b> man page for full details.  In this case, the test has a 
+name ("<span class="tt">dummy-1.1</span>"), a description ("Dummy"), a test <span class="tt">-setup</span> clause
+that simply calls <span class="tt">setup</span>, a <span class="tt">-body</span> which is the test proper, 
+a <span class="tt">-cleanup</span> clause that simply calls <span class="tt">cleanup</span>, and an expected
+<span class="tt">-result</span>.  The test passes if the <span class="tt">-body</span> returns the expected
+result, and fails otherwise.
+</td>
+</tr>
+        
+
+<tr class="tr-odd">
+<td><div class="mark">F</div></td>
+<td>
+        
+In this case, the test fails; the <span class="tt">-body</span> returns 0, but the test
+expects 1.  This is a gentle reminder to the developer to write proper
+unit tests. 
+</td>
+</tr>
+        
+</table>
+        
+
+
+<h3><a name="testing.ted" href="#toc.testing.ted">6.3 Test Execution Deputies</a></h3>
+<p>Sometimes, and especially in application implementation packages, there
+will be test setup and utility code shared across two or more test files.
+In this case it is customary to place this code in a file called 
+<span class="tt"><i>root</i>/test/mylib/ted.tcl</span> and source it into each test script.  The
+name <span class="tt">ted.tcl</span> stands for "Test Execution Deputy", and is a tribute
+to Ted Brunzie, Athena's original test engineer.</p>
+
+<p>The code in <span class="tt"><i>root</i>/test/mylib/ted.tcl</span> should reside in the 
+<span class="tt">::ted</span> namespace, so as not to collide with the package definitions.
+
+</p>
+
+<hr class="hrule">
+
+
+<h2><a name="docs" href="#toc.docs">7. Documentation Tools</a></h2>
+<p>Kite supports two kinds of HTML documentation: man pages and 
+section-numbered documents like this one.  Man pages are used to 
+document executables, TCL APIs, file formats, and the like; 
+section-numbered documents are used for other kinds of development
+documentation.  Both are written in flavors of a markup language called
+"Extended HTML", which is defined by the <a href="./man5/ehtml.html">ehtml(5)</a> man page.  The
+man page-specific flavor is described in the <a href="./man5/manpage.html">manpage(5)</a> man page,
+and the document flavor is described in the <a href="./man5/kitedoc.html">kitedoc(5)</a> man page.</p>
+
+<p>The <b>kite docs</b> command automatically translates the extended
+HTML input files into standard HTML files:
+
+</p>
+
+<ul class="ulp">
+<li> Files matching <span class="tt"><i>root</i>/docs/*.ehtml</span> are assumed to be 
+     <a href="./man5/kitedoc.html">kitedoc(5)</a> files.
+
+</li><li> Files matching <span class="tt"><i>root</i>/docs/man1/*.ehtml</span> are assumed to be
+     <a href="./man5/manpage.html">manpage(5)</a> files documenting executables.
+
+</li><li> Files matching <span class="tt"><i>root</i>/docs/man5/*.ehtml</span> are assumed to be
+     <a href="./man5/manpage.html">manpage(5)</a> files documenting file formats.
+
+</li><li> Files matching <span class="tt"><i>root</i>/docs/mann/*.ehtml</span> are assumed to be
+     <a href="./man5/manpage.html">manpage(5)</a> files documenting TCL APIs.
+
+</li><li> Files matching <span class="tt"><i>root</i>/docs/mani/*.ehtml</span> are assumed to be
+     <a href="./man5/manpage.html">manpage(5)</a> files documenting interfaces implemented
+     by multiple TCL APIs.
+</li></ul>
+<p>Additional man page sections can be used by adding the 
+<a href="./man5/project.html#mansec">mansec</a> statement to the 
+<a href="#projfile">project file</a>.</p>
+
+<p>Each <span class="tt">.ehtml</span> input file is translated into a matching <span class="tt">.html</span> 
+file in the same directory.</p>
+
+<p>There are examples of both kinds of document in Kite's own 
+<span class="tt"><i>root</i>/docs/</span> directory.
+
+</p>
+
+<hr class="hrule">
+
+
+<h2><a name="dep" href="#toc.dep">8. Dependency Management</a></h2>
+<p>A Kite project can have the following kinds of external dependency:
+
+</p>
+
+<ul>
+<li> Teapot packages
+    <ul>
+    <li> From a remote teapot repository
+    </li><li> Locally built and installed
+    </li></ul>
+</li><li> Basekits
+    <ul>
+    <li> For the current platform
+    </li><li> With and without Tk
+    </li></ul>
+</li></ul>
+
+
+<h3><a name="dep.teapot" href="#toc.dep.teapot">8.1 Teapot Repositories and Packages</a></h3>
+<p>A <i>teapot</i> is a kind of TCL/TK code repository defined by ActiveState for
+use with their ActiveTcl distribution of TCL/TK.  A teapot can contain
+multiple distinct versions of any number of TCL packages.</p>
+
+<p>When ActiveTcl is installed, it defines a local teapot, which it
+populates with a small number of popular packages.  The <span class="tt">tclsh</span>
+application is linked to this local teapot; packages in the teapot
+can be loaded using the <span class="tt">package require</span> command without any need to
+set Tcl's <span class="tt">auto_path</span>.</p>
+
+<p>ActiveTcl also maintains a remote teapot at 
+<span class="tt">http://teapot.activestate.com</span> that contains a great many more
+packages.  These packages may be installed into the local teapot using
+a program called <span class="tt">teacup</span>, which is delivered with ActiveTcl.  This
+is the usual way of acquiring third party packages.</p>
+
+<p>The one difficult with this system is that ActiveTcl's local teapot is
+usually stored in a part of the file system that normal users have no
+write-access to; this makes it much harder to install new packages.</p>
+
+<p>Kite works around this by creating its own local teapot in the user's 
+home directory, as <span class="tt">~/.kite/teapot</span>, and linking this local teapot
+to the <span class="tt">tclsh</span>.  Packages can now be downloaded from the remote
+teapot server and installed freely.</p>
+
+<p>And then Kite goes one further.  When a Kite project provides a library
+package for external use, Kite can wrap the library package as a teapot 
+package and install it into the local teapot.  This makes the package
+accessible by any of the user's TCL scripts.
+
+
+</p>
+
+<h4><a name="dep.teapot.package" href="#toc.dep.teapot.package">8.1.1 Required Packages</a></h4>
+<p>Kite handles virtually all of the teapot details automatically.  To 
+make use of an external TCL package, add a <a href="./man5/project.html#require">require</a>
+statement to the <a href="#projfile">project file</a>.  For example, to 
+add a dependency on the Snit object system, add this line:
+
+</p>
+
+<pre class="example">
+require snit 2.3
+</pre>
+<p>This tells Kite that your project will make need of Snit version 2.3.  This
+has three effects:
+
+</p>
+
+<ul class="ulp">
+<li> Kite will not build an executable if Snit is not available.
+</li><li> The <span class="tt">kite deps update</span> command will pull Snit 2.3 (and any other
+     dependencies) down from the remote teapot and install them in the
+     local teapot.
+</li><li> The "<span class="tt">package require snit</span>" statements in your packages' 
+     <span class="tt">pkgModules.tcl</span> files will have their version numbers updated
+     automatically if they change.
+</li></ul>
+
+
+<h4><a name="dep.teapot.local" href="#toc.dep.teapot.local">8.1.2 Locally-built Teapot Packages</a></h4>
+<p>A project may depend on library packages produced by other local projects.
+It will retrieve these from the local teapot, just as for other external 
+packages, and will track whether the local teapot contains the required
+versions.  However, it will never attempt to retrieve them from a remote
+teapot repository; rather the developer must ensure that they are installed
+locally.</p>
+
+<p>To mark a package as locally produced, use the `-local` flag:
+
+</p>
+
+<pre class="example">
+require kiteutils 0.5.0 -local
+</pre>
+
+
+<h3><a name="dep.basekits" href="#toc.dep.basekits">8.2 Basekits</a></h3>
+<p>A basekit is a single-file Tcl interpreter that can be used as the 
+"prefix" of a wrapped stand-alone executable.  As such, basekits are an 
+implicit dependency of any project that builds stand-alone executables.</p>
+
+<p>ActiveState includes two basekits with the ActiveTcl installation, one that 
+includes Tk and one that doesn't.  The non-Tk basekit is smaller, resulting
+in smaller executables when Tk isn't required; but the distinction is
+especially important on Windows systems, where Tk applications do not have
+access to stdin, stdout, and stderr, and on "headless" Linux nodes in the
+cloud, where the X Windows libraries are not installed.</p>
+
+<p>Kite always uses the basekits included in the development Tcl installation.
+This means that Kite can only build executables for the specific platform 
+on which it is running.</p>
+
+<p>Basekits can also be retrieved from 
+<span class="tt">http://teapot.activestate.com</span> using the
+<span class="tt">teacup</span> tool.  In the future, Kite may take advantage of this 
+to support cross-platform builds.
+
+
+</p>
+
+<h4><a name="dep.basekits.locating" href="#toc.dep.basekits.locating">8.2.1 Locating Basekits</a></h4>
+<p>ActiveState's basekits are distinguished by the following variables:
+
+</p>
+
+<ul>
+<li> Whether or not Tk is included.
+</li><li> Whether the basekit supports multiple threads or not.
+</li><li> The version of Tcl/Tk
+</li><li> The platform for which it was built.
+</li></ul>
+
+
+<h4><a name="dep.basekits.locating.dist" href="#toc.dep.basekits.locating.dist">8.2.1.1 In ActiveTcl Distributions</a></h4>
+<p>For basekits distributed with ActiveTcl, these features are represented
+in the filename as follows:</p>
+
+<p><span class="tt">base-<i>tcltk</i><i>x.y</i>-[thread-]-<i>platform</i>[.exe]</span></p>
+
+<p>where <i>tcltk</i> is either "<span class="tt">tcl</span>" or "<span class="tt">tk</span>", "<i>x.y</i>" is the Tcl
+version, "thread-" is present or not, and <i>platform</i> is the build  
+platform as returned by the standard Tcl <span class="tt">platform::identify</span> command.</p>
+
+<p>As of 2014, ActiveState's freely available builds of ActiveTcl 8.5 and 8.6
+are all threaded, so the "<span class="tt">thread-</span>" component can be assumed.</p>
+
+<p>On Windows and Linux, the basekits are installed into the same directory
+as the <i>tclsh</i> executable.  On OS X, at least as of ActiveTcl 8.6, the
+basekits are installed in the <span class="tt">/Library/Tcl/basekits</span> directory.</p>
+
+<p>ActiveTcl generally also provides dynamic Tcl/Tk libraries, which have
+the same base name as the basekit but a different file extension
+(<span class="tt">.so</span>, <span class="tt">.dll</span>, or <span class="tt">.dylib</span>).  When looking for the basekit,
+it's usually necessary to filter these out.
+
+
+</p>
+
+<h4><a name="dep.basekits.locating.teapot" href="#toc.dep.basekits.locating.teapot">8.2.1.2 In the Teapot</a></h4>
+<p>Basekits can also be retrieved from the the remote teapot repository.  
+Artifacts in the repository are identified by four components:
+
+</p>
+
+<ul>
+<li> The entity type, usually <span class="tt">package</span> or <span class="tt">application</span>.  For 
+    basekits, this is always <span class="tt">application</span>.
+
+</li><li> The artifact's name.  For basekits, this will be either 
+    <span class="tt">base-tcl-thread</span> or <span class="tt">base-tk-thread</span>.
+
+</li><li> The version.  This is an ActiveState version number, which is usually
+    <i>x.y.z.w.buildNum</i>, e.g., <span class="tt">8.6.1.1.298358</span>.
+
+</li><li> The platform on which it was built, e.g., <span class="tt">win32-ix86</span>,
+    <span class="tt">macosx10.5-i386-x86_64</span>, or <span class="tt">linux-glibc2.3-ix86</span>.
+</li></ul>
+<p>To pull down the desired basekit, then, it's generally necessary to
+get a list of the available basekits and decide which one best fits the
+desired version and current platform.  This can be tricky.  Windows and
+Linux come in 32-bit and 64-bit flavors; and the 
+<span class="tt">platform::identify</span> value for the development platform often won't 
+exactly match that of the appropriate basekit.</p>
+
+<p>In general, then, follow these rules:
+
+</p>
+
+<ul>
+<li> Always look for an <span class="tt">application</span>.
+
+</li><li> For a console application, look for <span class="tt">base-tcl-thread</span>; for
+    a GUI application, look for <span class="tt">base-tk-thread</span>.
+
+</li><li> For Tcl version <i>X.Y</i>, look for the largest version 
+    (per <span class="tt">package vcompare</span>) that matches "X.Y*".
+
+</li><li> Match the platform as follows:
+    <ul>
+    <li> 32-bit Windows: "<span class="tt">win32-ix86</span>".
+    </li><li> 64-bit Windows: "<span class="tt">win32-x86_64</span>".
+    </li><li> 32-bit Linux: "<span class="tt">linux-*-ix86</span>".
+    </li><li> 64-bit Linux: "<span class="tt">linux-*-x86_64</span>".
+    </li><li> 64-bit Mac OSX: "<span class="tt">macosx*-x86_64</span>".
+    </li></ul>
+</li></ul>
+<p>Having selected these four components, you can retrieve the basekit as
+follows:
+
+</p>
+
+<pre class="example">
+$ teacup get --is application --output <i>folder</i> \
+    <i>name</i> <i>version</i> <i>platform</i>
+</pre>
+<p>The basekit will be saved to the specified <i>folder</i>, and will be called</p>
+
+<p><span class="tt">application-<i>name</i>-<i>version</i>-<i>platform</i>[.exe]</span>
+
+</p>
+
+<hr class="hrule">
+
+
+<h2><a name="comp" href="#toc.comp">9. Compilation</a></h2>
+<p>Kite handles many tasks automatically.  It can format documentation,
+run test suites, wrap libraries as teapot packages, and wrap applications
+as single-file executables.  But there are many tasks it cannot do itself;
+for example, it cannot compile C code and link it into a library.</p>
+
+<p>Kite supports this kind of compilation via the <a href="./man5/project.html#src">src</a>
+statement in the <a href="#projfile">project file</a> and the
+<span class="tt"><i>root</i>/src/</span> directory.</p>
+
+<p>Suppose you have some code that needs to be compiled.  Put it into
+a subdirectory of <span class="tt"><i>root</i>/src/</span>, say, <span class="tt"><i>root</i>/src/myclib</span>.  Include a
+<span class="tt">Makefile</span> that supports two targets, <span class="tt">make all</span> and 
+<span class="tt">make clean</span>.</p>
+
+<p>Then, add the following statement to the <a href="#projfile">project file</a>:
+
+</p>
+
+<pre class="example">
+src myclib
+</pre>
+<p>The <b>kite compile</b> and <b>kite build</b> commands will now call the
+<span class="tt">Makefile</span> at the appropriate time.</p>
+
+<p>If the commands <span class="tt">make clean</span> and <span class="tt">make all</span> are not appropriate,
+they can be customized using the <a href="./man5/project.html#src">src</a> statement's 
+options.  See <a href="./man5/project.html">project(5)</a> for more details, and also for a 
+discussion of what to do if the C code being compiled is a binary
+TCL extension.</p>
+
+<p>Note that any kind of processing can be done in a 
+<span class="tt"><i>root</i>/src/</span> subdirectory; it need not be "compilation" per se.
+
+</p>
+
+<hr class="hrule">
+
+
+<h2><a name="dist" href="#toc.dist">10. Building Distributions</a></h2>
+<p>The final part of the build process is building the distribution files.
+Kite directly supports the building of any number of 
+distribution <span class="tt">.zip</span> files by
+means of the <a href="./man5/project.html#dist">dist</a> statement in the 
+<a href="#projfile">project file</a>.  The <a href="./man5/project.html#dist">dist</a> statement
+gives the name of the distribution as well as a list of file patterns;
+all files matching the patterns are pulled into the distribution file.
+See <a href="./man5/project.html">project(5)</a> for more details.</p>
+
+<p>Distribution files are built by <b>kite dist</b>, and implicitly
+by <b>kite build</b>.</p>
+
+<p>Note that Kite does not build installers, just .zip files.  If you
+wish a proper installer, you will need to find an installer builder
+that suits your needs.  (Inno Setup works quite well for Windows.)
+
+
+</p>
+
+<h2><a name="install" href="#toc.install">11. Local Installation</a></h2>
+<p>Once a project has been built, it is often desirable to install its 
+build projects for local use.  The <b>kite install</b> command installs
+the project's applications into the user's <span class="tt">~/bin</span> directory, and
+its provided packages into Kite's local teapot.
+
+</p>
+
+<hr>
+<p><address><a href="mailto:William.H.Duquette@jpl.nasa.gov">William.H.Duquette@jpl.nasa.gov</a></address>
+</p>
+
+</body>
+</html>
+    
+
+<!-- List of Anchors
+audience                      Audience
+overview                      1. Kite Overview
+projtree                      2. The Project Tree
+    tab.projtree              Table 2-1: Project Directory Tree
+projtree.new                  2.1 Creating New Project Trees
+projtree.add                  2.2 Adding Elements to a Project Tree
+projfile                      3. The Project File
+lib                           4. Library Packages
+lib.pkgindex                  4.1 The 'pkgIndex.tcl' File
+    fig.lib.pkgindex          Figure 4-1: Standard 'pkgIndex.tcl' File
+lib.pkgmodules                4.2 The 'pkgModules.tcl' File
+    fig.lib.pkgmodules        Figure 4-2: Standard 'pkgModules.tcl' file
+lib.modules                   4.3 Package Modules
+    fig.lib.module            Figure 4-3: A Typical Package Module
+lib.otherfiles                4.4 Other Files
+lib.onemodule                 4.5 Packages with One Module
+lib.manymodules               4.6 Packages with Many Modules
+app                           5. Applications
+app.loader                    5.1 Application Loader File
+    fig.app_loader            Figure 5-1: Sample Application Loader Script
+app.pkgindex                  5.2 The 'pkgIndex.tcl' File
+app.pkgmodules                5.3 The 'pkgModules.tcl' File
+app.main                      5.4 The 'main.tcl' File
+    fig.main_tcl              Figure 5-2: Sample 'main.tcl' File
+app.modules                   5.5 Application Modules and Data Files
+testing                       6. Project Test Suites
+testing.all_tests             6.1 The 'all_tests.test' File
+    fig.all_tests             Figure 6-1: Sample 'all_tests.test' File
+testing.module_test           6.2 Module Test Files
+    fig.module_test           Figure 6-2: Sample 'mymodule.test' File
+testing.ted                   6.3 Test Execution Deputies
+docs                          7. Documentation Tools
+dep                           8. Dependency Management
+dep.teapot                    8.1 Teapot Repositories and Packages
+dep.teapot.package            8.1.1 Required Packages
+dep.teapot.local              8.1.2 Locally-built Teapot Packages
+dep.basekits                  8.2 Basekits
+dep.basekits.locating         8.2.1 Locating Basekits
+dep.basekits.locating.dist    8.2.1.1 In ActiveTcl Distributions
+dep.basekits.locating.teapot  8.2.1.2 In the Teapot
+comp                          9. Compilation
+dist                          10. Building Distributions
+install                       11. Local Installation
+
+-->

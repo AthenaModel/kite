@@ -1,0 +1,511 @@
+<html>
+<head>
+<title>kite 0.5.0: manpage(5) -- Kite Man Page Format</title>
+<style type="text/css" media="screen,print">
+/* ehtml(5) Standard CSS */
+
+/*---------------------------------------------------------*/
+/* General Use                                             */
+
+a {
+    /* No underlines */
+    text-decoration: none;
+}
+
+/* Special formatting for definition lists, to get proper
+ * blank lines after descriptions but not after topics. */
+dt {
+    margin-bottom: 0;
+}
+
+dd { 
+    margin-bottom: 1em; 
+}
+
+dd > p:first-child { 
+    margin-top: 0; 
+}
+
+
+/*---------------------------------------------------------*/
+/* Specific Macros                                         */
+
+/* bigmark */
+div.bigmark {
+    display: inline;
+    font-family: Verdana;
+    font-size: 100%;
+    background: black;
+    color: white;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+/* def, defitem, defopt */
+
+dt.def {
+    font-weight: bold;
+}
+
+dt.defitem {
+    font-weight: bold;
+    font-family: monospace;
+}
+
+dt.defopt {
+    font-weight: bold;
+    font-family: monospace;
+}
+
+
+/* example/ */
+pre.example {
+    background:     #FFFDD1 ;
+    border:         1px solid blue;
+    padding-top:    2px;
+    padding-bottom: 2px;
+    padding-left:   4px;
+}
+
+
+/* hrule */
+hr.hrule {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+/* iref */
+a.iref {
+    font-family: monospace;
+}
+
+/* itemlist */                
+ul.itemlist {
+    padding-left: 0;
+    list-style-type: none;
+}
+
+/* listing/ */
+pre.listing {
+    background:     #FFFDD1 ;
+    border:         1px solid blue;
+    padding-top:    4px;
+    padding-bottom: 4px;
+    padding-left:   4px;
+}
+
+span.linenum {
+    background:     #E3E08F ;
+}
+
+/* mark */
+div.mark {
+    display:       inline;
+    font-family:   Verdana;
+    font-size:     75%;
+    background:    black;
+    color:         white;
+    border:        1px solid black;
+    border-radius: 5px;
+    padding-left:  2px;
+    padding-right: 2px;
+}
+
+/* procedure */
+
+table.procedure {
+    border: 1px solid black;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table.procedure td {
+    border: 1px solid black;
+}
+
+td.procedure-index {
+    padding-right: 5px;
+    text-align: right;
+    width: 2em;
+}
+
+
+/* topiclist/ */
+.topiclist {
+    margin-top:    1em;
+    margin-bottom: 1em;
+}
+
+tr.topic {
+    vertical-align: baseline;
+}
+
+tr.topicname {
+    min-width: 1.5em;
+}
+
+/* tt/ */
+
+.tt {
+    font-family: monospace;
+}
+
+
+
+/* olp/ */
+
+ol.olp > li {
+    margin-bottom: 1em;
+}
+
+/* ulp/ */
+
+ul.ulp > li {
+    margin-bottom: 1em;
+}
+
+/*---------------------------------------------------------*/
+/* table/ plus macros that use it.    Most formatting is
+ * depends on the "table" class.                           */
+
+table {
+    margin-top:     1em;
+    margin-bottom:  1em;
+    vertical-align: baseline;
+}
+
+th {
+    padding-left: 5px;
+    text-align:   left;
+}
+
+td {
+    padding-left:   5px;
+    vertical-align: baseline;
+}
+
+
+/* "table" class: standard table formatting. */
+.table {
+    border:           1px solid black;
+    border-spacing:   0;
+    color:            black;
+    background-color: white;
+}
+
+.table tr:first-child {
+    font-weight:      bold;
+    color:            white;
+    background-color: #000099;    
+}
+
+.table tr.tr-odd {
+    background-color: #EEEEEE;
+}
+
+.table tr.tr-even { }
+
+.table-wide {
+    width: 100%;
+}
+
+        BODY {
+            color: black;
+            background: white;
+            margin-left: 6%;
+            margin-right: 6%;
+        }
+
+        H1 {
+            margin-left: -5%;
+        }
+        H2 {
+            margin-left: -5%;
+        }
+        HR {
+            margin-left: -5%;
+        }
+
+        TABLE {
+            text-align:    left;
+        }
+        
+        /* mktree styles */
+        ul.mktree  li  { list-style: none; }
+        ul.mktree, ul.mktree ul, ul.mktree li { 
+            margin-left:10px; padding:0px; }
+        ul.mktree li .bullet { padding-left: 10px }
+        ul.mktree  li.liOpen   .bullet {cursor : pointer; }
+        ul.mktree  li.liClosed .bullet {cursor : pointer; }
+        ul.mktree  li.liBullet .bullet {cursor : default; }
+        ul.mktree  li.liOpen   ul {display: block; }
+        ul.mktree  li.liClosed ul {display: none; }
+    
+</style>
+
+
+
+</head>
+
+<body>
+<h1 style="background: red;">
+&nbsp;kite 0.5.0: Kite Project Automation Tool
+</h1>
+    
+
+<h2><a name="name">NAME</a></h2>
+    
+
+<p><b>manpage(5)</b> -- Kite Man Page Format
+
+</p>
+
+<ul>
+
+    <li><a href="#name">NAME</a></li>
+    
+
+    <li><a href="#synopsis">SYNOPSIS</a></li>
+    
+
+    <li><a href="#description">DESCRIPTION</a></li>
+    <ul>
+
+    <li><a href="#automatic_transformations">Automatic Transformations</a></li>
+
+</ul>
+    
+
+    <li><a href="#macros">MACROS</a></li>
+    
+
+    <li><a href="#man_page_skeleton">MAN PAGE SKELETON</a></li>
+    
+
+    <li><a href="#author">AUTHOR</a></li>
+    
+
+    <li><a href="#history">HISTORY</a></li>
+    
+
+</ul>
+    
+    
+
+<h2><a name="synopsis">SYNOPSIS</a></h2>
+    
+
+<ul class="itemlist">
+<li><a class="iref" href="#manpage">&lt;manpage <i>nameList description</i>&gt;</a></li>
+<li><a class="iref" href="#/manpage">&lt;/manpage&gt;</a></li>
+<li><a class="iref" href="#section">&lt;section <i>name</i>&gt;</a></li>
+<li><a class="iref" href="#subsection">&lt;subsection <i>name</i>&gt;</a></li>
+<li><a class="iref" href="#version">&lt;version&gt;</a></li>
+<li><a class="iref" href="#mktree"><code>&lt;mktree <i>id</i>&gt;</code>...<code>&lt;/mktree&gt;</code></a></li>
+</ul>
+
+
+<h2><a name="description">DESCRIPTION</a></h2>
+<p>This man page defines the manpage(5) man page format,
+a flavor of "Extended HTML", i.e., an HTML-like format
+extended with Tcl macros.  The
+basic syntax and capabilities of Extended HTML are defined in the
+<a href="../man5/ehtml.html">ehtml(5)</a> man page.  This man page describes an extension 
+to the basic format, as an aid to writing man pages.</p>
+
+<p>The <a href="../mann/manpage.html">manpage(n)</a> module translates man pages in
+manpage(5) format into HTML.
+
+</p>
+
+<h2><a name="automatic_transformations">Automatic Transformations</a></h2>
+<p>The <a href="../mann/manpage.html">manpage(n)</a> processor uses <a href="../mann/htmltrans.html">htmltrans(n)</a> to transform
+the output of the macro processor.  In particular, it supports:
+
+</p>
+
+<ul>
+<li> Automated closure of <code>&lt;li&gt;</code> and similar tags.
+
+</li><li> Automatic paragraph detection and insertion of
+     <code>&lt;p&gt;</code>...<code>&lt;/p&gt;</code> tags.  Essentially, blank lines in prose force a
+     paragraph break.  There is no need to insert the paragraph
+     tags by hand.
+</li></ul>
+
+<h2><a name="macros">MACROS</a></h2>
+<p>manpage(5) man pages may use any of the following macros, as well
+as those defined in the <a href="../man5/ehtml.html">ehtml(5)</a> man page.
+Note that these macros are simply Tcl commands; you can define
+your own macros, as described in <a href="../man5/ehtml.html">ehtml(5)</a>,
+and use them in your man pages.
+
+</p>
+
+<dl>
+
+<dt class="defitem"><a name="manpage">&lt;manpage <i>nameList description</i>&gt;</a></dt><dd><p>
+
+This macro should be the first in the man page, as it expands to the
+HTML header and also the "NAME" section of the man page.</p>
+
+<p>The macro has two forms.  In the first form, <i>nameList</i> is just
+the name of the man page; <i>description</i> is a short one-line
+description of the documented library, file format, or program:
+
+</p><pre class="example">
+&lt;manpage manpage(5) "Kite Man Page Format"&gt;
+</pre>
+<p>The second form is used when the man page documents a submodule of a
+larger library.  In this case, <i>nameList</i> is a list containing
+two entries, the name of the parent man page and the name of this man
+page.  For example, the man page for <a href="../mann/kitedocs.html">kitedocs(n)</a>'s
+<a href="../mann/marsmisc.html">marsmisc(n)</a> module begins with this macro:
+
+</p>
+
+<pre class="example">
+&lt;manpage {kitedocs(n) kitedoc(n)} "Kite Document Formatter"&gt;
+</pre>
+
+</dd>
+<dt class="defitem"><a name="/manpage">&lt;/manpage&gt;</a></dt><dd><p>
+
+This macro should be the last in the man page, as it expands to the
+HTML footer.  It also adds a timestamp for when the page was
+translated.</p>
+
+<p>For example,
+
+</p><pre class="example">
+&lt;/manpage&gt;
+</pre>
+
+</dd>
+<dt class="defitem"><a name="section">&lt;section <i>name</i>&gt;</a></dt><dd><p>
+
+Begins a new section.  By convention, man page section names are
+displayed in all caps; consequently, <i>name</i> is converted to
+all caps when needed.</p>
+
+<p>Every section is included in a table of contents at the beginning of
+the generated man page.</p>
+
+<p>The <i>name</i> can be almost anything; however, see
+<a href="#man_page_skeleton">MAN PAGE SKELETON</a> for a list of the sections found in 
+most man pages.
+
+</p>
+</dd>
+<dt class="defitem"><a name="subsection">&lt;subsection <i>name</i>&gt;</a></dt><dd><p>
+
+Begins a new subsection under the current <a class="iref" href="#section">section</a>.
+By convention, man page subsection names are displayed in mixed case.
+Subsections are included in the table of contents, indented under
+their parent section.</p>
+
+<p>The subsection <i>name</i> can be almost anything, but it should be
+unique within the man page.
+
+</p>
+</dd>
+<dt class="defitem"><a name="version">&lt;version&gt;</a></dt><dd>
+
+Returns the project version number, as provided to 
+<a href="../mann/manpage.html">manpage(n)</a>'s <a href="../mann/manpage.html#format">format</a> subcommand.
+
+</dd>
+<dt class="defitem"><a name="mktree"><code>&lt;mktree <i>id</i>&gt;</code>...<code>&lt;/mktree&gt;</code></a></dt><dd><p>
+
+This tag defines an unordered "<code>&lt;ul&gt;</code>" list that uses the
+"mktree" Javascript package for turning nested lists of links into
+dynamic lists that can be opened and closed.  The
+Javascript code and the necessary CSS styles are included in the HTML
+output automatically.</p>
+
+<p>The <i>id</i> is used as the value of the "id" attribute of the 
+<code>&lt;ul&gt;</code> tag, which is generated like this:
+
+</p><pre class="example">
+<code>&lt;ul class="mktree" id="<i>id</i>"&gt;</code>
+</pre>
+
+
+</dd>
+</dl>
+
+<h2><a name="man_page_skeleton">MAN PAGE SKELETON</a></h2>
+<p>The sections included in a man page depend on just what you're
+documenting.  That said, here's a fairly typical skeleton:
+
+</p>
+
+<pre class="example">
+&lt;manpage somelib(n)&gt;
+
+&lt;section SYNOPSIS&gt;
+
+Put how to load this library here.  Then, put the itemlist:
+
+&lt;itemlist&gt;
+
+&lt;section DESCRIPTION&gt;
+
+A general description of the package.
+
+&lt;section COMMANDS&gt;
+
+If this were a C library, this might be "FUNCTIONS" instead.
+
+&lt;deflist commands&gt;
+     .
+     .
+     .
+&lt;/deflist commands&gt;
+
+&lt;section EXAMPLES&gt;
+
+Put examples here, assuming they didn't fit better under one of the
+items listed above.
+
+&lt;section AUTHOR&gt;
+
+Your name.
+
+&lt;section HISTORY&gt;
+
+Any relevant historical information, like "This package was developed
+as a replacement for &lt;xref soandsolib(n)&gt;...."
+
+&lt;/manpage&gt;
+</pre>
+
+<h2><a name="author">AUTHOR</a></h2>
+<p>Will Duquette
+
+</p>
+
+<h2><a name="history">HISTORY</a></h2>
+<p>Originally written for JNEM as jnem_man(5); migrated to Mars in
+September 2008 as app_man(5), and moved to Kite in July 2014.
+
+</p>
+
+<hr>
+<p><i>kite 0.5.0 Man page generated by manpage(n) on 
+Fri Nov 20 09:34:55 PST 2015</i>
+</p>
+
+</body>
+</html>
+    
+
+
+
+
+
+
+
+

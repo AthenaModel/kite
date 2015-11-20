@@ -1,0 +1,1756 @@
+<html><head>
+<title>kite 0.5.0: Tcl Coding Standard</title>
+<style>
+/* ehtml(5) Standard CSS */
+
+/*---------------------------------------------------------*/
+/* General Use                                             */
+
+a {
+    /* No underlines */
+    text-decoration: none;
+}
+
+/* Special formatting for definition lists, to get proper
+ * blank lines after descriptions but not after topics. */
+dt {
+    margin-bottom: 0;
+}
+
+dd { 
+    margin-bottom: 1em; 
+}
+
+dd > p:first-child { 
+    margin-top: 0; 
+}
+
+
+/*---------------------------------------------------------*/
+/* Specific Macros                                         */
+
+/* bigmark */
+div.bigmark {
+    display: inline;
+    font-family: Verdana;
+    font-size: 100%;
+    background: black;
+    color: white;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+/* def, defitem, defopt */
+
+dt.def {
+    font-weight: bold;
+}
+
+dt.defitem {
+    font-weight: bold;
+    font-family: monospace;
+}
+
+dt.defopt {
+    font-weight: bold;
+    font-family: monospace;
+}
+
+
+/* example/ */
+pre.example {
+    background:     #FFFDD1 ;
+    border:         1px solid blue;
+    padding-top:    2px;
+    padding-bottom: 2px;
+    padding-left:   4px;
+}
+
+
+/* hrule */
+hr.hrule {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+/* iref */
+a.iref {
+    font-family: monospace;
+}
+
+/* itemlist */                
+ul.itemlist {
+    padding-left: 0;
+    list-style-type: none;
+}
+
+/* listing/ */
+pre.listing {
+    background:     #FFFDD1 ;
+    border:         1px solid blue;
+    padding-top:    4px;
+    padding-bottom: 4px;
+    padding-left:   4px;
+}
+
+span.linenum {
+    background:     #E3E08F ;
+}
+
+/* mark */
+div.mark {
+    display:       inline;
+    font-family:   Verdana;
+    font-size:     75%;
+    background:    black;
+    color:         white;
+    border:        1px solid black;
+    border-radius: 5px;
+    padding-left:  2px;
+    padding-right: 2px;
+}
+
+/* procedure */
+
+table.procedure {
+    border: 1px solid black;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table.procedure td {
+    border: 1px solid black;
+}
+
+td.procedure-index {
+    padding-right: 5px;
+    text-align: right;
+    width: 2em;
+}
+
+
+/* topiclist/ */
+.topiclist {
+    margin-top:    1em;
+    margin-bottom: 1em;
+}
+
+tr.topic {
+    vertical-align: baseline;
+}
+
+tr.topicname {
+    min-width: 1.5em;
+}
+
+/* tt/ */
+
+.tt {
+    font-family: monospace;
+}
+
+
+
+/* olp/ */
+
+ol.olp > li {
+    margin-bottom: 1em;
+}
+
+/* ulp/ */
+
+ul.ulp > li {
+    margin-bottom: 1em;
+}
+
+/*---------------------------------------------------------*/
+/* table/ plus macros that use it.    Most formatting is
+ * depends on the "table" class.                           */
+
+table {
+    margin-top:     1em;
+    margin-bottom:  1em;
+    vertical-align: baseline;
+}
+
+th {
+    padding-left: 5px;
+    text-align:   left;
+}
+
+td {
+    padding-left:   5px;
+    vertical-align: baseline;
+}
+
+
+/* "table" class: standard table formatting. */
+.table {
+    border:           1px solid black;
+    border-spacing:   0;
+    color:            black;
+    background-color: white;
+}
+
+.table tr:first-child {
+    font-weight:      bold;
+    color:            white;
+    background-color: #000099;    
+}
+
+.table tr.tr-odd {
+    background-color: #EEEEEE;
+}
+
+.table tr.tr-even { }
+
+.table-wide {
+    width: 100%;
+}
+
+        BODY {
+            color: black;
+            background: white;
+            margin-left: 1%;
+            margin-right: 1%;
+        }
+    
+</style>
+</head>
+
+<body>
+<h1 style="background: red;">
+&nbsp;kite 0.5.0: Kite Project Automation Tool
+</h1>
+    
+<h1>Tcl Coding Standard</h1>
+    
+
+<hr class="hrule">
+
+<h2>Table of Contents</h2>
+
+<p><b><a href="#changelog" name="toc.changelog">Change Log</a></b></p>
+
+
+<p><b><a href="#intro" name="toc.intro">1. Introduction</a></b></p>
+
+<ul>
+
+    <li><a href="#intro.base" name="toc.intro.base">1.1 Base Standard</a></li>
+
+    
+
+</ul>
+    
+<p><b><a href="#form" name="toc.form">2. Code Layout</a></b></p>
+
+<ul>
+
+    <li><a href="#form.linelength" name="toc.form.linelength">2.1 Line Length</a></li>
+
+    <ul>
+
+    <li><a href="#form.linelength.longstrings" name="toc.form.linelength.longstrings">2.1.1 Long Text Strings</a></li>
+
+    
+
+</ul>
+    
+
+    <li><a href="#form.indentation" name="toc.form.indentation">2.2 Indentation</a></li>
+
+    
+
+    <li><a href="#form.continuation" name="toc.form.continuation">2.3 Continuation Lines</a></li>
+
+    
+
+    <li><a href="#form.comments" name="toc.form.comments">2.4 Comments</a></li>
+
+    <ul>
+
+    <li><a href="#form.comments.file" name="toc.form.comments.file">2.4.1 File Header Comments</a></li>
+
+    
+
+    <li><a href="#form.comments.filesection" name="toc.form.comments.filesection">2.4.2 File Section Comments</a></li>
+
+    
+
+    <li><a href="#form.comments.typesection" name="toc.form.comments.typesection">2.4.3 Type and Widget Sections</a></li>
+
+    
+
+    <li><a href="#form.comments.endline" name="toc.form.comments.endline">2.4.4 End-line Comments</a></li>
+
+    
+
+    <li><a href="#form.comments.events" name="toc.form.comments.events">2.4.5 Notifier Event Comments</a></li>
+
+    
+
+    <li><a href="#form.comments.option" name="toc.form.comments.option">2.4.6 Option Comments</a></li>
+
+    
+
+    <li><a href="#form.comments.variable" name="toc.form.comments.variable">2.4.7 Variable Comments</a></li>
+
+    
+
+    <li><a href="#form.comments.procheader" name="toc.form.comments.procheader">2.4.8 Procedure Header Comments</a></li>
+
+    
+
+    <li><a href="#form.comments.constructor" name="toc.form.comments.constructor">2.4.9 Constructor Header Comments</a></li>
+
+    
+
+    <li><a href="#form.comments.methodheader" name="toc.form.comments.methodheader">2.4.10 Method Header Comments</a></li>
+
+    
+
+    <li><a href="#form.comments.body" name="toc.form.comments.body">2.4.11 Procedure/Method Body Comments</a></li>
+
+    
+
+</ul>
+    
+
+</ul>
+    
+<p><b><a href="#code" name="toc.code">3. Code Semantics</a></b></p>
+
+<ul>
+
+    <li><a href="#code.naming" name="toc.code.naming">3.1 Naming Conventions</a></li>
+
+    <ul>
+
+    <li><a href="#code.naming.camelcase" name="toc.code.naming.camelcase">3.1.1 Prefer Camel Case</a></li>
+
+    
+
+    <li><a href="#code.naming.public" name="toc.code.naming.public">3.1.2 Public Names</a></li>
+
+    <ul>
+
+    <li><a href="#code.naming.public.command" name="toc.code.naming.public.command">3.1.2.1 Public Command Names</a></li>
+
+    
+
+    <li><a href="#code.naming.public.methods" name="toc.code.naming.public.methods">3.1.2.2 Public Methods and Typemethods</a></li>
+
+    
+
+    <li><a href="#code.naming.public.variables" name="toc.code.naming.public.variables">3.1.2.3 Public Variables</a></li>
+
+    
+
+</ul>
+    
+
+    <li><a href="#code.naming.private" name="toc.code.naming.private">3.1.3 Private Names</a></li>
+
+    <ul>
+
+    <li><a href="#code.naming.private.commands" name="toc.code.naming.private.commands">3.1.3.1 Private Command Names</a></li>
+
+    
+
+    <li><a href="#code.naming.private.methods" name="toc.code.naming.private.methods">3.1.3.2 Private Methods and Typemethods</a></li>
+
+    
+
+    <li><a href="#code.naming.private.variables" name="toc.code.naming.private.variables">3.1.3.3 Private and Local Variables</a></li>
+
+    
+
+</ul>
+    
+
+</ul>
+    
+
+    <li><a href="#code.expressions" name="toc.code.expressions">3.2 Expressions</a></li>
+
+    
+
+    <li><a href="#code.return" name="toc.code.return">3.3 Functional Return Values</a></li>
+
+    
+
+    <li><a href="#code.typeawareness" name="toc.code.typeawareness">3.4 Data Type Awareness</a></li>
+
+    
+
+    <li><a href="#code.callbacks" name="toc.code.callbacks">3.5 Callbacks</a></li>
+
+    <ul>
+
+    <li><a href="#code.callbacks.procs" name="toc.code.callbacks.procs">3.5.1 Procedure Callbacks</a></li>
+
+    
+
+    <li><a href="#code.callbacks.events" name="toc.code.callbacks.events">3.5.2 Event Bindings</a></li>
+
+    
+
+    <li><a href="#code.callbacks.calling" name="toc.code.callbacks.calling">3.5.3 Calling Callbacks</a></li>
+
+    
+
+</ul>
+    
+
+</ul>
+    
+<p><b><a href="#file" name="toc.file">4. File-Level Standards</a></b></p>
+
+
+
+
+
+
+    
+
+<hr class="hrule">
+
+
+<h2><a name="changelog" href="#toc.changelog">Change Log</a></h2>
+    
+
+<table class="table table-wide">
+<tr>
+<th>Status</th>
+<th>Nature of Change</th>
+<th>Date</th>
+<th>Initiator</th>
+</tr>
+        
+<tr class="tr-even">
+<td>Update</td>
+<td>
+Moved to Kite.
+</td>
+<td>10/27/2014</td>
+<td>whd</td>
+</tr>
+        
+
+<tr class="tr-odd">
+<td>Update</td>
+<td>
+Updated for Mars 3.0.x.
+</td>
+<td>8/20/2014</td>
+<td>whd</td>
+</tr>
+        
+
+<tr class="tr-even">
+<td>Update</td>
+<td>
+Removed NaturalDocs commenting conventions.
+</td>
+<td>11/18/10</td>
+<td>whd</td>
+</tr>
+        
+
+<tr class="tr-odd">
+<td>New</td>
+<td><p>
+Updated from the JNEM Tcl coding standard.  Updates include:
+
+</p><ul>
+<li> NaturalDocs commenting conventions
+</li></ul>
+</td>
+<td>11/10/09</td>
+<td>whd</td>
+</tr>
+        
+
+</table>
+
+<hr class="hrule">
+
+
+<h2><a name="intro" href="#toc.intro">1. Introduction</a></h2>
+<p>This page contains the Tcl/Tk coding standards for Kite.  Projects
+using Kite are welcome to follow the same standards.</p>
+
+<p>All new work done on Kite and related projects should follow these
+standards, with the following exceptions:
+
+</p>
+
+<ul>
+  <li> Where conformance to some other standard is clearly
+       appropriate. For example, when using an external framework library
+       with its own naming conventions, it is appropriate to modify these
+       standards so as to be consistent with the practices of the 
+       framework.
+
+  </li><li> Where, in the judgement of the programmer, not following the
+       standard in a particular case results in manifestly clearer
+       code. This is not a license to flout the standard; it is
+       intended to cover special circumstances, and must be defensible
+       during code reviews.
+</li></ul>
+
+
+<h3><a name="intro.base" href="#toc.intro.base">1.1 Base Standard</a></h3>
+<p>The Kite Tcl/Tk Coding Standard has evolved over time.  Originally,
+as the JNEM coding standard, it was a collection of changes to 
+the <i><a href="http://www.tcl.tk/doc/styleGuide.pdf">Tcl Style Guide</a></i>.
+This document was once the recognized standard for Tcl code within the
+Tcl/Tk community at large.  It was developed at Sun Microsystems at the
+beginning of the Tcl 8.x era, and is extremely dated.
+
+</p>
+
+<hr class="hrule">
+
+
+<h2><a name="form" href="#toc.form">2. Code Layout</a></h2>
+<p>This section deals with the general appearance of code at the lines of
+code level.
+
+
+</p>
+
+<h3><a name="form.linelength" href="#toc.form.linelength">2.1 Line Length</a></h3>
+<p>In general, lines of code should not exceed 80 characters; where
+possible, lines should be broken after about 72 characters.
+
+
+</p>
+
+<h4><a name="form.linelength.longstrings" href="#toc.form.linelength.longstrings">2.1.1 Long Text Strings</a></h4>
+<p>An exception can be made for long literal
+text strings which define a <b>single</b> line of text.  For example, prefer
+code like this
+
+</p>
+
+<pre class="example">
+error "This is a very long text string which is a single line of text...."
+</pre>
+<p>to this
+
+</p>
+
+<pre class="example">
+set msg "This is a very long text string "
+append msg "which is a single line of text...."
+error $msg
+</pre>
+<p>Before letting the string extend past 80 columns, however, first try
+to put it on its own line, outdenting if necessary:
+
+</p>
+
+<pre class="example">
+error \
+"This is a very long text string which is a single line of text...."
+</pre>
+<p>Long text strings which contain multiple lines of text should be
+spread across multiple lines, possibly using
+<a href="./mann/stringx.html#outdent">outdent</a> to remove
+or preserve indentation.  For example, the following code defines a long
+message, indented with the code; the <a href="./mann/stringx.html#outdent">outdent</a> command
+removes the unwanted whitespace at the beginning of each line:
+
+</p>
+
+<pre class="example">
+puts [outdent {
+    Usage: myscript files....
+
+    myscript(1) randomizes the content of the files listed on
+    its command line at the byte level, saving the randomized
+    content back to the original file with no backup.  The
+    system clock time is used as the random seed; hence, given
+    precise knowledge of the system clock time at the start of
+    processing and a detailed knowledge of the algorithm, it
+    might be possible to reconstruct the original content.
+}]
+</pre>
+
+
+<h3><a name="form.indentation" href="#toc.form.indentation">2.2 Indentation</a></h3>
+<p>Tab characters shall <b>not</b> to be used for indentation.</p>
+
+<p>Text at file scope should be flush with the left margin:
+
+</p>
+
+<pre class="example">
+proc myproc {} {
+    ...
+}
+</pre>
+<p>Text within curly braces should be indented four spaces
+relative to the line on which the open brace appears:
+
+</p>
+
+<pre class="example">
+proc myproc {x} {
+    if {$x == 1} {
+        # Do this
+    } else {
+        # Do that
+    }
+}
+</pre>
+<p>Continuation lines should be indented four spaces relative to the
+first line in the command.
+
+</p>
+
+<pre class="example">
+label .mylabel \
+    -text       "Hello, World" \
+    -foreground black          \
+    -background white
+</pre>
+<p>Continuations to a bracketed command should usually
+be indented four spaces relative to the bracketed command.
+
+</p>
+
+<pre class="example">
+set a [list \
+           "This item"       \
+           "That item"       \
+           "The other item"]
+</pre>
+
+
+<h3><a name="form.continuation" href="#toc.form.continuation">2.3 Continuation Lines</a></h3>
+<p>In Tcl, commands which continue onto another line need to be escaped
+with a backslash ("\") at the end of the previous line.</p>
+
+<p>Avoid using backslashed continuation lines unnecessarily, except for
+certain cases listed below.</p>
+
+<p>Prefer the natural continuation provided by curly brackets to
+using backslashes.  For example, <b>never</b> use a backslash
+to break a line right before a curly brace.
+
+</p>
+
+<pre class="example">
+# Don't do this!
+if {$x == $y} \
+{
+    puts $x
+}
+</pre>
+<p>When a command ends with a homogeneous list of items which is
+too long to fit on one line, consider putting each item on its
+own line.
+
+</p>
+
+<pre class="example">
+set a [list \
+           "This very long item"            \
+           "That even longer item"          \
+           "The other extremely long item"]
+</pre>
+<p>In this case the backslashes on the second and subsequent lines
+should be made to line up, as shown, and should be at least one
+space past the end of the longest item.</p>
+
+<p>When creating an object (e.g., a Tk widget) with one or more
+creation options, put each option and its value on its own
+line.
+
+</p>
+
+<pre class="example">
+label .mylabel \
+    -text       "Hello, World" \
+    -foreground black          \
+    -background white
+</pre>
+<p>The options, values, and backslashes should line up as shown.</p>
+
+<p>Format the command this way even if only one or two options are
+being set and the options and values would all fit on the first
+line.
+
+ </p>
+
+<pre class="example">
+ # Don't do this!
+ label .mylabel -text "Hello, World"
+ </pre>
+<p>The previous rule generally applies to any command which takes
+a long string of options.
+
+
+</p>
+
+<h3><a name="form.comments" href="#toc.form.comments">2.4 Comments</a></h3>
+<p>Good comments are a must.  Comments are used to structure code modules
+so that they are easier to read and specific content is easier to find.
+At the line-of-code level, comments should focus on details which are
+<b>not</b> obvious from looking at the code.  Comments should protect
+the programmers who follow from nasty surprises.</p>
+
+<p>The commenting standards contained in the following subsections
+should be observed as far as they go; but do not hesitate to extend
+them in exceptional circumstances.
+
+
+</p>
+
+<h4><a name="form.comments.file" href="#toc.form.comments.file">2.4.1 File Header Comments</a></h4>
+<p>Every code file should begin with a header comment which looks
+generally like this (different kinds of code file may tweak this
+comment in different ways, or have additional boilerplate):
+
+</p>
+
+<pre class="example">
+         1         2         3         4         5         6         7  
+123456789012345678901234567890123456789012345678901234567890123456789012
+#-----------------------------------------------------------------------
+# TITLE:
+#   tclfile.tcl
+#
+# PROJECT:
+#   Name of the project to which this package belongs
+#
+# AUTHOR:
+#   The name(s) of the author(s).
+#
+# DESCRIPTION:
+#   A description of the contents of this file.
+#
+#-----------------------------------------------------------------------
+</pre>
+<p>Additional keywords and documentation can be added as needed; content
+following each keyword should be indented three spaces from the "#" mark.
+The separator lines should be exactly 72 columns wide.  (An editor
+which supports templates can be extremely useful here.)
+
+
+</p>
+
+<h4><a name="form.comments.filesection" href="#toc.form.comments.filesection">2.4.2 File Section Comments</a></h4>
+<p>Code files should be broken into sections using section comments,
+which provide a title for the section:
+
+</p>
+
+<pre class="example">
+         1         2         3         4         5         6         7  
+123456789012345678901234567890123456789012345678901234567890123456789012
+#-----------------------------------------------------------------------
+# Sample Section
+</pre>
+<p>If the section requires a longer description, it should follow
+directly after the section title, separated by a blank comment line.
+
+</p>
+
+<pre class="example">
+#-----------------------------------------------------------------------
+# Sample Section
+#
+# Here is a longer description of what this section is for,
+# what's in it, and so forth.
+</pre>
+
+
+<h4><a name="form.comments.typesection" href="#toc.form.comments.typesection">2.4.3 Type and Widget Sections</a></h4>
+<p>Snit type, Snit widget, TclOO class, and TclOO object definitionsshould 
+also be broken into sections. In this case, the section comment should be
+indented, and shortened so that the row of hyphens still extends to the 
+72nd column:
+
+</p>
+
+<pre class="example">
+         1         2         3         4         5         6         7  
+123456789012345678901234567890123456789012345678901234567890123456789012
+snit::type mytype {
+    #-------------------------------------------------------------------
+    # Constructor
+    ...
+}
+</pre>
+<p>The following sections are commonly used, though rarely all in the
+same type or widget definition.  The precise sections will depend
+on the content of the definition.
+
+</p>
+
+<pre class="example">
+snit::type mytype {
+    #-------------------------------------------------------------------
+    # Type Components
+
+    #-------------------------------------------------------------------
+    # Type Variables
+
+    #-------------------------------------------------------------------
+    # Type Constructor
+
+    #-------------------------------------------------------------------
+    # Public Type Methods
+
+    #-------------------------------------------------------------------
+    # Private Type Methods
+
+    #-------------------------------------------------------------------
+    # Options
+
+    #-------------------------------------------------------------------
+    # Instance Variables
+
+    #-------------------------------------------------------------------
+    # Constructor
+
+    #-------------------------------------------------------------------
+    # Public Methods
+
+    #-------------------------------------------------------------------
+    # Private Methods
+
+    #-------------------------------------------------------------------
+    # Utility Methods and Procs
+}
+</pre>
+<p>Section headers used for collections of methods and type methods are
+fairly fluid; in particular, the groupings implied by the section
+titles above should not be considered part of the standard.  If a
+public method is implemented in part by one or two private methods
+which exist only for that purpose, they should generally follow
+directly after the public method.</p>
+
+<p>In short, think of the code file as a document that's telling a story, and
+use the grouping that best communicates the story.
+
+
+</p>
+
+<h4><a name="form.comments.endline" href="#toc.form.comments.endline">2.4.4 End-line Comments</a></h4>
+<p>In general, full-line comments are preferred to end-line comments.
+It is allowable, though, to use end-line comments to document a
+sequence of items such as variable declarations:
+
+</p>
+
+<pre class="example">
+variable thisVariable    5    ;# This short description
+variable thatVariable    6    ;# That short description
+variable anotherVariable 7    ;# Another short description              
+</pre>
+<p>If the items can't be cleanly documented as shown--e.g., if one
+variable name or value is much longer than the
+others--then full-line comments should be used instead.</p>
+
+<p>When end-line commands are used, they should always be written
+as shown, with the semicolon immediately preceding the pound sign,
+"<b>;#</b>".
+
+
+</p>
+
+<h4><a name="form.comments.events" href="#toc.form.comments.events">2.4.5 Notifier Event Comments</a></h4>
+<p>If a module sends <a href="./mann/notifier.html">notifier(n)</a> events, they should be
+documented in a section comment near the top of the module, or
+in the module header.
+
+
+</p>
+
+<h4><a name="form.comments.option" href="#toc.form.comments.option">2.4.6 Option Comments</a></h4>
+<p>Options defined in a Snit type or widget definition should be placed
+in an Options section, and preceded by a comment like this:
+
+</p>
+
+<pre class="example">
+snit:type {
+    #-------------------------------------------------------------------
+    # Options
+    ...
+    # -myoption
+    #
+    # Description of my option
+
+    option -myoptions \
+        -default "My Value" ...
+}
+</pre>
+<p>The description need not include the default value (if any) since it's
+right there.</p>
+
+<p>If the option references a <code>-configuremethod</code> or
+<code>-cgetmethod</code>, the method may be defined following the
+option.  If multiple options reference the same method, it should be
+defined at the end of the Options section.
+
+
+</p>
+
+<h4><a name="form.comments.variable" href="#toc.form.comments.variable">2.4.7 Variable Comments</a></h4>
+<p>As a general rule, scalar type and instance variables should be
+documented with end-line comments unless there is more to be said
+than will fit.  Thus, prefer this:
+
+</p>
+
+<pre class="example">
+    #-------------------------------------------------------------------
+    # Type Variables
+
+    typevariable tv1     ;# Something about the variable
+    typevariable tv2     ;# Something about the variable
+    ...
+
+    #-------------------------------------------------------------------
+    # Instance Variables
+
+    variable v1          ;# Something about the variable
+    variable v2          ;# Something about the variable
+</pre>
+<p>Particularly significant type and instance variables should be preceded by a
+header comment, like this:
+
+</p>
+
+<pre class="example">
+snit:type {
+    # myvar
+    #
+    # Description of myvar
+
+    typevariable myvar {...}
+
+    # instvar
+    #
+    # Description of instvar
+
+    variable instvar {...}
+}
+</pre>
+<p>Array and dictionary variables with a variety of distinct keys should 
+always be documented using a header comment; the comment should
+list the distinct keys or kinds of key, and the kind of values that
+go with them.
+
+</p>
+
+<pre class="example">
+    # info array
+    #
+    # An array of information about the state of the simulation.  The
+    # keys are as follows.
+    #
+    #   dbloaded - 1 if a gramdb(5) is loaded, and 0 otherwise
+    #   dbfile   - Name of the loaded gramdb(5) file, or ""
+    #              if none.
+    
+    typevariable info -array {
+        dbloaded   0
+        dbfile     ""
+    }
+</pre>
+
+
+
+<h4><a name="form.comments.procheader" href="#toc.form.comments.procheader">2.4.8 Procedure Header Comments</a></h4>
+<p>Every procedure definition should begin with a comment that describes
+the procedure's calling sequence, arguments, options, purpose, and return
+value, along with anything else the developer should know about the
+procedure.  The following template should be used:
+
+</p>
+
+<pre class="example">
+# procname arg1 arg2
+#
+# arg1 - description of arg1
+# arg2 - description of arg2
+#
+# Description of the proc, including the return value.
+# The first sentence should be a good summary of the purpose of the
+# proc.
+</pre>
+<p>The argument names and descriptions should be separated by a hyphen,
+as shown.  When there are multiple arguments, the hyphens should be
+vertically aligned, one space to the left of the descriptions.</p>
+
+<p>For example,
+
+</p>
+
+<pre class="example">
+# double x
+#
+# x - A numeric value
+#
+# Multiplies x by 2 and returns the result.
+
+proc double {x} {
+    ...
+}
+</pre>
+<p>The calling sequence should indicate optional arguments using question
+marks, as is done in the standard Tcl man pages.
+
+</p>
+
+<pre class="example">
+# multiply x ?factor?
+#
+# x       - A numeric value
+# factor  - A numeric value; defaults to 2
+#
+# Multiplies x by the factor and returns the result.
+
+proc multiply {x {factor 2}} {
+    ...
+}
+</pre>
+<p>Repeating arguments should be indicated using an ellipsis ("...").  If
+the command takes options, the options and their meanings should be
+listed after the normal arguments.
+
+</p>
+
+<pre class="example">
+# modify x ?options...?
+#
+# x - A numeric value
+#
+# Options:
+#   -multiplyby factor  - Multiply x by the factor
+#   -add value          - Add the value to x.
+#
+# Modifies x as indicated by the options, which are processed in the
+# order of appearances.  Returns the modified value.
+
+proc modify {x args} {
+    ...
+}
+</pre>
+
+
+<h4><a name="form.comments.constructor" href="#toc.form.comments.constructor">2.4.9 Constructor Header Comments</a></h4>
+<p>Constructor header comments are just like procedure headers
+except that, falling as they do within a type or widget definition,
+they are indented four spaces.
+
+</p>
+
+<pre class="example">
+snit::type mytype {
+    ...
+    # constructor a b
+    #
+    # a - A parameter
+    # b - Another parameter
+    #
+    # Creates an instance of mytype given inputs a and b.
+
+    constructor {a b} {
+        ...
+    }
+}
+</pre>
+<p>If the constructor simply handles the type or widget's options,
+there's no need to call attention to the <i>args</i> parameter.</p>
+
+<p>If need be, the destructor can be documented in the same way:
+
+</p>
+
+<pre class="example">
+    # destructor
+    #
+    # Cleans up such-and-such.
+
+    destructor {
+        ...
+    }
+</pre>
+
+
+<h4><a name="form.comments.methodheader" href="#toc.form.comments.methodheader">2.4.10 Method Header Comments</a></h4>
+<p>Method and typemethod header comments are just like procedure headers
+except that, falling as they do within a type or widget definition,
+they are indented four spaces.  The type or instance command is
+omitted from the calling sequence.
+
+</p>
+
+<pre class="example">
+snit::type mytype {
+    ...
+    # register tag
+    #
+    # tag - An identifier string.
+    #
+    # Registers tag for use with all instances of this type.
+
+    typemethod register {tag} {
+        ...
+    }
+
+    ...
+    
+    # modify x
+    #
+    # x - A numeric value
+    #
+    # Modifies x as specified by the object's options, and returns the
+    # modified value.
+
+    method modify {x} {
+        ...
+    }
+}
+</pre>
+
+
+<h4><a name="form.comments.body" href="#toc.form.comments.body">2.4.11 Procedure/Method Body Comments</a></h4>
+<p>Procedure, method, and typemethod bodies should be broken into logical
+paragraphs using FIRST/NEXT comments.  Each such comment should
+introduce and describe the block of code that follows.
+
+</p>
+
+<pre class="example">
+proc UpdateDatabase {args} {
+    # FIRST, Validate the arguments.
+    ...
+
+    # NEXT, Update the affected database tables
+    ...
+
+    # NEXT, Call the -notifycmd callback to notify any interested
+    # parties.
+    ...
+}
+</pre>
+
+<ul>
+  <li> The block following a FIRST/NEXT comment may be as little as
+       one line of code, but will usually be larger.
+
+  </li><li> Small procedures consisting of only a few lines of code can
+       dispense with FIRST/NEXT comments.
+
+  </li><li> Large loop bodies and then/else clauses should also be broken
+       into paragraphs using FIRST/NEXT comments.
+</li></ul>
+<p>FIRST/NEXT comments help the body of code to tell its story.
+
+</p>
+
+<hr class="hrule">
+
+
+<h2><a name="code" href="#toc.code">3. Code Semantics</a></h2>
+    
+
+<p><a href="#form">Section 2</a> dealt with coding standards at the level of appearance;
+this section deals with code at the level of meaning.
+
+
+</p>
+
+<h3><a name="code.naming" href="#toc.code.naming">3.1 Naming Conventions</a></h3>
+<p>This section describes the naming conventions to use in writing
+Tcl code.
+
+
+</p>
+
+<h4><a name="code.naming.camelcase" href="#toc.code.naming.camelcase">3.1.1 Prefer Camel Case</a></h4>
+<p>Multi-word names should generally use "Camel Case", e.g.,
+"myVariable" rather than "my_variable".  However, there are
+exceptions, as called out in the following sections.  In
+particular, short multi-word names may use all lowercase with no
+separators, provided that the name reads clearly.
+
+
+</p>
+
+<h4><a name="code.naming.public" href="#toc.code.naming.public">3.1.2 Public Names</a></h4>
+<p>A name is public if it is intended for use outside the module or type
+definition within which it is defined.
+
+
+</p>
+
+<h4><a name="code.naming.public.command" href="#toc.code.naming.public.command">3.1.2.1 Public Command Names</a></h4>
+<p>Public command names should always begin with a lowercase
+letter, e.g., <a href="./mann/control.html#assert">assert</a>.</p>
+
+<p>Where possible without sacrificing clarity, public command names
+should be short, and all lowercase with no separators, e.g.,
+<a href="./mann/stringx.html#lmaxlen">lmaxlen</a>, which is short for "list maximum
+length".  This is an extreme case, but it succeeds because the
+name is consistent with those of the standard list manipulation
+commands.</p>
+
+<p>When defining a family of commands with related names, e.g.,
+"matnew", "matadd", "matmul", consider defining an ensemble
+command instead, e.g., "mat new", "mat add", "mat mul".</p>
+
+<p>If a code file defines a single ensemble command, the command
+name should match the file name.  (See
+<a href="#file">Section 4</a>.)
+
+
+
+</p>
+
+<h4><a name="code.naming.public.methods" href="#toc.code.naming.public.methods">3.1.2.2 Public Methods and Typemethods</a></h4>
+<p>As with public commands, public method names begin with a lowercase
+letter.  Because method and typemethod names are always subcommands of
+an ensemble command, they are already read as the second word of a
+multiword name.  Consequently they are almost always short, consisting
+of one or two words, all lowercase with no separators.</p>
+
+<p>When defining a family of methods with related names, consider using
+hierarchical method names instead, i.e., unite them in a
+sub-ensemble.  An example is the Tk text widget's "tag *" command and
+its subcommands.
+
+
+</p>
+
+<h4><a name="code.naming.public.variables" href="#toc.code.naming.public.variables">3.1.2.3 Public Variables</a></h4>
+<p>Public variables (those documented for use outside the module in which
+they are defined) should have names beginning with a lowercase
+letter, e.g., "::mymodule::myVariable".</p>
+
+<p>When referenced from another module, public variables should
+always be fully qualified, e.g.,
+
+</p>
+
+<pre class="example">
+if {$::mymodule::my == 2} {
+    ...
+}
+</pre>
+<p>However, use of public variables is discouraged; procedural
+interfaces are preferred.
+
+
+</p>
+
+<h4><a name="code.naming.private" href="#toc.code.naming.private">3.1.3 Private Names</a></h4>
+<p>A name is private if it is intended for use only inside the module
+within which it is defined.
+
+
+</p>
+
+<h4><a name="code.naming.private.commands" href="#toc.code.naming.private.commands">3.1.3.1 Private Command Names</a></h4>
+<p>A command is private if it is only intended for use inside the module
+within which it is defined.</p>
+
+<p>Private command names always begin with an upper-case letter, and are
+frequently much longer than public names, e.g.,
+"ComputeMeanSumOfSquares".
+
+
+</p>
+
+<h4><a name="code.naming.private.methods" href="#toc.code.naming.private.methods">3.1.3.2 Private Methods and Typemethods</a></h4>
+<p>Private method and typemethod names are defined just like private
+command names: Camel Case with an initial capital letter, and
+frequently with multiple words.
+
+
+</p>
+
+<h4><a name="code.naming.private.variables" href="#toc.code.naming.private.variables">3.1.3.3 Private and Local Variables</a></h4>
+<p>Private variables, including local variables defined in procedure and
+method bodies, private package variables, and Snit instance and type
+variables, should be defined with Camel Case names beginning with
+an initial lowercase letter.</p>
+
+<p>A previous version of this standard called for private variable
+names to begin with a capital letter, to distinguish them from public
+variable names; but in practice there are extremely few public variable
+names.  Consequently, all variables are written with an initial
+lowercase letter.
+
+
+</p>
+
+<h3><a name="code.expressions" href="#toc.code.expressions">3.2 Expressions</a></h3>
+<p>When using <b>expr</b> to compute the value of an expression,
+the expression should always be enclosed in curly braces:
+
+</p>
+
+<pre class="example">
+set a [expr {$b * $c}]
+</pre>
+<p>If the braces are omitted, both the Tcl
+interpreter and the expression parser will interpolate
+variables.  This degrades performance and can also be source of
+subtle bugs.</p>
+
+<p>Format expressions too long to fit on one line like blocks of
+code.  Indentation should indicating grouping.
+
+</p>
+
+<pre class="example">
+set dist [expr {
+    $diameter *
+    asin(sqrt($sinHalfDlat*$sinHalfDlat +
+              cos($lat1)*cos($lat2)*$sinHalfDlon*$sinHalfDlon))
+}]
+</pre>
+<p>The <i>Tcl Style Guide</i> suggests that expressions should not rely
+on operator precedence, but should always be explicitly
+parenthesized. However, "*" has higher precedence that "+" or
+"-", and they all have higher precedence than "&&" or "||" in
+Tcl, C, C++, and Java, and one should assume that the reader
+knows this.  Thus, it's OK to write:
+
+</p>
+
+<pre class="example">
+if {3*$x + 5 == 7 && $y == 9} {
+    ...
+}
+</pre>
+<p>When an <b>if</b> or <b>while</b> condition consists of a
+series of subexpressions and'd or or'd together, it is usually best
+to put each subexpression on a separate line.
+
+</p>
+
+<pre class="example">
+    if {3*$x + 5 == 7 &&
+        2*$z     == 9 &&
+        $y       == 9
+    } {
+        ...
+    }
+</pre>
+<p>In this case, the "&&" or "||" operators should line up.
+
+
+</p>
+
+<h3><a name="code.return" href="#toc.code.return">3.3 Functional Return Values</a></h3>
+<p>The <i>Tcl Style Guide</i> says to always use the "return" statement
+rather than relying Tcl to return the value of the last command
+executed in the body of a proc.</p>
+
+<p>In procs or methods of one or two lines, however, it is
+acceptable to omit the "return" statement, provided that the
+command whose value will be returned is the last comand in the
+body of the proc or method, and that the documented purpose of the
+proc or method is to compute and return a particular value.
+Thus, prefer
+
+</p>
+
+<pre class="example">
+proc double {x} {
+    expr {2*$x}
+}
+</pre>
+<p>to
+
+</p>
+
+<pre class="example">
+proc double {x} {
+    return [expr {2*$x}]
+}
+</pre>
+<p>This is especially helpful when programming in a more functional
+style.</p>
+
+<p>Commands that are called primarily for their side-effects should
+always use "return" explicitly if they return a value, regardless of
+length of the command.
+
+
+</p>
+
+<h3><a name="code.typeawareness" href="#toc.code.typeawareness">3.4 Data Type Awareness</a></h3>
+<p>In static languages like C, variables are typed.  In dynamic languages
+like Python, variables are untyped but values are typed.  In Tcl,
+neither variables nor values are innately typed.  A value can take on
+many different types depending on how it is used.  This is possible
+because, in Tcl, "everything is a string."</p>
+
+<p>In practice, however, the programmer often knows whether a variable is
+supposed to contain an integer, or a floating point number, or a list, or
+a string.  The programmer should try to always be aware of the
+notional type of each variable and use the appropriate operations for
+that type.  Failure to do so can lead to "shimmering", in which Tcl
+is constantly having to convert the value's internal representation
+from one type to another.  A bad case of shimmering can lead to
+serious performance problems.</p>
+
+<p>Therefore,</p>
+
+<p>Use "eq" and "ne" to compare strings for equality rather than
+"==" and "!=".</p>
+
+<p>Use <b>llength</b> or <a href="./mann/listx.html#got">got</a> to test for list-emptiness.  
+These are right:
+
+</p>
+
+<pre class="example">
+if {[llength $mylist] == 0} {
+    ...
+}
+
+if {[got $mylist]} {
+  ...
+}
+</pre>
+<p>This is wrong:
+ 
+</p>
+
+<pre class="example">
+if {$mylist eq ""} {
+    ...
+}
+</pre>
+<p>Use <b>list</b> and <b>lappend</b> to build lists from
+arbitrary data, rather than using string handling routines.</p>
+
+<p>The string representation of a Tcl list is a
+whitespace-delimited list of tokens.  It's perfectly all right
+to use this fact to type structured data directly into your
+program as list literals; for example, the following is a
+common idiom for initializing an array variable:
+
+</p>
+
+<pre class="example">
+array set myarray {
+    first   John
+    last    Doe
+    phone   555-1234
+}
+</pre>
+<p>When arbitrary data is involved (i.e., variables), relying on
+this is a source of errors.  In the following, list <i>a</i> is
+a two-element list, but list <i>b</i> is a three-element list:
+
+</p>
+
+<pre class="example">
+set name1 "Joe"
+set name2 "John Paul"
+
+set a "name $name1"
+set b "name $name2"
+</pre>
+<p>If <b>list</b> is used, both lists will have two elements, as
+desired.
+
+</p>
+
+<pre class="example">
+set name1 "Joe"
+set name2 "John Paul"
+
+set a [list name $name1]
+set b [list name $name2]
+</pre>
+
+
+<h3><a name="code.callbacks" href="#toc.code.callbacks">3.5 Callbacks</a></h3>
+<p>Tcl/Tk modules frequently define callback commands which are passed
+to other modules to be called at a later time, usually when some
+anticipated event occurs.  Three flavors of callback are typically
+used:
+
+</p>
+
+<ul>
+  <li> Script callbacks
+  </li><li> Script callbacks with symbol substitution
+  </li><li> Command prefix callbacks
+</li></ul>
+<p>Tcl's <b>after</b> command, which is used to define timeout and idle
+state callbacks, registers script callbacks.  The callback can be a
+Tcl script of any size, from one command to many; <b>after</b> places
+no restrictions on it.</p>
+
+<p>Tk's <b>bind</b> command, which is used to define bindings for
+keyboard and mouse events, registers script callbacks with symbol
+substitution.  The callback can be a Tcl script of any size, and
+event-specific "%" symbols, if present, will be replaced with details
+of the event.  On a mouse event, for example, <b>%x</b> and <b>%y</b> will be
+replaced with the pixel coordinates of the event.</p>
+
+<p>Other Tk callbacks, such as the <b>scrollbar</b> widget's
+<b>-command</b> callback, expect a "command prefix": a partial command
+to which the scrollbar will <b>lappend</b> one or more additional arguments
+before the command is called.</p>
+
+<p>Whatever the object defining the callback allows, however, the client
+should always register a callback which consists of a single command
+or command prefix.  The command will usually be a
+procedure, method, or typemethod defined just for the purpose, along with
+any leading arguments required by the client.
+
+
+</p>
+
+<h4><a name="code.callbacks.procs" href="#toc.code.callbacks.procs">3.5.1 Procedure Callbacks</a></h4>
+<p>If the callback command is a normal command or procedure, possibly with 
+leading arguments provided by the client, the command should be created 
+using <b>list</b>:
+
+</p>
+
+<pre class="example">
+scrollbar .yscroll \
+    -orient vertical \
+    -command [list .text yview]
+</pre>
+<p>With the exception of Tk widget commands, the callback command should
+almost always be fully qualified.</p>
+
+<p>In a Snit type or widget definition, where the callback procedure is
+defined in the body of the type, use <b>myproc</b>, <b>mymethod</b>,
+or <b>mytypemethod</b> instead of list:
+
+</p>
+
+<pre class="example">
+myobject configure \
+    -command [myproc MyCallbackProc arg arg arg...]
+</pre>
+<p>These commands builds the callback command as a list in the same way
+that <b>list</b> does, but also fully-qualify the procedure or method
+automatically.
+
+
+</p>
+
+<h4><a name="code.callbacks.events" href="#toc.code.callbacks.events">3.5.2 Event Bindings</a></h4>
+<p>In a Tk event binding, any substitutions should be written as
+arguments to the command:
+
+</p>
+
+<pre class="example">
+proc ButtonPress {x y} {
+    # Do something
+}
+
+# Call ButtonPress when they click on the thingy
+bind .thingy &lt;1&gt; [list ButtonPress %x %y]
+</pre>
+<p>Tk event bindings are allowed to return the <b>break</b> return code;
+this tells Tk that no further bindings should be called for the given
+event.  The event handler should do this by explicitly returning
+the <b>break</b> code, rather than by including "break" in the
+callback string.  For example, the following is correct:
+
+</p>
+
+<pre class="example">
+proc ButtonPress {x y} {
+    # Do something
+
+    # Process no further bindings for this button press
+    return -code break
+}
+
+# Call ButtonPress when they click on the thingy
+bind .thingy &lt;1&gt; [list ButtonPress %x %y]
+</pre>
+<p>Alternatively, the following can be used.
+
+</p>
+
+<pre class="example">
+bind .thingy &lt;1&gt; {ButtonPress %x %y; break}
+</pre>
+<p>The following doesn't work at all; <b>break</b> is called when the
+callback is defined, not when the button is pressed:
+
+</p>
+
+<pre class="example">
+bind .thingy &lt;1&gt; [list ButtonPress %x %y; break]
+</pre>
+
+
+<h4><a name="code.callbacks.calling" href="#toc.code.callbacks.calling">3.5.3 Calling Callbacks</a></h4>
+<p>Callbacks should almost always be called in the global scope; any
+other choice has too many opportunities for unpleasant surprises.
+If the callback command takes no additional arguments, it may be
+called like this:
+
+</p>
+
+<pre class="example">
+uplevel #0 $callback
+</pre>
+<p>It is frequently the case that the callback might not be defined, as
+when it's registered using an object option.  In this case, the code
+is:
+
+</p>
+
+<pre class="example">
+if {$callback ne ""} {
+    uplevel #0 $callback
+}
+</pre>
+<p>If the callback takes additional arguments, the code is a little longer:
+
+</p>
+
+<pre class="example">
+# Call callback with two additional args, a and b
+if {$callback ne ""} {
+    set cmd $callback
+    lappend cmd $a $b
+    uplevel #0 $cmd
+}
+</pre>
+<p>Finally, note that the <a href="./mann/control.html#callwith">callwith</a> command does all this
+in one line; the following example is equivalent to its predecessor.
+
+</p>
+
+<pre class="example">
+callwith $callback $a $b
+</pre>
+<p>Of course, <a href="./mann/control.html#callwith">callwith</a> can also be used for callbacks
+which take no additional arguments.</p>
+
+<p>Alternatively, if the command prefix might consist of multiple tokens,
+"{*}" notation can be used:
+
+</p>
+
+<pre class="example">
+if {$callback ne ""} {
+    {*}$callback $a $b
+}
+</pre>
+<p>This presumes that the callback command is fully-qualified, as it should
+be.
+
+</p>
+
+<hr class="hrule">
+
+
+<h2><a name="file" href="#toc.file">4. File-Level Standards</a></h2>
+<p>The <i><a href="./kdg.html">Kite Developer's Guide</a></i> has information on
+the expected content and layout of particular kinds of code files.  
+The following are a few rules:
+
+</p>
+
+<ul>
+<li> Library packages should define a package-wide namespace.  The package
+     code should be defined within that namespace with public names exported.
+
+</li><li> Applications should define an application-wide namespace as a container
+     for global variables, e.g., <span class="tt">::app_kite::library</span>.  But in general,
+     the global namespace belongs to the application.
+
+</li><li> Most modules should export a single ensemble command that serves as
+     the module's entry point.  Exceptions include collections of small
+     entities such as data validation types or utility commands.
+
+     When a single ensemble command is used, it should have the same 
+     name as the module file.
+
+</li><li> Some available Tcl modules (e.g., 
+     <a href="http://www.tcl.tk/man/tcl8.6/TclCmd/http.htm">http(n)</a>) expect 
+     users to access their commands using a qualified name, e.g., 
+     <span class="tt">::http::geturl</span>.  New code should use a <span class="tt">snit::type</span> singleton
+     or 
+     <a href="http://www.tcl.tk/man/tcl8.6/TclCmd/namespace.htm">namespace ensemble</a>
+     instead.
+</li></ul>
+
+<hr>
+<p><address><a href="mailto:William.H.Duquette@jpl.nasa.gov">William.H.Duquette@jpl.nasa.gov</a></address>
+</p>
+
+</body>
+</html>
+    
+
+
+
+
+
+
+
+
+<!-- List of Anchors
+changelog                      Change Log
+intro                          1. Introduction
+intro.base                     1.1 Base Standard
+form                           2. Code Layout
+form.linelength                2.1 Line Length
+form.linelength.longstrings    2.1.1 Long Text Strings
+form.indentation               2.2 Indentation
+form.continuation              2.3 Continuation Lines
+form.comments                  2.4 Comments
+form.comments.file             2.4.1 File Header Comments
+form.comments.filesection      2.4.2 File Section Comments
+form.comments.typesection      2.4.3 Type and Widget Sections
+form.comments.endline          2.4.4 End-line Comments
+form.comments.events           2.4.5 Notifier Event Comments
+form.comments.option           2.4.6 Option Comments
+form.comments.variable         2.4.7 Variable Comments
+form.comments.procheader       2.4.8 Procedure Header Comments
+form.comments.constructor      2.4.9 Constructor Header Comments
+form.comments.methodheader     2.4.10 Method Header Comments
+form.comments.body             2.4.11 Procedure/Method Body Comments
+code                           3. Code Semantics
+code.naming                    3.1 Naming Conventions
+code.naming.camelcase          3.1.1 Prefer Camel Case
+code.naming.public             3.1.2 Public Names
+code.naming.public.command     3.1.2.1 Public Command Names
+code.naming.public.methods     3.1.2.2 Public Methods and Typemethods
+code.naming.public.variables   3.1.2.3 Public Variables
+code.naming.private            3.1.3 Private Names
+code.naming.private.commands   3.1.3.1 Private Command Names
+code.naming.private.methods    3.1.3.2 Private Methods and Typemethods
+code.naming.private.variables  3.1.3.3 Private and Local Variables
+code.expressions               3.2 Expressions
+code.return                    3.3 Functional Return Values
+code.typeawareness             3.4 Data Type Awareness
+code.callbacks                 3.5 Callbacks
+code.callbacks.procs           3.5.1 Procedure Callbacks
+code.callbacks.events          3.5.2 Event Bindings
+code.callbacks.calling         3.5.3 Calling Callbacks
+file                           4. File-Level Standards
+
+-->

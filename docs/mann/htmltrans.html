@@ -1,0 +1,514 @@
+<html>
+<head>
+<title>kite 0.5.0: htmltrans(n) -- HTML Transformation Tool, submodule of kitedocs(n)</title>
+<style type="text/css" media="screen,print">
+/* ehtml(5) Standard CSS */
+
+/*---------------------------------------------------------*/
+/* General Use                                             */
+
+a {
+    /* No underlines */
+    text-decoration: none;
+}
+
+/* Special formatting for definition lists, to get proper
+ * blank lines after descriptions but not after topics. */
+dt {
+    margin-bottom: 0;
+}
+
+dd { 
+    margin-bottom: 1em; 
+}
+
+dd > p:first-child { 
+    margin-top: 0; 
+}
+
+
+/*---------------------------------------------------------*/
+/* Specific Macros                                         */
+
+/* bigmark */
+div.bigmark {
+    display: inline;
+    font-family: Verdana;
+    font-size: 100%;
+    background: black;
+    color: white;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+/* def, defitem, defopt */
+
+dt.def {
+    font-weight: bold;
+}
+
+dt.defitem {
+    font-weight: bold;
+    font-family: monospace;
+}
+
+dt.defopt {
+    font-weight: bold;
+    font-family: monospace;
+}
+
+
+/* example/ */
+pre.example {
+    background:     #FFFDD1 ;
+    border:         1px solid blue;
+    padding-top:    2px;
+    padding-bottom: 2px;
+    padding-left:   4px;
+}
+
+
+/* hrule */
+hr.hrule {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+/* iref */
+a.iref {
+    font-family: monospace;
+}
+
+/* itemlist */                
+ul.itemlist {
+    padding-left: 0;
+    list-style-type: none;
+}
+
+/* listing/ */
+pre.listing {
+    background:     #FFFDD1 ;
+    border:         1px solid blue;
+    padding-top:    4px;
+    padding-bottom: 4px;
+    padding-left:   4px;
+}
+
+span.linenum {
+    background:     #E3E08F ;
+}
+
+/* mark */
+div.mark {
+    display:       inline;
+    font-family:   Verdana;
+    font-size:     75%;
+    background:    black;
+    color:         white;
+    border:        1px solid black;
+    border-radius: 5px;
+    padding-left:  2px;
+    padding-right: 2px;
+}
+
+/* procedure */
+
+table.procedure {
+    border: 1px solid black;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table.procedure td {
+    border: 1px solid black;
+}
+
+td.procedure-index {
+    padding-right: 5px;
+    text-align: right;
+    width: 2em;
+}
+
+
+/* topiclist/ */
+.topiclist {
+    margin-top:    1em;
+    margin-bottom: 1em;
+}
+
+tr.topic {
+    vertical-align: baseline;
+}
+
+tr.topicname {
+    min-width: 1.5em;
+}
+
+/* tt/ */
+
+.tt {
+    font-family: monospace;
+}
+
+
+
+/* olp/ */
+
+ol.olp > li {
+    margin-bottom: 1em;
+}
+
+/* ulp/ */
+
+ul.ulp > li {
+    margin-bottom: 1em;
+}
+
+/*---------------------------------------------------------*/
+/* table/ plus macros that use it.    Most formatting is
+ * depends on the "table" class.                           */
+
+table {
+    margin-top:     1em;
+    margin-bottom:  1em;
+    vertical-align: baseline;
+}
+
+th {
+    padding-left: 5px;
+    text-align:   left;
+}
+
+td {
+    padding-left:   5px;
+    vertical-align: baseline;
+}
+
+
+/* "table" class: standard table formatting. */
+.table {
+    border:           1px solid black;
+    border-spacing:   0;
+    color:            black;
+    background-color: white;
+}
+
+.table tr:first-child {
+    font-weight:      bold;
+    color:            white;
+    background-color: #000099;    
+}
+
+.table tr.tr-odd {
+    background-color: #EEEEEE;
+}
+
+.table tr.tr-even { }
+
+.table-wide {
+    width: 100%;
+}
+
+        BODY {
+            color: black;
+            background: white;
+            margin-left: 6%;
+            margin-right: 6%;
+        }
+
+        H1 {
+            margin-left: -5%;
+        }
+        H2 {
+            margin-left: -5%;
+        }
+        HR {
+            margin-left: -5%;
+        }
+
+        TABLE {
+            text-align:    left;
+        }
+        
+        /* mktree styles */
+        ul.mktree  li  { list-style: none; }
+        ul.mktree, ul.mktree ul, ul.mktree li { 
+            margin-left:10px; padding:0px; }
+        ul.mktree li .bullet { padding-left: 10px }
+        ul.mktree  li.liOpen   .bullet {cursor : pointer; }
+        ul.mktree  li.liClosed .bullet {cursor : pointer; }
+        ul.mktree  li.liBullet .bullet {cursor : default; }
+        ul.mktree  li.liOpen   ul {display: block; }
+        ul.mktree  li.liClosed ul {display: none; }
+    
+</style>
+
+
+
+</head>
+
+<body>
+<h1 style="background: red;">
+&nbsp;kite 0.5.0: Kite Project Automation Tool
+</h1>
+    
+
+<h2><a name="name">NAME</a></h2>
+    
+
+<p><b>htmltrans(n)</b> -- HTML Transformation Tool, submodule of <a href="../mann/kitedocs.html">kitedocs(n)</a>
+
+</p>
+
+<ul>
+
+    <li><a href="#name">NAME</a></li>
+    
+
+    <li><a href="#synopsis">SYNOPSIS</a></li>
+    
+
+    <li><a href="#description">DESCRIPTION</a></li>
+    <ul>
+
+    <li><a href="#the_parser">The Parser</a></li>
+
+</ul>
+    
+
+    <li><a href="#commands">COMMANDS</a></li>
+    
+
+    <li><a href="#author">AUTHOR</a></li>
+    
+
+    <li><a href="#history">HISTORY</a></li>
+    
+
+</ul>
+    
+    
+
+<h2><a name="synopsis">SYNOPSIS</a></h2>
+    
+
+<pre>
+package require kitedocs 0.5.0
+namespace import ::kitedocs::*
+</pre>
+
+<ul class="itemlist">
+<li><a class="iref" href="#htmltrans_fix">htmltrans fix <i>html</i></a></li>
+<li><a class="iref" href="#htmltrans_para">htmltrans para <i>html</i></a></li>
+<li><a class="iref" href="#htmltrans_parse">htmltrans parse <i>html command</i></a></li>
+</ul>
+
+
+<h2><a name="description">DESCRIPTION</a></h2>
+<p>htmltrans(n) is a tool for parsing and transforming HTML text.  The intent 
+of this toolkit is to allow Kite's documentation tools to produce reasonably
+correct HTML from more relaxed input.  In particular, htmltrans(n) can 
+properly close HTML tags and infer paragraph breaks from blank lines in
+the appropriate context.
+
+</p>
+
+<h2><a name="the_parser">The Parser</a></h2>
+<p>htmltrans(n)'s parser is extremely simple and forgiving; it will break
+anything that is remotely HTML-like up into tags and text.  It understands
+four kinds of things in the input:
+
+</p>
+
+<dl>
+<dt class="def">HTML-like Tags</dt><dd><p>
+
+An HTML-like tag is a string consisting of:
+
+</p><ul>
+<li> A left angle bracket: "<b>&lt</b>"
+</li><li> Optionally, a slash character: "<b>/</b>"
+</li><li> The tag name: a letter followed by zero or more letters, digits, or
+     underscores.
+</li><li> Optionally, one or more whitespace characters
+</li><li> Optionally, the attribute data: <i>any</i> mix of
+     characters other than "<b>&gt</b>"
+</li><li> A right angle bracket: "<b>&gt</b>"
+</li></ul>
+<p>The parser does not validate tag names.
+
+</p>
+
+</dd>
+<dt class="def">HTML Comments</dt><dd><p>
+
+An HTML comment is a string consisting of:
+
+</p><ul>
+<li> A comment-beginning token: "<b>&lt!--</b>"
+</li><li> The comment text: any text not including the comment-ending token, "<b>--&gt</b>"
+</li><li> A comment-ending token: "<b>--&gt</b>"
+</li></ul>
+
+</dd>
+<dt class="def">!DOCTYPE Declarations</dt><dd>
+Document-type declarations are handled just like regular HTML tags.
+
+</dd>
+<dt class="def">Document text</dt><dd>
+
+Any text not forming part of one of the above elements is considered to
+be document text.
+
+</dd>
+</dl>
+<p>The basic philosophy of the parser is that the input consists of HTML tags
+and the text in-between them.  Therefore, it breaks the input up into a
+list of individual tags with the text immediately following each, and 
+calls the user's command once for each.</p>
+
+<p>Because there can be text before
+the first tag, parsing begins with a pseudo-tag, <code>&lt;hmstart&gt;</code>, which is
+injected at the beginning of the input; any text before the first
+actual tag is associated with <code>&lt;hmstart&gt;</code>.  Similarly, parsing ends with
+the closing pseudo-tag <code>&lt;/hmstart&gt;</code>, which is injected at the end 
+of the input.
+
+
+</p>
+
+<h2><a name="commands">COMMANDS</a></h2>
+<p>htmltrans(n) provides the following commands:
+
+</p>
+
+<dl>
+
+<dt class="defitem"><a name="htmltrans_fix">htmltrans fix <i>html</i></a></dt><dd><p>
+
+This command does basic lint checking and closes HTML elements for which
+the closing tag was omitted.  On success, it returns the modified HTML;
+on error, it throws <b>SYNTAX</b> with an appropriate error message.
+In particular,
+
+</p><ul class="ulp">
+<li> HTML tags known not to take a closing tag are simply passed through.
+</li><li> When a closing tag is seen, open elements are closed until the
+     tag's opening tag is found.
+</li><li> List item and list-item-like tags (e.g., <code>&lt;li&gt;</code>, <code>&lt;dt&gt;</code>,
+     <code>&lt;dd&gt;</code>, <code>&lt;tr&gt;</code>, <code>&lt;th&gt;</code>, and <code>&lt;th&gt;</code>)
+     will automatically close open siblings.
+</li><li> The input's <code>&lt;!DOCTYPE&gt;</code> and HTML comments (if any) are preserved.
+</li></ul>
+<p>This command is extremely forgiving; it insists that end tags have 
+start tags and that the list item tags listed above appear in the 
+proper container elements.  It does not otherwise validate the tag names 
+or the attribute syntax, and it works equally well on full HTML pages
+and short snippets.
+
+</p>
+
+</dd>
+<dt class="defitem"><a name="htmltrans_para">htmltrans para <i>html</i></a></dt><dd><p>
+
+This command adds paragraph tags (<code>&lt;p&gt;</code>...<code>&lt;/p&gt;</code>) to the input
+based on blank lines and the structure of the document, and returns
+the result.  This allows documentation to be written in a more natural 
+and less verbose style; the <code>&lt;p&gt;</code>...<code>&lt;/p&gt;</code> tags can generally be
+omitted by the author, and have them inserted automatically.</p>
+
+<p>The input must consist of properly closed elements with valid HTML tag 
+names; tag names are supported for all standard versions of HTML 
+(not XHTML) up through HTML5.  However, it can be used with both 
+full pages and snippets.</p>
+
+<p>In particular:
+
+</p><ul class="ulp">
+<li> In block contexts, e.g., in <code>&lt;body&gt;</code>, <code>&lt;div&gt;</code>, and so forth,
+     all blocks of text that aren't otherwise enclosed will be enclosed in
+     <code>&lt;p&gt;</code>...<code>&lt;/p&gt;</code> tags.  Blank lines terminate paragraphs.
+
+</li><li> In contexts like <code>&lt;li&gt;</code>...<code>&lt;/li&gt;</code>, where the input might be a 
+     single paragraph simply enclosed in the tags, the <code>&lt;p&gt;</code>...<code>&lt;/p&gt;</code>
+     tags are inserted only if the block contains multiple paragraphs or
+     other complex entities.
+
+</li><li><p> The <code>&lt;nopara&gt;</code>...<code>&lt;/nopara&gt;</code> tags disable paragraph detection
+     for the content they contain.  The content is treated like any
+     other "opaque" content (e.g., the HTML <code>&lt;head&gt;</code> element); structure
+     and tag names are checked, but no paragraphing is done.  The tags
+     themselves are removed during processing.</p><p>
+</p></li></ul>
+<p>Details of the algorithm can be found in the file <span class="tt">htmltrans.md</span> in 
+the source code.
+
+</p>
+
+</dd>
+<dt class="defitem"><a name="htmltrans_parse">htmltrans parse <i>html command</i></a></dt><dd><p>
+
+This command parses the <i>html</i> input, calling the <i>command</i> for
+each tag and the text immediately following it.  The command is a 
+prefix to which five additional arguments will be added:
+
+</p><ul class="ulp">
+<li> The complete tag, with attributes and angle brackets.
+
+</li><li> The tag name, minus any slash.  This will be "<span class="tt">!DOCTYPE</span>" for the
+     <code>&lt;!DOCTYPE&gt;</code> directive, and "<span class="tt">!--</span>" for comments.
+
+</li><li> A boolean flag, 1 if the tag is a closing tag and 0 otherwise.
+
+</li><li> The unparsed attribute text.  The tag is broken up into a name,
+     some whitespace, and then the attribute text which runs up to the
+     closing "&gt;".
+
+</li><li> The text immediately following the tag's closing angle bracket, up 
+     until the opening angle bracket of the next tag.
+</li></ul>
+<p>The command is called for pseudotag <code>&lt;hmstart&gt;</code> before the beginning
+of the real input and for <code>&lt;/hmstart&gt;</code> after; this allows the 
+command to do special things at the beginning and end of the input, and
+also to capture any text that occurs prior to the first tag in the input.</p>
+
+<p>In addition to normal tags, the command also handles the 
+<code>&lt;!DOCTYPE&gt;</code> directive and HTML comments; in the latter case,
+the <i>attrs</i> argument will contain the comment text.</p>
+
+<p>Returns the empty string; it is up to the command to save 
+the text for later use.
+
+</p>
+
+</dd>
+</dl>
+
+<h2><a name="author">AUTHOR</a></h2>
+<p>Will Duquette
+
+</p>
+
+<h2><a name="history">HISTORY</a></h2>
+<p>Original package; the parser mechanism was inspired by the Tcllib module
+htmlparse(n).
+
+</p>
+
+<hr>
+<p><i>kite 0.5.0 Man page generated by manpage(n) on 
+Fri Nov 20 09:34:56 PST 2015</i>
+</p>
+
+</body>
+</html>
+    
+
+
+
+
+
+
+

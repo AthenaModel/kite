@@ -1,0 +1,432 @@
+<html>
+<head>
+<title>kite 0.5.0: kitedoc(n) -- Kite Document Formatter, submodule of kitedocs(n)</title>
+<style type="text/css" media="screen,print">
+/* ehtml(5) Standard CSS */
+
+/*---------------------------------------------------------*/
+/* General Use                                             */
+
+a {
+    /* No underlines */
+    text-decoration: none;
+}
+
+/* Special formatting for definition lists, to get proper
+ * blank lines after descriptions but not after topics. */
+dt {
+    margin-bottom: 0;
+}
+
+dd { 
+    margin-bottom: 1em; 
+}
+
+dd > p:first-child { 
+    margin-top: 0; 
+}
+
+
+/*---------------------------------------------------------*/
+/* Specific Macros                                         */
+
+/* bigmark */
+div.bigmark {
+    display: inline;
+    font-family: Verdana;
+    font-size: 100%;
+    background: black;
+    color: white;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+/* def, defitem, defopt */
+
+dt.def {
+    font-weight: bold;
+}
+
+dt.defitem {
+    font-weight: bold;
+    font-family: monospace;
+}
+
+dt.defopt {
+    font-weight: bold;
+    font-family: monospace;
+}
+
+
+/* example/ */
+pre.example {
+    background:     #FFFDD1 ;
+    border:         1px solid blue;
+    padding-top:    2px;
+    padding-bottom: 2px;
+    padding-left:   4px;
+}
+
+
+/* hrule */
+hr.hrule {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+/* iref */
+a.iref {
+    font-family: monospace;
+}
+
+/* itemlist */                
+ul.itemlist {
+    padding-left: 0;
+    list-style-type: none;
+}
+
+/* listing/ */
+pre.listing {
+    background:     #FFFDD1 ;
+    border:         1px solid blue;
+    padding-top:    4px;
+    padding-bottom: 4px;
+    padding-left:   4px;
+}
+
+span.linenum {
+    background:     #E3E08F ;
+}
+
+/* mark */
+div.mark {
+    display:       inline;
+    font-family:   Verdana;
+    font-size:     75%;
+    background:    black;
+    color:         white;
+    border:        1px solid black;
+    border-radius: 5px;
+    padding-left:  2px;
+    padding-right: 2px;
+}
+
+/* procedure */
+
+table.procedure {
+    border: 1px solid black;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table.procedure td {
+    border: 1px solid black;
+}
+
+td.procedure-index {
+    padding-right: 5px;
+    text-align: right;
+    width: 2em;
+}
+
+
+/* topiclist/ */
+.topiclist {
+    margin-top:    1em;
+    margin-bottom: 1em;
+}
+
+tr.topic {
+    vertical-align: baseline;
+}
+
+tr.topicname {
+    min-width: 1.5em;
+}
+
+/* tt/ */
+
+.tt {
+    font-family: monospace;
+}
+
+
+
+/* olp/ */
+
+ol.olp > li {
+    margin-bottom: 1em;
+}
+
+/* ulp/ */
+
+ul.ulp > li {
+    margin-bottom: 1em;
+}
+
+/*---------------------------------------------------------*/
+/* table/ plus macros that use it.    Most formatting is
+ * depends on the "table" class.                           */
+
+table {
+    margin-top:     1em;
+    margin-bottom:  1em;
+    vertical-align: baseline;
+}
+
+th {
+    padding-left: 5px;
+    text-align:   left;
+}
+
+td {
+    padding-left:   5px;
+    vertical-align: baseline;
+}
+
+
+/* "table" class: standard table formatting. */
+.table {
+    border:           1px solid black;
+    border-spacing:   0;
+    color:            black;
+    background-color: white;
+}
+
+.table tr:first-child {
+    font-weight:      bold;
+    color:            white;
+    background-color: #000099;    
+}
+
+.table tr.tr-odd {
+    background-color: #EEEEEE;
+}
+
+.table tr.tr-even { }
+
+.table-wide {
+    width: 100%;
+}
+
+        BODY {
+            color: black;
+            background: white;
+            margin-left: 6%;
+            margin-right: 6%;
+        }
+
+        H1 {
+            margin-left: -5%;
+        }
+        H2 {
+            margin-left: -5%;
+        }
+        HR {
+            margin-left: -5%;
+        }
+
+        TABLE {
+            text-align:    left;
+        }
+        
+        /* mktree styles */
+        ul.mktree  li  { list-style: none; }
+        ul.mktree, ul.mktree ul, ul.mktree li { 
+            margin-left:10px; padding:0px; }
+        ul.mktree li .bullet { padding-left: 10px }
+        ul.mktree  li.liOpen   .bullet {cursor : pointer; }
+        ul.mktree  li.liClosed .bullet {cursor : pointer; }
+        ul.mktree  li.liBullet .bullet {cursor : default; }
+        ul.mktree  li.liOpen   ul {display: block; }
+        ul.mktree  li.liClosed ul {display: none; }
+    
+</style>
+
+
+
+</head>
+
+<body>
+<h1 style="background: red;">
+&nbsp;kite 0.5.0: Kite Project Automation Tool
+</h1>
+    
+
+<h2><a name="name">NAME</a></h2>
+    
+
+<p><b>kitedoc(n)</b> -- Kite Document Formatter, submodule of <a href="../mann/kitedocs.html">kitedocs(n)</a>
+
+</p>
+
+<ul>
+
+    <li><a href="#name">NAME</a></li>
+    
+
+    <li><a href="#synopsis">SYNOPSIS</a></li>
+    
+
+    <li><a href="#description">DESCRIPTION</a></li>
+    
+
+    <li><a href="#commands">COMMANDS</a></li>
+    
+
+    <li><a href="#environment">ENVIRONMENT</a></li>
+    
+
+    <li><a href="#author">AUTHOR</a></li>
+    
+
+    <li><a href="#history">HISTORY</a></li>
+    
+
+</ul>
+    
+    
+
+<h2><a name="synopsis">SYNOPSIS</a></h2>
+    
+
+<pre>
+package require kitedocs 0.5.0
+namespace import ::kitedocs::*
+</pre>
+
+<ul class="itemlist">
+<li><a class="iref" href="#register">manpage register <i>macroset</i></a></li>
+<li><a class="iref" href="#format">kitedoc format ?<i>options...</i>? <i>files...</i></a></li>
+<li>&nbsp;&nbsp;&nbsp;&nbsp;<a class="iref" href="#format-project">-project <i>project</i></a></li>
+<li>&nbsp;&nbsp;&nbsp;&nbsp;<a class="iref" href="#format-version">-version <i>x.y.z</i></a></li>
+<li>&nbsp;&nbsp;&nbsp;&nbsp;<a class="iref" href="#format-description">-description <i>description</i></a></li>
+<li>&nbsp;&nbsp;&nbsp;&nbsp;<a class="iref" href="#format-poc">-poc <i>email</i></a></li>
+<li>&nbsp;&nbsp;&nbsp;&nbsp;<a class="iref" href="#format-docroot">-docroot <i>docroot</i></a></li>
+<li>&nbsp;&nbsp;&nbsp;&nbsp;<a class="iref" href="#format-anchors">-anchors</a></li>
+</ul>
+
+
+<h2><a name="description">DESCRIPTION</a></h2>
+<p>kitedoc(n) defines a formatter for project document files written in 
+<a href="../man5/kitedoc.html">kitedoc(5)</a> format.  <a href="../man5/kitedoc.html">kitedoc(5)</a> is an "Extended HTML"
+format; a document is an HTML-like file with embedded macros that make it
+easy to add section numbers, tables of contents, and so forth.</p>
+
+<p>See <a href="../man5/kitedoc.html">kitedoc(5)</a> for a description of the document syntax and the
+available macros.  Note that individual documents can define their
+own macros.
+
+</p>
+
+<h2><a name="commands">COMMANDS</a></h2>
+<p>This module provides the following commands:
+
+</p>
+
+<dl>
+
+<dt class="defitem"><a name="register">manpage register <i>macroset</i></a></dt><dd>
+
+Registers a <a href="../mani/macroset.html">macroset(i)</a> macro set with kitedoc(n).  The macro set
+will be available at the next and subsequent calls to <a class="iref" href="#format">format</a>.
+
+
+</dd>
+<dt class="defitem"><a name="format">kitedoc format ?<i>options...</i>? <i>files...</i></a></dt><dd><p>
+
+Given a list of one or more <a href="../man5/kitedoc.html">kitedoc(5)</a> files, this command
+formats each as an HTML page in the same directory.</p>
+
+<p>Note that the macro expander is reset between documents; page-specific
+macros do not carry over from one document to the next.
+
+</p><dl>
+
+<dt class="defopt"><a name="format-project">-project <i>project</i></a></dt><dd>
+
+Specifies the name of the project being documented. 
+Defaults to "YourProject".  This string appears in the headers
+and footers of the generated pages.
+
+</dd>
+<dt class="defopt"><a name="format-version">-version <i>x.y.z</i></a></dt><dd>
+
+Specifies the client project's version number, for inclusion in the
+generated documents.  Defaults to "0.0.0", as a placeholder.
+
+</dd>
+<dt class="defopt"><a name="format-description">-description <i>description</i></a></dt><dd>
+
+Specifies a brief one-line description of the project being documented. 
+Defaults to "Your project description".  This string
+appears in the headers of the generated pages.
+
+</dd>
+<dt class="defopt"><a name="format-poc">-poc <i>email</i></a></dt><dd>
+
+Specifies an e-mail address for the primary point-of-contact.  This
+can be included in documents using the <a href="../man5/kitedoc.html#poc">poc</a> macro.
+
+</dd>
+<dt class="defopt"><a name="format-docroot">-docroot <i>docroot</i></a></dt><dd><p>
+
+Specifies the relative path from the directory in which each
+<i>file</i> appears to the <span class="tt">docs/</span> directory for the project.  This
+is used by <a href="../man5/ehtml.html">ehtml(5)</a>'s <a href="../man5/ehtml.html#xref">xref</a> macro to create
+relative links to man pages and other project documents.</p>
+
+<p>If this option is not set, then <a href="../man5/ehtml.html#xref">xref</a> will only create
+links to explicit <a href="../man5/ehtml.html#xrefset">xrefset</a> IDs.
+
+</p>
+</dd>
+<dt class="defopt"><a name="format-anchors">-anchors</a></dt><dd>
+
+If this option is included, then an index of all anchors and titles
+will be included in an HTML comment at the end of each output file.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+<h2><a name="environment">ENVIRONMENT</a></h2>
+<p>kitedoc(n) requires Tcl 8.6 or later.
+
+</p>
+
+<h2><a name="author">AUTHOR</a></h2>
+<p>Will Duquette
+
+</p>
+
+<h2><a name="history">HISTORY</a></h2>
+<p>Originally written for JNEM as jnem_doc(1); migrated to Mars in
+September 2008 as app_doc(1), and then to Kite as kitedoc(n) in 
+July 2014.
+
+</p>
+
+<hr>
+<p><i>kite 0.5.0 Man page generated by manpage(n) on 
+Fri Nov 20 09:34:56 PST 2015</i>
+</p>
+
+</body>
+</html>
+    
+
+
+
+
+
+
+
+
+
+
+
+

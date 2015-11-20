@@ -1,0 +1,530 @@
+<html>
+<head>
+<title>kite 0.5.0: template(n) -- Text Template Definition, submodule of kiteutils(n)</title>
+<style type="text/css" media="screen,print">
+/* ehtml(5) Standard CSS */
+
+/*---------------------------------------------------------*/
+/* General Use                                             */
+
+a {
+    /* No underlines */
+    text-decoration: none;
+}
+
+/* Special formatting for definition lists, to get proper
+ * blank lines after descriptions but not after topics. */
+dt {
+    margin-bottom: 0;
+}
+
+dd { 
+    margin-bottom: 1em; 
+}
+
+dd > p:first-child { 
+    margin-top: 0; 
+}
+
+
+/*---------------------------------------------------------*/
+/* Specific Macros                                         */
+
+/* bigmark */
+div.bigmark {
+    display: inline;
+    font-family: Verdana;
+    font-size: 100%;
+    background: black;
+    color: white;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+/* def, defitem, defopt */
+
+dt.def {
+    font-weight: bold;
+}
+
+dt.defitem {
+    font-weight: bold;
+    font-family: monospace;
+}
+
+dt.defopt {
+    font-weight: bold;
+    font-family: monospace;
+}
+
+
+/* example/ */
+pre.example {
+    background:     #FFFDD1 ;
+    border:         1px solid blue;
+    padding-top:    2px;
+    padding-bottom: 2px;
+    padding-left:   4px;
+}
+
+
+/* hrule */
+hr.hrule {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+/* iref */
+a.iref {
+    font-family: monospace;
+}
+
+/* itemlist */                
+ul.itemlist {
+    padding-left: 0;
+    list-style-type: none;
+}
+
+/* listing/ */
+pre.listing {
+    background:     #FFFDD1 ;
+    border:         1px solid blue;
+    padding-top:    4px;
+    padding-bottom: 4px;
+    padding-left:   4px;
+}
+
+span.linenum {
+    background:     #E3E08F ;
+}
+
+/* mark */
+div.mark {
+    display:       inline;
+    font-family:   Verdana;
+    font-size:     75%;
+    background:    black;
+    color:         white;
+    border:        1px solid black;
+    border-radius: 5px;
+    padding-left:  2px;
+    padding-right: 2px;
+}
+
+/* procedure */
+
+table.procedure {
+    border: 1px solid black;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table.procedure td {
+    border: 1px solid black;
+}
+
+td.procedure-index {
+    padding-right: 5px;
+    text-align: right;
+    width: 2em;
+}
+
+
+/* topiclist/ */
+.topiclist {
+    margin-top:    1em;
+    margin-bottom: 1em;
+}
+
+tr.topic {
+    vertical-align: baseline;
+}
+
+tr.topicname {
+    min-width: 1.5em;
+}
+
+/* tt/ */
+
+.tt {
+    font-family: monospace;
+}
+
+
+
+/* olp/ */
+
+ol.olp > li {
+    margin-bottom: 1em;
+}
+
+/* ulp/ */
+
+ul.ulp > li {
+    margin-bottom: 1em;
+}
+
+/*---------------------------------------------------------*/
+/* table/ plus macros that use it.    Most formatting is
+ * depends on the "table" class.                           */
+
+table {
+    margin-top:     1em;
+    margin-bottom:  1em;
+    vertical-align: baseline;
+}
+
+th {
+    padding-left: 5px;
+    text-align:   left;
+}
+
+td {
+    padding-left:   5px;
+    vertical-align: baseline;
+}
+
+
+/* "table" class: standard table formatting. */
+.table {
+    border:           1px solid black;
+    border-spacing:   0;
+    color:            black;
+    background-color: white;
+}
+
+.table tr:first-child {
+    font-weight:      bold;
+    color:            white;
+    background-color: #000099;    
+}
+
+.table tr.tr-odd {
+    background-color: #EEEEEE;
+}
+
+.table tr.tr-even { }
+
+.table-wide {
+    width: 100%;
+}
+
+        BODY {
+            color: black;
+            background: white;
+            margin-left: 6%;
+            margin-right: 6%;
+        }
+
+        H1 {
+            margin-left: -5%;
+        }
+        H2 {
+            margin-left: -5%;
+        }
+        HR {
+            margin-left: -5%;
+        }
+
+        TABLE {
+            text-align:    left;
+        }
+        
+        /* mktree styles */
+        ul.mktree  li  { list-style: none; }
+        ul.mktree, ul.mktree ul, ul.mktree li { 
+            margin-left:10px; padding:0px; }
+        ul.mktree li .bullet { padding-left: 10px }
+        ul.mktree  li.liOpen   .bullet {cursor : pointer; }
+        ul.mktree  li.liClosed .bullet {cursor : pointer; }
+        ul.mktree  li.liBullet .bullet {cursor : default; }
+        ul.mktree  li.liOpen   ul {display: block; }
+        ul.mktree  li.liClosed ul {display: none; }
+    
+</style>
+
+
+
+</head>
+
+<body>
+<h1 style="background: red;">
+&nbsp;kite 0.5.0: Kite Project Automation Tool
+</h1>
+    
+
+<h2><a name="name">NAME</a></h2>
+    
+
+<p><b>template(n)</b> -- Text Template Definition, submodule of <a href="../mann/kiteutils.html">kiteutils(n)</a>
+
+</p>
+
+<ul>
+
+    <li><a href="#name">NAME</a></li>
+    
+
+    <li><a href="#synopsis">SYNOPSIS</a></li>
+    
+
+    <li><a href="#description">DESCRIPTION</a></li>
+    
+
+    <li><a href="#commands">COMMANDS</a></li>
+    
+
+    <li><a href="#environment">ENVIRONMENT</a></li>
+    
+
+    <li><a href="#author">AUTHOR</a></li>
+    
+
+    <li><a href="#history">HISTORY</a></li>
+    
+
+</ul>
+    
+    
+
+<h2><a name="synopsis">SYNOPSIS</a></h2>
+    
+
+<pre>
+package require kiteutils 0.5.0
+namespace import ::kiteutils::*
+</pre>
+
+<ul class="itemlist">
+<li><a class="iref" href="#tsubst">tsubst <i>tstring</i></a></li>
+<li><a class="iref" href="#template">template <i>name arglist ?initbody? template</i></a></li>
+<li><a class="iref" href="#tforeach">tforeach <i>vars items ?initbody? template</i></a></li>
+<li><a class="iref" href="#tif">tif <i>condition thenbody</i> ?else <i>elsebody</i>?</a></li>
+<li><a class="iref" href="#swallow">swallow <i>body</i></a></li>
+</ul>
+
+
+<h2><a name="description">DESCRIPTION</a></h2>
+<p>The template(n) package contains a number of routines for the creation
+and use of text templates.  A template is a Tcl command that, given
+zero or more arguments, returns text based on the arguments and a
+template string which references the arguments.</p>
+
+<p>In addition, template(n) defines a Snit macro allowing Snit
+methods, typemethods, and procs to be templates, simply by
+prefixing the method, typemethod, or proc with the word
+"template".
+
+</p>
+
+<h2><a name="commands">COMMANDS</a></h2>
+<p>template(n) provides the following commands:
+
+</p>
+
+<dl>
+
+<dt class="defitem"><a name="tsubst">tsubst <i>tstring</i></a></dt><dd><p>
+
+By default, substitutes variables, commands, and backslashes into
+<i>tstring</i> in the caller's context, returning the result, just as the
+standard Tcl command <code>subst</code> does.  If the first
+non-whitespace token in <i>tstring</i> is
+
+</p><pre>
+|&lt;--
+</pre>
+<p>then the position of the "|" character defines the left margin.  All
+whitespace in <i>tstring</i> to the left of the "|" is deleted before the
+template is expanded.  In addition, the line on which the token
+appears is also deleted, along with all whitespace before it.  For
+example,
+
+</p>
+
+<pre>
+set name "Joe"
+puts [tsubst {
+         |&lt;--
+             $name}]
+</pre>
+<p>will output the string
+
+</p>
+
+<pre>
+"....Joe"
+</pre>
+<p>(where the "." characters denote blanks).
+
+</p>
+
+</dd>
+<dt class="defitem"><a name="template">template <i>name arglist ?initbody? template</i></a></dt><dd><p>
+
+Defines a new template command.  <i>name</i> and <i>arglist</i> are
+the name and argument list of the new command, just as when using
+<code>proc</code>.  If specified, <i>initbody</i> is a body of Tcl
+code which will be executed before the <i>template</i> is expanded;
+it's usually used to define local variables which will then appear in
+the <i>template</i> string.</p>
+
+<p>Finally, <i>template</i> is a text template string which may contain
+embedded variables and commands.  For example,
+
+</p><pre>
+template greeting {first last} {Hi, $first $last!}
+</pre>
+<p>This statement defines a new Tcl command, <code>greeting</code>, that
+takes two arguments, <i>first</i> and <i>last</i>.  Then,
+
+</p>
+
+<pre>
+puts [greeting John Doe]
+</pre>
+<p>will write
+
+</p>
+
+<pre>
+Hi, John Doe!
+</pre>
+<p>to standard output.  The template string might also contain commands.
+Suppose the <code>pget</code> command returns information about a
+person from a data base given a record ID:
+
+</p>
+
+<pre>
+template greeting {id} {Hi, [pget $id first] [pget $id last]!}
+</pre>
+<p>If desired, the <i>initbody</i> can be used to precompute values for 
+substitution into the template.  For example, the following 
+template definition does the same thing as the previous one:
+
+</p>
+
+<pre>
+template greeting {id} {
+    set first [pget $id first]
+    set last  [pget $id last]
+} {Hi, $first $last!}
+</pre>
+<p>Any literal "$", "[", or "]" characters in the <i>template</i> string
+must be escaped with a "\":
+
+</p>
+
+<pre>
+template showprice {price} {This wonderful widget costs \$$price!}
+</pre>
+<p>The <i>template</i> string may reference template arguments, local
+variables defined in the <i>initbody</i>, and global variables provided
+that they are declared in the <i>initbody</i> or are fully qualified.</p>
+
+<p>The <i>template</i> string is processed by <a class="iref" href="#tsubst">tsubst</a>, so it
+may contain the "<span class="tt">|&lt;--</span>" indent marker.
+
+</p>
+
+</dd>
+<dt class="defitem"><a name="tforeach">tforeach <i>vars items ?initbody? template</i></a></dt><dd><p>
+
+The <code>tforeach</code> command is designed for use within
+<a class="iref" href="#template">template</a> definitions.  It loops over items in a list much
+as <code>foreach</code> does; in each iteration, the <i>template</i>
+string is expanded using <a class="iref" href="#tsubst">tsubst</a>.  Then, the concatenated
+expansions are returned.  <i>vars</i> is a list of one or more
+variable names and <i>items</i> is a list of items, as for
+<code>foreach</code>.  If provided, <i>initbody</i> contains Tcl code
+which is called before each substitution; it is usually used to
+initialize variables used in the template.</p>
+
+<p>For example, suppose that <code>aget</code> returns information about an
+assembly given its ID:
+
+</p><pre>
+template assembly {id} {
+    Assembly [aget $id name] contains:
+        [tforeach cmp [aget $id components] {    Component $cmp\n}]
+}
+</pre>
+<p>The <a class="iref" href="#tforeach">tforeach</a> command is used to format a line for each
+component.
+
+</p>
+
+</dd>
+<dt class="defitem"><a name="tif">tif <i>condition thenbody</i> ?else <i>elsebody</i>?</a></dt><dd>
+
+The <code>tif</code> command is designed for use in
+<a class="iref" href="#template">template</a>
+definitions.  <i>condition</i> is a logical expression, as for the
+<code>if</code> statement.  <i>thenbody</i> and <i>elsebody</i> (if
+present) are template strings.  If <i>condition</i> is true, the
+<i>thenbody</i> is expanded and returned using
+<a class="iref" href="#tsubst">tsubst</a>;
+otherwise, the <i>elsebody</i> (if present) is expanded and returned.
+
+</dd>
+<dt class="defitem"><a name="swallow">swallow <i>body</i></a></dt><dd><p>
+
+In Tcl, most commands return a value.  Sometimes in a template
+definition it's desirable to call a command for its side-effects,
+rather than its return value, which should be ignored.  For example, 
+the Tcl command
+
+</p><pre>
+set a 5
+</pre>
+<p>will ordinarily return "5".  On the other hand,
+
+</p>
+
+<pre>
+swallow {set a 5}
+</pre>
+<p>has the same effect of assigning 5 to the variable <code>a</code>, but
+it always returns the empty string.</p>
+
+<p><code>swallow</code>'s body may contain any number of Tcl commands.
+
+</p>
+
+</dd>
+</dl>
+
+<h2><a name="environment">ENVIRONMENT</a></h2>
+<p>template(n) requires Tcl 8.3 or later.</p>
+
+<p>To use template(n) in a Tcl script, the environment variable
+<code>TCLLIBPATH</code> must include the parent of the template(n)
+library directory.
+
+</p>
+
+<h2><a name="author">AUTHOR</a></h2>
+<p>Will Duquette
+
+</p>
+
+<h2><a name="history">HISTORY</a></h2>
+<p>This package was originally written for the DSN Uplink subsystem.
+
+</p>
+
+<hr>
+<p><i>kite 0.5.0 Man page generated by manpage(n) on 
+Fri Nov 20 09:34:56 PST 2015</i>
+</p>
+
+</body>
+</html>
+    
+
+
+
+

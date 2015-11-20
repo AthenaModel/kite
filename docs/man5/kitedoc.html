@@ -1,0 +1,637 @@
+<html>
+<head>
+<title>kite 0.5.0: kitedoc(5) -- Mars Document Format</title>
+<style type="text/css" media="screen,print">
+/* ehtml(5) Standard CSS */
+
+/*---------------------------------------------------------*/
+/* General Use                                             */
+
+a {
+    /* No underlines */
+    text-decoration: none;
+}
+
+/* Special formatting for definition lists, to get proper
+ * blank lines after descriptions but not after topics. */
+dt {
+    margin-bottom: 0;
+}
+
+dd { 
+    margin-bottom: 1em; 
+}
+
+dd > p:first-child { 
+    margin-top: 0; 
+}
+
+
+/*---------------------------------------------------------*/
+/* Specific Macros                                         */
+
+/* bigmark */
+div.bigmark {
+    display: inline;
+    font-family: Verdana;
+    font-size: 100%;
+    background: black;
+    color: white;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+/* def, defitem, defopt */
+
+dt.def {
+    font-weight: bold;
+}
+
+dt.defitem {
+    font-weight: bold;
+    font-family: monospace;
+}
+
+dt.defopt {
+    font-weight: bold;
+    font-family: monospace;
+}
+
+
+/* example/ */
+pre.example {
+    background:     #FFFDD1 ;
+    border:         1px solid blue;
+    padding-top:    2px;
+    padding-bottom: 2px;
+    padding-left:   4px;
+}
+
+
+/* hrule */
+hr.hrule {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+/* iref */
+a.iref {
+    font-family: monospace;
+}
+
+/* itemlist */                
+ul.itemlist {
+    padding-left: 0;
+    list-style-type: none;
+}
+
+/* listing/ */
+pre.listing {
+    background:     #FFFDD1 ;
+    border:         1px solid blue;
+    padding-top:    4px;
+    padding-bottom: 4px;
+    padding-left:   4px;
+}
+
+span.linenum {
+    background:     #E3E08F ;
+}
+
+/* mark */
+div.mark {
+    display:       inline;
+    font-family:   Verdana;
+    font-size:     75%;
+    background:    black;
+    color:         white;
+    border:        1px solid black;
+    border-radius: 5px;
+    padding-left:  2px;
+    padding-right: 2px;
+}
+
+/* procedure */
+
+table.procedure {
+    border: 1px solid black;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table.procedure td {
+    border: 1px solid black;
+}
+
+td.procedure-index {
+    padding-right: 5px;
+    text-align: right;
+    width: 2em;
+}
+
+
+/* topiclist/ */
+.topiclist {
+    margin-top:    1em;
+    margin-bottom: 1em;
+}
+
+tr.topic {
+    vertical-align: baseline;
+}
+
+tr.topicname {
+    min-width: 1.5em;
+}
+
+/* tt/ */
+
+.tt {
+    font-family: monospace;
+}
+
+
+
+/* olp/ */
+
+ol.olp > li {
+    margin-bottom: 1em;
+}
+
+/* ulp/ */
+
+ul.ulp > li {
+    margin-bottom: 1em;
+}
+
+/*---------------------------------------------------------*/
+/* table/ plus macros that use it.    Most formatting is
+ * depends on the "table" class.                           */
+
+table {
+    margin-top:     1em;
+    margin-bottom:  1em;
+    vertical-align: baseline;
+}
+
+th {
+    padding-left: 5px;
+    text-align:   left;
+}
+
+td {
+    padding-left:   5px;
+    vertical-align: baseline;
+}
+
+
+/* "table" class: standard table formatting. */
+.table {
+    border:           1px solid black;
+    border-spacing:   0;
+    color:            black;
+    background-color: white;
+}
+
+.table tr:first-child {
+    font-weight:      bold;
+    color:            white;
+    background-color: #000099;    
+}
+
+.table tr.tr-odd {
+    background-color: #EEEEEE;
+}
+
+.table tr.tr-even { }
+
+.table-wide {
+    width: 100%;
+}
+
+        BODY {
+            color: black;
+            background: white;
+            margin-left: 6%;
+            margin-right: 6%;
+        }
+
+        H1 {
+            margin-left: -5%;
+        }
+        H2 {
+            margin-left: -5%;
+        }
+        HR {
+            margin-left: -5%;
+        }
+
+        TABLE {
+            text-align:    left;
+        }
+        
+        /* mktree styles */
+        ul.mktree  li  { list-style: none; }
+        ul.mktree, ul.mktree ul, ul.mktree li { 
+            margin-left:10px; padding:0px; }
+        ul.mktree li .bullet { padding-left: 10px }
+        ul.mktree  li.liOpen   .bullet {cursor : pointer; }
+        ul.mktree  li.liClosed .bullet {cursor : pointer; }
+        ul.mktree  li.liBullet .bullet {cursor : default; }
+        ul.mktree  li.liOpen   ul {display: block; }
+        ul.mktree  li.liClosed ul {display: none; }
+    
+</style>
+
+
+
+</head>
+
+<body>
+<h1 style="background: red;">
+&nbsp;kite 0.5.0: Kite Project Automation Tool
+</h1>
+    
+
+<h2><a name="name">NAME</a></h2>
+    
+
+<p><b>kitedoc(5)</b> -- Mars Document Format
+
+</p>
+
+<ul>
+
+    <li><a href="#name">NAME</a></li>
+    
+
+    <li><a href="#synopsis">SYNOPSIS</a></li>
+    
+
+    <li><a href="#description">DESCRIPTION</a></li>
+    
+
+    <li><a href="#document_structure">DOCUMENT STRUCTURE</a></li>
+    
+
+    <li><a href="#identifiers">IDENTIFIERS</a></li>
+    <ul>
+
+    <li><a href="#section_identifiers">Section Identifiers</a></li>
+
+    <li><a href="#figure_and_table_identifiers">Figure and Table Identifiers</a></li>
+
+    <li><a href="#crossreferences">Cross-References</a></li>
+
+</ul>
+    
+
+    <li><a href="#macros">MACROS</a></li>
+    
+
+    <li><a href="#author">AUTHOR</a></li>
+    
+
+    <li><a href="#history">HISTORY</a></li>
+    
+
+</ul>
+    
+    
+
+<h2><a name="synopsis">SYNOPSIS</a></h2>
+    
+
+<ul class="itemlist">
+<li><a class="iref" href="#banner"><code>&lt;banner&gt;</code></a></li>
+<li><a class="iref" href="#contents"><code>&lt;contents&gt;</code></a></li>
+<li><a class="iref" href="#description"><code>&lt;description&gt;</code></a></li>
+<li><a class="iref" href="#document"><code>&lt;document <i>title</i>&gt;</code>...<code>&lt;/document&gt;</code></a></li>
+<li><a class="iref" href="#figure"><code>&lt;figure <i>id title filename</i>&gt;</code></a></li>
+<li><a class="iref" href="#figures"><code>&lt;figures&gt;</code></a></li>
+<li><a class="iref" href="#poc"><code>&lt;poc&gt;</code></a></li>
+<li><a class="iref" href="#preface"><code>&lt;preface <i>id title</i>&gt;</code></a></li>
+<li><a class="iref" href="#project"><code>&lt;project&gt;</code></a></li>
+<li><a class="iref" href="#section"><code>&lt;section <i>id title</i>&gt;</code></a></li>
+<li><a class="iref" href="#sectioncontents"><code>&lt;sectioncontents <i>id</i>&gt;</code></a></li>
+<li><a class="iref" href="#standardstyle"><code>&lt;standardstyle&gt;</code></a></li>
+<li><a class="iref" href="#table"><code>&lt;table <i>id title</i>&gt;</code>...<code>&lt;/table&gt;</code></a></li>
+<li><a class="iref" href="#textfigure"><code>&lt;textfigure <i>id title</i>&gt;</code></a></li>
+<li><a class="iref" href="#th"><code>&lt;th&gt;</code>...<code>&lt;/th&gt;</code></a></li>
+<li><a class="iref" href="#td"><code>&lt;td&gt;</code>...<code>&lt;/td&gt;</code></a></li>
+<li><a class="iref" href="#tables"><code>&lt;tables&gt;</code></a></li>
+<li><a class="iref" href="#version"><code>&lt;version&gt;</code></a></li>
+</ul>
+
+
+<h2><a name="description">DESCRIPTION</a></h2>
+<p>This man page defines the kitedoc(5) format for writing HTML
+documents.  It is an "Extended HTML" format, i.e., it extends HTML
+with embedded macros.  It is similar to <a href="../man5/manpage.html">manpage(5)</a>, but is
+used for arbitrary documents, with section number, tables of contents,
+and so forth. The basic syntax and capabilities of
+Extended HTML are defined in the <a href="../man5/ehtml.html">ehtml(5)</a> man page.</p>
+
+<p><a href="../mann/kitedoc.html">kitedoc(n)</a> translates kitedoc(5) files into standard HTML
+files.</p>
+
+<p>kitedoc(5) documents can contain automatically numbered and linked
+tables, figures, and sections; sections can be nested arbitrarily
+deeply, and the table of contents and lists of figures and tables can
+be generated automatically.
+
+</p>
+
+<h2><a name="document_structure">DOCUMENT STRUCTURE</a></h2>
+<p>kitedoc(5) can be used to write any kind of document that can be
+represented in HTML.  If you wish to use kitedoc(5)'s automatic
+numbering and table-of-contents generation, your document will
+typically look like this:
+
+</p>
+
+<ul>
+  <li> The <a class="iref" href="#document">&lt;document&gt;</a> header.
+  </li><li> A list of change entries.
+  </li><li> A table of <a class="iref" href="#contents">&lt;contents&gt;</a>.
+  </li><li> Lists of <a class="iref" href="#figures">&lt;figures&gt;</a> and <a class="iref" href="#tables">&lt;tables&gt;</a>.
+  </li><li> Zero or more <a class="iref" href="#preface">&lt;preface&gt;</a> sections.  A preface section has
+       a title but no section number, and cannot have subsections.
+  </li><li> Zero or more numbered sections, each of which may have zero or
+       more subsections.
+  </li><li> Numbered sections may contain <a class="iref" href="#table">&lt;table&gt;</a>s and
+       <a class="iref" href="#figure">&lt;figure&gt;</a>s.
+  </li><li> The <code>&lt;/document&gt;</code> footer.
+</li></ul>
+<p>All of these features are optional; in particular, there's no need to
+have a list of figures or tables unless you have figures or tables.
+
+</p>
+
+<h2><a name="identifiers">IDENTIFIERS</a></h2>
+<p>To support auto-numbering and hyperlinking, every section, figure, and
+table has a unique identifier.
+
+</p>
+
+<h2><a name="section_identifiers">Section Identifiers</a></h2>
+<p>kitedoc(5) allows you to define automatically-numbered sections and
+subsections.  Each section and subsection has an ID that uniquely
+identifies it; the ID also indicates how the section relates to its
+neighbors.</p>
+
+<p>The ID for a top-level section (e.g., Section 1, Section 2, etc.) must
+be a single word containing no whitespace or punctuation.</p>
+
+<p>The ID for a subsection is "<i>parentId</i>.<i>name</i>" where
+<i>parentId</i> is the parent's ID and <i>name</i> is a single word
+containing no whitespace or punctuation.</p>
+
+<p>For example, a document might have an introductory section which contains
+two subsections: nomenclature to be used in the document, and a list
+of references.  In the final document, we wish these sections to be
+numbered and titled as follows:
+
+</p>
+
+<ul>
+  <li> 1. Introduction</li>
+  <li> 1.1 Conventions used in this document</li>
+  <li> 1.2 References</li>
+</ul>
+<p>In the kitedoc(5) input, the section headers are written as follows:
+
+</p>
+
+<pre class="example">
+<code>&lt;section intro "Introduction"&gt;</code>
+<code>&lt;section intro.conventions "Conventions used in this document"&gt;</code>
+<code>&lt;section intro.references "References"&gt;</code>
+</pre>
+<p>In essence, each component of the numeric section number is replaced
+by a short word. You may nest sections six levels deep, but
+the normal constraints apply; for example, you can't add a section two
+levels below its parent, and the order of sections in the input needs
+to match the numeric order in the output.
+
+</p>
+
+<h2><a name="figure_and_table_identifiers">Figure and Table Identifiers</a></h2>
+<p>Figure and table identifiers look like <code>fig.<i>name</i></code> and
+<code>tab.<i>name</i></code>.  The prefix ensures that they won't be
+confused with section IDs.
+
+</p>
+
+<h2><a name="crossreferences">Cross-References</a></h2>
+    
+
+<p><a href="../mann/kitedoc.html">kitedoc(n)</a> supports <a href="../man5/ehtml.html">ehtml(5)</a>'s <a href="../man5/ehtml.html#xref">xref</a>
+macro.  Every section, table, and figure ID is an 
+<a href="../man5/ehtml.html#xref">xref</a> cross-reference ID.  Documents can also link
+to the project's man pages, and to other project documents using
+a file path relative to the <a href="../mann/kitedoc.html">kitedoc(n)</a> <span class="tt">-docroot</span>.  Links
+to other projects are possible as well; see <a href="../man5/ehtml.html">ehtml(5)</a>.
+
+</p>
+
+<h2><a name="macros">MACROS</a></h2>
+<p>kitedoc(5) man pages may use the following macros, as well as all
+commands defined in the <a href="../man5/ehtml.html">ehtml(5)</a> man page.  Note
+that these macros are simply Tcl commands;  you can define
+your own macros, as described in <a href="../man5/ehtml.html">ehtml(5)</a>,
+and use them in your documents.
+
+</p>
+
+<dl>
+
+<dt class="defitem"><a name="banner"><code>&lt;banner&gt;</code></a></dt><dd><p>
+
+Returns the banner for the top of the page.  The banner consists of
+the project name, version, and description, as provided to 
+<a href="../mann/kitedoc.html">kitedoc(n)</a>'s <a href="../mann/kitedoc.html#format">format</a> subcommand.</p>
+
+<p>It should rarely be necessary to use this macro directly, as it is
+included automatically by <a class="iref" href="#document">&lt;document&gt;</a>.
+
+</p>
+</dd>
+<dt class="defitem"><a name="contents"><code>&lt;contents&gt;</code></a></dt><dd>
+
+This macro is replaced with a complete table of contents;
+the table of contents is automatically followed by lists of tables 
+and figures if any tables and figures were defined.
+
+</dd>
+<dt class="defitem"><a name="description"><code>&lt;description&gt;</code></a></dt><dd>
+
+Returns the description for the current project, as passed to
+<a href="../mann/kitedoc.html">kitedoc(n)</a>.
+
+</dd>
+<dt class="defitem"><a name="document"><code>&lt;document <i>title</i>&gt;</code>...<code>&lt;/document&gt;</code></a></dt><dd>
+
+These macros begin and end the document, and format the HTML header
+and footer, include the document's title and style sheet.
+
+</dd>
+<dt class="defitem"><a name="figure"><code>&lt;figure <i>id title filename</i>&gt;</code></a></dt><dd><p>
+
+Adds a figure to the document.  The figure is identified by
+<i>id</i>, which must have the form <code>fig.<i>name</i></code>;
+the <i>title</i> will be included in the caption.  The figure itself
+is an image file called <i>filename</i>; the file must reside in the
+same directory as the generated HTML file, and must be a format
+recognized by the browser (e.g., GIF, PNG, or JPEG).</p>
+
+<p>Figures will be auto-numbered, and included in the list of
+<a class="iref" href="#figures">&lt;figures&gt;</a>.
+
+</p>
+</dd>
+<dt class="defitem"><a name="figures"><code>&lt;figures&gt;</code></a></dt><dd>
+
+This macro will be replaced by a list of the figures found in the
+document.  Note that it is rarely necessary to use this macro
+explicitly, because the table of <a class="iref" href="#contents">&lt;contents&gt;</a> will include it
+automatically if there are any figures in the document.
+
+
+</dd>
+<dt class="defitem"><a name="poc"><code>&lt;poc&gt;</code></a></dt><dd>
+
+Returns the <a href="../mann/kitedoc.html">kitedoc(n)</a> point-of-contact e-mail address
+as a "mailto" link.
+
+</dd>
+<dt class="defitem"><a name="preface"><code>&lt;preface <i>id title</i>&gt;</code></a></dt><dd><p>
+
+Adds an unnumbered section header to the document; it is uniquely
+identifed by <i>id</i>, and has the specified <i>title</i>:
+
+</p><pre class="example">
+<code>&lt;preface foreword "Author's Foreword"&gt;</code>
+</pre>
+<p>Unnumbered sections may not have subsections; hence, the <i>id</i> may
+not contain any periods.</p>
+
+<p>Unnumbered sections may appear anywhere in the document, but really
+shouldn't be used anyway but the beginning or the end.
+
+</p>
+
+</dd>
+<dt class="defitem"><a name="project"><code>&lt;project&gt;</code></a></dt><dd>
+
+Returns the short name for the current project, as passed to
+<a href="../mann/kitedoc.html">kitedoc(n)</a>.
+
+</dd>
+<dt class="defitem"><a name="section"><code>&lt;section <i>id title</i>&gt;</code></a></dt><dd>
+
+Adds a numbered section header to the document; the section has the
+specified <i>id</i> and <i>title</i>.  See
+<a href="#section_identifiers">Section Identifiers</a> for a discussion of how to choose
+the <i>id</i>.
+
+</dd>
+<dt class="defitem"><a name="sectioncontents"><code>&lt;sectioncontents <i>id</i>&gt;</code></a></dt><dd>
+
+Returns a table of contents for section <i>id</i>, that is, a list of
+its subsections, with links.
+
+</dd>
+<dt class="defitem"><a name="standardstyle"><code>&lt;standardstyle&gt;</code></a></dt><dd><p>
+
+Returns the standard list of CSS styles, for inclusion in the HTML 
+header.</p>
+
+<p>It should rarely be necessary to use this macro directly, as it is
+included automatically by <a class="iref" href="#document">&lt;document&gt;</a>.
+
+
+</p>
+</dd>
+<dt class="defitem"><a name="table"><code>&lt;table <i>id title</i>&gt;</code>...<code>&lt;/table&gt;</code></a></dt><dd><p>
+
+Contains and captions a table object.  The table <i>id</i>
+must have the form <code>tab.<i>name</i></code>, while the title is
+arbitrary.</p>
+
+<p>Tables will be auto-numbered, and included in the list of
+<a class="iref" href="#tables">&lt;tables&gt;</a>.
+
+</p>
+</dd>
+<dt class="defitem"><a name="textfigure"><code>&lt;textfigure <i>id title</i>&gt;</code></a></dt><dd><p>
+
+Adds a "text figure" to the document, i.e., a figure consisting of
+an <a href="../man5/ehtml.html">ehtml(5)</a> <code>&lt;example&gt;</code> or <code>&lt;listing&gt;</code> rather than an image 
+file.  The relevant <code>&lt;example&gt;</code> or <code>&lt;listing&gt;</code> should follow immediately
+after the <code>&lt;textfigure&gt;</code> tag.</p>
+
+<p>The figure is identified by
+<i>id</i>, which must have the form <code>fig.<i>name</i></code>;
+the <i>title</i> will be included in the caption.</p>
+
+<p>Text figures will be auto-numbered, and included in the list of
+<a class="iref" href="#figures">&lt;figures&gt;</a>.
+
+</p>
+</dd>
+<dt class="defitem"><a name="th"><code>&lt;th&gt;</code>...<code>&lt;/th&gt;</code></a></dt><dd>
+
+Brackets a "pretty" table header.
+
+</dd>
+<dt class="defitem"><a name="td"><code>&lt;td&gt;</code>...<code>&lt;/td&gt;</code></a></dt><dd>
+
+Brackets a "pretty" table row.
+
+</dd>
+<dt class="defitem"><a name="tables"><code>&lt;tables&gt;</code></a></dt><dd>
+
+This macro will be replaced by a list of the tables found in the
+document.  Note that it is rarely necessary to use this macro
+explicitly, because the table of <a class="iref" href="#contents">&lt;contents&gt;</a> will include it
+automatically if there are any tables in the document.
+
+</dd>
+<dt class="defitem"><a name="version"><code>&lt;version&gt;</code></a></dt><dd>
+
+Returns the version number for the current project, as passed to
+<a href="../mann/kitedoc.html">kitedoc(n)</a>.
+
+</dd>
+</dl>
+
+<h2><a name="author">AUTHOR</a></h2>
+<p>Will Duquette
+
+</p>
+
+<h2><a name="history">HISTORY</a></h2>
+<p>Originally written for JNEM as jnem_doc(5); migrated to Mars in
+September 2008, and moved to Kite in July 2014.
+
+</p>
+
+<hr>
+<p><i>kite 0.5.0 Man page generated by manpage(n) on 
+Fri Nov 20 09:34:55 PST 2015</i>
+</p>
+
+</body>
+</html>
+    
+
+
+
+
+
+
+
+

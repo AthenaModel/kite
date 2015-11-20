@@ -1,0 +1,410 @@
+<html>
+<head>
+<title>kite 0.5.0: tclchecker(n) -- Tcl Syntax Checker, submodule of kiteutils(n)</title>
+<style type="text/css" media="screen,print">
+/* ehtml(5) Standard CSS */
+
+/*---------------------------------------------------------*/
+/* General Use                                             */
+
+a {
+    /* No underlines */
+    text-decoration: none;
+}
+
+/* Special formatting for definition lists, to get proper
+ * blank lines after descriptions but not after topics. */
+dt {
+    margin-bottom: 0;
+}
+
+dd { 
+    margin-bottom: 1em; 
+}
+
+dd > p:first-child { 
+    margin-top: 0; 
+}
+
+
+/*---------------------------------------------------------*/
+/* Specific Macros                                         */
+
+/* bigmark */
+div.bigmark {
+    display: inline;
+    font-family: Verdana;
+    font-size: 100%;
+    background: black;
+    color: white;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+/* def, defitem, defopt */
+
+dt.def {
+    font-weight: bold;
+}
+
+dt.defitem {
+    font-weight: bold;
+    font-family: monospace;
+}
+
+dt.defopt {
+    font-weight: bold;
+    font-family: monospace;
+}
+
+
+/* example/ */
+pre.example {
+    background:     #FFFDD1 ;
+    border:         1px solid blue;
+    padding-top:    2px;
+    padding-bottom: 2px;
+    padding-left:   4px;
+}
+
+
+/* hrule */
+hr.hrule {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+/* iref */
+a.iref {
+    font-family: monospace;
+}
+
+/* itemlist */                
+ul.itemlist {
+    padding-left: 0;
+    list-style-type: none;
+}
+
+/* listing/ */
+pre.listing {
+    background:     #FFFDD1 ;
+    border:         1px solid blue;
+    padding-top:    4px;
+    padding-bottom: 4px;
+    padding-left:   4px;
+}
+
+span.linenum {
+    background:     #E3E08F ;
+}
+
+/* mark */
+div.mark {
+    display:       inline;
+    font-family:   Verdana;
+    font-size:     75%;
+    background:    black;
+    color:         white;
+    border:        1px solid black;
+    border-radius: 5px;
+    padding-left:  2px;
+    padding-right: 2px;
+}
+
+/* procedure */
+
+table.procedure {
+    border: 1px solid black;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table.procedure td {
+    border: 1px solid black;
+}
+
+td.procedure-index {
+    padding-right: 5px;
+    text-align: right;
+    width: 2em;
+}
+
+
+/* topiclist/ */
+.topiclist {
+    margin-top:    1em;
+    margin-bottom: 1em;
+}
+
+tr.topic {
+    vertical-align: baseline;
+}
+
+tr.topicname {
+    min-width: 1.5em;
+}
+
+/* tt/ */
+
+.tt {
+    font-family: monospace;
+}
+
+
+
+/* olp/ */
+
+ol.olp > li {
+    margin-bottom: 1em;
+}
+
+/* ulp/ */
+
+ul.ulp > li {
+    margin-bottom: 1em;
+}
+
+/*---------------------------------------------------------*/
+/* table/ plus macros that use it.    Most formatting is
+ * depends on the "table" class.                           */
+
+table {
+    margin-top:     1em;
+    margin-bottom:  1em;
+    vertical-align: baseline;
+}
+
+th {
+    padding-left: 5px;
+    text-align:   left;
+}
+
+td {
+    padding-left:   5px;
+    vertical-align: baseline;
+}
+
+
+/* "table" class: standard table formatting. */
+.table {
+    border:           1px solid black;
+    border-spacing:   0;
+    color:            black;
+    background-color: white;
+}
+
+.table tr:first-child {
+    font-weight:      bold;
+    color:            white;
+    background-color: #000099;    
+}
+
+.table tr.tr-odd {
+    background-color: #EEEEEE;
+}
+
+.table tr.tr-even { }
+
+.table-wide {
+    width: 100%;
+}
+
+        BODY {
+            color: black;
+            background: white;
+            margin-left: 6%;
+            margin-right: 6%;
+        }
+
+        H1 {
+            margin-left: -5%;
+        }
+        H2 {
+            margin-left: -5%;
+        }
+        HR {
+            margin-left: -5%;
+        }
+
+        TABLE {
+            text-align:    left;
+        }
+        
+        /* mktree styles */
+        ul.mktree  li  { list-style: none; }
+        ul.mktree, ul.mktree ul, ul.mktree li { 
+            margin-left:10px; padding:0px; }
+        ul.mktree li .bullet { padding-left: 10px }
+        ul.mktree  li.liOpen   .bullet {cursor : pointer; }
+        ul.mktree  li.liClosed .bullet {cursor : pointer; }
+        ul.mktree  li.liBullet .bullet {cursor : default; }
+        ul.mktree  li.liOpen   ul {display: block; }
+        ul.mktree  li.liClosed ul {display: none; }
+    
+</style>
+
+
+
+</head>
+
+<body>
+<h1 style="background: red;">
+&nbsp;kite 0.5.0: Kite Project Automation Tool
+</h1>
+    
+
+<h2><a name="name">NAME</a></h2>
+    
+
+<p><b>tclchecker(n)</b> -- Tcl Syntax Checker, submodule of <a href="../mann/kiteutils.html">kiteutils(n)</a>
+
+</p>
+
+<ul>
+
+    <li><a href="#name">NAME</a></li>
+    
+
+    <li><a href="#synopsis">SYNOPSIS</a></li>
+    
+
+    <li><a href="#description">DESCRIPTION</a></li>
+    
+
+    <li><a href="#commands">COMMANDS</a></li>
+    
+
+    <li><a href="#environment">ENVIRONMENT</a></li>
+    
+
+    <li><a href="#author">AUTHOR</a></li>
+    
+
+    <li><a href="#history">HISTORY</a></li>
+    
+
+</ul>
+    
+    
+
+<h2><a name="synopsis">SYNOPSIS</a></h2>
+    
+
+<pre>
+package require kiteutils 0.5.0
+namespace import ::kiteutils::tclchecker
+</pre>
+
+<ul class="itemlist">
+<li><a class="iref" href="#tclchecker_check">tclchecker check <i>client script</i> ?<i>firstline</i>?</a></li>
+<li><a class="iref" href="#cmdsplit">tclchecker cmdsplit <i>cmd</i> ?<i>num</i>?</a></li>
+<li><a class="iref" href="#getembedded">tclchecker getembedded <i>string</i></a></li>
+<li><a class="iref" href="#scriptsplit">tclchecker scriptsplit <i>script</i> ?<i>firstline</i>?</a></li>
+</ul>
+
+
+<h2><a name="description">DESCRIPTION</a></h2>
+<p>tclchecker(n) defines a syntax checker for simple Tcl scripts of the
+kind run in a <a href="../mann/tclchecker.html">tclchecker(n)</a> interpreter.  In addition, it 
+provides tools for breaking Tcl scripts into pieces, while tracking
+line numbers: individual commands, and individual words in a command.
+
+</p>
+
+<h2><a name="commands">COMMANDS</a></h2>
+    
+
+<dl>
+
+
+<dt class="defitem"><a name="tclchecker_check">tclchecker check <i>client script</i> ?<i>firstline</i>?</a></dt><dd>
+
+Checks the <i>script</i> for obvious errors in the context of the 
+<i>client</i>, which must be an instance of <a href="../mann/smartinterp.html">smartinterp(n)</a>,
+and returns a flat list of line numbers and error messages.  
+If <i>firstline</i> is given,
+it is taken to be the line number of the first line of the script; it
+defaults to 1.  Note that the result is <i>not</i> a dictionary; the same
+line number can appear multiple times.
+
+</dd>
+<dt class="defitem"><a name="cmdsplit">tclchecker cmdsplit <i>cmd</i> ?<i>num</i>?</a></dt><dd><p>
+
+Splits a single Tcl command (as returned by <a class="iref" href="#scriptsplit">scriptsplit</a>) into 
+individual words, returning a list of two items: a list of words, and
+a list of starting line numbers for each word.  Thus, this command is
+usually used like this:
+
+</p><pre>
+lassign [tclchecker cmdsplit $command] words nums
+</pre>
+<p>If <i>num</i> is given, it's the starting line number for the command
+as a whole.
+
+</p>
+
+</dd>
+<dt class="defitem"><a name="getembedded">tclchecker getembedded <i>string</i></a></dt><dd>
+
+Returns a list of the interpolated commands embedded in a string.  
+<b>textutil::expander</b> does the heavy lifting.
+
+</dd>
+<dt class="defitem"><a name="scriptsplit">tclchecker scriptsplit <i>script</i> ?<i>firstline</i>?</a></dt><dd><p>
+
+This command splits a script into individual commands, returning
+a dictionary of commands by initial line number.  The caller can
+process the commands in sequence by iterating over the keys in 
+the dictionary.</p>
+
+<p>If <i>firstline</i> is given, it is used as the line number of the
+first line in the script.  It defaults to 1.</p>
+
+<p>Multiple commands on a single line are treated as one command.</p>
+
+<p>This command does not recurse into control structure or proc bodies.</p>
+
+<p>If the script cannot be split into commands because of an unterminated
+string, this command throws an error with error code <b>UNTERMINATED</b>.
+
+</p>
+</dd>
+</dl>
+
+<h2><a name="environment">ENVIRONMENT</a></h2>
+<p>Requires Tcl 8.6 or later.</p>
+
+<p>To use this package in a Tcl script, the environment variable
+<code>TCLLIBPATH</code> must include the parent of the package directory.
+
+</p>
+
+<h2><a name="author">AUTHOR</a></h2>
+<p>Will Duquette
+
+</p>
+
+<h2><a name="history">HISTORY</a></h2>
+<p>Original package.
+
+</p>
+
+<hr>
+<p><i>kite 0.5.0 Man page generated by manpage(n) on 
+Fri Nov 20 09:34:56 PST 2015</i>
+</p>
+
+</body>
+</html>
+    
+
+
+
+
+
+
+
+
+
