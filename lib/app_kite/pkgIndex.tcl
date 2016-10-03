@@ -9,7 +9,7 @@
 #   Kite: app_kite package index.
 
 # -kite-ifneeded-start  DO NOT EDIT THIS BLOCK BY HAND
-package ifneeded app_kite 0.5.0 [list source [file join $dir pkgModules.tcl]]
+package ifneeded app_kite 0.6.0 [list source [file join $dir pkgModules.tcl]]
 # -kite-ifneeded-end
 
 

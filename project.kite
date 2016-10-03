@@ -1,4 +1,4 @@
-project kite 0.5.0 "Kite Project Automation Tool"
+project kite 0.6.0 "Kite Project Automation Tool"
 poc William.H.Duquette@jpl.nasa.gov
 app kite -apptype exe
 provide kiteutils
